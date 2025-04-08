@@ -1,0 +1,59 @@
+using eCinema.Model;
+using eCinema.Model.Requests;
+using eCinema.Model.SearchObjects;
+using eCinema.Services;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using eCinema.Model.Responses;
+namespace eCinema.API.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class BaseController<T, TSearch> : ControllerBase where T : class where TSearch : BaseSearchObject, new()
+    {
+        protected readonly IService<T, TSearch> _service;
+
+        public BaseController(IService<T, TSearch> service)
+        {
+            _service = service;
+        }
+
+        [HttpGet("")]
+        public async Task<PagedResult<T>> Get([FromQuery] TSearch? search = null)
+        {
+            return await _service.GetAsync(search ?? new TSearch());
+        }
+
+        [HttpGet("{id}")]
+        public async Task<T?> GetById(int id)
+        {
+            return await _service.GetByIdAsync(id);
+        }
+
+        // [HttpPost]
+        // public virtual async Task<ActionResult<T>> Create([FromBody] T request)
+        // {
+        //     var result = await _service.CreateAsync(request);
+        //     return Ok(result);
+        // }
+
+        // [HttpPut("{id}")]
+        // public virtual async Task<ActionResult<T>> Update(int id, [FromBody] T request)
+        // {
+        //     var result = await _service.UpdateAsync(id, request);
+        //     if (result == null)
+        //         return NotFound();
+        //     return Ok(result);
+        // }
+
+        // [HttpDelete("{id}")]
+        // public virtual async Task<ActionResult<bool>> Delete(int id)
+        // {
+        //     var result = await _service.DeleteAsync(id);
+        //     if (!result)
+        //         return NotFound();
+        //     return Ok(result);
+        // }
+    }
+} 

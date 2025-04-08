@@ -1,0 +1,6 @@
+﻿services:
+  ecinema.webapi:
+    image: ecinema.webapi
+    build:
+      context: .
+      dockerfile: eCinema.WebAPI/Dockerfile
