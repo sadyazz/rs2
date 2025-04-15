@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace eCinema.Services.Database.Entities
 {
-    public class SeatType
+    public class ScreeningFormat
     {
         public int Id { get; set; }
         
         [Required]
         [MaxLength(50)]
-        public string Name { get; set; } = string.Empty; // Regular, VIP, Premium, Accessible, etc.
+        public string Name { get; set; } = string.Empty; // 2D, 3D, IMAX, etc.
         
         [MaxLength(200)]
         public string? Description { get; set; }
@@ -18,12 +18,8 @@ namespace eCinema.Services.Database.Entities
         [Column(TypeName = "decimal(10, 2)")]
         public decimal PriceMultiplier { get; set; } = 1.0m; // 1.0 = regular price, 1.5 = 50% more, etc.
         
-        [MaxLength(50)]
-        public string? Color { get; set; } // For UI display
-        
         public bool IsActive { get; set; } = true;
         
-        // Navigation properties
-        public virtual ICollection<Seat> Seats { get; set; } = new HashSet<Seat>();
+        public virtual ICollection<Screening> Screenings { get; set; } = new HashSet<Screening>();
     }
 } 

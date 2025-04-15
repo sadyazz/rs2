@@ -7,6 +7,6 @@ namespace eCinema.Model.Responses
         public string Description { get; set; }
         public decimal PriceMultiplier { get; set; }
         public string Color { get; set; }
-        public bool Active { get; set; }
+        public bool IsActive { get; set; }
     }
 } 

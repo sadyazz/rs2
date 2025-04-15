@@ -94,7 +94,7 @@ namespace eCinema.Services
                 Email = request.Email,
                 Username = request.Username,
                 PhoneNumber = request.PhoneNumber,
-                Active = request.Active,
+                IsActive = request.IsActive,
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -150,7 +150,7 @@ namespace eCinema.Services
             user.Email = request.Email;
             user.Username = request.Username;
             user.PhoneNumber = request.PhoneNumber;
-            user.Active = request.Active;
+            user.IsActive = request.IsActive;
 
             if (!string.IsNullOrEmpty(request.Password))
             {
@@ -212,7 +212,7 @@ namespace eCinema.Services
                 query = query.Where(x => x.UserRoles.Any(ur => ur.RoleId == search.RoleId.Value));
 
             if (search.IsActive.HasValue)
-                query = query.Where(x => x.Active == search.IsActive.Value);
+                query = query.Where(x => x.IsActive == search.IsActive.Value);
 
             return query;
         }

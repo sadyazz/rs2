@@ -16,6 +16,6 @@ namespace eCinema.Model.Requests
         [MaxLength(50)]
         public string Color { get; set; }
         
-        public bool Active { get; set; } = true;
+        public bool IsActive { get; set; } = true;
     }
 } 

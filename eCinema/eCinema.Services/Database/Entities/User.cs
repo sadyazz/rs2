@@ -35,7 +35,7 @@ namespace eCinema.Services.Database.Entities
         
         public DateTime? DateOfBirth { get; set; }
         
-        public bool Active { get; set; } = true;
+        public bool IsActive { get; set; } = true;
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         

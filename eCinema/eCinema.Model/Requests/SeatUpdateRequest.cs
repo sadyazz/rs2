@@ -18,6 +18,6 @@ namespace eCinema.Model.Requests
         [Range(1, 100)]
         public int SeatNumber { get; set; }
         
-        public bool Active { get; set; } = true;
+        public bool IsActive { get; set; } = true;
     }
 }

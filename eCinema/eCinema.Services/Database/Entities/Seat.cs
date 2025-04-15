@@ -14,13 +14,11 @@ namespace eCinema.Services.Database.Entities
         [Required]
         public int Number { get; set; }
         
-        public bool Active { get; set; } = true;
+        public bool IsActive { get; set; } = true;
         
-        // Foreign keys
         public int HallId { get; set; }
         public int? SeatTypeId { get; set; }
         
-        // Navigation properties
         // [ForeignKey(nameof(HallId))]
         // public virtual Hall Hall { get; set; } = null!;
         
