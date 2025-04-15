@@ -48,8 +48,8 @@ namespace eCinema.Services.Database.Entities
         public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
         
         // Navigation properties
-        // public virtual ICollection<Reservation> Reservations { get; set; } = new HashSet<Reservation>();
-        // public virtual ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
+        public virtual ICollection<Reservation> Reservations { get; set; } = new HashSet<Reservation>();
+        public virtual ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
         // public virtual ICollection<NewsArticle> NewsArticles { get; set; } = new HashSet<NewsArticle>();
     }
 } 

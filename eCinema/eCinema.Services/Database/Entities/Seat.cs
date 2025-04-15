@@ -19,12 +19,12 @@ namespace eCinema.Services.Database.Entities
         public int HallId { get; set; }
         public int? SeatTypeId { get; set; }
         
-        // [ForeignKey(nameof(HallId))]
-        // public virtual Hall Hall { get; set; } = null!;
+        [ForeignKey(nameof(HallId))]
+        public virtual Hall Hall { get; set; } = null!;
         
-        // [ForeignKey(nameof(SeatTypeId))]
-        // public virtual SeatType? SeatType { get; set; }
+        [ForeignKey(nameof(SeatTypeId))]
+        public virtual SeatType? SeatType { get; set; }
         
-        // public virtual ICollection<Reservation> Reservations { get; set; } = new HashSet<Reservation>();
+        public virtual ICollection<Reservation> Reservations { get; set; } = new HashSet<Reservation>();
     }
 } 
