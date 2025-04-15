@@ -1,5 +1,5 @@
 using System;
-
+using System.Collections.Generic;
 namespace eCinema.Model.Responses
 {
     public class UserResponse
@@ -14,7 +14,6 @@ namespace eCinema.Model.Responses
         public bool Active { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? LastModifiedAt { get; set; }
-        public int RoleId { get; set; }
-        public string RoleName { get; set; } = string.Empty;
+        public List<RoleResponse> Roles { get; set; } = new List<RoleResponse>();
     }
 } 

@@ -3,27 +3,49 @@ using eCinema.Services.Database;
 using Microsoft.EntityFrameworkCore;
 using Mapster;
 using MapsterMapper;
+using Microsoft.AspNetCore.Authentication;
+using eCinema.API.Filters;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+builder.Services.AddeCinemaDbContext(connectionString);
+
+builder.Services.AddAuthentication("BasicAuthentication")
+    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+
 builder.Services.AddControllers(); 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-
-// Add database context
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddeCinemaDbContext(connectionString);
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("BasicAuthentication", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "basic",
+        In = ParameterLocation.Header,
+        Description = "Basic Authorization header using the Bearer scheme."
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "BasicAuthentication" } },
+            new string[] { }
+        }
+    });
+});
 
 builder.Services.AddTransient<ISeatService, SeatService>();
 builder.Services.AddTransient<ISeatTypeService, SeatTypeService>();
+builder.Services.AddTransient<IRoleService, RoleService>();
 // builder.Services.AddTransient<IMovieService, MovieService>();
-// builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IUserService, UserService>();
 // builder.Services.AddTransient<IActorService, ActorService>();
 
 builder.Services.AddMapster();
+
 
 var app = builder.Build();
 
@@ -43,32 +65,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast")
-    .WithOpenApi();
-
+app.UseAuthorization();
 app.MapControllers();
-
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

@@ -41,16 +41,15 @@ namespace eCinema.Services.Database.Entities
         
         public DateTime? LastModifiedAt { get; set; }
         
-        // Foreign key for Role (one-to-many)
-        // public int RoleId { get; set; }
+        public bool ReceiveNotifications { get; set; } = true;
+
+        public bool isDeleted { get; set; } = false;
+
+        public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
         
         // Navigation properties
-        // [ForeignKey(nameof(RoleId))]
-        // public virtual Role Role { get; set; } = null!;
-        
         // public virtual ICollection<Reservation> Reservations { get; set; } = new HashSet<Reservation>();
         // public virtual ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
         // public virtual ICollection<NewsArticle> NewsArticles { get; set; } = new HashSet<NewsArticle>();
-        public virtual UserProfile? UserProfile { get; set; }
     }
 } 

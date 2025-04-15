@@ -1,6 +1,6 @@
-@eCinema.WebAPI_HostAddress = http://localhost:5190
+@eCinema.API_HostAddress = http://localhost:5190
 
-GET {{eCinema.WebAPI_HostAddress}}/weatherforecast/
+GET {{eCinema.API_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###

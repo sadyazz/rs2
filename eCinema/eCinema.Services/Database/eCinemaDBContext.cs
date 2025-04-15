@@ -10,8 +10,8 @@ namespace eCinema.Services.Database
         }
 
         public DbSet<User> Users { get; set; } = null!;
-        // public DbSet<Role> Roles { get; set; } = null!;
-        public DbSet<UserProfile> UserProfiles { get; set; } = null!;
+        public DbSet<Role> Roles { get; set; } = null!;
+        public DbSet<UserRole> UserRoles { get; set; }
         // public DbSet<Hall> Halls { get; set; } = null!;
         public DbSet<Seat> Seats { get; set; } = null!;
         public DbSet<SeatType> SeatTypes { get; set; } = null!;
@@ -33,32 +33,39 @@ namespace eCinema.Services.Database
             base.OnModelCreating(modelBuilder);
 
             // Configure User entity
-            // modelBuilder.Entity<User>()
-            //     .HasIndex(u => u.Username)
-            //     .IsUnique();
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
 
-            // modelBuilder.Entity<User>()
-            //     .HasIndex(u => u.Email)
-            //     .IsUnique();
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
 
-            // // Configure Role entity
-            // modelBuilder.Entity<Role>()
-            //     .HasIndex(r => r.Name)
-            //     .IsUnique();
+            // Configure Role entity
+            modelBuilder.Entity<Role>()
+                .HasIndex(r => r.Name)
+                .IsUnique();
 
-            // // Configure User and Role relationship (one-to-many)
-            // modelBuilder.Entity<User>()
-            //     .HasOne(u => u.Role)
-            //     .WithMany(r => r.Users)
-            //     .HasForeignKey(u => u.RoleId)
-            //     .OnDelete(DeleteBehavior.Restrict); // Preventing deletion of roles with users
+            modelBuilder.Entity<Role>()
+                .Property(r => r.IsActive)
+                .HasDefaultValue(true);
 
-            // // Configure User and UserProfile relationship (one-to-one)
-            // modelBuilder.Entity<UserProfile>()
-            //     .HasOne(up => up.User)
-            //     .WithOne(u => u.UserProfile)
-            //     .HasForeignKey<UserProfile>(up => up.UserId)
-            //     .OnDelete(DeleteBehavior.Cascade);
+            // Configure UserRole relationships
+            modelBuilder.Entity<UserRole>()
+                .HasOne(ur => ur.User)
+                .WithMany(u => u.UserRoles)
+                .HasForeignKey(ur => ur.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserRole>()
+                .HasOne(ur => ur.Role)
+                .WithMany(r => r.UserRoles)
+                .HasForeignKey(ur => ur.RoleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserRole>()
+                .HasIndex(ur => new { ur.UserId, ur.RoleId })
+                .IsUnique();
 
             // Configure Hall and Seat relationship
             // modelBuilder.Entity<Seat>()
@@ -193,9 +200,7 @@ namespace eCinema.Services.Database
             //     .HasIndex(g => g.Name)
             //     .IsUnique();
                 
-            modelBuilder.Entity<SeatType>()
-                .HasIndex(st => st.Name)
-                .IsUnique();
+        
                 
             // modelBuilder.Entity<ScreeningFormat>()
             //     .HasIndex(sf => sf.Name)

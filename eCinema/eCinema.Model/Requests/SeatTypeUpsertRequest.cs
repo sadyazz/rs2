@@ -9,7 +9,7 @@ namespace eCinema.Model.Requests
         public string Name { get; set; }
         
         [MaxLength(200)]
-        public string Description { get; set; }
+        public string? Description { get; set; }
         
         public decimal PriceMultiplier { get; set; } = 1.0m;
         

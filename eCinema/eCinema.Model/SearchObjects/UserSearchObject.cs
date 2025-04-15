@@ -1,6 +1,6 @@
 namespace eCinema.Model.SearchObjects
 {
-    public class UserSearchObject
+    public class UserSearchObject : BaseSearchObject
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }

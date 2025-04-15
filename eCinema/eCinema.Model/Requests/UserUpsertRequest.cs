@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace eCinema.Model.Requests
@@ -29,6 +30,6 @@ namespace eCinema.Model.Requests
         
         public bool Active { get; set; } = true;
         
-        public int RoleId { get; set; } = 2; // Default to regular user role
+        public List<int> RoleIds { get; set; } = new List<int>();
     }
 } 
