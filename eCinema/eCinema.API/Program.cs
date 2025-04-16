@@ -41,9 +41,9 @@ builder.Services.AddTransient<ISeatService, SeatService>();
 builder.Services.AddTransient<ISeatTypeService, SeatTypeService>();
 builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<IActorService, ActorService>();
+builder.Services.AddTransient<IGenreService, GenreService>();
 // builder.Services.AddTransient<IMovieService, MovieService>();
 builder.Services.AddTransient<IUserService, UserService>();
-// builder.Services.AddTransient<IActorService, ActorService>();
 
 builder.Services.AddMapster();
 
