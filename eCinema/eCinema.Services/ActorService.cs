@@ -48,7 +48,6 @@ namespace eCinema.Services
 
         protected override async Task BeforeInsert(Database.Entities.Actor entity, ActorUpsertRequest request)
         {
-            // Check for duplicate actor name
             if (await _context.Actors.AnyAsync(a => 
                 a.FirstName == request.FirstName && 
                 a.LastName == request.LastName))
@@ -59,7 +58,6 @@ namespace eCinema.Services
 
         protected override async Task BeforeUpdate(Database.Entities.Actor entity, ActorUpsertRequest request)
         {
-            // Check for duplicate actor name (excluding current actor)
             if (await _context.Actors.AnyAsync(a => 
                 a.FirstName == request.FirstName && 
                 a.LastName == request.LastName && 
