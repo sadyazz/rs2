@@ -44,6 +44,9 @@ builder.Services.AddTransient<IActorService, ActorService>();
 builder.Services.AddTransient<IGenreService, GenreService>();
 builder.Services.AddTransient<IHallService, HallService>();
 builder.Services.AddTransient<IMovieService, MovieService>();
+builder.Services.AddTransient<INewsArticleService, NewsArticleService>();
+builder.Services.AddTransient<IPaymentService, PaymentService>();
+builder.Services.AddTransient<IPromotionService, PromotionService>();
 builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddMapster();

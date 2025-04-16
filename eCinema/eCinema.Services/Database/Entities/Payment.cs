@@ -22,10 +22,8 @@ namespace eCinema.Services.Database.Entities
         [MaxLength(50)]
         public string Status { get; set; } = "Completed"; // Pending, Completed, Failed, etc.
         
-        // Foreign key
         public int ReservationId { get; set; }
         
-        // Navigation property
         [ForeignKey(nameof(ReservationId))]
         public virtual Reservation Reservation { get; set; } = null!;
     }
