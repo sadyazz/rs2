@@ -43,7 +43,7 @@ builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<IActorService, ActorService>();
 builder.Services.AddTransient<IGenreService, GenreService>();
 builder.Services.AddTransient<IHallService, HallService>();
-// builder.Services.AddTransient<IMovieService, MovieService>();
+builder.Services.AddTransient<IMovieService, MovieService>();
 builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddMapster();
@@ -51,7 +51,6 @@ builder.Services.AddMapster();
 
 var app = builder.Build();
 
-// Ensure database is created
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -59,7 +58,6 @@ using (var scope = app.Services.CreateScope())
     dbContext.Database.EnsureCreated();
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

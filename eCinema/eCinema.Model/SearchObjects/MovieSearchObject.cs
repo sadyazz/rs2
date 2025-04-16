@@ -1,0 +1,16 @@
+using System;
+
+namespace eCinema.Model.SearchObjects
+{
+    public class MovieSearchObject : BaseSearchObject
+    {
+        public string? Title { get; set; }
+        public string? Director { get; set; }
+        public string? Genre { get; set; }
+        public int? MinDuration { get; set; }
+        public int? MaxDuration { get; set; }
+        public float? MinGrade { get; set; }
+        public float? MaxGrade { get; set; }
+        public int? ReleaseYear { get; set; }
+    }
+} 
