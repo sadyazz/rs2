@@ -14,7 +14,7 @@ namespace eCinema.Services
 {
     public abstract class BaseCRUDService<T, TSearch, TEntity, TInsert, TUpdate> : BaseService<T, TSearch, TEntity>, ICRUDService<T, TSearch, TInsert, TUpdate> where T : class where TSearch : BaseSearchObject where TEntity : class, new() where TInsert : class where TUpdate : class
     {
-        private readonly eCinemaDBContext _context;
+        protected readonly eCinemaDBContext _context;
         public BaseCRUDService(eCinemaDBContext context, IMapper mapper): base(context, mapper)
         {
             _context = context;

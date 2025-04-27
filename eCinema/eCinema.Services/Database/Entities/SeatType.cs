@@ -23,7 +23,6 @@ namespace eCinema.Services.Database.Entities
         
         public bool IsActive { get; set; } = true;
         
-        // Navigation properties
         public virtual ICollection<Seat> Seats { get; set; } = new HashSet<Seat>();
     }
 } 

@@ -42,5 +42,8 @@ namespace eCinema.Services.Database.Entities
         public virtual Promotion? Promotion { get; set; }
         
         public virtual Payment? Payment { get; set; }
+
+        [MaxLength(50)]
+        public string State { get; set; } = string.Empty;
     }
 } 

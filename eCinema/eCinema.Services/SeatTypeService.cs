@@ -28,5 +28,11 @@ namespace eCinema.Services
             }
             return query;
         }
+
+        protected override Task BeforeInsert(SeatType entity, SeatTypeUpsertRequest request)
+        {
+            throw new UserException("not allowed");
+            return base.BeforeInsert(entity, request);
+        }
     }
 } 

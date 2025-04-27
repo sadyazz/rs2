@@ -6,6 +6,7 @@ using MapsterMapper;
 using Microsoft.AspNetCore.Authentication;
 using eCinema.API.Filters;
 using Microsoft.OpenApi.Models;
+using eCinema.Services.ReservationStateMachine;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,10 @@ builder.Services.AddeCinemaDbContext(connectionString);
 builder.Services.AddAuthentication("BasicAuthentication")
     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
-builder.Services.AddControllers(); 
+builder.Services.AddControllers(x=> 
+    {
+        x.Filters.Add<ExceptionFilter>();
+    }); 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -52,6 +56,12 @@ builder.Services.AddTransient<IPromotionService, PromotionService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IReservationService, ReservationService>();
 
+builder.Services.AddTransient<BaseReservationState>();
+builder.Services.AddTransient<InitialReservationState>();
+builder.Services.AddTransient<PendingReservationState>();
+builder.Services.AddTransient<ApprovedReservationState>();
+builder.Services.AddTransient<RejectedReservationState>();
+builder.Services.AddTransient<ExpiredReservationState>();
 builder.Services.AddMapster();
 
 

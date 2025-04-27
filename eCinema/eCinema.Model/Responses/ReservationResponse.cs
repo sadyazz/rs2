@@ -22,5 +22,6 @@ namespace eCinema.Model.Responses
         public string? PromotionName { get; set; }
         public int? PaymentId { get; set; }
         public string? PaymentStatus { get; set; }
+        public string ReservationState { get; set; } = string.Empty;
     }
 } 
