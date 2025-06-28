@@ -3,12 +3,13 @@ import 'package:ecinema_desktop/providers/auth_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 class MovieProvider{
+  static String? _baseUrl;
   MovieProvider(){
-
+    _baseUrl = const String.fromEnvironment('baseUrl', defaultValue: 'http://localhost:5190');
   } 
 
   Future<dynamic> get() async{
-    var url = 'http://localhost:5190/Movie';
+    var url = '$_baseUrl/Movie';
     var uri = Uri.parse(url);
     var response = await http.get(uri, headers: createHeaders());
 

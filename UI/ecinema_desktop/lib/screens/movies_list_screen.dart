@@ -1,3 +1,4 @@
+import 'package:ecinema_desktop/layouts/master_screen.dart';
 import 'package:flutter/material.dart';
 
 class MoviesListScreen extends StatelessWidget {
@@ -5,6 +6,14 @@ class MoviesListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return MasterScreen("Movies", Column(
+      children: [
+        Text("Movies placeholder"),
+        const SizedBox(height: 10),
+        ElevatedButton(onPressed: (){
+          Navigator.pop(context);
+        }, child: Text("Back")),
+      ],
+    ));
   }
 }
