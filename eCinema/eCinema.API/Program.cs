@@ -14,6 +14,17 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddeCinemaDbContext(connectionString);
 
+//TEMP
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddAuthentication("BasicAuthentication")
     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
@@ -42,7 +53,6 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddTransient<ISeatService, SeatService>();
-builder.Services.AddTransient<ISeatTypeService, SeatTypeService>();
 builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<IActorService, ActorService>();
 builder.Services.AddTransient<IGenreService, GenreService>();
@@ -82,5 +92,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
+//TEMP
+app.UseCors("AllowAll");
 app.MapControllers();
 app.Run();

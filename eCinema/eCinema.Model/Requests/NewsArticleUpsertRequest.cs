@@ -13,6 +13,8 @@ namespace eCinema.Model.Requests
         public string Content { get; set; } = string.Empty;
         
         public DateTime PublishDate { get; set; } = DateTime.UtcNow;
+
+        public byte[]? Image { get; set; }
         
         public bool IsActive { get; set; } = true;
         

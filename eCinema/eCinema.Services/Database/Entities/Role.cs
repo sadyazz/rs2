@@ -13,7 +13,5 @@ namespace eCinema.Services.Database.Entities
         
         [Required]
         public bool IsActive { get; set; } = true;
-        
-        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
     }
 } 

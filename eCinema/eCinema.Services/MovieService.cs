@@ -33,9 +33,9 @@ namespace eCinema.Services
                 query = query.Where(x => x.Director.Contains(search.Director));
             }
 
-            if (!string.IsNullOrWhiteSpace(search.Genre))
+            if (search.GenreIds != null && search.GenreIds.Any())
             {
-                query = query.Where(x => x.Genre.Contains(search.Genre));
+                query = query.Where(x => x.MovieGenres.Any(mg => search.GenreIds.Contains(mg.GenreId)));
             }
 
             if (search.MinDuration.HasValue)
@@ -65,5 +65,46 @@ namespace eCinema.Services
 
             return query;
         }
+
+
+        protected override async Task BeforeInsert(Movie entity, MovieUpsertRequest request)
+        {
+            if (request.GenreIds != null && request.GenreIds.Any())
+            {
+                var genres = await _context.Genres
+                    .Where(g => request.GenreIds.Contains(g.Id))
+                    .ToListAsync();
+
+                foreach (var genre in genres)
+                {
+                    entity.MovieGenres.Add(new MovieGenre
+                    {
+                        Movie = entity,
+                        Genre = genre
+                    });
+                }
+            }
+        }
+
+        protected override async Task BeforeUpdate(Movie entity, MovieUpsertRequest request)
+        {
+            entity.MovieGenres.Clear();
+
+            if (request.GenreIds != null && request.GenreIds.Any())
+            {
+                var genres = await _context.Genres
+                    .Where(g => request.GenreIds.Contains(g.Id))
+                    .ToListAsync();
+
+                foreach (var genre in genres)
+                {
+                    entity.MovieGenres.Add(new MovieGenre
+                    {
+                        Movie = entity,
+                        Genre = genre
+                    });
+                }
+            }
+        }
     }
-} 
+}

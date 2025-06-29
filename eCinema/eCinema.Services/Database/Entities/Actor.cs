@@ -21,8 +21,7 @@ namespace eCinema.Services.Database.Entities
         [MaxLength(500)]
         public string? Biography { get; set; }
         
-        // [MaxLength(255)]
-        // public string? PhotoUrl { get; set; }
+        public byte[]? Image { get; set; }
         
         public bool IsActive { get; set; } = true;
         

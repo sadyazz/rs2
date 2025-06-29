@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace eCinema.Model.Responses
 {
@@ -12,9 +13,10 @@ namespace eCinema.Model.Responses
         public string Cast { get; set; } = string.Empty;
         public DateTime ReleaseDate { get; set; }
         public int ReleaseYear { get; set; }
-        public string Genre { get; set; } = string.Empty;
+        public List<string> Genres { get; set; } = new List<string>();
         public string? TrailerUrl { get; set; }
         public float Grade { get; set; }
+        public byte[]? Image { get; set; }
         public bool IsActive { get; set; }
     }
-} 
+}

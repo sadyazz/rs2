@@ -17,6 +17,7 @@ namespace eCinema.Model.Requests
         
         [MaxLength(500)]
         public string? Biography { get; set; }
+        public byte[]? Image { get; set; }
         
         public bool IsActive { get; set; } = true;
     }

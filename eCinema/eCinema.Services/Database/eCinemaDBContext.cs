@@ -11,10 +11,8 @@ namespace eCinema.Services.Database
 
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Role> Roles { get; set; } = null!;
-        public DbSet<UserRole> UserRoles { get; set; } = null!;
         public DbSet<Hall> Halls { get; set; } = null!;
         public DbSet<Seat> Seats { get; set; } = null!;
-        public DbSet<SeatType> SeatTypes { get; set; } = null!;
         public DbSet<Actor> Actors { get; set; } = null!;
         public DbSet<Movie> Movies { get; set; } = null!;
         public DbSet<Genre> Genres { get; set; } = null!;
@@ -55,33 +53,11 @@ namespace eCinema.Services.Database
                 .Property(a => a.IsActive)
                 .HasDefaultValue(true);
 
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.User)
-                .WithMany(u => u.UserRoles)
-                .HasForeignKey(ur => ur.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.Role)
-                .WithMany(r => r.UserRoles)
-                .HasForeignKey(ur => ur.RoleId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<UserRole>()
-                .HasIndex(ur => new { ur.UserId, ur.RoleId })
-                .IsUnique();
-
             modelBuilder.Entity<Seat>()
                 .HasOne(s => s.Hall)
                 .WithMany(h => h.Seats)
                 .HasForeignKey(s => s.HallId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Seat>()
-                .HasOne(s => s.SeatType)
-                .WithMany(st => st.Seats)
-                .HasForeignKey(s => s.SeatTypeId)
-                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Screening>()
                 .HasOne(s => s.Movie)

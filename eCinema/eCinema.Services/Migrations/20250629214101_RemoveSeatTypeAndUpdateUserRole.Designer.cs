@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eCinema.Services.Database;
 
@@ -11,9 +12,11 @@ using eCinema.Services.Database;
 namespace eCinema.Services.Migrations
 {
     [DbContext(typeof(eCinemaDBContext))]
-    partial class eCinemaDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250629214101_RemoveSeatTypeAndUpdateUserRole")]
+    partial class RemoveSeatTypeAndUpdateUserRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,6 +153,11 @@ namespace eCinema.Services.Migrations
 
                     b.Property<int>("DurationMinutes")
                         .HasColumnType("int");
+
+                    b.Property<string>("Genre")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<float>("Grade")
                         .HasColumnType("real");

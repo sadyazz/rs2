@@ -30,6 +30,8 @@ namespace eCinema.Model.Requests
         
         public bool IsActive { get; set; } = true;
         
-        public List<int> RoleIds { get; set; } = new List<int>();
+        [Required]
+        public int RoleId { get; set; }
+        public byte[]? Image { get; set; }
     }
 } 

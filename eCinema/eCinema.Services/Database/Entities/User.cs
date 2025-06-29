@@ -45,8 +45,11 @@ namespace eCinema.Services.Database.Entities
 
         public bool isDeleted { get; set; } = false;
 
-        public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
-        
+        public byte[]? Image { get; set; }
+
+        public int RoleId { get; set; }
+        [ForeignKey(nameof(RoleId))]
+        public virtual Role Role { get; set; } = null!;
         // Navigation properties
         public virtual ICollection<Reservation> Reservations { get; set; } = new HashSet<Reservation>();
         public virtual ICollection<Review> Reviews { get; set; } = new HashSet<Review>();

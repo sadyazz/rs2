@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace eCinema.Model.SearchObjects
 {
@@ -6,11 +7,11 @@ namespace eCinema.Model.SearchObjects
     {
         public string? Title { get; set; }
         public string? Director { get; set; }
-        public string? Genre { get; set; }
         public int? MinDuration { get; set; }
         public int? MaxDuration { get; set; }
         public float? MinGrade { get; set; }
         public float? MaxGrade { get; set; }
         public int? ReleaseYear { get; set; }
+        public List<int> GenreIds { get; set; } = new List<int>();
     }
 } 

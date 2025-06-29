@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace eCinema.Model.Requests
@@ -28,15 +29,15 @@ namespace eCinema.Model.Requests
         
         [Required]
         public int ReleaseYear { get; set; }
-        
-        [Required]
-        [MaxLength(50)]
-        public string Genre { get; set; } = string.Empty;
+
+        public List<int> GenreIds { get; set; } = new List<int>();
         
         [MaxLength(255)]
         public string? TrailerUrl { get; set; }
         
         public float Grade { get; set; }
+
+        public byte[]? Image { get; set; }
         
         public bool IsActive { get; set; } = true;
     }

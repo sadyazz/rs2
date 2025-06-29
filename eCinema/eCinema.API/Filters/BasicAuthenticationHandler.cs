@@ -50,12 +50,9 @@ namespace eCinema.API.Filters
                 new Claim(ClaimTypes.Email, user.Email)
             };
             
-            if (user.Roles != null)
+            if (user.Role != null)
             {
-                foreach (var role in user.Roles)
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, role.Name));
-                }
+                claims.Add(new Claim(ClaimTypes.Role, user.Role.Name));
             }
             
             var identity = new ClaimsIdentity(claims, Scheme.Name);

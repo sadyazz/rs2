@@ -9,6 +9,7 @@ namespace eCinema.Model.Responses
         public string LastName { get; set; } = string.Empty;
         public DateTime? DateOfBirth { get; set; }
         public string? Biography { get; set; }
+        public byte[]? Image { get; set; }
         public bool IsActive { get; set; }
     }
 } 

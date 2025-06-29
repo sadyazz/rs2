@@ -14,9 +14,8 @@ namespace eCinema.Services.Database.Entities
         
         [Required]
         public string Content { get; set; } = string.Empty;
-        
-        // [MaxLength(255)]
-        // public string? ImageUrl { get; set; }
+            
+        public byte[]? Image { get; set; }
         
         public DateTime PublishDate { get; set; } = DateTime.UtcNow;
         

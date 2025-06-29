@@ -28,7 +28,7 @@ namespace eCinema.Services
             _context = context;
         }
 
-         public async Task<List<UserResponse>> GetAsync(UserSearchObject search)
+        public async Task<List<UserResponse>> GetAsync(UserSearchObject search)
         {
             var query = _context.Users.AsQueryable();
             
@@ -51,13 +51,13 @@ namespace eCinema.Services
                     u.Email.Contains(search.FTS));
             }
             
-            var users = await query.ToListAsync();
+            var users = await query.Include(u => u.Role).ToListAsync();
             return users.Select(MapToResponse).ToList();
         }
 
         public async Task<UserResponse?> GetByIdAsync(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == id);
             return user != null ? MapToResponse(user) : null;
         }
 
@@ -95,6 +95,7 @@ namespace eCinema.Services
                 Username = request.Username,
                 PhoneNumber = request.PhoneNumber,
                 IsActive = request.IsActive,
+                RoleId = request.RoleId,
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -108,25 +109,7 @@ namespace eCinema.Services
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            if (request.RoleIds != null && request.RoleIds.Count > 0)
-            {
-                foreach (var roleId in request.RoleIds)
-                {
-                    if (await _context.Roles.AnyAsync(r => r.Id == roleId))
-                    {
-                        var userRole = new UserRole
-                        {
-                            UserId = user.Id,
-                            RoleId = roleId,
-                            DateAssigned = DateTime.UtcNow
-                        };
-                        _context.UserRoles.Add(userRole);
-                    }
-                }
-                await _context.SaveChangesAsync();
-            }
-
-            return await GetUserResponseWithRolesAsync(user.Id);
+            return await GetUserResponseWithRoleAsync(user.Id);
         }
 
         public async Task<UserResponse?> UpdateAsync(int id, UserUpsertRequest request)
@@ -151,6 +134,7 @@ namespace eCinema.Services
             user.Username = request.Username;
             user.PhoneNumber = request.PhoneNumber;
             user.IsActive = request.IsActive;
+            user.RoleId = request.RoleId;
 
             if (!string.IsNullOrEmpty(request.Password))
             {
@@ -159,28 +143,8 @@ namespace eCinema.Services
                 user.PasswordSalt = Convert.ToBase64String(salt);
             }
             
-            var existingUserRoles = await _context.UserRoles.Where(ur => ur.UserId == id).ToListAsync();
-            _context.UserRoles.RemoveRange(existingUserRoles);
-            
-            if (request.RoleIds != null && request.RoleIds.Count > 0)
-            {
-                foreach (var roleId in request.RoleIds)
-                {
-                    if (await _context.Roles.AnyAsync(r => r.Id == roleId))
-                    {
-                        var userRole = new UserRole
-                        {
-                            UserId = user.Id,
-                            RoleId = roleId,
-                            DateAssigned = DateTime.UtcNow
-                        };
-                        _context.UserRoles.Add(userRole);
-                    }
-                }
-            }
-            
             await _context.SaveChangesAsync();
-            return await GetUserResponseWithRolesAsync(user.Id);
+            return await GetUserResponseWithRoleAsync(user.Id);
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -209,7 +173,7 @@ namespace eCinema.Services
                 query = query.Where(x => x.LastName.Contains(search.LastName));
 
             if (search.RoleId.HasValue)
-                query = query.Where(x => x.UserRoles.Any(ur => ur.RoleId == search.RoleId.Value));
+                query = query.Where(x => x.RoleId == search.RoleId.Value);
 
             if (search.IsActive.HasValue)
                 query = query.Where(x => x.IsActive == search.IsActive.Value);
@@ -217,11 +181,10 @@ namespace eCinema.Services
             return query;
         }
 
-        private async Task<UserResponse> GetUserResponseWithRolesAsync(int userId)
+        private async Task<UserResponse> GetUserResponseWithRoleAsync(int userId)
         {
             var user = await _context.Users
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
+                .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Id == userId);
             
             if (user == null)
@@ -229,14 +192,11 @@ namespace eCinema.Services
             
             var response = MapToResponse(user);
             
-            response.Roles = user.UserRoles
-                .Where(ur => ur.Role.IsActive)
-                .Select(ur => new RoleResponse
-                {
-                    Id = ur.Role.Id,
-                    Name = ur.Role.Name
-                })
-                .ToList();
+            response.Role = new RoleResponse
+            {
+                Id = user.Role.Id,
+                Name = user.Role.Name
+            };
             
             return response;
         }
@@ -244,8 +204,7 @@ namespace eCinema.Services
         public async Task<UserResponse?> AuthenticateAsync(UserLoginRequest request)
         {
             var user = await _context.Users
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
+                .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Username == request.Username);
             
             if (user == null)
@@ -258,19 +217,16 @@ namespace eCinema.Services
 
             var response = MapToResponse(user);
             
-            response.Roles = user.UserRoles
-                .Where(ur => ur.Role.IsActive)
-                .Select(ur => new RoleResponse
-                {
-                    Id = ur.Role.Id,
-                    Name = ur.Role.Name
-                })
-                .ToList();
+            response.Role = new RoleResponse
+            {
+                Id = user.Role.Id,
+                Name = user.Role.Name
+            };
             
             return response;
         }
 
-       private bool VerifyPassword(string password, string passwordHash, string passwordSalt)
+        private bool VerifyPassword(string password, string passwordHash, string passwordSalt)
         {
             var salt = Convert.FromBase64String(passwordSalt);
             var hash = Convert.FromBase64String(passwordHash);

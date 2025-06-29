@@ -32,12 +32,7 @@ namespace eCinema.Services.Database.Entities
         [Required]
         public int ReleaseYear { get; set; }
         
-        [Required]
-        [MaxLength(50)]
-        public string Genre { get; set; } = string.Empty;
-        
-        // [MaxLength(255)]
-        // public string? PosterUrl { get; set; }
+        public byte[]? Image { get; set; }
         
         [MaxLength(255)]
         public string? TrailerUrl { get; set; }
