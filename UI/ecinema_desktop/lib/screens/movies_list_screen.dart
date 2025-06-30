@@ -20,6 +20,14 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
     provider = context.read<MovieProvider>();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadMovies();
+    });
+  }
+
   SearchResult<Movie>? result = null;
 
   final TextEditingController _searchController = TextEditingController();
@@ -31,6 +39,70 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   final TextEditingController _maxGradeController = TextEditingController();
   final TextEditingController _releaseYearController = TextEditingController();
   bool isActive = true;
+
+  // Metoda za učitavanje filmova
+  Future<void> _loadMovies() async {
+    try {
+      var filter = <String, dynamic>{};
+      result = await provider.get(filter: filter);
+      setState(() {
+        result = result;
+      });
+    } catch (e) {
+      print('Error loading movies: $e');
+    }
+  }
+
+  // Metoda za pretragu filmova sa filterima
+  Future<void> _searchMovies() async {
+    try {
+      var filter = <String, dynamic>{};
+      
+      if (_searchController.text.isNotEmpty) {
+        filter["title"] = _searchController.text;
+      }
+      if (_directorController.text.isNotEmpty) {
+        filter["director"] = _directorController.text;
+      }
+      if (_genresController.text.isNotEmpty) {
+        try {
+          var genreIds = _genresController.text
+              .split(',')
+              .map((e) => int.tryParse(e.trim()))
+              .where((e) => e != null)
+              .cast<int>()
+              .toList();
+          if (genreIds.isNotEmpty) {
+            filter["genreIds"] = genreIds;
+          }
+        } catch (e) {
+          print('Error parsing genre IDs: $e');
+        }
+      }
+      if (_minDurationController.text.isNotEmpty) {
+        filter["minDuration"] = int.tryParse(_minDurationController.text);
+      }
+      if (_maxDurationController.text.isNotEmpty) {
+        filter["maxDuration"] = int.tryParse(_maxDurationController.text);
+      }
+      if (_minGradeController.text.isNotEmpty) {
+        filter["minGrade"] = double.tryParse(_minGradeController.text);
+      }
+      if (_maxGradeController.text.isNotEmpty) {
+        filter["maxGrade"] = double.tryParse(_maxGradeController.text);
+      }
+      if (_releaseYearController.text.isNotEmpty) {
+        filter["releaseYear"] = int.tryParse(_releaseYearController.text);
+      }
+      
+      result = await provider.get(filter: filter);
+      setState(() {
+        result = result;
+      });
+    } catch (e) {
+      print('Error searching movies: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,51 +158,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
           height: 36,
           child: ElevatedButton.icon(
             onPressed: () async {
-                var filter = <String, dynamic>{};
-                
-                if (_searchController.text.isNotEmpty) {
-                  filter["title"] = _searchController.text;
-                }
-                if (_directorController.text.isNotEmpty) {
-                  filter["director"] = _directorController.text;
-                }
-                if (_genresController.text.isNotEmpty) {
-                  try {
-                    var genreIds = _genresController.text
-                        .split(',')
-                        .map((e) => int.tryParse(e.trim()))
-                        .where((e) => e != null)
-                        .cast<int>()
-                        .toList();
-                    if (genreIds.isNotEmpty) {
-                      filter["genreIds"] = genreIds;
-                    }
-                  } catch (e) {
-                    print('Error parsing genre IDs: $e');
-                  }
-                }
-                if (_minDurationController.text.isNotEmpty) {
-                  filter["minDuration"] = int.tryParse(_minDurationController.text);
-                }
-                if (_maxDurationController.text.isNotEmpty) {
-                  filter["maxDuration"] = int.tryParse(_maxDurationController.text);
-                }
-                if (_minGradeController.text.isNotEmpty) {
-                  filter["minGrade"] = double.tryParse(_minGradeController.text);
-                }
-                if (_maxGradeController.text.isNotEmpty) {
-                  filter["maxGrade"] = double.tryParse(_maxGradeController.text);
-                }
-                if (_releaseYearController.text.isNotEmpty) {
-                  filter["releaseYear"] = int.tryParse(_releaseYearController.text);
-                }
-                
-                result = await provider.get(filter: filter);
-                print(result?.result[0].title);
-
-                setState(() {
-                  result = result;
-                });
+              await _searchMovies();
             },
             icon: const Icon(Icons.search, size: 18),
             label: const Text('Search'),
@@ -289,49 +317,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                         ),
                         ElevatedButton(
                           onPressed: () async {
-                            var filter = <String, dynamic>{};
-                            
-                            if (_searchController.text.isNotEmpty) {
-                              filter["title"] = _searchController.text;
-                            }
-                            if (_directorController.text.isNotEmpty) {
-                              filter["director"] = _directorController.text;
-                            }
-                            if (_genresController.text.isNotEmpty) {
-                              try {
-                                var genreIds = _genresController.text
-                                    .split(',')
-                                    .map((e) => int.tryParse(e.trim()))
-                                    .where((e) => e != null)
-                                    .cast<int>()
-                                    .toList();
-                                if (genreIds.isNotEmpty) {
-                                  filter["genreIds"] = genreIds;
-                                }
-                              } catch (e) {
-                                print('Error parsing genre IDs: $e');
-                              }
-                            }
-                            if (_minDurationController.text.isNotEmpty) {
-                              filter["minDuration"] = int.tryParse(_minDurationController.text);
-                            }
-                            if (_maxDurationController.text.isNotEmpty) {
-                              filter["maxDuration"] = int.tryParse(_maxDurationController.text);
-                            }
-                            if (_minGradeController.text.isNotEmpty) {
-                              filter["minGrade"] = double.tryParse(_minGradeController.text);
-                            }
-                            if (_maxGradeController.text.isNotEmpty) {
-                              filter["maxGrade"] = double.tryParse(_maxGradeController.text);
-                            }
-                            if (_releaseYearController.text.isNotEmpty) {
-                              filter["releaseYear"] = int.tryParse(_releaseYearController.text);
-                            }
-                            
-                            result = await provider.get(filter: filter);
-                            setState(() {
-                              result = result;
-                            });
+                            await _searchMovies();
                             Navigator.pop(context);
                           },
                           child: const Text('Apply'),
@@ -355,7 +341,25 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   }
 
   Widget _BuildResultView(){
-    if (result == null || result!.result.isEmpty) {
+    if (result == null) {
+      return const Expanded(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 16),
+              Text(
+                "Loading movies...",
+                style: TextStyle(fontSize: 18, color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    
+    if (result!.result.isEmpty) {
       return const Expanded(
         child: Center(
           child: Column(
@@ -364,14 +368,20 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
               Icon(Icons.movie_outlined, size: 64, color: Colors.grey),
               SizedBox(height: 16),
               Text(
-                "Search for movies to get started",
+                "No movies found",
                 style: TextStyle(fontSize: 18, color: Colors.grey),
+              ),
+              SizedBox(height: 8),
+              Text(
+                "Try adjusting your search criteria",
+                style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
             ],
           ),
         ),
       );
     }
+    
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.only(top: 16),
