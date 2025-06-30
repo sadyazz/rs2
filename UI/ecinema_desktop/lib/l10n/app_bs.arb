@@ -1,0 +1,166 @@
+{
+  "dashboard": "Kontrolna ploča",
+  "@dashboard": {
+    "description": "Dashboard navigation item"
+  },
+  "movies": "Filmovi",
+  "@movies": {
+    "description": "Movies navigation item"
+  },
+  "screenings": "Projekcije",
+  "@screenings": {
+    "description": "Screenings navigation item"
+  },
+  "seatsHalls": "Sjedala i sale",
+  "@seatsHalls": {
+    "description": "Seats and halls navigation item"
+  },
+  "news": "Novosti",
+  "@news": {
+    "description": "News navigation item"
+  },
+  "users": "Korisnici",
+  "@users": {
+    "description": "Users navigation item"
+  },
+  "reviews": "Recenzije",
+  "@reviews": {
+    "description": "Reviews navigation item"
+  },
+  "reports": "Izvještaji",
+  "@reports": {
+    "description": "Reports navigation item"
+  },
+  "settings": "Postavke",
+  "@settings": {
+    "description": "Settings navigation item"
+  },
+  "logout": "Odjava",
+  "@logout": {
+    "description": "Logout button text"
+  },
+  "back": "Nazad",
+  "@back": {
+    "description": "Back button text"
+  },
+  "search": "Pretraga",
+  "@search": {
+    "description": "Search button and placeholder text"
+  },
+  "filters": "Filteri",
+  "@filters": {
+    "description": "Filters button text"
+  },
+  "addMovie": "Dodaj film",
+  "@addMovie": {
+    "description": "Add movie button text"
+  },
+  "movieManagement": "Upravljanje filmovima",
+  "@movieManagement": {
+    "description": "Movie management page title"
+  },
+  "manageYourMovieCatalog": "Upravljajte svojom filmskom kolekcijom",
+  "@manageYourMovieCatalog": {
+    "description": "Movie management subtitle"
+  },
+  "noMoviesFound": "Nema filmova",
+  "@noMoviesFound": {
+    "description": "Message when no movies are found"
+  },
+  "noMoviesMatchSearch": "Nijedan film ne odgovara pretrazi",
+  "@noMoviesMatchSearch": {
+    "description": "Message when search returns no results"
+  },
+  "clearSearch": "Očisti pretragu",
+  "@clearSearch": {
+    "description": "Clear search button text"
+  },
+  "id": "ID",
+  "@id": {
+    "description": "ID column header"
+  },
+  "title": "Naslov",
+  "@title": {
+    "description": "Title column header"
+  },
+  "director": "Režiser",
+  "@director": {
+    "description": "Director column header"
+  },
+  "genre": "Žanr",
+  "@genre": {
+    "description": "Genre column header"
+  },
+  "duration": "Trajanje",
+  "@duration": {
+    "description": "Duration column header"
+  },
+  "grade": "Ocjena",
+  "@grade": {
+    "description": "Grade column header"
+  },
+  "actions": "Akcije",
+  "@actions": {
+    "description": "Actions column header"
+  },
+  "edit": "Uredi",
+  "@edit": {
+    "description": "Edit button text"
+  },
+  "delete": "Obriši",
+  "@delete": {
+    "description": "Delete button text"
+  },
+  "minDuration": "Min. trajanje",
+  "@minDuration": {
+    "description": "Minimum duration filter label"
+  },
+  "maxDuration": "Max. trajanje",
+  "@maxDuration": {
+    "description": "Maximum duration filter label"
+  },
+  "minGrade": "Min. ocjena",
+  "@minGrade": {
+    "description": "Minimum grade filter label"
+  },
+  "maxGrade": "Max. ocjena",
+  "@maxGrade": {
+    "description": "Maximum grade filter label"
+  },
+  "releaseYear": "Godina izlaska",
+  "@releaseYear": {
+    "description": "Release year filter label"
+  },
+  "isActive": "Aktivan",
+  "@isActive": {
+    "description": "Is active filter label"
+  },
+  "reset": "Resetuj",
+  "@reset": {
+    "description": "Reset button text"
+  },
+  "close": "Zatvori",
+  "@close": {
+    "description": "Close button text"
+  },
+  "apply": "Primijeni",
+  "@apply": {
+    "description": "Apply button text"
+  },
+  "noData": "Nema podataka",
+  "@noData": {
+    "description": "Message when no data is available"
+  },
+  "language": "Jezik",
+  "@language": {
+    "description": "Language picker label"
+  },
+  "english": "English",
+  "@english": {
+    "description": "English language option"
+  },
+  "bosnian": "Bosanski",
+  "@bosnian": {
+    "description": "Bosnian language option"
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "dashboard": "Dashboard",
+  "@dashboard": {
+    "description": "Dashboard navigation item"
+  },
+  "movies": "Movies",
+  "@movies": {
+    "description": "Movies navigation item"
+  },
+  "screenings": "Screenings",
+  "@screenings": {
+    "description": "Screenings navigation item"
+  },
+  "seatsHalls": "Seats & Halls",
+  "@seatsHalls": {
+    "description": "Seats and halls navigation item"
+  },
+  "news": "News",
+  "@news": {
+    "description": "News navigation item"
+  },
+  "users": "Users",
+  "@users": {
+    "description": "Users navigation item"
+  },
+  "reviews": "Reviews",
+  "@reviews": {
+    "description": "Reviews navigation item"
+  },
+  "reports": "Reports",
+  "@reports": {
+    "description": "Reports navigation item"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings navigation item"
+  },
+  "logout": "Logout",
+  "@logout": {
+    "description": "Logout button text"
+  },
+  "back": "Back",
+  "@back": {
+    "description": "Back button text"
+  },
+  "search": "Search",
+  "@search": {
+    "description": "Search button and placeholder text"
+  },
+  "filters": "Filters",
+  "@filters": {
+    "description": "Filters button text"
+  },
+  "addMovie": "Add Movie",
+  "@addMovie": {
+    "description": "Add movie button text"
+  },
+  "movieManagement": "Movie Management",
+  "@movieManagement": {
+    "description": "Movie management page title"
+  },
+  "manageYourMovieCatalog": "Manage your movie catalog",
+  "@manageYourMovieCatalog": {
+    "description": "Movie management subtitle"
+  },
+  "noMoviesFound": "No movies found",
+  "@noMoviesFound": {
+    "description": "Message when no movies are found"
+  },
+  "noMoviesMatchSearch": "No movies match your search",
+  "@noMoviesMatchSearch": {
+    "description": "Message when search returns no results"
+  },
+  "clearSearch": "Clear search",
+  "@clearSearch": {
+    "description": "Clear search button text"
+  },
+  "id": "ID",
+  "@id": {
+    "description": "ID column header"
+  },
+  "title": "Title",
+  "@title": {
+    "description": "Title column header"
+  },
+  "director": "Director",
+  "@director": {
+    "description": "Director column header"
+  },
+  "genre": "Genre",
+  "@genre": {
+    "description": "Genre column header"
+  },
+  "duration": "Duration",
+  "@duration": {
+    "description": "Duration column header"
+  },
+  "grade": "Grade",
+  "@grade": {
+    "description": "Grade column header"
+  },
+  "actions": "Actions",
+  "@actions": {
+    "description": "Actions column header"
+  },
+  "edit": "Edit",
+  "@edit": {
+    "description": "Edit button text"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete button text"
+  },
+  "minDuration": "Min Duration",
+  "@minDuration": {
+    "description": "Minimum duration filter label"
+  },
+  "maxDuration": "Max Duration",
+  "@maxDuration": {
+    "description": "Maximum duration filter label"
+  },
+  "minGrade": "Min Grade",
+  "@minGrade": {
+    "description": "Minimum grade filter label"
+  },
+  "maxGrade": "Max Grade",
+  "@maxGrade": {
+    "description": "Maximum grade filter label"
+  },
+  "releaseYear": "Release Year",
+  "@releaseYear": {
+    "description": "Release year filter label"
+  },
+  "isActive": "Is Active",
+  "@isActive": {
+    "description": "Is active filter label"
+  },
+  "reset": "Reset",
+  "@reset": {
+    "description": "Reset button text"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close button text"
+  },
+  "apply": "Apply",
+  "@apply": {
+    "description": "Apply button text"
+  },
+  "noData": "No data",
+  "@noData": {
+    "description": "Message when no data is available"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language picker label"
+  },
+  "english": "English",
+  "@english": {
+    "description": "English language option"
+  },
+  "bosnian": "Bosanski",
+  "@bosnian": {
+    "description": "Bosnian language option"
+  }
+}

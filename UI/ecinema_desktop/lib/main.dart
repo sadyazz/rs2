@@ -1,12 +1,21 @@
+import 'package:ecinema_desktop/l10n/l10n.dart';
 import 'package:ecinema_desktop/providers/auth_provider.dart';
 import 'package:ecinema_desktop/providers/movie_provider.dart';
+import 'package:ecinema_desktop/providers/screening_provider.dart';
+import 'package:ecinema_desktop/providers/review_provider.dart';
+import 'package:ecinema_desktop/providers/language_provider.dart';
 import 'package:ecinema_desktop/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => MovieProvider()),
+    ChangeNotifierProvider(create: (_) => ScreeningProvider()),
+    ChangeNotifierProvider(create: (_) => ReviewProvider()),
+    ChangeNotifierProvider(create: (_) => LanguageProvider()),
   ], child: const MyApp()));
 }
 
@@ -15,30 +24,52 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'eCinema Desktop',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF4F8593),
-          brightness: Brightness.light,
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+    return Consumer<LanguageProvider>(
+      builder: (context, languageProvider, child) {
+        if (!languageProvider.isInitialized) {
+          return MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          );
+        }
+
+        return MaterialApp(
+          title: 'eCinema Desktop',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xFF4F8593),
+              brightness: Brightness.light,
+            ),
+            inputDecorationTheme: InputDecorationTheme(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              filled: true,
+            ),
+            cardTheme: CardTheme(
+              elevation: 8,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          filled: true,
-        ),
-        cardTheme: CardTheme(
-          elevation: 8,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-      ),
-      home: LoginPage(),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: L10n.all,
+          locale: languageProvider.currentLocale,
+          home: LoginPage(),
+        );
+      },
     );
   }
 }

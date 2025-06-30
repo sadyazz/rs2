@@ -1,7 +1,11 @@
 import 'package:ecinema_desktop/screens/dashboard_screen.dart';
 import 'package:ecinema_desktop/screens/movies_list_screen.dart';
 import 'package:ecinema_desktop/screens/screenings_list_screen.dart';
+import 'package:ecinema_desktop/screens/settings_screen.dart';
+import 'package:ecinema_desktop/providers/language_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class MasterScreen extends StatefulWidget {
   MasterScreen(this.title, this.child, {super.key});
@@ -16,6 +20,8 @@ class MasterScreen extends StatefulWidget {
 class _MasterScreenState extends State<MasterScreen> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title ?? '', style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 24, fontWeight: FontWeight.bold)),
@@ -43,48 +49,47 @@ class _MasterScreenState extends State<MasterScreen> {
                   children: [
                     _buildListTile(
                       icon: Icons.arrow_back,
-                      title: "Back",
+                      title: l10n.back,
                       isBackButton: true,
                     ),
                     _buildListTile(
                       icon: Icons.dashboard,
-                      title: "Dashboard",
+                      title: l10n.dashboard,
                     ),
                     _buildListTile(
                       icon: Icons.movie,
-                      title: "Movies",
+                      title: l10n.movies,
                     ),
                     _buildListTile(
                       icon: Icons.schedule,
-                      title: "Screenings",
+                      title: l10n.screenings,
                     ),
                     _buildListTile(
                       icon: Icons.event_seat,
-                      title: "Seats & Halls",
+                      title: l10n.seatsHalls,
                     ),
                     _buildListTile(
                       icon: Icons.article,
-                      title: "News",
+                      title: l10n.news,
                     ),
                     _buildListTile(
                       icon: Icons.people,
-                      title: "Users",
-                    ),
-                    _buildListTile(
-                      icon: Icons.rate_review,
-                      title: "Reviews",
+                      title: l10n.users,
                     ),
                     _buildListTile(
                       icon: Icons.analytics,
-                      title: "Reports",
+                      title: l10n.reports,
                     ),
                     _buildListTile(
                       icon: Icons.settings,
-                      title: "Settings",
+                      title: l10n.settings,
                     ),
                   ],
                 ),
               ),
+              
+              // Language picker
+              _buildLanguagePicker(l10n),
               
               // Divider
               Divider(
@@ -95,7 +100,7 @@ class _MasterScreenState extends State<MasterScreen> {
               // Logout button at bottom
               _buildListTile(
                 icon: Icons.logout,
-                title: "Logout",
+                title: l10n.logout,
                 isLogout: true,
               ),
             ],
@@ -103,6 +108,134 @@ class _MasterScreenState extends State<MasterScreen> {
         ),
       ),
       body: widget.child,
+    );
+  }
+
+  Widget _buildLanguagePicker(AppLocalizations l10n) {
+    return Consumer<LanguageProvider>(
+      builder: (context, languageProvider, child) {
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(8),
+              onTap: () => _showLanguageDialog(context, languageProvider),
+              child: ListTile(
+                title: Text(
+                  l10n.language,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.9),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                subtitle: Text(
+                  languageProvider.getCurrentLanguageName(),
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.7),
+                    fontSize: 14,
+                  ),
+                ),
+                leading: Icon(
+                  Icons.language,
+                  color: Colors.white.withOpacity(0.8),
+                  size: 24,
+                ),
+                trailing: Icon(
+                  Icons.arrow_drop_down,
+                  color: Colors.white.withOpacity(0.8),
+                  size: 24,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showLanguageDialog(BuildContext context, LanguageProvider languageProvider) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.language),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildLanguageOption(
+                context,
+                languageProvider,
+                'en',
+                'English',
+                '🇺🇸',
+              ),
+              const SizedBox(height: 8),
+              _buildLanguageOption(
+                context,
+                languageProvider,
+                'bs',
+                'Bosanski',
+                '🇧🇦',
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildLanguageOption(
+    BuildContext context,
+    LanguageProvider languageProvider,
+    String languageCode,
+    String languageName,
+    String flag,
+  ) {
+    final isSelected = languageProvider.getCurrentLanguageCode() == languageCode;
+    
+    return InkWell(
+      onTap: () {
+        languageProvider.setLanguage(languageCode);
+        Navigator.of(context).pop();
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: isSelected ? Theme.of(context).colorScheme.primary.withOpacity(0.1) : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? Theme.of(context).colorScheme.primary : Colors.grey.shade300,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Text(
+              flag,
+              style: const TextStyle(fontSize: 20),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                languageName,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  color: isSelected ? Theme.of(context).colorScheme.primary : Colors.black87,
+                ),
+              ),
+            ),
+            if (isSelected)
+              Icon(
+                Icons.check_circle,
+                color: Theme.of(context).colorScheme.primary,
+                size: 20,
+              ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -132,35 +265,25 @@ class _MasterScreenState extends State<MasterScreen> {
               return;
             }
             
-            // Navigation logic
-            switch (title.toLowerCase()) {
-              case 'dashboard':
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardScreen()));
-                break;
-              case 'movies':
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MoviesListScreen()));
-                break;
-              case 'screenings':
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ScreeningsListScreen()));
-                break;
-              case 'seats & halls':
-                // Navigate to seats & halls
-                break;
-              case 'news':
-                // Navigate to news
-                break;
-              case 'users':
-                // Navigate to users
-                break;
-              case 'reviews':
-                // Navigate to reviews
-                break;
-              case 'reports':
-                // Navigate to reports
-                break;
-              case 'settings':
-                // Navigate to settings
-                break;
+            // Navigation logic using localized keys
+            final l10n = AppLocalizations.of(context)!;
+            
+            if (title == l10n.dashboard) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardScreen()));
+            } else if (title == l10n.movies) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MoviesListScreen()));
+            } else if (title == l10n.screenings) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ScreeningsListScreen()));
+            } else if (title == l10n.seatsHalls) {
+              // Navigate to seats & halls
+            } else if (title == l10n.news) {
+              // Navigate to news
+            } else if (title == l10n.users) {
+              // Navigate to users
+            } else if (title == l10n.reports) {
+              // Navigate to reports
+            } else if (title == l10n.settings) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsScreen()));
             }
           },
           child: ListTile(
