@@ -21,6 +21,62 @@ namespace eCinema.Services
             _context = context;
         }
 
+        public override async Task<ReviewResponse> CreateAsync(ReviewUpsertRequest request)
+        {
+            var result = await base.CreateAsync(request);
+            
+            await RecalculateMovieGrade(request.MovieId);
+            
+            return result;
+        }
+
+        public override async Task<ReviewResponse> UpdateAsync(int id, ReviewUpsertRequest request)
+        {
+            var result = await base.UpdateAsync(id, request);
+            
+            await RecalculateMovieGrade(request.MovieId);
+            
+            return result;
+        }
+
+        public override async Task<bool> DeleteAsync(int id)
+        {
+            var entity = await _context.Set<Review>().FindAsync(id);
+            var movieId = entity?.MovieId ?? 0;
+            
+            var result = await base.DeleteAsync(id);
+            
+            if (result && movieId > 0)
+            {
+                await RecalculateMovieGrade(movieId);
+            }
+            
+            return result;
+        }
+
+        private async Task RecalculateMovieGrade(int movieId)
+        {
+            var movie = await _context.Movies
+                .Include(m => m.Reviews.Where(r => r.IsActive))
+                .FirstOrDefaultAsync(m => m.Id == movieId);
+
+            if (movie != null)
+            {
+                var activeReviews = movie.Reviews.Where(r => r.IsActive).ToList();
+                
+                if (activeReviews.Any())
+                {
+                    movie.Grade = (float)activeReviews.Average(r => r.Rating);
+                }
+                else
+                {
+                    movie.Grade = 0;
+                }
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
         protected override IQueryable<Review> ApplyFilter(IQueryable<Review> query, ReviewSearchObject search)
         {
             query = query
