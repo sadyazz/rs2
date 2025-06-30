@@ -1,10 +1,13 @@
 import 'package:ecinema_desktop/providers/auth_provider.dart';
 import 'package:ecinema_desktop/providers/movie_provider.dart';
-import 'package:ecinema_desktop/screens/movies_list_screen.dart';
+import 'package:ecinema_desktop/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => MovieProvider()),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -201,14 +204,12 @@ class _LoginPageState extends State<LoginPage> {
                           ElevatedButton(
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
-                                print('credentials: ${_usernameController.text} ${_passwordController.text}');
-                                
                                 AuthProvider.username = _usernameController.text;
                                 AuthProvider.password = _passwordController.text;
                                 MovieProvider movieProvider = MovieProvider();
                                 try{
                                   var data = await movieProvider.get();
-                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => MoviesListScreen()));
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => DashboardScreen()));
                                   print(data);
                                 } on Exception catch (e) {
                                   showDialog(context: context, builder: (context) => AlertDialog(

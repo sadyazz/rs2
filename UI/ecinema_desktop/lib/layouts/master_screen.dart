@@ -1,3 +1,4 @@
+import 'package:ecinema_desktop/screens/dashboard_screen.dart';
 import 'package:ecinema_desktop/screens/movies_list_screen.dart';
 import 'package:ecinema_desktop/screens/screenings_list_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,10 @@ class _MasterScreenState extends State<MasterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(widget.title ?? '', style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 24, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        centerTitle: false,
       ),
       drawer: Drawer(
         child: Container(
@@ -132,7 +135,7 @@ class _MasterScreenState extends State<MasterScreen> {
             // Navigation logic
             switch (title.toLowerCase()) {
               case 'dashboard':
-                // Stay on current page or navigate to dashboard
+                Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardScreen()));
                 break;
               case 'movies':
                 Navigator.push(context, MaterialPageRoute(builder: (context) => MoviesListScreen()));
