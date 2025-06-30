@@ -8,6 +8,8 @@ namespace eCinema.Services.Database.Entities
     {
         public int Id { get; set; }
         
+        [Required]
+        [Range(1, 5, ErrorMessage = "Rating must be between 1 and 5")]
         public int Rating { get; set; } // 1-5 stars
         
         [MaxLength(500)]
@@ -19,7 +21,10 @@ namespace eCinema.Services.Database.Entities
         
         public bool IsActive { get; set; } = true;
         
+        [Required]
         public int UserId { get; set; }
+        
+        [Required]
         public int MovieId { get; set; }
         
         [ForeignKey(nameof(UserId))]

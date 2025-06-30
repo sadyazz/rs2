@@ -23,6 +23,11 @@ namespace eCinema.Services
 
         protected override IQueryable<Screening> ApplyFilter(IQueryable<Screening> query, ScreeningSearchObject search)
         {
+            query = query
+                .Include(x => x.Movie)
+                .Include(x => x.Hall)
+                .Include(x => x.Format);
+
             if (search.MovieId.HasValue)
             {
                 query = query.Where(x => x.MovieId == search.MovieId.Value);
@@ -164,6 +169,21 @@ namespace eCinema.Services
             {
                 throw new InvalidOperationException("End time must be after start time.");
             }
+        }
+
+        protected override ScreeningResponse MapToResponse(Screening entity)
+        {
+            var response = _mapper.Map<ScreeningResponse>(entity);
+            
+            response.MovieTitle = entity.Movie?.Title ?? string.Empty;
+            response.HallName = entity.Hall?.Name ?? string.Empty;
+            response.ScreeningFormatName = entity.Format?.Name;
+            response.ScreeningFormatPriceMultiplier = entity.Format?.PriceMultiplier;
+            
+            response.AvailableSeats = entity.Hall?.Capacity - entity.Reservations?.Count ?? 0;
+            response.ReservationsCount = entity.Reservations?.Count ?? 0;
+            
+            return response;
         }
     }
 } 
