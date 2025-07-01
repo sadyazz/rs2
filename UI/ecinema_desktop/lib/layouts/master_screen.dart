@@ -3,9 +3,11 @@ import 'package:ecinema_desktop/screens/movies_list_screen.dart';
 import 'package:ecinema_desktop/screens/screenings_list_screen.dart';
 import 'package:ecinema_desktop/screens/settings_screen.dart';
 import 'package:ecinema_desktop/providers/language_provider.dart';
+import 'package:ecinema_desktop/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:ecinema_desktop/main.dart' show LoginPage;
 
 class MasterScreen extends StatefulWidget {
   MasterScreen(this.title, this.child, {super.key});
@@ -43,7 +45,6 @@ class _MasterScreenState extends State<MasterScreen> {
           ),
           child: Column(
             children: [
-              // Main menu items
               Expanded(
                 child: ListView(
                   children: [
@@ -88,16 +89,13 @@ class _MasterScreenState extends State<MasterScreen> {
                 ),
               ),
               
-              // Language picker
               _buildLanguagePicker(l10n),
               
-              // Divider
               Divider(
                 color: Colors.white.withOpacity(0.3),
                 height: 32,
               ),
               
-              // Logout button at bottom
               _buildListTile(
                 icon: Icons.logout,
                 title: l10n.logout,
@@ -252,7 +250,6 @@ class _MasterScreenState extends State<MasterScreen> {
         child: InkWell(
           borderRadius: BorderRadius.circular(8),
           onTap: () {
-            // Close drawer first
             Navigator.pop(context);
             
             if (isBackButton) {
@@ -261,11 +258,10 @@ class _MasterScreenState extends State<MasterScreen> {
             }
             
             if (isLogout) {
-              Navigator.of(context).pushReplacementNamed('/login');
+              _showLogoutDialog();
               return;
             }
             
-            // Navigation logic using localized keys
             final l10n = AppLocalizations.of(context)!;
             
             if (title == l10n.dashboard) {
@@ -275,13 +271,9 @@ class _MasterScreenState extends State<MasterScreen> {
             } else if (title == l10n.screenings) {
               Navigator.push(context, MaterialPageRoute(builder: (context) => ScreeningsListScreen()));
             } else if (title == l10n.seatsHalls) {
-              // Navigate to seats & halls
             } else if (title == l10n.news) {
-              // Navigate to news
             } else if (title == l10n.users) {
-              // Navigate to users
             } else if (title == l10n.reports) {
-              // Navigate to reports
             } else if (title == l10n.settings) {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsScreen()));
             }
@@ -304,5 +296,53 @@ class _MasterScreenState extends State<MasterScreen> {
         ),
       ),
     );
+  }
+
+  void _showLogoutDialog() {
+    final l10n = AppLocalizations.of(context)!;
+    
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Icon(
+                Icons.logout,
+                color: Colors.red.shade600,
+                size: 24,
+              ),
+              const SizedBox(width: 12),
+              Text(l10n.logout),
+            ],
+          ),
+          content: Text(l10n.logoutConfirmation),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(l10n.cancel),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _performLogout();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red.shade600,
+                foregroundColor: Colors.white,
+              ),
+              child: Text(l10n.logout),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _performLogout() {
+    AuthProvider.username = '';
+    AuthProvider.password = '';
+    
+    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 }

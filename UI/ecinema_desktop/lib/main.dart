@@ -86,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -96,6 +97,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -141,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Welcome back!',
+                            l10n.welcomeBack,
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               color: Colors.grey[600],
                             ),
@@ -151,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                           TextFormField(
                             controller: _usernameController,
                             decoration: InputDecoration(
-                              labelText: 'Username',
+                              labelText: l10n.username,
                               prefixIcon: const Icon(Icons.person_outline),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -170,17 +173,24 @@ class _LoginPageState extends State<LoginPage> {
                               fillColor: Colors.white,
                             ),
                             validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter your username';
+                              if (value == null || value.trim().isEmpty) {
+                                return l10n.pleaseEnterUsername;
+                              }
+                              if (value.trim().length < 3) {
+                                return 'Username must be at least 3 characters';
                               }
                               return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (_) {
+                              FocusScope.of(context).nextFocus();
                             },
                           ),
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _passwordController,
                             decoration: InputDecoration(
-                              labelText: 'Password',
+                              labelText: l10n.password,
                               prefixIcon: const Icon(Icons.lock_outline),
                               suffixIcon: IconButton(
                                 icon: Icon(
@@ -211,9 +221,16 @@ class _LoginPageState extends State<LoginPage> {
                             obscureText: _obscurePassword,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter your password';
+                                return l10n.pleaseEnterPassword;
+                              }
+                              if (value.length < 6) {
+                                return 'Password must be at least 6 characters';
                               }
                               return null;
+                            },
+                            textInputAction: TextInputAction.done,
+                            onFieldSubmitted: (_) {
+                              _handleLogin(l10n);
                             },
                           ),
                           const SizedBox(height: 8),
@@ -224,7 +241,7 @@ class _LoginPageState extends State<LoginPage> {
                                 // TODO: Implement forgot password
                               },
                               child: Text(
-                                'Forgot password?',
+                                l10n.forgotPassword,
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
@@ -233,28 +250,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           const SizedBox(height: 24),
                           ElevatedButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                AuthProvider.username = _usernameController.text;
-                                AuthProvider.password = _passwordController.text;
-                                MovieProvider movieProvider = MovieProvider();
-                                try{
-                                  var data = await movieProvider.get();
-                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => DashboardScreen()));
-                                  print(data);
-                                } on Exception catch (e) {
-                                  showDialog(context: context, builder: (context) => AlertDialog(
-                                    title:Text("Error"),
-                                    content: Text(e.toString()),
-                                    actions: [
-                                      TextButton(onPressed: (){
-                                        Navigator.pop(context);
-                                      }, child: Text("OK"))
-                                    ],
-                                  ));
-                                }
-                              }
-                            },
+                            onPressed: _isLoading ? null : () => _handleLogin(l10n),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F8593),
                               foregroundColor: Colors.white,
@@ -264,13 +260,22 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               elevation: 0,
                             ),
-                            child: const Text(
-                              'Login',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: _isLoading
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    ),
+                                  )
+                                : Text(
+                                    l10n.login,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                           ),
                         ],
                       ),
@@ -283,5 +288,43 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _handleLogin(AppLocalizations l10n) async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      AuthProvider.username = _usernameController.text.trim();
+      AuthProvider.password = _passwordController.text;
+      MovieProvider movieProvider = MovieProvider();
+      
+      var data = await movieProvider.get();
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => DashboardScreen()));
+      print(data);
+    } on Exception catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(l10n.error),
+          content: Text(e.toString()),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l10n.ok),
+            ),
+          ],
+        ),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

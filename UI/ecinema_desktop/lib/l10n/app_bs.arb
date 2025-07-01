@@ -162,5 +162,49 @@
   "bosnian": "Bosanski",
   "@bosnian": {
     "description": "Bosnian language option"
+  },
+  "welcomeBack": "Dobrodošli nazad!",
+  "@welcomeBack": {
+    "description": "Login page welcome message"
+  },
+  "username": "Korisničko ime",
+  "@username": {
+    "description": "Username field label"
+  },
+  "password": "Lozinka",
+  "@password": {
+    "description": "Password field label"
+  },
+  "forgotPassword": "Zaboravili ste lozinku?",
+  "@forgotPassword": {
+    "description": "Forgot password link text"
+  },
+  "login": "Prijava",
+  "@login": {
+    "description": "Login button text"
+  },
+  "pleaseEnterUsername": "Molimo unesite korisničko ime",
+  "@pleaseEnterUsername": {
+    "description": "Username validation message"
+  },
+  "pleaseEnterPassword": "Molimo unesite lozinku",
+  "@pleaseEnterPassword": {
+    "description": "Password validation message"
+  },
+  "error": "Greška",
+  "@error": {
+    "description": "Error dialog title"
+  },
+  "ok": "U redu",
+  "@ok": {
+    "description": "OK button text"
+  },
+  "cancel": "Otkaži",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "logoutConfirmation": "Da li ste sigurni da se želite odjaviti?",
+  "@logoutConfirmation": {
+    "description": "Logout confirmation message"
   }
 }
