@@ -2,6 +2,9 @@ import 'package:ecinema_desktop/layouts/master_screen.dart';
 import 'package:ecinema_desktop/models/movie.dart';
 import 'package:ecinema_desktop/models/search_result.dart';
 import 'package:ecinema_desktop/providers/movie_provider.dart';
+import 'package:ecinema_desktop/providers/utils.dart';
+import 'package:ecinema_desktop/screens/movie_details_screen.dart';
+import 'package:ecinema_desktop/screens/edit_movie_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 class MoviesListScreen extends StatefulWidget {
@@ -336,6 +339,34 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
             ),
           ),
         ),
+        const SizedBox(width: 8),
+        SizedBox(
+          height: 36,
+          child: ElevatedButton.icon(
+            onPressed: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EditMovieScreen(),
+                ),
+              );
+              
+              // Refresh movies list if new movie was created
+              if (result == true) {
+                await _loadMovies();
+              }
+            },
+            icon: const Icon(Icons.add, size: 18),
+            label: const Text('Add Movie'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green[600],
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+              minimumSize: const Size(0, 36),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -387,10 +418,10 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
         padding: const EdgeInsets.only(top: 16),
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            childAspectRatio: 0.75,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20,
+            crossAxisCount: 5,
+            childAspectRatio: 0.65,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
           ),
           itemCount: result!.result.length,
           itemBuilder: (context, index) {
@@ -403,184 +434,213 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   }
 
   Widget _buildMovieCard(Movie movie) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.15),
-            spreadRadius: 2,
-            blurRadius: 12,
-            offset: const Offset(0, 6),
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MovieDetailsScreen(movie: movie),
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 4,
-            child: Stack(
-              children: [
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.movie, size: 56, color: Colors.grey[400]),
-                      const SizedBox(height: 12),
-                      Text(
-                        "No Image",
-                        style: TextStyle(color: Colors.grey[600], fontSize: 13),
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  top: 8,
-                  left: 8,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: movie.isActive == true ? Colors.green[600] : Colors.red[600],
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          spreadRadius: 1,
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: Text(
-                      movie.isActive == true ? "Active" : "Inactive",
-                      style: const TextStyle(
-                        fontSize: 10,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+        );
+      },
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 8,
+              offset: const Offset(0, 4),
             ),
-          ),
-          
-          Expanded(
-            flex: 3,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 4,
+              child: Stack(
                 children: [
-                  Text(
-                    movie.title ?? "Unknown Title",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.grey[200]!,
+                          Colors.grey[300]!,
+                        ],
+                      ),
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    movie.director ?? "Unknown Director",
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  if (movie.genres != null && movie.genres!.isNotEmpty)
-                    Wrap(
-                      spacing: 4,
-                      runSpacing: 2,
-                      children: movie.genres!.take(2).map((genre) => Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: Colors.blue[100],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          genre.name ?? "Unknown",
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.blue[700],
-                            fontWeight: FontWeight.w500,
+                    child: movie.image != null && movie.image!.isNotEmpty
+                        ? ClipRRect(
+                            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                            child: imageFromString(movie.image!),
+                          )
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.movie, size: 48, color: Colors.grey[500]),
+                              const SizedBox(height: 8),
+                              Text(
+                                "No Image",
+                                style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                              ),
+                            ],
                           ),
-                        ),
-                      )).toList(),
-                    ),
-                  const Spacer(),
-                  Row(
-                    children: [
-                      Icon(Icons.star, size: 18, color: Colors.amber),
-                      const SizedBox(width: 4),
-                      Text(
-                        movie.grade?.toStringAsFixed(1) ?? "N/A",
+                  ),
+                  Positioned(
+                    top: 10,
+                    left: 10,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: movie.isActive == true ? Colors.green[600] : Colors.red[600],
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.15),
+                            spreadRadius: 0,
+                            blurRadius: 3,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        movie.isActive == true ? "Active" : "Inactive",
                         style: const TextStyle(
                           fontSize: 12,
+                          color: Colors.white,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        child: IconButton(
-                          onPressed: () {
-                            // TODO: Implement edit functionality
-                            print('Edit movie: ${movie.title}');
-                          },
-                          icon: Icon(
-                            Icons.edit,
-                            size: 18,
-                            color: Colors.blue[600],
-                          ),
-                          padding: const EdgeInsets.all(6),
-                          constraints: const BoxConstraints(
-                            minWidth: 28,
-                            minHeight: 28,
-                          ),
+                  if (movie.grade != null)
+                    Positioned(
+                      top: 10,
+                      right: 10,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.amber[600],
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              spreadRadius: 0,
+                              blurRadius: 3,
+                              offset: const Offset(0, 1),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.star, size: 12, color: Colors.white),
+                            const SizedBox(width: 2),
+                            Text(
+                              movie.grade!.toStringAsFixed(1),
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 6),
-                      Container(
-                        child: IconButton(
-                          onPressed: () {
-                            // TODO: Implement delete functionality
-                            print('Delete movie: ${movie.title}');
-                          },
-                          icon: Icon(
-                            Icons.delete,
-                            size: 18,
-                            color: Colors.red[600],
-                          ),
-                          padding: const EdgeInsets.all(6),
-                          constraints: const BoxConstraints(
-                            minWidth: 28,
-                            minHeight: 28,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
                 ],
               ),
             ),
-          ),
-        ],
+            
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      movie.title ?? "Unknown Title",
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        height: 1.2,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 2),
+                    
+                    Text(
+                      movie.director ?? "Unknown Director",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[600],
+                        height: 1.2,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 4),
+                    
+                    Row(
+                      children: [
+                        if (movie.genres != null && movie.genres!.isNotEmpty)
+                          Expanded(
+                            child: Wrap(
+                              spacing: 2,
+                              runSpacing: 1,
+                              children: movie.genres!.take(1).map((genre) => Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue[50],
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(color: Colors.blue[200]!, width: 0.5),
+                                ),
+                                child: Text(
+                                  genre.name ?? "Unknown",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.blue[700],
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              )).toList(),
+                            ),
+                          ),
+                        
+                        if (movie.durationMinutes != null)
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.access_time, size: 10, color: Colors.grey[500]),
+                              const SizedBox(width: 2),
+                              Text(
+                                "${movie.durationMinutes}m",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
