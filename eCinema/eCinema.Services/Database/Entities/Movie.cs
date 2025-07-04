@@ -23,9 +23,6 @@ namespace eCinema.Services.Database.Entities
         [MaxLength(50)]
         public string Director { get; set; } = string.Empty;
         
-        [MaxLength(200)]
-        public string Cast { get; set; } = string.Empty;
-        
         [Required]
         public DateTime ReleaseDate { get; set; }
         
@@ -41,9 +38,9 @@ namespace eCinema.Services.Database.Entities
         
         public bool IsActive { get; set; } = true;
         
-        public virtual ICollection<Screening> Screenings { get; set; } = new HashSet<Screening>();
-        public virtual ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
-        public virtual ICollection<MovieGenre> MovieGenres { get; set; } = new HashSet<MovieGenre>();
-        public virtual ICollection<MovieActor> MovieActors { get; set; } = new HashSet<MovieActor>();
+        public virtual ICollection<Screening> Screenings { get; set; } = new List<Screening>();
+        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+        public virtual ICollection<MovieGenre> Genres { get; set; } = new List<MovieGenre>();
+        public virtual ICollection<MovieActor> Actors { get; set; } = new List<MovieActor>();
     }
 } 

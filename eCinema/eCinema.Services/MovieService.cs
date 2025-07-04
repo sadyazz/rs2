@@ -21,30 +21,31 @@ namespace eCinema.Services
             _context = context;
         }
 
-        // Override getById to automatically calculate grade
         public override async Task<MovieResponse> GetByIdAsync(int id)
         {
             var movie = await _context.Movies
-                .Include(m => m.MovieGenres)
+                .Include(m => m.Genres)
                 .ThenInclude(mg => mg.Genre)
+                .Include(m => m.Actors)
+                .ThenInclude(ca => ca.Actor)
                 .Include(m => m.Reviews.Where(r => r.IsActive))
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (movie == null)
                 return null;
 
-            // Automatically calculate and update grade
             await RecalculateMovieGrade(movie);
 
             return MapToResponse(movie);
         }
 
-        // Override get to automatically calculate grades for all movies
         public override async Task<PagedResult<MovieResponse>> GetAsync(MovieSearchObject search)
         {
             var query = _context.Movies
-                .Include(m => m.MovieGenres)
+                .Include(m => m.Genres)
                 .ThenInclude(mg => mg.Genre)
+                .Include(m => m.Actors)
+                .ThenInclude(ca => ca.Actor)
                 .Include(m => m.Reviews.Where(r => r.IsActive))
                 .AsQueryable();
 
@@ -68,7 +69,6 @@ namespace eCinema.Services
 
             var movies = await query.ToListAsync();
 
-            // Automatically calculate grades for all movies
             foreach (var movie in movies)
             {
                 await RecalculateMovieGrade(movie);
@@ -81,11 +81,10 @@ namespace eCinema.Services
             };
         }
 
-        // Private method to recalculate movie grade
         private async Task RecalculateMovieGrade(Movie movie)
         {
             var activeReviews = movie.Reviews.Where(r => r.IsActive).ToList();
-            
+
             if (activeReviews.Any())
             {
                 movie.Grade = (float)activeReviews.Average(r => r.Rating);
@@ -112,7 +111,7 @@ namespace eCinema.Services
 
             if (search.GenreIds != null && search.GenreIds.Any())
             {
-                query = query.Where(x => x.MovieGenres.Any(mg => search.GenreIds.Contains(mg.GenreId)));
+                query = query.Where(x => x.Genres.Any(mg => search.GenreIds.Contains(mg.GenreId)));
             }
 
             if (search.MinDuration.HasValue)
@@ -153,10 +152,26 @@ namespace eCinema.Services
 
                 foreach (var genre in genres)
                 {
-                    entity.MovieGenres.Add(new MovieGenre
+                    entity.Genres.Add(new MovieGenre
                     {
                         Movie = entity,
                         Genre = genre
+                    });
+                }
+            }
+
+            if (request.ActorIds != null && request.ActorIds.Any())
+            {
+                var actors = await _context.Actors
+                    .Where(a => request.ActorIds.Contains(a.Id))
+                    .ToListAsync();
+
+                foreach (var actor in actors)
+                {
+                    entity.Actors.Add(new MovieActor
+                    {
+                        Movie = entity,
+                        Actor = actor
                     });
                 }
             }
@@ -164,7 +179,7 @@ namespace eCinema.Services
 
         protected override async Task BeforeUpdate(Movie entity, MovieUpsertRequest request)
         {
-            entity.MovieGenres.Clear();
+            entity.Genres.Clear();
 
             if (request.GenreIds != null && request.GenreIds.Any())
             {
@@ -174,13 +189,47 @@ namespace eCinema.Services
 
                 foreach (var genre in genres)
                 {
-                    entity.MovieGenres.Add(new MovieGenre
+                    entity.Genres.Add(new MovieGenre
                     {
                         Movie = entity,
                         Genre = genre
                     });
                 }
             }
+            entity.Actors.Clear();
+
+            if (request.ActorIds != null && request.ActorIds.Any())
+            {
+                var actors = await _context.Actors
+                    .Where(a => request.ActorIds.Contains(a.Id))
+                    .ToListAsync();
+
+                foreach (var actor in actors)
+                {
+                    entity.Actors.Add(new MovieActor
+                    {
+                        Movie = entity,
+                        Actor = actor
+                    });
+                }
+            }
+
         }
+
+        protected override MovieResponse MapToResponse(Movie movie)
+        {
+            var response = _mapper.Map<MovieResponse>(movie);
+
+            response.Genres = movie.Genres?
+                .Select(mg => _mapper.Map<GenreResponse>(mg.Genre))
+                .ToList() ?? new List<GenreResponse>();
+
+            response.Actors = movie.Actors?
+                .Select(ma => _mapper.Map<ActorResponse>(ma.Actor))
+                .ToList() ?? new List<ActorResponse>();
+
+            return response;
+        }
+
     }
 }

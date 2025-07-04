@@ -20,10 +20,9 @@ namespace eCinema.Model.Requests
         [Required]
         [MaxLength(50)]
         public string Director { get; set; } = string.Empty;
-        
-        [MaxLength(200)]
-        public string Cast { get; set; } = string.Empty;
-        
+
+        [Required]
+        public List<int> ActorIds { get; set; } = new List<int>();
         [Required]
         public DateTime ReleaseDate { get; set; }
         
@@ -34,8 +33,6 @@ namespace eCinema.Model.Requests
         
         [MaxLength(255)]
         public string? TrailerUrl { get; set; }
-        
-        public float Grade { get; set; }
 
         public byte[]? Image { get; set; }
         

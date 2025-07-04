@@ -130,7 +130,7 @@ namespace eCinema.Services.Database
 
             modelBuilder.Entity<MovieActor>()
                 .HasOne(ma => ma.Movie)
-                .WithMany(m => m.MovieActors)
+                .WithMany(m => m.Actors)
                 .HasForeignKey(ma => ma.MovieId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -142,7 +142,7 @@ namespace eCinema.Services.Database
 
             modelBuilder.Entity<MovieGenre>()
                 .HasOne(mg => mg.Movie)
-                .WithMany(m => m.MovieGenres)
+                .WithMany(m => m.Genres)
                 .HasForeignKey(mg => mg.MovieId)
                 .OnDelete(DeleteBehavior.Restrict);
 
