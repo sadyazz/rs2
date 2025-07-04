@@ -1,9 +1,11 @@
 import 'package:ecinema_desktop/l10n/l10n.dart';
 import 'package:ecinema_desktop/providers/auth_provider.dart';
+import 'package:ecinema_desktop/providers/genre_provider.dart';
 import 'package:ecinema_desktop/providers/movie_provider.dart';
 import 'package:ecinema_desktop/providers/screening_provider.dart';
 import 'package:ecinema_desktop/providers/review_provider.dart';
 import 'package:ecinema_desktop/providers/language_provider.dart';
+import 'package:ecinema_desktop/providers/actor_provider.dart';
 import 'package:ecinema_desktop/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -16,6 +18,8 @@ void main() {
     ChangeNotifierProvider(create: (_) => ScreeningProvider()),
     ChangeNotifierProvider(create: (_) => ReviewProvider()),
     ChangeNotifierProvider(create: (_) => LanguageProvider()),
+    ChangeNotifierProvider(create: (_) => GenreProvider()),
+    ChangeNotifierProvider(create: (_) => ActorProvider()),
   ], child: const MyApp()));
 }
 

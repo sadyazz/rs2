@@ -1,7 +1,10 @@
 import 'package:ecinema_desktop/layouts/master_screen.dart';
+import 'package:ecinema_desktop/models/actor.dart';
 import 'package:ecinema_desktop/models/movie.dart';
 import 'package:ecinema_desktop/models/review.dart';
 import 'package:ecinema_desktop/models/search_result.dart';
+import 'package:ecinema_desktop/providers/actor_provider.dart';
+import 'package:ecinema_desktop/providers/genre_provider.dart';
 import 'package:ecinema_desktop/providers/movie_provider.dart';
 import 'package:ecinema_desktop/providers/review_provider.dart';
 import 'package:ecinema_desktop/providers/utils.dart';
@@ -22,17 +25,22 @@ class MovieDetailsScreen extends StatefulWidget {
 class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   MovieProvider? movieProvider;
   ReviewProvider? reviewProvider;
+  GenreProvider? genreProvider;   
+  ActorProvider? actorProvider;
   Movie? detailedMovie;
   SearchResult<Review>? reviewsResult;
   bool isLoading = false;
   bool isLoadingReviews = false;
-
+  bool isLoadingGenres = false;
+  bool isLoadingActors = false;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    movieProvider ??= context.read<MovieProvider>();
-    reviewProvider ??= context.read<ReviewProvider>();
+    movieProvider = context.read<MovieProvider>();
+    reviewProvider = context.read<ReviewProvider>();
+    genreProvider = context.read<GenreProvider>();
+    actorProvider = context.read<ActorProvider>();
   }
 
   @override
@@ -42,6 +50,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       if (widget.movie.id != null) {
         _loadMovieDetails();
         _loadReviews();
+        _loadGenres();
+        _loadActors();
       } else {
         detailedMovie = widget.movie;
       }
@@ -95,6 +105,57 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       });
     }
   }
+
+    Future<void> _loadGenres() async {
+      if (widget.movie.id == null || genreProvider == null) return;
+
+      setState(() {
+        isLoadingGenres = true; 
+      });
+
+      try {
+        var filter = <String, dynamic>{
+          'isActive': true,
+        };
+
+        var genres = await genreProvider!.get(filter: filter);
+        setState(() {
+          genres = genres;
+          isLoadingGenres = false;
+        });
+        print("Genres: $genres");
+      }catch (e) {
+        print('Error loading genres: $e');
+        setState(() {
+          isLoadingGenres = false;
+        });
+      }
+    }
+
+    Future<void> _loadActors() async {
+      if (widget.movie.id == null || actorProvider == null) return;
+
+      setState(() {
+        isLoadingActors = true;
+      });
+
+      try {
+        var filter = <String, dynamic>{
+          'isActive': true,
+        };
+
+        var actors = await actorProvider!.get(filter: filter);
+        setState(() {
+          actors = actors;
+          isLoadingActors = false;
+        });
+      }catch (e) {
+        print('Error loading actors: $e');
+        setState(() {
+          isLoadingActors = false;
+        });
+      }
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -275,8 +336,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             
                             _buildDetailRow("Director", movie.director ?? "Unknown"),
                             
-                            _buildDetailRow("Cast", movie.cast ?? "Unknown"),
-                            
                             _buildDetailRow("Duration", "${movie.durationMinutes ?? 0} minutes"),
                             
                             _buildDetailRow("Release Date", 
@@ -287,8 +346,17 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             
                             _buildDetailRow("Release Year", movie.releaseYear?.toString() ?? "Unknown"),
                             
-                            if (movie.genres != null && movie.genres!.isNotEmpty)
-                              _buildDetailRow("Genres", movie.genres!.map((g) => g.name).join(", ")),
+                            _buildDetailRow("Genres", 
+                              movie.genres != null && movie.genres!.isNotEmpty
+                                ? movie.genres!.map((g) => g.name).join(", ")
+                                : "No genres assigned"
+                            ),
+                            
+                            _buildDetailRow("Actors", 
+                              movie.actors != null && movie.actors!.isNotEmpty
+                                ? movie.actors!.map((a) => "${a.firstName} ${a.lastName}").join(", ")
+                                : "No actors assigned"
+                            ),
                             
                             if (movie.trailerUrl != null && movie.trailerUrl!.isNotEmpty)
                               _buildDetailRow("Trailer", movie.trailerUrl!),

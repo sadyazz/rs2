@@ -347,11 +347,10 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
               final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const EditMovieScreen(),
+                  builder: (context) => EditMovieScreen(),
                 ),
               );
               
-              // Refresh movies list if new movie was created
               if (result == true) {
                 await _loadMovies();
               }
@@ -391,7 +390,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
     }
     
     if (result!.result.isEmpty) {
-      return const Expanded(
+    return const Expanded(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
