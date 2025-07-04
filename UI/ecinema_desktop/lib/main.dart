@@ -6,6 +6,7 @@ import 'package:ecinema_desktop/providers/screening_provider.dart';
 import 'package:ecinema_desktop/providers/review_provider.dart';
 import 'package:ecinema_desktop/providers/language_provider.dart';
 import 'package:ecinema_desktop/providers/actor_provider.dart';
+import 'package:ecinema_desktop/providers/theme_provider.dart';
 import 'package:ecinema_desktop/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -20,6 +21,7 @@ void main() {
     ChangeNotifierProvider(create: (_) => LanguageProvider()),
     ChangeNotifierProvider(create: (_) => GenreProvider()),
     ChangeNotifierProvider(create: (_) => ActorProvider()),
+    ChangeNotifierProvider(create: (_) => ThemeProvider()),
   ], child: const MyApp()));
 }
 
@@ -28,8 +30,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LanguageProvider>(
-      builder: (context, languageProvider, child) {
+    return Consumer2<LanguageProvider, ThemeProvider>(
+      builder: (context, languageProvider, themeProvider, child) {
         if (!languageProvider.isInitialized) {
           return MaterialApp(
             home: Scaffold(
@@ -43,26 +45,9 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: 'eCinema Desktop',
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color(0xFF4F8593),
-              brightness: Brightness.light,
-            ),
-            inputDecorationTheme: InputDecorationTheme(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              filled: true,
-            ),
-            cardTheme: CardTheme(
-              elevation: 8,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-          ),
+          theme: themeProvider.getLightTheme(),
+          darkTheme: themeProvider.getDarkTheme(),
+          themeMode: themeProvider.themeMode,
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -150,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                           Text(
                             l10n.welcomeBack,
                             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              color: Colors.grey[600],
+                              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -159,13 +144,13 @@ class _LoginPageState extends State<LoginPage> {
                             controller: _usernameController,
                             decoration: InputDecoration(
                               labelText: l10n.username,
-                              prefixIcon: const Icon(Icons.person_outline),
+                              prefixIcon: Icon(Icons.person_outline, color: Theme.of(context).colorScheme.onSurface),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: Colors.grey.shade300),
+                                borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -174,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               filled: true,
-                              fillColor: Colors.white,
+                              fillColor: Theme.of(context).colorScheme.surface,
                             ),
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
@@ -195,10 +180,11 @@ class _LoginPageState extends State<LoginPage> {
                             controller: _passwordController,
                             decoration: InputDecoration(
                               labelText: l10n.password,
-                              prefixIcon: const Icon(Icons.lock_outline),
+                              prefixIcon: Icon(Icons.lock_outline, color: Theme.of(context).colorScheme.onSurface),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                  color: Theme.of(context).colorScheme.onSurface,
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -211,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: Colors.grey.shade300),
+                                borderSide: BorderSide(color: Theme.of(context).colorScheme.outline),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -220,7 +206,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               filled: true,
-                              fillColor: Colors.white,
+                              fillColor: Theme.of(context).colorScheme.surface,
                             ),
                             obscureText: _obscurePassword,
                             validator: (value) {

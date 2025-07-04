@@ -4,17 +4,19 @@ import 'package:ecinema_desktop/screens/screenings_list_screen.dart';
 import 'package:ecinema_desktop/screens/settings_screen.dart';
 import 'package:ecinema_desktop/providers/language_provider.dart';
 import 'package:ecinema_desktop/providers/auth_provider.dart';
+import 'package:ecinema_desktop/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:ecinema_desktop/main.dart' show LoginPage;
 
 class MasterScreen extends StatefulWidget {
-  MasterScreen(this.title, this.child, {super.key, this.showDrawer = true});
+  MasterScreen(this.title, this.child, {super.key, this.showDrawer = true, this.floatingActionButton});
 
   String? title;
   Widget? child;
   bool showDrawer;
+  Widget? floatingActionButton;
 
   @override
   State<MasterScreen> createState() => _MasterScreenState();
@@ -50,8 +52,8 @@ class _MasterScreenState extends State<MasterScreen> {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Theme.of(context).colorScheme.primary,
-                Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                const Color(0xFF4F8593),
+                const Color(0xFF4F8593).withOpacity(0.8),
               ],
             ),
           ),
@@ -98,6 +100,48 @@ class _MasterScreenState extends State<MasterScreen> {
               
               _buildLanguagePicker(l10n),
               
+              Consumer<ThemeProvider>(
+                builder: (context, themeProvider, child) {
+                  return Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(8),
+                        onTap: () => themeProvider.toggleTheme(),
+                        child: ListTile(
+                          title: Text(
+                            'Theme',
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.9),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          subtitle: Text(
+                            themeProvider.isDarkMode ? 'Dark Mode' : 'Light Mode',
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.7),
+                              fontSize: 14,
+                            ),
+                          ),
+                          leading: Icon(
+                            themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                            color: Colors.white.withOpacity(0.8),
+                            size: 24,
+                          ),
+                          trailing: Icon(
+                            Icons.swap_horiz,
+                            color: Colors.white.withOpacity(0.8),
+                            size: 24,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              
               Divider(
                 color: Colors.white.withOpacity(0.3),
                 height: 32,
@@ -113,6 +157,7 @@ class _MasterScreenState extends State<MasterScreen> {
         ),
       ) : null,
       body: widget.child,
+      floatingActionButton: widget.floatingActionButton,
     );
   }
 
