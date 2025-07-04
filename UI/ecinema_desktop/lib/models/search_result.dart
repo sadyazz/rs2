@@ -1,4 +1,6 @@
 class SearchResult<T> {
-  int? count = 0;
-  List<T> result = [];
+  int? totalCount;
+  List<T>? items;
+
+  SearchResult({this.totalCount, this.items});
 }

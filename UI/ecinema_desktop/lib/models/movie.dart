@@ -11,7 +11,6 @@ class Movie {
   String? description;
   int? durationMinutes;
   String? director;
-  String? cast;
   DateTime? releaseDate;
   int? releaseYear;
   List<Genre>? genres;
@@ -27,7 +26,6 @@ class Movie {
     this.description,
     this.durationMinutes,
     this.director,
-    this.cast,
     this.releaseDate,
     this.releaseYear,
     this.genres,

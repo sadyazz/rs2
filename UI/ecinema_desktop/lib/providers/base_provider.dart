@@ -34,8 +34,8 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
       var result = SearchResult<T>();
 
-      result.count = data['count'];
-      result.result = List<T>.from(data["items"].map((e) => fromJson(e)));
+      result.totalCount = data['totalCount'];
+      result.items = List<T>.from(data["items"].map((e) => fromJson(e)));
 
 
       return result;
