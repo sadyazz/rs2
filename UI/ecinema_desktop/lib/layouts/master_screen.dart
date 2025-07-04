@@ -10,10 +10,11 @@ import 'package:provider/provider.dart';
 import 'package:ecinema_desktop/main.dart' show LoginPage;
 
 class MasterScreen extends StatefulWidget {
-  MasterScreen(this.title, this.child, {super.key});
+  MasterScreen(this.title, this.child, {super.key, this.showDrawer = true});
 
   String? title;
   Widget? child;
+  bool showDrawer;
 
   @override
   State<MasterScreen> createState() => _MasterScreenState();
@@ -30,8 +31,19 @@ class _MasterScreenState extends State<MasterScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: false,
+        leading: widget.showDrawer 
+          ? Builder(
+              builder: (context) => IconButton(
+                icon: Icon(Icons.menu, color: Theme.of(context).colorScheme.primary),
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              ),
+            )
+          : IconButton(
+              icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.primary),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
       ),
-      drawer: Drawer(
+      drawer: widget.showDrawer ? Drawer(
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -48,11 +60,6 @@ class _MasterScreenState extends State<MasterScreen> {
               Expanded(
                 child: ListView(
                   children: [
-                    _buildListTile(
-                      icon: Icons.arrow_back,
-                      title: l10n.back,
-                      isBackButton: true,
-                    ),
                     _buildListTile(
                       icon: Icons.dashboard,
                       title: l10n.dashboard,
@@ -104,7 +111,7 @@ class _MasterScreenState extends State<MasterScreen> {
             ],
           ),
         ),
-      ),
+      ) : null,
       body: widget.child,
     );
   }
