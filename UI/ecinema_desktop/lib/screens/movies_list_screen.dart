@@ -510,13 +510,15 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
 
   Widget _buildMovieCard(Movie movie) {
     return InkWell(
-      onTap: () {
-        Navigator.push(
+      onTap: () async {
+        final result = await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => MovieDetailsScreen(movie: movie),
           ),
         );
+        
+        _resetPagination();
       },
       borderRadius: BorderRadius.circular(16),
       child: Container(

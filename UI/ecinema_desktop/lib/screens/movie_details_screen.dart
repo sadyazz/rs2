@@ -162,7 +162,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     final movie = detailedMovie ?? widget.movie;
 
     return MasterScreen(
-      "Movie Details",
+      movie.title ?? "Movie Details",
       Padding(
         padding: const EdgeInsets.all(32.0),
         child: isLoading 
@@ -180,27 +180,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.arrow_back),
-                        tooltip: 'Back to movies',
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Text(
-                          movie.title ?? "Unknown Movie",
-                          style: const TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 32),
-                  
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -253,7 +232,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                     ),
                                   );
                                   
-                                  // Refresh movie details if edit was successful
                                   if (result == true) {
                                     await _loadMovieDetails();
                                   }
@@ -272,8 +250,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                 icon: const Icon(Icons.delete),
                                 label: const Text('Delete Movie'),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red[600],
-                                  foregroundColor: Colors.white,
+                                  backgroundColor: Theme.of(context).colorScheme.error,
+                                  foregroundColor: Theme.of(context).colorScheme.onError,
                                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                 ),
                               ),
@@ -383,7 +361,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             
                             const SizedBox(height: 32),
                             
-                            // Reviews Section
                             _buildReviewsSection(),
                           ],
                         ),
@@ -395,7 +372,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 ],
               ),
             ),
-      ),
+      ), showDrawer: false
     );
   }
   
@@ -409,10 +386,10 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             width: 120,
             child: Text(
               "$label:",
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: Colors.grey,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
               ),
             ),
           ),
@@ -431,7 +408,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
   Widget _buildReviewsSection() {
     final movie = detailedMovie ?? widget.movie;
-    final reviews = reviewsResult?.result ?? [];
+    final reviews = reviewsResult?.items ?? [];
 
     return Card(
       child: Padding(
@@ -476,7 +453,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       Text(
                         '(${reviews.length} reviews)',
                         style: TextStyle(
-                          color: Colors.grey[600],
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                           fontSize: 14,
                         ),
                       ),
@@ -487,7 +464,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             
             const SizedBox(height: 16),
             
-            // Preview of recent reviews
             if (isLoadingReviews)
               const Center(
                 child: Padding(
@@ -509,7 +485,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                   child: Text(
                     '... and ${reviews.length - 2} more reviews',
                     style: TextStyle(
-                      color: Colors.grey[600],
+                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                       fontSize: 14,
                       fontStyle: FontStyle.italic,
                     ),
@@ -524,21 +500,21 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       Icon(
                         Icons.rate_review,
                         size: 48,
-                        color: Colors.grey[400],
+                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
                       ),
                       const SizedBox(height: 16),
                       Text(
                         'No reviews yet',
                         style: TextStyle(
                           fontSize: 16,
-                          color: Colors.grey[600],
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                         ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         'Be the first to review this movie!',
                         style: TextStyle(
-                          color: Colors.grey[500],
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                           fontSize: 14,
                         ),
                       ),
@@ -566,7 +542,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     label: const Text('View All Reviews'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Colors.white,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                 ),
@@ -590,8 +566,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             radius: 16,
             child: Text(
               review.userName.isNotEmpty ? review.userName[0].toUpperCase() : 'U',
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary,
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
               ),
