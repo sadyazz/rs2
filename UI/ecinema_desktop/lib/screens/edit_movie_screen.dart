@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ecinema_desktop/layouts/master_screen.dart';
 import 'package:ecinema_desktop/models/movie.dart';
 import 'package:ecinema_desktop/models/genre.dart';
@@ -6,9 +8,12 @@ import 'package:ecinema_desktop/models/search_result.dart';
 import 'package:ecinema_desktop/providers/movie_provider.dart';
 import 'package:ecinema_desktop/providers/genre_provider.dart';
 import 'package:ecinema_desktop/providers/actor_provider.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'dart:convert';
 
 class EditMovieScreen extends StatefulWidget {
   Movie? movie;
@@ -88,7 +93,8 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MasterScreen('Edit Movie', Column(
+    final l10n = AppLocalizations.of(context)!;
+    return MasterScreen(l10n.editMovie, Column(
       children:[
         isLoading ? Container() : _buildForm(),
         _save()
@@ -97,6 +103,7 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
   }
 
   Widget _buildForm() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: FormBuilder(
@@ -104,45 +111,163 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
         initialValue: _initialValue,
         child: Column(
           children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 200,
+                  height: 300,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+                      width: 1,
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                          borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.image,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Movie Poster',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surface,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                              width: 1,
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: (_initialValue['image'] != null && _initialValue['image'].toString().isNotEmpty) || _imageBase64 != null
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Image.memory(
+                                          base64Decode(_imageBase64 ?? _initialValue['image']),
+                                          fit: BoxFit.cover,
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                        ),
+                                      )
+                                    : MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        child: GestureDetector(
+                                          onTap: getImage,
+                                          child: Container(
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context).colorScheme.surface,
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.movie,
+                                                  size: 48,
+                                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Text(
+                                                  'Select movie',
+                                                  style: TextStyle(
+                                                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                
+                SizedBox(width: 24),
+                
+                Expanded(
+                  child: Column(
+                    children: [
+                      FormBuilderTextField(
+                        decoration: InputDecoration(labelText: l10n.title),
+                        name: 'title',
+                      ),
+                      
+                      SizedBox(height: 16),
+                      
+                      FormBuilderTextField(
+                        decoration: InputDecoration(labelText: l10n.description),
+                        name: "description",
+                      ),
+                      
+                      SizedBox(height: 16),
+                      
+                      FormBuilderTextField(
+                        decoration: InputDecoration(labelText: l10n.director),
+                        name: 'director',
+                      ),
+                      
+                      SizedBox(height: 16),
+                      
+                      FormBuilderTextField(
+                        decoration: InputDecoration(labelText: l10n.durationMinutes),
+                        name: 'durationMinutes',
+                        keyboardType: TextInputType.number,
+                      ),
+                      
+                      SizedBox(height: 16),
+                      
+                      FormBuilderDropdown(
+                        name:"genreId",
+                        decoration: InputDecoration(labelText: l10n.genre),
+                        items: genresResult?.items?.map((e)=>DropdownMenuItem(value: e.id.toString(), child: Text(e.name ?? ""),)).toList() ?? [],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            
+            SizedBox(height: 24),
+            
             Row(children: [
-              Expanded(child: FormBuilderTextField(
-                decoration: InputDecoration(labelText: 'Title'),
-                name: 'title',
-              )),
-              SizedBox(width:10),
-              Expanded(child: FormBuilderTextField(
-                decoration: InputDecoration(labelText: 'Description'),
-                name:"description",
-              ))
-            ],),
-            
-            SizedBox(height: 16),
-            
-            Row(children: [
-              Expanded(child: FormBuilderTextField(
-                decoration: InputDecoration(labelText: 'Director'),
-                name: 'director',
-              )),
-              SizedBox(width:10),
-              Expanded(child: FormBuilderTextField(
-                decoration: InputDecoration(labelText: 'Duration (minutes)'),
-                name: 'durationMinutes',
-                keyboardType: TextInputType.number,
-              ))
-            ],),
-            
-            SizedBox(height: 16),
-            
-            Row(children: [
-              Expanded(child: FormBuilderDropdown(
-                name:"genreId",
-                decoration: InputDecoration(labelText: 'Genre'),
-                items: genresResult?.items?.map((e)=>DropdownMenuItem(value: e.id.toString(), child: Text(e.name ?? ""),)).toList() ?? [],
-              )),
-              SizedBox(width:10),
               Expanded(child: FormBuilderDropdown(
                 name:"actorId",
-                decoration: InputDecoration(labelText: 'Actor'),
+                decoration: InputDecoration(labelText: l10n.actor),
                 items: actorsResult?.items?.map((e) => DropdownMenuItem(
                   value: e.id.toString(), 
                   child: Text("${e.firstName ?? ""} ${e.lastName ?? ""}")
@@ -154,13 +279,13 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
             
             Row(children: [
               Expanded(child: FormBuilderDateTimePicker(
-                decoration: InputDecoration(labelText: 'Release Date'),
+                decoration: InputDecoration(labelText: l10n.releaseDate),
                 name: 'releaseDate',
                 inputType: InputType.date,
               )),
               SizedBox(width:10),
               Expanded(child: FormBuilderTextField(
-                decoration: InputDecoration(labelText: 'Release Year'),
+                decoration: InputDecoration(labelText: l10n.releaseYear),
                 name: 'releaseYear',
                 keyboardType: TextInputType.number,
               ))
@@ -170,23 +295,18 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
             
             Row(children: [
               Expanded(child: FormBuilderTextField(
-                decoration: InputDecoration(labelText: 'Trailer URL'),
+                decoration: InputDecoration(labelText: l10n.trailerUrl),
                 name: 'trailerUrl',
               )),
-              SizedBox(width:10),
-              Expanded(child: FormBuilderTextField(
-                decoration: InputDecoration(labelText: 'Image URL'),
-                name: 'image',
-              ))
             ],),
             
             SizedBox(height: 16),
             
             FormBuilderSwitch(
               name: 'isActive',
-              title: Text('Is Active'),
+              title: Text(l10n.isActive),
               decoration: InputDecoration(
-                labelText: 'Movie Status',
+                labelText: l10n.movieStatus,
               ),
             ),
           ],
@@ -196,6 +316,7 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
   }
   
   Widget _save() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
@@ -205,7 +326,7 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           SizedBox(width: 16),
           ElevatedButton(
@@ -238,8 +359,10 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
                   }
                   
                   formData['isActive'] = formData['isActive'] ?? true;
-                  
-                  print('Form data to send: $formData');
+
+                  if (_imageBase64 != null) {
+                    formData['image'] = _imageBase64;
+                  }
                   
                   if(widget.movie == null){
                     await movieProvider.insert(formData);
@@ -252,7 +375,7 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
                   print('Error saving movie: $e');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Error saving movie: $e'),
+                      content: Text(l10n.errorSavingMovie(e.toString())),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -262,11 +385,24 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
               backgroundColor: Theme.of(context).colorScheme.primary,
               foregroundColor: Theme.of(context).colorScheme.onPrimary,
             ),
-            child: Text(widget.movie == null ? 'Add Movie' : 'Update Movie'),
+            child: Text(widget.movie == null ? l10n.addMovie : l10n.updateMovie),
           ),
         ]
       ),
     );
+  }
+
+  File? _image;
+  String? _imageBase64;
+  
+  void getImage() async {
+    var result = await FilePicker.platform.pickFiles(type: FileType.image);
+
+    if(result != null && result.files.single.path != null) {
+      _image = File(result.files.single.path!);
+      _imageBase64 = base64Encode(_image!.readAsBytesSync());
+      setState(() {});
+    }
   }
   
 

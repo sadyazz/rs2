@@ -560,5 +560,79 @@
   "ofText": "of",
   "@ofText": {
     "description": "Of text used in pagination (e.g., 15 of 75)"
+  },
+  "editMovie": "Edit Movie",
+  "@editMovie": {
+    "description": "Edit movie page title"
+  },
+  "title": "Title",
+  "@title": {
+    "description": "Title field label"
+  },
+  "description": "Description",
+  "@description": {
+    "description": "Description field label"
+  },
+  "director": "Director",
+  "@director": {
+    "description": "Director field label"
+  },
+  "durationMinutes": "Duration (minutes)",
+  "@durationMinutes": {
+    "description": "Duration field label"
+  },
+  "genre": "Genre",
+  "@genre": {
+    "description": "Genre field label"
+  },
+  "actor": "Actor",
+  "@actor": {
+    "description": "Actor field label"
+  },
+  "releaseDate": "Release Date",
+  "@releaseDate": {
+    "description": "Release date field label"
+  },
+  "releaseYear": "Release Year",
+  "@releaseYear": {
+    "description": "Release year field label"
+  },
+  "trailerUrl": "Trailer URL",
+  "@trailerUrl": {
+    "description": "Trailer URL field label"
+  },
+  "imageUrl": "Image URL",
+  "@imageUrl": {
+    "description": "Image URL field label"
+  },
+  "isActive": "Is Active",
+  "@isActive": {
+    "description": "Is active field label"
+  },
+  "movieStatus": "Movie Status",
+  "@movieStatus": {
+    "description": "Movie status field label"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "addMovie": "Add Movie",
+  "@addMovie": {
+    "description": "Add movie button text"
+  },
+  "updateMovie": "Update Movie",
+  "@updateMovie": {
+    "description": "Update movie button text"
+  },
+  "errorSavingMovie": "Error saving movie: {error}",
+  "@errorSavingMovie": {
+    "description": "Error saving movie message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
   }
 }

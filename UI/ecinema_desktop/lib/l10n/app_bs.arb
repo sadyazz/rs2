@@ -327,7 +327,7 @@
   },
   "editMovie": "Uredi film",
   "@editMovie": {
-    "description": "Edit movie button text"
+    "description": "Edit movie page title"
   },
   "deleteMovie": "Obriši film",
   "@deleteMovie": {
@@ -536,5 +536,75 @@
   "ofText": "od",
   "@ofText": {
     "description": "Of text used in pagination (e.g., 15 of 75)"
+  },
+  "editMovie": "Uredi film",
+  "@editMovie": {
+    "description": "Edit movie page title"
+  },
+  "title": "Naslov",
+  "@title": {
+    "description": "Title field label"
+  },
+  "description": "Opis",
+  "@description": {
+    "description": "Description field label"
+  },
+  "director": "Režiser",
+  "@director": {
+    "description": "Director field label"
+  },
+  "durationMinutes": "Trajanje (minuta)",
+  "@durationMinutes": {
+    "description": "Duration field label"
+  },
+  "genre": "Žanr",
+  "@genre": {
+    "description": "Genre field label"
+  },
+  "actor": "Glumac",
+  "@actor": {
+    "description": "Actor field label"
+  },
+  "releaseDate": "Datum izlaska",
+  "@releaseDate": {
+    "description": "Release date field label"
+  },
+  "releaseYear": "Godina izlaska",
+  "@releaseYear": {
+    "description": "Release year field label"
+  },
+  "trailerUrl": "Trejler URL",
+  "@trailerUrl": {
+    "description": "Trailer URL field label"
+  },
+  "imageUrl": "URL slike",
+  "@imageUrl": {
+    "description": "Image URL field label"
+  },
+  "isActive": "Je aktivan",
+  "@isActive": {
+    "description": "Is active field label"
+  },
+  "movieStatus": "Status filma",
+  "@movieStatus": {
+    "description": "Movie status field label"
+  },
+  "addMovie": "Dodaj film",
+  "@addMovie": {
+    "description": "Add movie button text"
+  },
+  "updateMovie": "Ažuriraj film",
+  "@updateMovie": {
+    "description": "Update movie button text"
+  },
+  "errorSavingMovie": "Greška pri čuvanju filma: {error}",
+  "@errorSavingMovie": {
+    "description": "Error saving movie message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
   }
 }

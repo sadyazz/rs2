@@ -514,14 +514,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        l10n.beFirstToReview,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                          fontSize: 14,
-                        ),
-                      ),
                     ],
                   ),
                 ),
