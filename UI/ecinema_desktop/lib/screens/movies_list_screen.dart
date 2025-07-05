@@ -32,6 +32,9 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   }
 
   SearchResult<Movie>? result = null;
+  int currentPage = 0;
+  int pageSize = 15;
+  bool isLoading = false;
 
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _directorController = TextEditingController();
@@ -43,23 +46,41 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   final TextEditingController _releaseYearController = TextEditingController();
   bool isActive = true;
 
-  // Metoda za učitavanje filmova
   Future<void> _loadMovies() async {
     try {
-      var filter = <String, dynamic>{};
+      setState(() {
+        isLoading = true;
+      });
+      
+      var filter = <String, dynamic>{
+        'page': currentPage,
+        'pageSize': pageSize,
+        'includeTotalCount': true,
+      };
       result = await provider.get(filter: filter);
       setState(() {
         result = result;
+        isLoading = false;
       });
     } catch (e) {
       print('Error loading movies: $e');
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
-  // Metoda za pretragu filmova sa filterima
   Future<void> _searchMovies() async {
     try {
-      var filter = <String, dynamic>{};
+      setState(() {
+        isLoading = true;
+      });
+      
+      var filter = <String, dynamic>{
+        'page': 0,
+        'pageSize': pageSize,
+        'includeTotalCount': true,
+      };
       
       if (_searchController.text.isNotEmpty) {
         filter["title"] = _searchController.text;
@@ -101,17 +122,47 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
       result = await provider.get(filter: filter);
       setState(() {
         result = result;
+        currentPage = 0;
+        isLoading = false;
       });
     } catch (e) {
       print('Error searching movies: $e');
+      setState(() {
+        isLoading = false;
+      });
     }
+  }
+
+  void _goToNextPage() {
+    if (result != null && result!.items!.length == pageSize) {
+      setState(() {
+        currentPage++;
+      });
+      _loadMovies();
+    }
+  }
+
+  void _goToPreviousPage() {
+    if (currentPage > 0) {
+      setState(() {
+        currentPage--;
+      });
+      _loadMovies();
+    }
+  }
+
+  void _resetPagination() {
+    setState(() {
+      currentPage = 0;
+    });
+    _loadMovies();
   }
 
   @override
   Widget build(BuildContext context) {
     return MasterScreen("Movies",
       Padding(
-        padding: const EdgeInsets.all(32.0),
+        padding: const EdgeInsets.fromLTRB(32.0, 16.0, 32.0, 16.0),
         child: Column(
           children: [
             _buildSearch(),
@@ -352,7 +403,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
               );
               
               if (result == true) {
-                await _loadMovies();
+                _resetPagination();
               }
             },
             icon: const Icon(Icons.add, size: 18),
@@ -371,7 +422,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   }
 
   Widget _BuildResultView(){
-    if (result == null) {
+    if (isLoading) {
       return const Expanded(
         child: Center(
           child: Column(
@@ -389,7 +440,25 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
       );
     }
     
-    if (result!.result.isEmpty) {
+    if (result == null) {
+      return const Expanded(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.movie_outlined, size: 64, color: Colors.grey),
+              SizedBox(height: 16),
+              Text(
+                "No movies loaded",
+                style: TextStyle(fontSize: 18, color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    
+    if (result!.items!.isEmpty) {
     return const Expanded(
         child: Center(
           child: Column(
@@ -413,21 +482,28 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
     }
     
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 5,
-            childAspectRatio: 0.65,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
+      child: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16, bottom: 5),
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 5,
+                  childAspectRatio: 0.65,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                ),
+                itemCount: result!.items!.length,
+                itemBuilder: (context, index) {
+                  final movie = result!.items![index];
+                  return _buildMovieCard(movie);
+                },
+              ),
+            ),
           ),
-          itemCount: result!.result.length,
-          itemBuilder: (context, index) {
-            final movie = result!.result[index];
-            return _buildMovieCard(movie);
-          },
-        ),
+          _buildPaginationControls(),
+        ],
       ),
     );
   }
@@ -445,11 +521,11 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
       borderRadius: BorderRadius.circular(16),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
+              color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
               spreadRadius: 1,
               blurRadius: 8,
               offset: const Offset(0, 4),
@@ -470,8 +546,8 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          Colors.grey[200]!,
-                          Colors.grey[300]!,
+                          Theme.of(context).colorScheme.surfaceVariant,
+                          Theme.of(context).colorScheme.outline.withOpacity(0.3),
                         ],
                       ),
                       borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
@@ -484,11 +560,11 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                         : Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.movie, size: 48, color: Colors.grey[500]),
+                              Icon(Icons.movie, size: 48, color: Theme.of(context).colorScheme.onSurfaceVariant),
                               const SizedBox(height: 8),
                               Text(
                                 "No Image",
-                                style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                                style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 12),
                               ),
                             ],
                           ),
@@ -582,7 +658,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                       movie.director ?? "Unknown Director",
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey[600],
+                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                         height: 1.2,
                       ),
                       maxLines: 1,
@@ -600,15 +676,15 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                               children: movie.genres!.take(1).map((genre) => Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                                 decoration: BoxDecoration(
-                                  color: Colors.blue[50],
+                                  color: Theme.of(context).colorScheme.primaryContainer,
                                   borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(color: Colors.blue[200]!, width: 0.5),
+                                  border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.3), width: 0.5),
                                 ),
                                 child: Text(
                                   genre.name ?? "Unknown",
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Colors.blue[700],
+                                    color: Theme.of(context).colorScheme.onPrimaryContainer,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -620,13 +696,13 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.access_time, size: 10, color: Colors.grey[500]),
+                              Icon(Icons.access_time, size: 10, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6)),
                               const SizedBox(width: 2),
                               Text(
                                 "${movie.durationMinutes}m",
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: Colors.grey[600],
+                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -640,6 +716,147 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildPaginationControls() {
+    if (result == null) return const SizedBox.shrink();
+    
+    final totalCount = result!.totalCount ?? 0;
+    final currentItems = result!.items!.length;
+    final hasNextPage = currentItems == pageSize;
+    final hasPreviousPage = currentPage > 0;
+    final totalPages = (totalCount / pageSize).ceil();
+    
+    return Container(
+      margin: const EdgeInsets.only(top: 4, bottom: 2),
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).colorScheme.shadow.withOpacity(0.05),
+            spreadRadius: 0,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: hasPreviousPage 
+                ? Theme.of(context).colorScheme.primaryContainer
+                : Theme.of(context).colorScheme.surfaceVariant,
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: hasPreviousPage ? _goToPreviousPage : null,
+                borderRadius: BorderRadius.circular(6),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.chevron_left,
+                        size: 14,
+                        color: hasPreviousPage 
+                          ? Theme.of(context).colorScheme.onPrimaryContainer
+                          : Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: 2),
+                      Text(
+                        'Previous',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          color: hasPreviousPage 
+                            ? Theme.of(context).colorScheme.onPrimaryContainer
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '${currentPage + 1} / $totalPages',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 1),
+              Text(
+                '$currentItems of $totalCount',
+                style: TextStyle(
+                  fontSize: 10,
+                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                ),
+              ),
+            ],
+          ),
+          
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: hasNextPage 
+                ? Theme.of(context).colorScheme.primaryContainer
+                : Theme.of(context).colorScheme.surfaceVariant,
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: hasNextPage ? _goToNextPage : null,
+                borderRadius: BorderRadius.circular(6),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Next',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          color: hasNextPage 
+                            ? Theme.of(context).colorScheme.onPrimaryContainer
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(width: 2),
+                      Icon(
+                        Icons.chevron_right,
+                        size: 14,
+                        color: hasNextPage 
+                          ? Theme.of(context).colorScheme.onPrimaryContainer
+                          : Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
