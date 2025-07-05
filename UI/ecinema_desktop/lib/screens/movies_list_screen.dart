@@ -365,7 +365,10 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                             _minGradeController.clear();
                             _maxGradeController.clear();
                             _releaseYearController.clear();
-                            setState(() => localIsActive = true);
+                            setState(() {
+                              localIsActive = true;
+                              isActive = true;
+                            });
                           },
                           child: const Text('Reset'),
                         ),
@@ -375,6 +378,9 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                         ),
                         ElevatedButton(
                           onPressed: () async {
+                            setState(() {
+                              isActive = localIsActive;
+                            });
                             await _searchMovies();
                             Navigator.pop(context);
                           },
