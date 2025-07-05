@@ -231,6 +231,10 @@
   "@reviews": {
     "description": "Reviews count text"
   },
+  "reviews2":"Recenzije",
+  "@reviews2":{
+    "description":"Reviews count text"
+  },
   "stars4Plus": "4+ zvjezdice",
   "@stars4Plus": {
     "description": "4+ stars text"
@@ -296,6 +300,230 @@
         "example": "Network error"
       }
     }
+  },
+  "previous": "Prethodna",
+  "@previous": {
+    "description": "Previous page button text"
+  },
+  "next": "Sljedeća",
+  "@next": {
+    "description": "Next page button text"
+  },
+  "ofText": "od",
+  "@ofText": {
+    "description": "Of text used in pagination (e.g., 15 of 75)"
+  },
+  "movieDetails": "Detalji filma",
+  "@movieDetails": {
+    "description": "Movie details page title"
+  },
+  "loadingMovieDetails": "Učitavanje detalja filma...",
+  "@loadingMovieDetails": {
+    "description": "Loading movie details message"
+  },
+  "noImage": "Nema slike",
+  "@noImage": {
+    "description": "No image placeholder text"
+  },
+  "editMovie": "Uredi film",
+  "@editMovie": {
+    "description": "Edit movie button text"
+  },
+  "deleteMovie": "Obriši film",
+  "@deleteMovie": {
+    "description": "Delete movie button text"
+  },
+  "unknownTitle": "Nepoznat naslov",
+  "@unknownTitle": {
+    "description": "Unknown title placeholder"
+  },
+  "active": "Aktivan",
+  "@active": {
+    "description": "Active status text"
+  },
+  "inactive": "Neaktivan",
+  "@inactive": {
+    "description": "Inactive status text"
+  },
+  "minutes": "minuta",
+  "@minutes": {
+    "description": "Minutes text"
+  },
+  "releaseDate": "Datum izlaska",
+  "@releaseDate": {
+    "description": "Release date label"
+  },
+  "genres": "Žanrovi",
+  "@genres": {
+    "description": "Genres label"
+  },
+  "actors": "Glumci",
+  "@actors": {
+    "description": "Actors label"
+  },
+  "trailer": "Trejler",
+  "@trailer": {
+    "description": "Trailer label"
+  },
+  "description": "Opis",
+  "@description": {
+    "description": "Description label"
+  },
+  "unknown": "Nepoznato",
+  "@unknown": {
+    "description": "Unknown placeholder text"
+  },
+  "noGenresAssigned": "Nema dodijeljenih žanrova",
+  "@noGenresAssigned": {
+    "description": "No genres assigned text"
+  },
+  "noActorsAssigned": "Nema dodijeljenih glumaca",
+  "@noActorsAssigned": {
+    "description": "No actors assigned text"
+  },
+  "beFirstToReview": "Budite prvi koji će recenzirati ovaj film!",
+  "@beFirstToReview": {
+    "description": "Be first to review message"
+  },
+  "viewAllReviews": "Pogledaj sve recenzije",
+  "@viewAllReviews": {
+    "description": "View all reviews button text"
+  },
+  "andMoreReviews": "... i još {count} recenzija",
+  "@andMoreReviews": {
+    "description": "And more reviews text",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "confirmDeletion": "Potvrda brisanja",
+  "@confirmDeletion": {
+    "description": "Confirm deletion dialog title"
+  },
+  "confirmDeleteMovie": "Da li ste sigurni da želite obrisati \"{title}\"?",
+  "@confirmDeleteMovie": {
+    "description": "Confirm delete movie message",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Movie Title"
+      }
+    }
+  },
+  "movieDeletedSuccessfully": "Film uspješno obrisan",
+  "@movieDeletedSuccessfully": {
+    "description": "Movie deleted success message"
+  },
+  "failedToDeleteMovie": "Greška pri brisanju filma",
+  "@failedToDeleteMovie": {
+    "description": "Failed to delete movie message"
+  },
+  "movies": "Filmovi",
+  "@movies": {
+    "description": "Movies list page title"
+  },
+  "search": "Pretraga",
+  "@search": {
+    "description": "Search button and field label"
+  },
+  "filters": "Filteri",
+  "@filters": {
+    "description": "Filters button text"
+  },
+  "addMovie": "Dodaj film",
+  "@addMovie": {
+    "description": "Add movie button text"
+  },
+  "director": "Režiser",
+  "@director": {
+    "description": "Director field label"
+  },
+  "genreIds": "ID žanrova (npr. 1,2,3)",
+  "@genreIds": {
+    "description": "Genre IDs field label"
+  },
+  "genreIdsHint": "Unesite ID žanrova odvojene zarezima",
+  "@genreIdsHint": {
+    "description": "Genre IDs field hint text"
+  },
+  "minDuration": "Min trajanje",
+  "@minDuration": {
+    "description": "Minimum duration field label"
+  },
+  "maxDuration": "Max trajanje",
+  "@maxDuration": {
+    "description": "Maximum duration field label"
+  },
+  "minGrade": "Min ocjena",
+  "@minGrade": {
+    "description": "Minimum grade field label"
+  },
+  "maxGrade": "Max ocjena",
+  "@maxGrade": {
+    "description": "Maximum grade field label"
+  },
+  "releaseYear": "Godina izlaska",
+  "@releaseYear": {
+    "description": "Release year field label"
+  },
+  "isActive": "Je aktivan",
+  "@isActive": {
+    "description": "Is active field label"
+  },
+  "reset": "Resetuj",
+  "@reset": {
+    "description": "Reset button text"
+  },
+  "close": "Zatvori",
+  "@close": {
+    "description": "Close button text"
+  },
+  "apply": "Primijeni",
+  "@apply": {
+    "description": "Apply button text"
+  },
+  "loadingMovies": "Učitavanje filmova...",
+  "@loadingMovies": {
+    "description": "Loading movies message"
+  },
+  "noMoviesLoaded": "Nema učitavanih filmova",
+  "@noMoviesLoaded": {
+    "description": "No movies loaded message"
+  },
+  "noMoviesFound": "Nema pronađenih filmova",
+  "@noMoviesFound": {
+    "description": "No movies found message"
+  },
+  "tryAdjustingSearch": "Pokušajte da prilagodite kriterije pretrage",
+  "@tryAdjustingSearch": {
+    "description": "Try adjusting search criteria message"
+  },
+  "noImage": "Nema slike",
+  "@noImage": {
+    "description": "No image placeholder text"
+  },
+  "unknownTitle": "Nepoznat naslov",
+  "@unknownTitle": {
+    "description": "Unknown title placeholder"
+  },
+  "unknownDirector": "Nepoznat režiser",
+  "@unknownDirector": {
+    "description": "Unknown director placeholder"
+  },
+  "unknown": "Nepoznato",
+  "@unknown": {
+    "description": "Unknown placeholder text"
+  },
+  "active": "Aktivan",
+  "@active": {
+    "description": "Active status text"
+  },
+  "inactive": "Neaktivan",
+  "@inactive": {
+    "description": "Inactive status text"
   },
   "previous": "Prethodna",
   "@previous": {

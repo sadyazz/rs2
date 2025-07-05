@@ -231,6 +231,10 @@
   "@reviews": {
     "description": "Reviews count text"
   },
+   "reviews2":"Reviews",
+  "@reviews2":{
+    "description":"Reviews count text"
+  },
   "stars4Plus": "4+ stars",
   "@stars4Plus": {
     "description": "4+ stars text"
@@ -296,6 +300,254 @@
         "example": "Network error"
       }
     }
+  },
+  "previous": "Previous",
+  "@previous": {
+    "description": "Previous page button text"
+  },
+  "next": "Next",
+  "@next": {
+    "description": "Next page button text"
+  },
+  "ofText": "of",
+  "@ofText": {
+    "description": "Of text used in pagination (e.g., 15 of 75)"
+  },
+  "movieDetails": "Movie Details",
+  "@movieDetails": {
+    "description": "Movie details page title"
+  },
+  "loadingMovieDetails": "Loading movie details...",
+  "@loadingMovieDetails": {
+    "description": "Loading movie details message"
+  },
+  "noImage": "No Image",
+  "@noImage": {
+    "description": "No image placeholder text"
+  },
+  "editMovie": "Edit Movie",
+  "@editMovie": {
+    "description": "Edit movie button text"
+  },
+  "deleteMovie": "Delete Movie",
+  "@deleteMovie": {
+    "description": "Delete movie button text"
+  },
+  "unknownTitle": "Unknown Title",
+  "@unknownTitle": {
+    "description": "Unknown title placeholder"
+  },
+  "active": "Active",
+  "@active": {
+    "description": "Active status text"
+  },
+  "inactive": "Inactive",
+  "@inactive": {
+    "description": "Inactive status text"
+  },
+  "director": "Director",
+  "@director": {
+    "description": "Director label"
+  },
+  "duration": "Duration",
+  "@duration": {
+    "description": "Duration label"
+  },
+  "minutes": "minutes",
+  "@minutes": {
+    "description": "Minutes text"
+  },
+  "releaseDate": "Release Date",
+  "@releaseDate": {
+    "description": "Release date label"
+  },
+  "releaseYear": "Release Year",
+  "@releaseYear": {
+    "description": "Release year label"
+  },
+  "genres": "Genres",
+  "@genres": {
+    "description": "Genres label"
+  },
+  "actors": "Actors",
+  "@actors": {
+    "description": "Actors label"
+  },
+  "trailer": "Trailer",
+  "@trailer": {
+    "description": "Trailer label"
+  },
+  "description": "Description",
+  "@description": {
+    "description": "Description label"
+  },
+  "unknown": "Unknown",
+  "@unknown": {
+    "description": "Unknown placeholder text"
+  },
+  "noGenresAssigned": "No genres assigned",
+  "@noGenresAssigned": {
+    "description": "No genres assigned text"
+  },
+  "noActorsAssigned": "No actors assigned",
+  "@noActorsAssigned": {
+    "description": "No actors assigned text"
+  },
+  "reviews": "Reviews",
+  "@reviews": {
+    "description": "Reviews section title"
+  },
+  "loadingReviews": "Loading reviews...",
+  "@loadingReviews": {
+    "description": "Loading reviews message"
+  },
+  "noReviewsYet": "No reviews yet",
+  "@noReviewsYet": {
+    "description": "No reviews message"
+  },
+  "beFirstToReview": "Be the first to review this movie!",
+  "@beFirstToReview": {
+    "description": "Be first to review message"
+  },
+  "viewAllReviews": "View All Reviews",
+  "@viewAllReviews": {
+    "description": "View all reviews button text"
+  },
+  "andMoreReviews": "... and {count} more reviews",
+  "@andMoreReviews": {
+    "description": "And more reviews text",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "confirmDeletion": "Confirm Deletion",
+  "@confirmDeletion": {
+    "description": "Confirm deletion dialog title"
+  },
+  "confirmDeleteMovie": "Are you sure you want to delete \"{title}\"?",
+  "@confirmDeleteMovie": {
+    "description": "Confirm delete movie message",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Movie Title"
+      }
+    }
+  },
+  "movieDeletedSuccessfully": "Movie deleted successfully",
+  "@movieDeletedSuccessfully": {
+    "description": "Movie deleted success message"
+  },
+  "failedToDeleteMovie": "Failed to delete movie",
+  "@failedToDeleteMovie": {
+    "description": "Failed to delete movie message"
+  },
+  "movies": "Movies",
+  "@movies": {
+    "description": "Movies list page title"
+  },
+  "search": "Search",
+  "@search": {
+    "description": "Search button and field label"
+  },
+  "filters": "Filters",
+  "@filters": {
+    "description": "Filters button text"
+  },
+  "addMovie": "Add Movie",
+  "@addMovie": {
+    "description": "Add movie button text"
+  },
+  "director": "Director",
+  "@director": {
+    "description": "Director field label"
+  },
+  "genreIds": "Genre IDs (e.g., 1,2,3)",
+  "@genreIds": {
+    "description": "Genre IDs field label"
+  },
+  "genreIdsHint": "Enter genre IDs separated by commas",
+  "@genreIdsHint": {
+    "description": "Genre IDs field hint text"
+  },
+  "minDuration": "Min Duration",
+  "@minDuration": {
+    "description": "Minimum duration field label"
+  },
+  "maxDuration": "Max Duration",
+  "@maxDuration": {
+    "description": "Maximum duration field label"
+  },
+  "minGrade": "Min Grade",
+  "@minGrade": {
+    "description": "Minimum grade field label"
+  },
+  "maxGrade": "Max Grade",
+  "@maxGrade": {
+    "description": "Maximum grade field label"
+  },
+  "releaseYear": "Release Year",
+  "@releaseYear": {
+    "description": "Release year field label"
+  },
+  "isActive": "Is Active",
+  "@isActive": {
+    "description": "Is active field label"
+  },
+  "reset": "Reset",
+  "@reset": {
+    "description": "Reset button text"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close button text"
+  },
+  "apply": "Apply",
+  "@apply": {
+    "description": "Apply button text"
+  },
+  "loadingMovies": "Loading movies...",
+  "@loadingMovies": {
+    "description": "Loading movies message"
+  },
+  "noMoviesLoaded": "No movies loaded",
+  "@noMoviesLoaded": {
+    "description": "No movies loaded message"
+  },
+  "noMoviesFound": "No movies found",
+  "@noMoviesFound": {
+    "description": "No movies found message"
+  },
+  "tryAdjustingSearch": "Try adjusting your search criteria",
+  "@tryAdjustingSearch": {
+    "description": "Try adjusting search criteria message"
+  },
+  "noImage": "No Image",
+  "@noImage": {
+    "description": "No image placeholder text"
+  },
+  "unknownTitle": "Unknown Title",
+  "@unknownTitle": {
+    "description": "Unknown title placeholder"
+  },
+  "unknownDirector": "Unknown Director",
+  "@unknownDirector": {
+    "description": "Unknown director placeholder"
+  },
+  "unknown": "Unknown",
+  "@unknown": {
+    "description": "Unknown placeholder text"
+  },
+  "active": "Active",
+  "@active": {
+    "description": "Active status text"
+  },
+  "inactive": "Inactive",
+  "@inactive": {
+    "description": "Inactive status text"
   },
   "previous": "Previous",
   "@previous": {

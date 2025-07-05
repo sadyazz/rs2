@@ -7,6 +7,8 @@ import 'package:ecinema_desktop/screens/movie_details_screen.dart';
 import 'package:ecinema_desktop/screens/edit_movie_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class MoviesListScreen extends StatefulWidget {
   const MoviesListScreen({super.key});
 
@@ -164,7 +166,8 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MasterScreen("Movies",
+    final l10n = AppLocalizations.of(context)!;
+    return MasterScreen(l10n.movies,
       Padding(
         padding: const EdgeInsets.fromLTRB(32.0, 16.0, 32.0, 16.0),
         child: Column(
@@ -178,6 +181,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   }
 
   Widget _buildSearch() {
+    final l10n = AppLocalizations.of(context)!;
     final primaryColor = Theme.of(context).colorScheme.primary;
     OutlineInputBorder roundedBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(16),
@@ -191,7 +195,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
             child: TextField( 
               controller: _searchController,
               decoration: InputDecoration(
-                labelText: "Search",
+                labelText: l10n.search,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(32),
                   borderSide: BorderSide(color: primaryColor, width: 2),
@@ -219,7 +223,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
               await _searchMovies();
             },
             icon: const Icon(Icons.search, size: 18),
-            label: const Text('Search'),
+            label: Text(l10n.search),
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryColor,
               foregroundColor: Colors.white,
@@ -250,7 +254,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                               TextField(
                                 controller: _directorController,
                                 decoration: InputDecoration(
-                                  labelText: 'Director',
+                                  labelText: l10n.director,
                                   border: roundedBorder,
                                   enabledBorder: roundedBorder,
                                   focusedBorder: roundedBorder,
@@ -260,8 +264,8 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                               TextField(
                                 controller: _genresController,
                                 decoration: InputDecoration(
-                                  labelText: 'Genre IDs (e.g., 1,2,3)',
-                                  hintText: 'Enter genre IDs separated by commas',
+                                  labelText: l10n.genreIds,
+                                  hintText: l10n.genreIdsHint,
                                   border: roundedBorder,
                                   enabledBorder: roundedBorder,
                                   focusedBorder: roundedBorder,
@@ -275,7 +279,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                                       controller: _minDurationController,
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
-                                        labelText: 'Min Duration',
+                                        labelText: l10n.minDuration,
                                         border: roundedBorder,
                                         enabledBorder: roundedBorder,
                                         focusedBorder: roundedBorder,
@@ -288,7 +292,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                                       controller: _maxDurationController,
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
-                                        labelText: 'Max Duration',
+                                        labelText: l10n.maxDuration,
                                         border: roundedBorder,
                                         enabledBorder: roundedBorder,
                                         focusedBorder: roundedBorder,
@@ -305,7 +309,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                                       controller: _minGradeController,
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
-                                        labelText: 'Min Grade',
+                                        labelText: l10n.minGrade,
                                         border: roundedBorder,
                                         enabledBorder: roundedBorder,
                                         focusedBorder: roundedBorder,
@@ -318,7 +322,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                                       controller: _maxGradeController,
                                       keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
-                                        labelText: 'Max Grade',
+                                        labelText: l10n.maxGrade,
                                         border: roundedBorder,
                                         enabledBorder: roundedBorder,
                                         focusedBorder: roundedBorder,
@@ -332,7 +336,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                                 controller: _releaseYearController,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
-                                  labelText: 'Release Year',
+                                  labelText: l10n.releaseYear,
                                   border: roundedBorder,
                                   enabledBorder: roundedBorder,
                                   focusedBorder: roundedBorder,
@@ -341,7 +345,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                               const SizedBox(height: 12),
                               Row(
                                 children: [
-                                  const Text('Is Active'),
+                                  Text(l10n.isActive),
                                   const SizedBox(width: 8),
                                   Switch(
                                     value: localIsActive,
@@ -370,11 +374,11 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                               isActive = true;
                             });
                           },
-                          child: const Text('Reset'),
+                          child: Text(l10n.reset),
                         ),
                         TextButton(
                           onPressed: () => Navigator.pop(context),
-                          child: const Text('Close'),
+                          child: Text(l10n.close),
                         ),
                         ElevatedButton(
                           onPressed: () async {
@@ -384,7 +388,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                             await _searchMovies();
                             Navigator.pop(context);
                           },
-                          child: const Text('Apply'),
+                          child: Text(l10n.apply),
                         ),
                       ],
                     ),
@@ -393,7 +397,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
               );
             },
             icon: const Icon(Icons.filter_alt_outlined),
-            label: const Text('Filters'),
+            label: Text(l10n.filters),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 18),
               minimumSize: const Size(0, 36),
@@ -417,7 +421,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
               }
             },
             icon: const Icon(Icons.add, size: 18),
-            label: const Text('Add Movie'),
+            label: Text(l10n.addMovie),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green[600],
               foregroundColor: Colors.white,
@@ -432,8 +436,9 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   }
 
   Widget _BuildResultView(){
+    final l10n = AppLocalizations.of(context)!;
     if (isLoading) {
-      return const Expanded(
+      return Expanded(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -441,7 +446,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
               CircularProgressIndicator(),
               SizedBox(height: 16),
               Text(
-                "Loading movies...",
+                l10n.loadingMovies,
                 style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
             ],
@@ -451,7 +456,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
     }
     
     if (result == null) {
-      return const Expanded(
+      return Expanded(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -459,7 +464,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
               Icon(Icons.movie_outlined, size: 64, color: Colors.grey),
               SizedBox(height: 16),
               Text(
-                "No movies loaded",
+                l10n.noMoviesLoaded,
                 style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
             ],
@@ -469,7 +474,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
     }
     
     if (result!.items!.isEmpty) {
-    return const Expanded(
+    return Expanded(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -477,12 +482,12 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
               Icon(Icons.movie_outlined, size: 64, color: Colors.grey),
               SizedBox(height: 16),
               Text(
-                "No movies found",
+                l10n.noMoviesFound,
                 style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
               SizedBox(height: 8),
               Text(
-                "Try adjusting your search criteria",
+                l10n.tryAdjustingSearch,
                 style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
             ],
@@ -519,6 +524,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   }
 
   Widget _buildMovieCard(Movie movie) {
+    final l10n = AppLocalizations.of(context)!;
     return InkWell(
       onTap: () async {
         final result = await Navigator.push(
@@ -575,7 +581,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                               Icon(Icons.movie, size: 48, color: Theme.of(context).colorScheme.onSurfaceVariant),
                               const SizedBox(height: 8),
                               Text(
-                                "No Image",
+                                l10n.noImage,
                                 style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 12),
                               ),
                             ],
@@ -599,7 +605,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                         ],
                       ),
                       child: Text(
-                        movie.isActive == true ? "Active" : "Inactive",
+                        movie.isActive == true ? l10n.active : l10n.inactive,
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.white,
@@ -655,7 +661,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      movie.title ?? "Unknown Title",
+                      movie.title ?? l10n.unknownTitle,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -667,7 +673,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                     const SizedBox(height: 2),
                     
                     Text(
-                      movie.director ?? "Unknown Director",
+                      movie.director ?? l10n.unknownDirector,
                       style: TextStyle(
                         fontSize: 12,
                         color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
@@ -693,7 +699,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                                   border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.3), width: 0.5),
                                 ),
                                 child: Text(
-                                  genre.name ?? "Unknown",
+                                  genre.name ?? l10n.unknown,
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Theme.of(context).colorScheme.onPrimaryContainer,
@@ -733,6 +739,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   }
 
   Widget _buildPaginationControls() {
+    final l10n = AppLocalizations.of(context)!;
     if (result == null) return const SizedBox.shrink();
     
     final totalCount = result!.totalCount ?? 0;
@@ -789,7 +796,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                       ),
                       const SizedBox(width: 2),
                       Text(
-                        'Previous',
+                        l10n.previous,
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w500,
@@ -818,7 +825,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
               ),
               const SizedBox(height: 1),
               Text(
-                '$currentItems of $totalCount',
+                '$currentItems ${l10n.ofText} $totalCount',
                 style: TextStyle(
                   fontSize: 10,
                   color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
@@ -845,7 +852,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Next',
+                        l10n.next,
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w500,
