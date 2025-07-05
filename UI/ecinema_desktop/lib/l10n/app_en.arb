@@ -206,5 +206,107 @@
   "logoutConfirmation": "Are you sure you want to logout?",
   "@logoutConfirmation": {
     "description": "Logout confirmation message"
+  },
+  "movieReviews": "Movie Reviews",
+  "@movieReviews": {
+    "description": "Movie reviews page title"
+  },
+  "averageRating": "Average Rating",
+  "@averageRating": {
+    "description": "Average rating statistic card title"
+  },
+  "totalReviews": "Total Reviews",
+  "@totalReviews": {
+    "description": "Total reviews statistic card title"
+  },
+  "positiveReviews": "Positive Reviews",
+  "@positiveReviews": {
+    "description": "Positive reviews statistic card title"
+  },
+  "outOf5": "out of 5.0",
+  "@outOf5": {
+    "description": "Rating out of 5 text"
+  },
+  "reviews": "reviews",
+  "@reviews": {
+    "description": "Reviews count text"
+  },
+  "stars4Plus": "4+ stars",
+  "@stars4Plus": {
+    "description": "4+ stars text"
+  },
+  "loadingReviews": "Loading reviews...",
+  "@loadingReviews": {
+    "description": "Loading reviews message"
+  },
+  "noReviewsYet": "No reviews yet",
+  "@noReviewsYet": {
+    "description": "No reviews message"
+  },
+  "noReviewsMessage": "This movie hasn't received any reviews yet.",
+  "@noReviewsMessage": {
+    "description": "No reviews explanation message"
+  },
+  "unknownUser": "Unknown User",
+  "@unknownUser": {
+    "description": "Unknown user text"
+  },
+  "today": "Today",
+  "@today": {
+    "description": "Today text"
+  },
+  "yesterday": "Yesterday",
+  "@yesterday": {
+    "description": "Yesterday text"
+  },
+  "daysAgo": "{count} days ago",
+  "@daysAgo": {
+    "description": "Days ago text",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "deleteReview": "Delete Review",
+  "@deleteReview": {
+    "description": "Delete review dialog title"
+  },
+  "deleteReviewConfirmation": "Are you sure you want to delete the review left by user {username}?",
+  "@deleteReviewConfirmation": {
+    "description": "Delete review confirmation message",
+    "placeholders": {
+      "username": {
+        "type": "String",
+        "example": "John Doe"
+      }
+    }
+  },
+  "reviewDeletedSuccessfully": "Review deleted successfully",
+  "@reviewDeletedSuccessfully": {
+    "description": "Review deleted success message"
+  },
+  "errorDeletingReview": "Error deleting review: {error}",
+  "@errorDeletingReview": {
+    "description": "Error deleting review message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "previous": "Previous",
+  "@previous": {
+    "description": "Previous page button text"
+  },
+  "next": "Next",
+  "@next": {
+    "description": "Next page button text"
+  },
+  "ofText": "of",
+  "@ofText": {
+    "description": "Of text used in pagination (e.g., 15 of 75)"
   }
 }

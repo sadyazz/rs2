@@ -206,5 +206,107 @@
   "logoutConfirmation": "Da li ste sigurni da se želite odjaviti?",
   "@logoutConfirmation": {
     "description": "Logout confirmation message"
+  },
+  "movieReviews": "Recenzije filma",
+  "@movieReviews": {
+    "description": "Movie reviews page title"
+  },
+  "averageRating": "Prosječna ocjena",
+  "@averageRating": {
+    "description": "Average rating statistic card title"
+  },
+  "totalReviews": "Ukupno recenzija",
+  "@totalReviews": {
+    "description": "Total reviews statistic card title"
+  },
+  "positiveReviews": "Pozitivne recenzije",
+  "@positiveReviews": {
+    "description": "Positive reviews statistic card title"
+  },
+  "outOf5": "od 5.0",
+  "@outOf5": {
+    "description": "Rating out of 5 text"
+  },
+  "reviews": "recenzija",
+  "@reviews": {
+    "description": "Reviews count text"
+  },
+  "stars4Plus": "4+ zvjezdice",
+  "@stars4Plus": {
+    "description": "4+ stars text"
+  },
+  "loadingReviews": "Učitavanje recenzija...",
+  "@loadingReviews": {
+    "description": "Loading reviews message"
+  },
+  "noReviewsYet": "Još nema recenzija",
+  "@noReviewsYet": {
+    "description": "No reviews message"
+  },
+  "noReviewsMessage": "Ovaj film još nije dobio nijednu recenziju.",
+  "@noReviewsMessage": {
+    "description": "No reviews explanation message"
+  },
+  "unknownUser": "Nepoznati korisnik",
+  "@unknownUser": {
+    "description": "Unknown user text"
+  },
+  "today": "Danas",
+  "@today": {
+    "description": "Today text"
+  },
+  "yesterday": "Juče",
+  "@yesterday": {
+    "description": "Yesterday text"
+  },
+  "daysAgo": "prije {count} dana",
+  "@daysAgo": {
+    "description": "Days ago text",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
+  "deleteReview": "Obriši recenziju",
+  "@deleteReview": {
+    "description": "Delete review dialog title"
+  },
+  "deleteReviewConfirmation": "Da li ste sigurni da želite obrisati recenziju korisnika {username}?",
+  "@deleteReviewConfirmation": {
+    "description": "Delete review confirmation message",
+    "placeholders": {
+      "username": {
+        "type": "String",
+        "example": "John Doe"
+      }
+    }
+  },
+  "reviewDeletedSuccessfully": "Recenzija uspješno obrisana",
+  "@reviewDeletedSuccessfully": {
+    "description": "Review deleted success message"
+  },
+  "errorDeletingReview": "Greška pri brisanju recenzije: {error}",
+  "@errorDeletingReview": {
+    "description": "Error deleting review message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "previous": "Prethodna",
+  "@previous": {
+    "description": "Previous page button text"
+  },
+  "next": "Sljedeća",
+  "@next": {
+    "description": "Next page button text"
+  },
+  "ofText": "od",
+  "@ofText": {
+    "description": "Of text used in pagination (e.g., 15 of 75)"
   }
 }

@@ -15,6 +15,7 @@ Review _$ReviewFromJson(Map<String, dynamic> json) => Review(
           ? null
           : DateTime.parse(json['modifiedAt'] as String),
       isActive: json['isActive'] as bool,
+      isDeleted: json['isDeleted'] as bool,
       userId: (json['userId'] as num).toInt(),
       userName: json['userName'] as String,
       userEmail: json['userEmail'] as String,
@@ -29,6 +30,7 @@ Map<String, dynamic> _$ReviewToJson(Review instance) => <String, dynamic>{
       'createdAt': instance.createdAt.toIso8601String(),
       'modifiedAt': instance.modifiedAt?.toIso8601String(),
       'isActive': instance.isActive,
+      'isDeleted': instance.isDeleted,
       'userId': instance.userId,
       'userName': instance.userName,
       'userEmail': instance.userEmail,
