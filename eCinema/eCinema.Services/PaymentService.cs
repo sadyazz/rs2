@@ -23,6 +23,8 @@ namespace eCinema.Services
 
         protected override IQueryable<Payment> ApplyFilter(IQueryable<Payment> query, PaymentSearchObject search)
         {
+            query = base.ApplyFilter(query, search);
+            
             if (search.MinAmount.HasValue)
             {
                 query = query.Where(x => x.Amount >= search.MinAmount.Value);

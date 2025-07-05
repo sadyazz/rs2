@@ -18,6 +18,8 @@ namespace eCinema.Services
 
         protected override IQueryable<Database.Entities.Role> ApplyFilter(IQueryable<Database.Entities.Role> query, RoleSearchObject search)
         {
+            query = base.ApplyFilter(query, search);
+            
             if (!string.IsNullOrEmpty(search.Name))
             {
                 query = query.Where(r => r.Name.Contains(search.Name));

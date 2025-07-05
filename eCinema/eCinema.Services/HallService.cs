@@ -23,6 +23,8 @@ namespace eCinema.Services
 
         protected override IQueryable<Hall> ApplyFilter(IQueryable<Hall> query, HallSearchObject search)
         {
+            query = base.ApplyFilter(query, search);
+            
             if (!string.IsNullOrWhiteSpace(search.Name))
             {
                 query = query.Where(x => x.Name.Contains(search.Name));

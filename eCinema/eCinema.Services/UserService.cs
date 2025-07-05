@@ -160,6 +160,8 @@ namespace eCinema.Services
 
         protected override IQueryable<User> ApplyFilter(IQueryable<User> query, UserSearchObject search)
         {
+            query = base.ApplyFilter(query, search);
+            
             if (!string.IsNullOrWhiteSpace(search.Username))
                 query = query.Where(x => x.Username.Contains(search.Username));
 

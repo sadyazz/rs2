@@ -99,6 +99,8 @@ namespace eCinema.Services
 
         protected override IQueryable<Movie> ApplyFilter(IQueryable<Movie> query, MovieSearchObject search)
         {
+            query = base.ApplyFilter(query, search);
+            
             if (!string.IsNullOrWhiteSpace(search.Title))
             {
                 query = query.Where(x => x.Title.Contains(search.Title));

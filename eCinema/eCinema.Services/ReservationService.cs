@@ -24,6 +24,8 @@ namespace eCinema.Services
 
         protected override IQueryable<Reservation> ApplyFilter(IQueryable<Reservation> query, ReservationSearchObject search)
         {
+            query = base.ApplyFilter(query, search);
+            
             if (search.UserId.HasValue)
             {
                 query = query.Where(x => x.UserId == search.UserId.Value);

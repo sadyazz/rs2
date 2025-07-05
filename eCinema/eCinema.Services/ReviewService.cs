@@ -79,6 +79,8 @@ namespace eCinema.Services
 
         protected override IQueryable<Review> ApplyFilter(IQueryable<Review> query, ReviewSearchObject search)
         {
+            query = base.ApplyFilter(query, search);
+            
             query = query
                 .Include(x => x.User)
                 .Include(x => x.Movie);

@@ -20,6 +20,8 @@ namespace eCinema.Services
 
         protected override IQueryable<Database.Entities.Actor> ApplyFilter(IQueryable<Database.Entities.Actor> query, ActorSearchObject search)
         {
+            query = base.ApplyFilter(query, search);
+            
             if (!string.IsNullOrEmpty(search.FirstName))
             {
                 query = query.Where(a => a.FirstName.Contains(search.FirstName));

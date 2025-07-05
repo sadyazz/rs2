@@ -23,6 +23,8 @@ namespace eCinema.Services
 
         protected override IQueryable<Screening> ApplyFilter(IQueryable<Screening> query, ScreeningSearchObject search)
         {
+            query = base.ApplyFilter(query, search);
+            
             query = query
                 .Include(x => x.Movie)
                 .Include(x => x.Hall)
