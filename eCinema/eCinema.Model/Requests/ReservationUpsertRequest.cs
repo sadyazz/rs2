@@ -35,5 +35,7 @@ namespace eCinema.Model.Requests
         public int SeatId { get; set; }
         
         public int? PromotionId { get; set; }
+
+        public bool IsDeleted { get; set; } = false;
     }
 } 

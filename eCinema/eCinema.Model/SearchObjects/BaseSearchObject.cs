@@ -9,5 +9,6 @@ namespace eCinema.Model.SearchObjects
         public bool? IsActive { get; set; }
 
         public bool IncludeTotalCount {get;set;} = false;
+        public bool IncludeDeleted { get; set; } = false;
     }
 } 

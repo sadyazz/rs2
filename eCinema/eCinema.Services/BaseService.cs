@@ -56,11 +56,31 @@ namespace eCinema.Services
         {
             var entity = await _context.Set<TEntity>().FindAsync(id);
 
-            return entity != null ? MapToResponse(entity) : null;
+            if (entity == null)
+                return null;
+
+            var isDeletedProperty = typeof(TEntity).GetProperty("IsDeleted");
+            if (isDeletedProperty != null && isDeletedProperty.PropertyType == typeof(bool))
+            {
+                var isDeleted = (bool)isDeletedProperty.GetValue(entity);
+                if (isDeleted)
+                    return null;
+            }
+
+            return MapToResponse(entity);
         }
 
         protected virtual IQueryable<TEntity> ApplyFilter(IQueryable<TEntity> query, TSearch search)
         {
+            if (!search.IncludeDeleted)
+            {
+                var isDeletedProperty = typeof(TEntity).GetProperty("IsDeleted");
+                if (isDeletedProperty != null && isDeletedProperty.PropertyType == typeof(bool))
+                {
+                    query = query.Where(e => !(bool)isDeletedProperty.GetValue(e));
+                }
+            }
+
             return query;
         }
         

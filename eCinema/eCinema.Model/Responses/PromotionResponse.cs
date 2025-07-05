@@ -13,5 +13,6 @@ namespace eCinema.Model.Responses
         public DateTime EndDate { get; set; }
         public bool IsActive { get; set; }
         public int ReservationCount { get; set; }
+        public bool IsDeleted { get; set; }
     }
 } 

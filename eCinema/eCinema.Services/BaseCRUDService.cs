@@ -78,5 +78,39 @@ namespace eCinema.Services
 
         }
 
+        public virtual async Task<bool> SoftDeleteAsync(int id)
+        {
+            var entity = await _context.Set<TEntity>().FindAsync(id);
+            if (entity == null)
+                return false;
+
+            var isDeletedProperty = typeof(TEntity).GetProperty("IsDeleted");
+            if (isDeletedProperty != null && isDeletedProperty.PropertyType == typeof(bool))
+            {
+                isDeletedProperty.SetValue(entity, true);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public virtual async Task<bool> RestoreAsync(int id)
+        {
+            var entity = await _context.Set<TEntity>().FindAsync(id);
+            if (entity == null)
+                return false;
+
+            var isDeletedProperty = typeof(TEntity).GetProperty("IsDeleted");
+            if (isDeletedProperty != null && isDeletedProperty.PropertyType == typeof(bool))
+            {
+                isDeletedProperty.SetValue(entity, false);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
     }
 } 

@@ -18,5 +18,6 @@ namespace eCinema.Model.Responses
         public byte[]? Image { get; set; }
         public List<ActorResponse> Actors { get; set; } = new List<ActorResponse>();
         public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

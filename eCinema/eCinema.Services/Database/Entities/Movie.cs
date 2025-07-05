@@ -38,6 +38,8 @@ namespace eCinema.Services.Database.Entities
         
         public bool IsActive { get; set; } = true;
         
+        public bool IsDeleted { get; set; } = false;
+        
         public virtual ICollection<Screening> Screenings { get; set; } = new List<Screening>();
         public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
         public virtual ICollection<MovieGenre> Genres { get; set; } = new List<MovieGenre>();

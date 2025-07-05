@@ -45,5 +45,7 @@ namespace eCinema.Services.Database.Entities
 
         [MaxLength(50)]
         public string State { get; set; } = string.Empty;
+
+        public bool IsDeleted { get; set; } = false;
     }
 } 

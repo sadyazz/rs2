@@ -22,6 +22,8 @@ namespace eCinema.Services.Database.Entities
         public bool HasSubtitles { get; set; }
         
         public bool IsActive { get; set; } = true;
+
+        public bool IsDeleted { get; set; } = false;
         
         public int MovieId { get; set; }
         public int HallId { get; set; }

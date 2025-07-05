@@ -31,5 +31,25 @@ namespace eCinema.API.Controllers
         public virtual async Task<bool> Delete(int id){
             return await _crudService.DeleteAsync(id);
         }
+
+        [HttpDelete("{id}/soft")]
+        public virtual async Task<IActionResult> SoftDelete(int id)
+        {
+            var result = await _crudService.SoftDeleteAsync(id);
+            if (!result)
+                return NotFound();
+
+            return Ok(new { message = "Entity soft deleted successfully" });
+        }
+
+        [HttpPost("{id}/restore")]
+        public virtual async Task<IActionResult> Restore(int id)
+        {
+            var result = await _crudService.RestoreAsync(id);
+            if (!result)
+                return NotFound();
+
+            return Ok(new { message = "Entity restored successfully" });
+        }
     }
 }

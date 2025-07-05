@@ -13,5 +13,7 @@
             Task<T> CreateAsync(TInsert request);
             Task<T> UpdateAsync(int id, TUpdate request);
             Task<bool> DeleteAsync(int id);
+            Task<bool> SoftDeleteAsync(int id);
+            Task<bool> RestoreAsync(int id);
         }
     }
