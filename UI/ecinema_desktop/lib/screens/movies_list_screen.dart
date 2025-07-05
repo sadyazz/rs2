@@ -56,6 +56,8 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
         'page': currentPage,
         'pageSize': pageSize,
         'includeTotalCount': true,
+        'isActive': true,
+        'isDeleted': false,
       };
       result = await provider.get(filter: filter);
       setState(() {
@@ -80,6 +82,8 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
         'page': 0,
         'pageSize': pageSize,
         'includeTotalCount': true,
+        'isActive': isActive,
+        'isDeleted': false,
       };
       
       if (_searchController.text.isNotEmpty) {

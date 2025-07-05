@@ -11,6 +11,7 @@ Genre _$GenreFromJson(Map<String, dynamic> json) => Genre(
       name: json['name'] as String?,
       description: json['description'] as String?,
       isActive: json['isActive'] as bool?,
+      isDeleted: json['isDeleted'] as bool?,
     );
 
 Map<String, dynamic> _$GenreToJson(Genre instance) => <String, dynamic>{
@@ -18,4 +19,5 @@ Map<String, dynamic> _$GenreToJson(Genre instance) => <String, dynamic>{
       'name': instance.name,
       'description': instance.description,
       'isActive': instance.isActive,
+      'isDeleted': instance.isDeleted,
     };

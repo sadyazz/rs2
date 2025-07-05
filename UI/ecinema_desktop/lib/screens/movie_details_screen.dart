@@ -656,7 +656,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     if (movieProvider == null || movie.id == null) return;
     
     try {
-      await movieProvider!.delete(movie.id!);
+      await movieProvider!.softDelete(movie.id!);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Movie deleted successfully'),

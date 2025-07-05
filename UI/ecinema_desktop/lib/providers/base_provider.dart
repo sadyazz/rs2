@@ -106,6 +106,34 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
+  Future<bool> softDelete(int id) async {
+    var url = "$_baseUrl$_endpoint/$id/soft";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var response = await http.delete(uri, headers: headers);
+
+    if (isValidResponse(response)) {
+      return true;
+    } else {
+      throw new Exception("Unknown error");
+    }
+  }
+
+  Future<bool> restore(int id) async {
+    var url = "$_baseUrl$_endpoint/$id/restore";
+    var uri = Uri.parse(url);
+    var headers = createHeaders();
+
+    var response = await http.post(uri, headers: headers);
+
+    if (isValidResponse(response)) {
+      return true;
+    } else {
+      throw new Exception("Unknown error");
+    }
+  }
+
   T fromJson(data) {
     throw Exception("Method not implemented");
   }

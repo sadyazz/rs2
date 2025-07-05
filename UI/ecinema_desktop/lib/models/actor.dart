@@ -8,9 +8,10 @@ class Actor {
   String? firstName;
   String? lastName;
   DateTime? dateOfBirth;
-  String? biography;
+  final String? biography;
   String? image;
-  bool? isActive;
+  final bool isActive;
+  final bool isDeleted;
 
   Actor({
     this.id,
@@ -19,7 +20,8 @@ class Actor {
     this.dateOfBirth,
     this.biography,
     this.image,
-    this.isActive,
+    required this.isActive,
+    required this.isDeleted,
   });
 
   factory Actor.fromJson(Map<String, dynamic> json) => _$ActorFromJson(json);

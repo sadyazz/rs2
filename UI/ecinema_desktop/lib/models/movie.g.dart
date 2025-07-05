@@ -26,6 +26,7 @@ Movie _$MovieFromJson(Map<String, dynamic> json) => Movie(
       actors: (json['actors'] as List<dynamic>?)
           ?.map((e) => Actor.fromJson(e as Map<String, dynamic>))
           .toList(),
+      isDeleted: json['isDeleted'] as bool,
     );
 
 Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{
@@ -42,4 +43,5 @@ Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{
       'grade': instance.grade,
       'isActive': instance.isActive,
       'actors': instance.actors,
+      'isDeleted': instance.isDeleted,
     };
