@@ -606,5 +606,141 @@
         "example": "Network error"
       }
     }
+  },
+  "addScreening": "Dodaj projekciju",
+  "@addScreening": {
+    "description": "Add screening button text"
+  },
+  "loadingScreenings": "Učitavanje projekcija...",
+  "@loadingScreenings": {
+    "description": "Loading screenings message"
+  },
+  "noScreeningsLoaded": "Nema učitanih projekcije",
+  "@noScreeningsLoaded": {
+    "description": "No screenings loaded message"
+  },
+  "noScreeningsFound": "Nema pronađenih projekcija",
+  "@noScreeningsFound": {
+    "description": "No screenings found message"
+  },
+  "previous": "Prethodna",
+  "@previous": {
+    "description": "Previous page button"
+  },
+  "next": "Sljedeća",
+  "@next": {
+    "description": "Next page button"
+  },
+  "movieId": "ID filma",
+  "@movieId": {
+    "description": "Movie ID field label"
+  },
+  "hallId": "ID sale",
+  "@hallId": {
+    "description": "Hall ID field label"
+  },
+  "screeningFormatId": "ID formata projekcije",
+  "@screeningFormatId": {
+    "description": "Screening Format ID field label"
+  },
+  "language": "Jezik",
+  "@language": {
+    "description": "Language field label"
+  },
+  "minBasePrice": "Minimalna osnovna cijena",
+  "@minBasePrice": {
+    "description": "Minimum base price field label"
+  },
+  "maxBasePrice": "Maksimalna osnovna cijena",
+  "@maxBasePrice": {
+    "description": "Maximum base price field label"
+  },
+  "fromStartTime": "Od vremena početka (GGGG-MM-DD)",
+  "@fromStartTime": {
+    "description": "From start time field label"
+  },
+  "toStartTime": "Do vremena početka (GGGG-MM-DD)",
+  "@toStartTime": {
+    "description": "To start time field label"
+  },
+  "hasSubtitles": "Ima titlove",
+  "@hasSubtitles": {
+    "description": "Has subtitles checkbox label"
+  },
+  "hasAvailableSeats": "Ima slobodna mjesta",
+  "@hasAvailableSeats": {
+    "description": "Has available seats checkbox label"
+  },
+  "isActive": "Aktivna",
+  "@isActive": {
+    "description": "Is active checkbox label"
+  },
+  "includeDeleted": "Uključi obrisane",
+  "@includeDeleted": {
+    "description": "Include deleted checkbox label"
+  },
+  "reset": "Resetuj",
+  "@reset": {
+    "description": "Reset button text"
+  },
+  "close": "Zatvori",
+  "@close": {
+    "description": "Close button text"
+  },
+  "apply": "Primijeni",
+  "@apply": {
+    "description": "Apply button text"
+  },
+  "confirmDeletion": "Potvrdi brisanje",
+  "@confirmDeletion": {
+    "description": "Confirm deletion dialog title"
+  },
+  "confirmRestoration": "Potvrdi vraćanje",
+  "@confirmRestoration": {
+    "description": "Confirm restoration dialog title"
+  },
+  "screeningDeletedSuccessfully": "Projekcija uspješno obrisana",
+  "@screeningDeletedSuccessfully": {
+    "description": "Screening deleted success message"
+  },
+  "screeningRestoredSuccessfully": "Projekcija uspješno vraćena",
+  "@screeningRestoredSuccessfully": {
+    "description": "Screening restored success message"
+  },
+  "failedToDeleteScreening": "Greška pri brisanju projekcije",
+  "@failedToDeleteScreening": {
+    "description": "Failed to delete screening message"
+  },
+  "failedToRestoreScreening": "Greška pri vraćanju projekcije",
+  "@failedToRestoreScreening": {
+    "description": "Failed to restore screening message"
+  },
+  "unknownMovie": "Nepoznat film",
+  "@unknownMovie": {
+    "description": "Unknown movie fallback text"
+  },
+  "unknownHall": "Nepoznata sala",
+  "@unknownHall": {
+    "description": "Unknown hall fallback text"
+  },
+  "unknown": "Nepoznato",
+  "@unknown": {
+    "description": "Unknown fallback text"
+  },
+  "active": "Aktivna",
+  "@active": {
+    "description": "Active status text"
+  },
+  "inactive": "Neaktivna",
+  "@inactive": {
+    "description": "Inactive status text"
+  },
+  "deleted": "Obrisana",
+  "@deleted": {
+    "description": "Deleted status text"
+  },
+  "screening": "Projekcija",
+  "@screening": {
+    "description": "Screening text"
   }
 }

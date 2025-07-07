@@ -30,6 +30,15 @@ namespace eCinema.Services
                 .Include(x => x.Hall)
                 .Include(x => x.Format);
 
+            if (!string.IsNullOrWhiteSpace(search.FTS))
+            {
+                query = query.Where(x => 
+                    x.Movie.Title.Contains(search.FTS) ||
+                    x.Hall.Name.Contains(search.FTS) ||
+                    x.Language.Contains(search.FTS) ||
+                    (x.Format != null && x.Format.Name.Contains(search.FTS)));
+            }
+
             if (search.MovieId.HasValue)
             {
                 query = query.Where(x => x.MovieId == search.MovieId.Value);
@@ -177,7 +186,11 @@ namespace eCinema.Services
         {
             var response = _mapper.Map<ScreeningResponse>(entity);
             
+            response.MovieId = entity.MovieId;
+            response.HallId = entity.HallId;
+            response.ScreeningFormatId = entity.ScreeningFormatId;
             response.MovieTitle = entity.Movie?.Title ?? string.Empty;
+            response.MovieImage = entity.Movie?.Image;
             response.HallName = entity.Hall?.Name ?? string.Empty;
             response.ScreeningFormatName = entity.Format?.Name;
             response.ScreeningFormatPriceMultiplier = entity.Format?.PriceMultiplier;
@@ -186,6 +199,28 @@ namespace eCinema.Services
             response.ReservationsCount = entity.Reservations?.Count ?? 0;
             
             return response;
+        }
+
+        public override async Task<ScreeningResponse?> GetByIdAsync(int id)
+        {
+            var entity = await _context.Screenings
+                .Include(x => x.Movie)
+                .Include(x => x.Hall)
+                .Include(x => x.Format)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (entity == null)
+                return null;
+
+            var isDeletedProperty = typeof(Screening).GetProperty("IsDeleted");
+            if (isDeletedProperty != null && isDeletedProperty.PropertyType == typeof(bool))
+            {
+                var isDeleted = (bool)isDeletedProperty.GetValue(entity);
+                if (isDeleted)
+                    return null;
+            }
+
+            return MapToResponse(entity);
         }
     }
 } 

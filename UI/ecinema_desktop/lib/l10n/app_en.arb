@@ -634,5 +634,141 @@
         "example": "Network error"
       }
     }
+  },
+  "addScreening": "Add Screening",
+  "@addScreening": {
+    "description": "Add screening button text"
+  },
+  "loadingScreenings": "Loading screenings...",
+  "@loadingScreenings": {
+    "description": "Loading screenings message"
+  },
+  "noScreeningsLoaded": "No screenings loaded",
+  "@noScreeningsLoaded": {
+    "description": "No screenings loaded message"
+  },
+  "noScreeningsFound": "No screenings found",
+  "@noScreeningsFound": {
+    "description": "No screenings found message"
+  },
+  "previous": "Previous",
+  "@previous": {
+    "description": "Previous page button"
+  },
+  "next": "Next",
+  "@next": {
+    "description": "Next page button"
+  },
+  "movieId": "Movie ID",
+  "@movieId": {
+    "description": "Movie ID field label"
+  },
+  "hallId": "Hall ID",
+  "@hallId": {
+    "description": "Hall ID field label"
+  },
+  "screeningFormatId": "Screening Format ID",
+  "@screeningFormatId": {
+    "description": "Screening Format ID field label"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language field label"
+  },
+  "minBasePrice": "Min Base Price",
+  "@minBasePrice": {
+    "description": "Minimum base price field label"
+  },
+  "maxBasePrice": "Max Base Price",
+  "@maxBasePrice": {
+    "description": "Maximum base price field label"
+  },
+  "fromStartTime": "From Start Time (YYYY-MM-DD)",
+  "@fromStartTime": {
+    "description": "From start time field label"
+  },
+  "toStartTime": "To Start Time (YYYY-MM-DD)",
+  "@toStartTime": {
+    "description": "To start time field label"
+  },
+  "hasSubtitles": "Has Subtitles",
+  "@hasSubtitles": {
+    "description": "Has subtitles checkbox label"
+  },
+  "hasAvailableSeats": "Has Available Seats",
+  "@hasAvailableSeats": {
+    "description": "Has available seats checkbox label"
+  },
+  "isActive": "Is Active",
+  "@isActive": {
+    "description": "Is active checkbox label"
+  },
+  "includeDeleted": "Include Deleted",
+  "@includeDeleted": {
+    "description": "Include deleted checkbox label"
+  },
+  "reset": "Reset",
+  "@reset": {
+    "description": "Reset button text"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close button text"
+  },
+  "apply": "Apply",
+  "@apply": {
+    "description": "Apply button text"
+  },
+  "confirmDeletion": "Confirm Deletion",
+  "@confirmDeletion": {
+    "description": "Confirm deletion dialog title"
+  },
+  "confirmRestoration": "Confirm Restoration",
+  "@confirmRestoration": {
+    "description": "Confirm restoration dialog title"
+  },
+  "screeningDeletedSuccessfully": "Screening deleted successfully",
+  "@screeningDeletedSuccessfully": {
+    "description": "Screening deleted success message"
+  },
+  "screeningRestoredSuccessfully": "Screening restored successfully",
+  "@screeningRestoredSuccessfully": {
+    "description": "Screening restored success message"
+  },
+  "failedToDeleteScreening": "Failed to delete screening",
+  "@failedToDeleteScreening": {
+    "description": "Failed to delete screening message"
+  },
+  "failedToRestoreScreening": "Failed to restore screening",
+  "@failedToRestoreScreening": {
+    "description": "Failed to restore screening message"
+  },
+  "unknownMovie": "Unknown Movie",
+  "@unknownMovie": {
+    "description": "Unknown movie fallback text"
+  },
+  "unknownHall": "Unknown Hall",
+  "@unknownHall": {
+    "description": "Unknown hall fallback text"
+  },
+  "unknown": "Unknown",
+  "@unknown": {
+    "description": "Unknown fallback text"
+  },
+  "active": "Active",
+  "@active": {
+    "description": "Active status text"
+  },
+  "inactive": "Inactive",
+  "@inactive": {
+    "description": "Inactive status text"
+  },
+  "deleted": "Deleted",
+  "@deleted": {
+    "description": "Deleted status text"
+  },
+  "screening": "Screening",
+  "@screening": {
+    "description": "Screening text"
   }
 }
