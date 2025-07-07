@@ -701,7 +701,7 @@
   "@hasAvailableSeats": {
     "description": "Has available seats checkbox label"
   },
-  "isActive": "Aktivna",
+  "isActive": "Aktivno",
   "@isActive": {
     "description": "Is active checkbox label"
   },
@@ -757,11 +757,11 @@
   "@unknown": {
     "description": "Unknown fallback text"
   },
-  "active": "Aktivna",
+  "active": "Aktivno",
   "@active": {
     "description": "Active status text"
   },
-  "inactive": "Neaktivna",
+  "inactive": "Neaktivno",
   "@inactive": {
     "description": "Inactive status text"
   },
@@ -918,5 +918,67 @@
   "saveSettings": "Sačuvaj postavke",
   "@saveSettings": {"description": "Save settings button text"},
   "resetToDefault": "Vrati na početne vrijednosti",
-  "@resetToDefault": {"description": "Reset to default button text"}
+  "@resetToDefault": {"description": "Reset to default button text"},
+  "genresList": "Lista žanrova",
+  "@genresList": {"description": "Genres list page title"},
+  "manageGenres": "Upravljanje žanrovima",
+  "@manageGenres": {"description": "Manage genres subtitle"},
+  "noGenresFound": "Nema pronađenih žanrova",
+  "@noGenresFound": {"description": "No genres found message"},
+  "noGenresMatchSearch": "Nijedan žanr ne odgovara pretrazi",
+  "@noGenresMatchSearch": {"description": "No genres match search message"},
+  "loadingGenres": "Učitavanje žanrova...",
+  "@loadingGenres": {"description": "Loading genres message"},
+  "noGenresLoaded": "Nema učitanih žanrova",
+  "@noGenresLoaded": {"description": "No genres loaded message"},
+  "addGenre": "Dodaj žanr",
+  "@addGenre": {"description": "Add genre button text"},
+  "editGenre": "Uredi žanr",
+  "@editGenre": {"description": "Edit genre button text"},
+  "deleteGenre": "Obriši žanr",
+  "@deleteGenre": {"description": "Delete genre button text"},
+  "genreName": "Naziv žanra",
+  "@genreName": {"description": "Genre name field label"},
+  "genreDescription": "Opis žanra",
+  "@genreDescription": {"description": "Genre description field label"},
+  "pleaseEnterGenreName": "Molimo unesite naziv žanra",
+  "@pleaseEnterGenreName": {"description": "Genre name validation message"},
+  "pleaseEnterGenreDescription": "Molimo unesite opis žanra",
+  "@pleaseEnterGenreDescription": {"description": "Genre description validation message"},
+  "genreCreatedSuccessfully": "Žanr uspješno kreiran",
+  "@genreCreatedSuccessfully": {"description": "Genre created success message"},
+  "genreUpdatedSuccessfully": "Žanr uspješno ažuriran",
+  "@genreUpdatedSuccessfully": {"description": "Genre updated success message"},
+  "genreDeletedSuccessfully": "Žanr uspješno obrisan",
+  "@genreDeletedSuccessfully": {"description": "Genre deleted success message"},
+  "genreRestoredSuccessfully": "Žanr uspješno vraćen",
+  "@genreRestoredSuccessfully": {"description": "Genre restored success message"},
+  "failedToSaveGenre": "Greška pri čuvanju žanra",
+  "@failedToSaveGenre": {"description": "Failed to save genre message"},
+  "failedToDeleteGenre": "Greška pri brisanju žanra",
+  "@failedToDeleteGenre": {"description": "Failed to delete genre message"},
+  "failedToRestoreGenre": "Greška pri vraćanju žanra",
+  "@failedToRestoreGenre": {"description": "Failed to restore genre message"},
+  "confirmDeleteGenre": "Da li ste sigurni da želite obrisati \"{name}\"?",
+  "@confirmDeleteGenre": {
+    "description": "Confirm delete genre message",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Akcija"
+      }
+    }
+  },
+  "confirmRestoreGenre": "Da li ste sigurni da želite vratiti žanr \"{name}\"?",
+  "@confirmRestoreGenre": {
+    "description": "Confirm restore genre dialog content",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Akcija"
+      }
+    }
+  },
+  "unnamedGenre": "Bezimena žanr",
+  "@unnamedGenre": {"description": "Unnamed genre placeholder"}
 }

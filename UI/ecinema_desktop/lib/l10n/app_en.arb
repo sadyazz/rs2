@@ -954,5 +954,67 @@
   "saveSettings": "Save Settings",
   "@saveSettings": {"description": "Save settings button text"},
   "resetToDefault": "Reset to Default",
-  "@resetToDefault": {"description": "Reset to default button text"}
+  "@resetToDefault": {"description": "Reset to default button text"},
+  "genresList": "Genres List",
+  "@genresList": {"description": "Genres list page title"},
+  "manageGenres": "Manage Genres",
+  "@manageGenres": {"description": "Manage genres subtitle"},
+  "noGenresFound": "No genres found",
+  "@noGenresFound": {"description": "No genres found message"},
+  "noGenresMatchSearch": "No genres match your search",
+  "@noGenresMatchSearch": {"description": "No genres match search message"},
+  "loadingGenres": "Loading genres...",
+  "@loadingGenres": {"description": "Loading genres message"},
+  "noGenresLoaded": "No genres loaded",
+  "@noGenresLoaded": {"description": "No genres loaded message"},
+  "addGenre": "Add Genre",
+  "@addGenre": {"description": "Add genre button text"},
+  "editGenre": "Edit Genre",
+  "@editGenre": {"description": "Edit genre button text"},
+  "deleteGenre": "Delete Genre",
+  "@deleteGenre": {"description": "Delete genre button text"},
+  "genreName": "Genre Name",
+  "@genreName": {"description": "Genre name field label"},
+  "genreDescription": "Genre Description",
+  "@genreDescription": {"description": "Genre description field label"},
+  "pleaseEnterGenreName": "Please enter genre name",
+  "@pleaseEnterGenreName": {"description": "Genre name validation message"},
+  "pleaseEnterGenreDescription": "Please enter genre description",
+  "@pleaseEnterGenreDescription": {"description": "Genre description validation message"},
+  "genreCreatedSuccessfully": "Genre created successfully",
+  "@genreCreatedSuccessfully": {"description": "Genre created success message"},
+  "genreUpdatedSuccessfully": "Genre updated successfully",
+  "@genreUpdatedSuccessfully": {"description": "Genre updated success message"},
+  "genreDeletedSuccessfully": "Genre deleted successfully",
+  "@genreDeletedSuccessfully": {"description": "Genre deleted success message"},
+  "genreRestoredSuccessfully": "Genre restored successfully",
+  "@genreRestoredSuccessfully": {"description": "Genre restored success message"},
+  "failedToSaveGenre": "Failed to save genre",
+  "@failedToSaveGenre": {"description": "Failed to save genre message"},
+  "failedToDeleteGenre": "Failed to delete genre",
+  "@failedToDeleteGenre": {"description": "Failed to delete genre message"},
+  "failedToRestoreGenre": "Failed to restore genre",
+  "@failedToRestoreGenre": {"description": "Failed to restore genre message"},
+  "confirmDeleteGenre": "Are you sure you want to delete \"{name}\"?",
+  "@confirmDeleteGenre": {
+    "description": "Confirm delete genre message",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Action"
+      }
+    }
+  },
+  "confirmRestoreGenre": "Are you sure you want to restore the genre \"{name}\"?",
+  "@confirmRestoreGenre": {
+    "description": "Confirm restore genre dialog content",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Action"
+      }
+    }
+  },
+  "unnamedGenre": "Unnamed Genre",
+  "@unnamedGenre": {"description": "Unnamed genre placeholder"}
 }

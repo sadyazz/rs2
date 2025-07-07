@@ -1,4 +1,5 @@
 import 'package:ecinema_desktop/layouts/master_screen.dart';
+import 'package:ecinema_desktop/screens/genres_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -13,169 +14,183 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return MasterScreen(l10n.settings, SingleChildScrollView(
-      padding: const EdgeInsets.all(24.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 8),
-          Text(
-            l10n.manageYourApplicationPreferences ?? 'Manage your application preferences and system configuration',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: Colors.grey[600],
-            ),
-          ),
-          const SizedBox(height: 32),
-          
-          // Settings Categories
-          _buildSettingsSection(
-            title: l10n.adminProfile,
-            icon: Icons.person,
+    return MasterScreen(
+        l10n.settings,
+        SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildInfoTile(
-                title: l10n.username,
-                subtitle: 'admin',
-                trailing: IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () => _showEditDialog(context, l10n.username, 'admin'),
-                ),
+              const SizedBox(height: 8),
+              Text(
+                l10n.manageYourApplicationPreferences,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Colors.grey[600],
+                    ),
               ),
-              _buildInfoTile(
-                title: l10n.fullName,
-                subtitle: 'Administrator',
-                trailing: IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () => _showEditDialog(context, l10n.fullName, 'Administrator'),
-                ),
-              ),
-              _buildInfoTile(
-                title: l10n.email ?? 'Email',
-                subtitle: 'admin@ecinema.com',
-                trailing: IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () => _showEditDialog(context, l10n.email ?? 'Email', 'admin@ecinema.com'),
-                ),
-              ),
-              _buildInfoTile(
-                title: l10n.phone ?? 'Phone',
-                subtitle: '+387 33 123 456',
-                trailing: IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () => _showEditDialog(context, l10n.phone ?? 'Phone', '+387 33 123 456'),
-                ),
-              ),
-              _buildInfoTile(
-                title: l10n.role,
-                subtitle: 'System Administrator',
-                trailing: const Icon(Icons.admin_panel_settings, color: Colors.grey),
-              ),
-              _buildInfoTile(
-                title: l10n.lastLogin,
-                subtitle: '2024-01-15 14:30',
-                trailing: const Icon(Icons.access_time, color: Colors.grey),
-              ),
-            ],
-          ),
-          
-          const SizedBox(height: 24),
-          
-          _buildSettingsSection(
-            title: l10n.contentManagement,
-            icon: Icons.category,
-            children: [
-              _buildManagementTile(
-                title: l10n.genres,
-                subtitle: l10n.manageMovieGenres ?? 'Manage movie genres and categories',
-                icon: Icons.theater_comedy,
-                onTap: () => _navigateToGenres(),
-              ),
-              _buildManagementTile(
-                title: l10n.actors,
-                subtitle: l10n.manageActors ?? 'Manage actors and performers',
+              const SizedBox(height: 32),
+
+              // Settings Categories
+              _buildSettingsSection(
+                title: l10n.adminProfile,
                 icon: Icons.person,
-                onTap: () => _navigateToActors(),
-              ),
-              _buildManagementTile(
-                title: l10n.screeningFormats,
-                subtitle: l10n.manageScreeningFormats ?? 'Manage 3D, IMAX, and other formats',
-                icon: Icons.aspect_ratio,
-                onTap: () => _navigateToScreeningFormats(),
-              ),
-              _buildManagementTile(
-                title: l10n.halls,
-                subtitle: l10n.manageHalls ?? 'Manage cinema halls and seating',
-                icon: Icons.event_seat,
-                onTap: () => _navigateToHalls(),
-              ),
-            ],
-          ),
-          
-          const SizedBox(height: 24),
-          
-          _buildSettingsSection(
-            title: l10n.systemManagement,
-            icon: Icons.admin_panel_settings,
-            children: [
-              _buildManagementTile(
-                title: l10n.users,
-                subtitle: l10n.manageUsers ?? 'Manage system users and permissions',
-                icon: Icons.people,
-                onTap: () => _navigateToUsers(),
-              ),
-              _buildManagementTile(
-                title: l10n.roles,
-                subtitle: l10n.manageRoles ?? 'Manage user roles and access levels',
-                icon: Icons.security,
-                onTap: () => _navigateToRoles(),
-              ),
-              _buildManagementTile(
-                title: l10n.newsArticles,
-                subtitle: l10n.manageNewsArticles ?? 'Manage news and announcements',
-                icon: Icons.article,
-                onTap: () => _navigateToNews(),
-              ),
-              _buildManagementTile(
-                title: l10n.promotions,
-                subtitle: l10n.managePromotions ?? 'Manage promotional offers and discounts',
-                icon: Icons.local_offer,
-                onTap: () => _navigateToPromotions(),
-              ),
-            ],
-          ),
-          
-          const SizedBox(height: 32),
-          
-          // Action Buttons
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: _saveSettings,
-                  icon: const Icon(Icons.save),
-                  label: Text(l10n.saveSettings ?? 'Save Settings'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Colors.white,
+                children: [
+                  _buildInfoTile(
+                    title: l10n.username,
+                    subtitle: 'admin',
+                    trailing: IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () =>
+                          _showEditDialog(context, l10n.username, 'admin'),
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: OutlinedButton.icon(
-                  onPressed: _resetSettings,
-                  icon: const Icon(Icons.refresh),
-                  label: Text(l10n.resetToDefault ?? 'Reset to Default'),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  _buildInfoTile(
+                    title: l10n.fullName,
+                    subtitle: 'Administrator',
+                    trailing: IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () => _showEditDialog(
+                          context, l10n.fullName, 'Administrator'),
+                    ),
                   ),
-                ),
+                  _buildInfoTile(
+                    title: l10n.email,
+                    subtitle: 'admin@ecinema.com',
+                    trailing: IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () => _showEditDialog(
+                          context, l10n.email, 'admin@ecinema.com'),
+                    ),
+                  ),
+                  _buildInfoTile(
+                    title: l10n.phone,
+                    subtitle: '+387 33 123 456',
+                    trailing: IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () => _showEditDialog(
+                          context, l10n.phone, '+387 33 123 456'),
+                    ),
+                  ),
+                  _buildInfoTile(
+                    title: l10n.role,
+                    subtitle: 'System Administrator',
+                    trailing: const Icon(Icons.admin_panel_settings,
+                        color: Colors.grey),
+                  ),
+                  _buildInfoTile(
+                    title: l10n.lastLogin,
+                    subtitle: '2024-01-15 14:30',
+                    trailing: const Icon(Icons.access_time, color: Colors.grey),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 24),
+
+              _buildSettingsSection(
+                title: l10n.contentManagement,
+                icon: Icons.category,
+                children: [
+                  _buildManagementTile(
+                    title: l10n.genres,
+                    subtitle: l10n.manageMovieGenres,
+                    icon: Icons.theater_comedy,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GenresListScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildManagementTile(
+                    title: l10n.actors,
+                    subtitle: l10n.manageActors,
+                    icon: Icons.person,
+                    onTap: () => _navigateToActors(),
+                  ),
+                  _buildManagementTile(
+                    title: l10n.screeningFormats,
+                    subtitle: l10n.manageScreeningFormats,
+                    icon: Icons.aspect_ratio,
+                    onTap: () => _navigateToScreeningFormats(),
+                  ),
+                  _buildManagementTile(
+                    title: l10n.halls,
+                    subtitle: l10n.manageHalls,
+                    icon: Icons.event_seat,
+                    onTap: () => _navigateToHalls(),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 24),
+
+              _buildSettingsSection(
+                title: l10n.systemManagement,
+                icon: Icons.admin_panel_settings,
+                children: [
+                  _buildManagementTile(
+                    title: l10n.users,
+                    subtitle: l10n.manageUsers,
+                    icon: Icons.people,
+                    onTap: () => _navigateToUsers(),
+                  ),
+                  _buildManagementTile(
+                    title: l10n.roles,
+                    subtitle: l10n.manageRoles,
+                    icon: Icons.security,
+                    onTap: () => _navigateToRoles(),
+                  ),
+                  _buildManagementTile(
+                    title: l10n.newsArticles,
+                    subtitle: l10n.manageNewsArticles,
+                    icon: Icons.article,
+                    onTap: () => _navigateToNews(),
+                  ),
+                  _buildManagementTile(
+                    title: l10n.promotions,
+                    subtitle: l10n.managePromotions,
+                    icon: Icons.local_offer,
+                    onTap: () => _navigateToPromotions(),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 32),
+
+              // Action Buttons
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: _saveSettings,
+                      icon: const Icon(Icons.save),
+                      label: Text(l10n.saveSettings),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: _resetSettings,
+                      icon: const Icon(Icons.refresh),
+                      label: Text(l10n.resetToDefault),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
-    ));
+        ));
   }
 
   Widget _buildSettingsSection({
@@ -200,8 +215,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ],
             ),
@@ -248,9 +263,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  void _showEditDialog(BuildContext context, String title, String currentValue) {
-    final TextEditingController controller = TextEditingController(text: currentValue);
-    
+  void _showEditDialog(
+      BuildContext context, String title, String currentValue) {
+    final TextEditingController controller =
+        TextEditingController(text: currentValue);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -300,7 +317,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Reset Settings'),
-          content: const Text('Are you sure you want to reset all settings to their default values?'),
+          content: const Text(
+              'Are you sure you want to reset all settings to their default values?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -328,14 +346,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       },
     );
   }
-
-  void _navigateToGenres() {
-    // TODO: Navigate to genres management screen
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Genres management - Coming soon')),
-    );
-  }
-
   void _navigateToActors() {
     // TODO: Navigate to actors management screen
     ScaffoldMessenger.of(context).showSnackBar(
@@ -346,7 +356,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _navigateToScreeningFormats() {
     // TODO: Navigate to screening formats management screen
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Screening formats management - Coming soon')),
+      const SnackBar(
+          content: Text('Screening formats management - Coming soon')),
     );
   }
 
