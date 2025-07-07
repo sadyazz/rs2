@@ -441,6 +441,36 @@
   "@movieDeletedSuccessfully": {
     "description": "Movie deleted success message"
   },
+  "restoreMovie": "Restore Movie",
+  "@restoreMovie": {
+    "description": "Restore movie button text"
+  },
+  "movieRestoredSuccessfully": "Movie restored successfully",
+  "@movieRestoredSuccessfully": {
+    "description": "Movie restored success message"
+  },
+  "failedToRestoreMovie": "Failed to restore movie",
+  "@failedToRestoreMovie": {
+    "description": "Failed to restore movie message"
+  },
+  "confirmRestoration": "Confirm Restoration",
+  "@confirmRestoration": {
+    "description": "Confirm restoration dialog title"
+  },
+  "confirmRestoreMovie": "Are you sure you want to restore the movie \"{title}\"?",
+  "@confirmRestoreMovie": {
+    "description": "Confirm restore movie dialog content",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Movie Title"
+      }
+    }
+  },
+  "restore": "Restore",
+  "@restore": {
+    "description": "Restore button text"
+  },
   "failedToDeleteMovie": "Failed to delete movie",
   "@failedToDeleteMovie": {
     "description": "Failed to delete movie message"

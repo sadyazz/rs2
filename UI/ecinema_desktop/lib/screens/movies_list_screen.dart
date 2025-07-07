@@ -47,6 +47,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   final TextEditingController _maxGradeController = TextEditingController();
   final TextEditingController _releaseYearController = TextEditingController();
   bool isActive = true;
+  bool includeDeleted = false;
 
   Future<void> _loadMovies() async {
     try {
@@ -59,7 +60,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
         'pageSize': pageSize,
         'includeTotalCount': true,
         'isActive': true,
-        'isDeleted': false,
+        'includeDeleted': includeDeleted,
       };
       result = await provider.get(filter: filter);
       setState(() {
@@ -85,7 +86,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
         'pageSize': pageSize,
         'includeTotalCount': true,
         'isActive': isActive,
-        'isDeleted': false,
+        'includeDeleted': includeDeleted,
       };
       
       if (_searchController.text.isNotEmpty) {
@@ -242,6 +243,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                 context: context,
                 builder: (context) {
                   bool localIsActive = isActive;
+                  bool localIncludeDeleted = includeDeleted;
                   return StatefulBuilder(
                     builder: (context, setState) => AlertDialog(
                       insetPadding: const EdgeInsets.symmetric(horizontal: 80),
@@ -355,6 +357,24 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                                   ),
                                 ],
                               ),
+                              const SizedBox(height: 12),
+                              Row(
+                                children: [
+                                  Text(
+                                    l10n.includeDeleted,
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.onSurface,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Switch(
+                                    value: localIncludeDeleted,
+                                    onChanged: (val) {
+                                      setState(() => localIncludeDeleted = val);
+                                    },
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ),
@@ -372,6 +392,8 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                             setState(() {
                               localIsActive = true;
                               isActive = true;
+                              localIncludeDeleted = false;
+                              includeDeleted = false;
                             });
                           },
                           child: Text(l10n.reset),
@@ -384,6 +406,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                           onPressed: () async {
                             setState(() {
                               isActive = localIsActive;
+                              includeDeleted = localIncludeDeleted;
                             });
                             await _searchMovies();
                             Navigator.pop(context);
@@ -639,6 +662,41 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                             const SizedBox(width: 2),
                             Text(
                               movie.grade!.toStringAsFixed(1),
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  if (movie.isDeleted == true)
+                    Positioned(
+                      top: movie.grade != null ? 40 : 10,
+                      right: 10,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.red[700],
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              spreadRadius: 0,
+                              blurRadius: 3,
+                              offset: const Offset(0, 1),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.delete_forever, size: 12, color: Colors.white),
+                            const SizedBox(width: 2),
+                            Text(
+                              l10n.deleted,
                               style: const TextStyle(
                                 fontSize: 12,
                                 color: Colors.white,

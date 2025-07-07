@@ -417,6 +417,36 @@
   "@movieDeletedSuccessfully": {
     "description": "Movie deleted success message"
   },
+  "restoreMovie": "Vrati Film",
+  "@restoreMovie": {
+    "description": "Restore movie button text"
+  },
+  "movieRestoredSuccessfully": "Film uspješno vraćen",
+  "@movieRestoredSuccessfully": {
+    "description": "Movie restored success message"
+  },
+  "failedToRestoreMovie": "Greška pri vraćanju filma",
+  "@failedToRestoreMovie": {
+    "description": "Failed to restore movie message"
+  },
+  "confirmRestoration": "Potvrdi Vraćanje",
+  "@confirmRestoration": {
+    "description": "Confirm restoration dialog title"
+  },
+  "confirmRestoreMovie": "Da li ste sigurni da želite vratiti film \"{title}\"?",
+  "@confirmRestoreMovie": {
+    "description": "Confirm restore movie dialog content",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Movie Title"
+      }
+    }
+  },
+  "restore": "Vrati",
+  "@restore": {
+    "description": "Restore button text"
+  },
   "failedToDeleteMovie": "Greška pri brisanju filma",
   "@failedToDeleteMovie": {
     "description": "Failed to delete movie message"
