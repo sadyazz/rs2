@@ -246,18 +246,32 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                 ),
                               ),
                               const SizedBox(width: 16),
-                              ElevatedButton.icon(
-                                onPressed: () {
-                                  _showDeleteConfirmationDialog(movie);
-                                },
-                                icon: const Icon(Icons.delete),
-                                label: Text(l10n.deleteMovie),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Theme.of(context).colorScheme.error,
-                                  foregroundColor: Theme.of(context).colorScheme.onError,
-                                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                              if (movie.isDeleted == true)
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    _showRestoreConfirmationDialog(movie);
+                                  },
+                                  icon: const Icon(Icons.restore),
+                                  label: Text(l10n.restoreMovie),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green[600],
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                  ),
+                                )
+                              else
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    _showDeleteConfirmationDialog(movie);
+                                  },
+                                  icon: const Icon(Icons.delete),
+                                  label: Text(l10n.deleteMovie),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Theme.of(context).colorScheme.error,
+                                    foregroundColor: Theme.of(context).colorScheme.onError,
+                                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ],
@@ -669,6 +683,55 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(l10n.failedToDeleteMovie),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  void _showRestoreConfirmationDialog(Movie movie) {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.confirmRestoration),
+        content: Text(l10n.confirmRestoreMovie(movie.title ?? l10n.unknownTitle)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.cancel),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _restoreMovie(movie);
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+            child: Text(l10n.restore),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _restoreMovie(Movie movie) async {
+    final l10n = AppLocalizations.of(context)!;
+    if (movieProvider == null || movie.id == null) return;
+    
+    try {
+      await movieProvider!.restore(movie.id!);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.movieRestoredSuccessfully),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.of(context).pop();
+    } catch (e) {
+      print('Error restoring movie: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.failedToRestoreMovie),
           backgroundColor: Colors.red,
         ),
       );
