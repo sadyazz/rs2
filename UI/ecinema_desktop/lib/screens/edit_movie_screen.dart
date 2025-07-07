@@ -94,7 +94,9 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return MasterScreen(l10n.editMovie, Column(
+    return MasterScreen(widget.movie?.id != null 
+        ? '${l10n.editMovie} - ${widget.movie!.title}' 
+        : l10n.addMovie, Column(
       children:[
         isLoading ? Container() : _buildForm(),
         _save()
