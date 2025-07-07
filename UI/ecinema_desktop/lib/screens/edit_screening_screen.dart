@@ -158,6 +158,9 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
         formData['endTime'] = formData['endTime'].toIso8601String();
       }
 
+      formData['hasSubtitles'] = formData['hasSubtitles'] ?? false;
+      formData['isActive'] = formData['isActive'] ?? true;
+
       if (widget.screening?.id != null) {
         await provider.update(widget.screening!.id!, formData);
       } else {
