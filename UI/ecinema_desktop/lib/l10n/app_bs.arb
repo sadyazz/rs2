@@ -742,5 +742,97 @@
   "screening": "Projekcija",
   "@screening": {
     "description": "Screening text"
+  },
+  "failedToSaveScreening": "Greška pri čuvanju projekcije",
+  "@failedToSaveScreening": {
+    "description": "Failed to save screening message"
+  },
+  "editScreening": "Uredi projekciju",
+  "@editScreening": {
+    "description": "Edit screening page title"
+  },
+  "addScreening": "Dodaj projekciju",
+  "@addScreening": {
+    "description": "Add screening page title"
+  },
+  "movie": "Film",
+  "@movie": {
+    "description": "Movie dropdown label"
+  },
+  "hall": "Sala",
+  "@hall": {
+    "description": "Hall dropdown label"
+  },
+  "screeningFormatOptional": "Format projekcije (Opciono)",
+  "@screeningFormatOptional": {
+    "description": "Screening format dropdown label"
+  },
+  "none": "Nijedan",
+  "@none": {
+    "description": "None option text"
+  },
+  "noFormat": "Bez formata",
+  "@noFormat": {
+    "description": "No format option text"
+  },
+  "basePrice": "Osnovna cijena",
+  "@basePrice": {
+    "description": "Base price field label"
+  },
+  "startTime": "Vrijeme početka (GGGG-MM-DDTHH:MM:SS)",
+  "@startTime": {
+    "description": "Start time field label"
+  },
+  "endTime": "Vrijeme završetka (GGGG-MM-DDTHH:MM:SS)",
+  "@endTime": {
+    "description": "End time field label"
+  },
+  "hasSubtitles": "Ima titlove",
+  "@hasSubtitles": {
+    "description": "Has subtitles switch label"
+  },
+  "isActive": "Je aktivan",
+  "@isActive": {
+    "description": "Is active switch label"
+  },
+  "update": "Ažuriraj",
+  "@update": {
+    "description": "Update button text"
+  },
+  "create": "Kreiraj",
+  "@create": {
+    "description": "Create button text"
+  },
+  "pleaseSelectMovie": "Molimo odaberite film",
+  "@pleaseSelectMovie": {
+    "description": "Movie selection validation message"
+  },
+  "pleaseSelectHall": "Molimo odaberite salu",
+  "@pleaseSelectHall": {
+    "description": "Hall selection validation message"
+  },
+  "pleaseEnterLanguage": "Molimo unesite jezik",
+  "@pleaseEnterLanguage": {
+    "description": "Language field validation message"
+  },
+  "pleaseEnterBasePrice": "Molimo unesite osnovnu cijenu",
+  "@pleaseEnterBasePrice": {
+    "description": "Base price field validation message"
+  },
+  "pleaseEnterValidNumber": "Molimo unesite validan broj",
+  "@pleaseEnterValidNumber": {
+    "description": "Number validation message"
+  },
+  "pleaseEnterStartTime": "Molimo unesite vrijeme početka",
+  "@pleaseEnterStartTime": {
+    "description": "Start time field validation message"
+  },
+  "pleaseEnterEndTime": "Molimo unesite vrijeme završetka",
+  "@pleaseEnterEndTime": {
+    "description": "End time field validation message"
+  },
+  "unknownFormat": "Nepoznat format",
+  "@unknownFormat": {
+    "description": "Unknown format fallback text"
   }
 }

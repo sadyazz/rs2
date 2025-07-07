@@ -311,7 +311,7 @@
   },
   "ofText": "of",
   "@ofText": {
-    "description": "Of text used in pagination (e.g., 15 of 75)"
+    "description": "Pagination 'of' text"
   },
   "movieDetails": "Movie Details",
   "@movieDetails": {
@@ -559,7 +559,7 @@
   },
   "ofText": "of",
   "@ofText": {
-    "description": "Of text used in pagination (e.g., 15 of 75)"
+    "description": "Pagination 'of' text"
   },
   "editMovie": "Edit Movie",
   "@editMovie": {
@@ -770,5 +770,105 @@
   "screening": "Screening",
   "@screening": {
     "description": "Screening text"
+  },
+  "screeningUpdatedSuccessfully": "Screening updated successfully",
+  "@screeningUpdatedSuccessfully": {
+    "description": "Screening updated success message"
+  },
+  "screeningCreatedSuccessfully": "Screening created successfully",
+  "@screeningCreatedSuccessfully": {
+    "description": "Screening created success message"
+  },
+  "failedToSaveScreening": "Failed to save screening",
+  "@failedToSaveScreening": {
+    "description": "Failed to save screening message"
+  },
+  "editScreening": "Edit Screening",
+  "@editScreening": {
+    "description": "Edit screening page title"
+  },
+  "addScreening": "Add Screening",
+  "@addScreening": {
+    "description": "Add screening page title"
+  },
+  "movie": "Movie",
+  "@movie": {
+    "description": "Movie dropdown label"
+  },
+  "hall": "Hall",
+  "@hall": {
+    "description": "Hall dropdown label"
+  },
+  "screeningFormatOptional": "Screening Format (Optional)",
+  "@screeningFormatOptional": {
+    "description": "Screening format dropdown label"
+  },
+  "none": "None",
+  "@none": {
+    "description": "None option text"
+  },
+  "noFormat": "No Format",
+  "@noFormat": {
+    "description": "No format option text"
+  },
+  "basePrice": "Base Price",
+  "@basePrice": {
+    "description": "Base price field label"
+  },
+  "startTime": "Start Time (YYYY-MM-DDTHH:MM:SS)",
+  "@startTime": {
+    "description": "Start time field label"
+  },
+  "endTime": "End Time (YYYY-MM-DDTHH:MM:SS)",
+  "@endTime": {
+    "description": "End time field label"
+  },
+  "hasSubtitles": "Has Subtitles",
+  "@hasSubtitles": {
+    "description": "Has subtitles switch label"
+  },
+  "isActive": "Is Active",
+  "@isActive": {
+    "description": "Is active switch label"
+  },
+  "update": "Update",
+  "@update": {
+    "description": "Update button text"
+  },
+  "create": "Create",
+  "@create": {
+    "description": "Create button text"
+  },
+  "pleaseSelectMovie": "Please select a movie",
+  "@pleaseSelectMovie": {
+    "description": "Movie selection validation message"
+  },
+  "pleaseSelectHall": "Please select a hall",
+  "@pleaseSelectHall": {
+    "description": "Hall selection validation message"
+  },
+  "pleaseEnterLanguage": "Please enter language",
+  "@pleaseEnterLanguage": {
+    "description": "Language field validation message"
+  },
+  "pleaseEnterBasePrice": "Please enter base price",
+  "@pleaseEnterBasePrice": {
+    "description": "Base price field validation message"
+  },
+  "pleaseEnterValidNumber": "Please enter a valid number",
+  "@pleaseEnterValidNumber": {
+    "description": "Number validation message"
+  },
+  "pleaseEnterStartTime": "Please enter start time",
+  "@pleaseEnterStartTime": {
+    "description": "Start time field validation message"
+  },
+  "pleaseEnterEndTime": "Please enter end time",
+  "@pleaseEnterEndTime": {
+    "description": "End time field validation message"
+  },
+  "unknownFormat": "Unknown Format",
+  "@unknownFormat": {
+    "description": "Unknown format fallback text"
   }
 }
