@@ -123,6 +123,100 @@ class _GenresListScreenState extends State<GenresListScreen> {
     _loadGenres();
   }
 
+  void _deleteGenre(Genre genre) async {
+    final l10n = AppLocalizations.of(context)!;
+    final genreName = genre.name ?? l10n.unnamedGenre;
+    
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.deleteGenre),
+        content: Text(l10n.confirmDeleteGenre(genreName)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.close),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            child: Text(l10n.delete),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      try {
+        await provider.softDelete(genre.id!);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.genreDeletedSuccessfully),
+            backgroundColor: Colors.green,
+          ),
+        );
+        _resetPagination();
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.failedToDeleteGenre),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  void _restoreGenre(Genre genre) async {
+    final l10n = AppLocalizations.of(context)!;
+    final genreName = genre.name ?? l10n.unnamedGenre;
+    
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.restore),
+        content: Text(l10n.confirmRestoreGenre(genreName)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.close),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.white,
+            ),
+            child: Text(l10n.restore),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      try {
+        await provider.restore(genre.id!);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.genreRestoredSuccessfully),
+            backgroundColor: Colors.green,
+          ),
+        );
+        _resetPagination();
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.failedToRestoreGenre),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -500,7 +594,7 @@ class _GenresListScreenState extends State<GenresListScreen> {
             Expanded(
               flex: 2,
               child: Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -514,37 +608,90 @@ class _GenresListScreenState extends State<GenresListScreen> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     if (genre.description != null && genre.description!.isNotEmpty) ...[
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 2),
                       Flexible(
                         child: Text(
                           genre.description!,
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
-                          maxLines: 2,
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
                     const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: genre.isActive == true 
-                            ? Colors.green[100] 
-                            : Colors.red[100],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        genre.isActive == true ? l10n.active : l10n.inactive,
-                        style: TextStyle(
-                          color: genre.isActive == true 
-                              ? Colors.green[700] 
-                              : Colors.red[700],
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: genre.isActive == true 
+                                ? Colors.green[100] 
+                                : Colors.red[100],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            genre.isActive == true ? l10n.active : l10n.inactive,
+                            style: TextStyle(
+                              color: genre.isActive == true 
+                                  ? Colors.green[700] 
+                                  : Colors.red[700],
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
-                      ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            InkWell(
+                              onTap: () async {
+                                final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditGenreScreen(genre: genre),
+                                  ),
+                                );
+                                if (result == true) {
+                                  _resetPagination();
+                                }
+                              },
+                              borderRadius: BorderRadius.circular(4),
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                child: Icon(
+                                  Icons.edit,
+                                  size: 16,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            InkWell(
+                              onTap: () {
+                                if (genre.isDeleted == true) {
+                                  _restoreGenre(genre);
+                                } else {
+                                  _deleteGenre(genre);
+                                }
+                              },
+                              borderRadius: BorderRadius.circular(4),
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                child: Icon(
+                                  genre.isDeleted == true ? Icons.restore : Icons.delete,
+                                  size: 16,
+                                  color: genre.isDeleted == true 
+                                      ? Colors.green 
+                                      : Colors.red,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),
