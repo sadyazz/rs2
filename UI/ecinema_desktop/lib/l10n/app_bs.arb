@@ -980,5 +980,71 @@
     }
   },
   "unnamedGenre": "Bezimena žanr",
-  "@unnamedGenre": {"description": "Unnamed genre placeholder"}
+  "@unnamedGenre": {"description": "Unnamed genre placeholder"},
+  "actorsList": "Lista glumaca",
+  "@actorsList": {"description": "Actors list page title"},
+  "manageActors": "Upravljanje glumcima",
+  "@manageActors": {"description": "Manage actors subtitle"},
+  "noActorsFound": "Nema pronađenih glumaca",
+  "@noActorsFound": {"description": "No actors found message"},
+  "noActorsMatchSearch": "Nijedan glumac ne odgovara pretrazi",
+  "@noActorsMatchSearch": {"description": "No actors match search message"},
+  "loadingActors": "Učitavanje glumaca...",
+  "@loadingActors": {"description": "Loading actors message"},
+  "noActorsLoaded": "Nema učitanih glumaca",
+  "@noActorsLoaded": {"description": "No actors loaded message"},
+  "addActor": "Dodaj glumca",
+  "@addActor": {"description": "Add actor button text"},
+  "editActor": "Uredi glumca",
+  "@editActor": {"description": "Edit actor button text"},
+  "deleteActor": "Obriši glumca",
+  "@deleteActor": {"description": "Delete actor button text"},
+  "actorFirstName": "Ime",
+  "@actorFirstName": {"description": "Actor first name field label"},
+  "actorLastName": "Prezime",
+  "@actorLastName": {"description": "Actor last name field label"},
+  "actorBiography": "Biografija",
+  "@actorBiography": {"description": "Actor biography field label"},
+  "pleaseEnterActorFirstName": "Molimo unesite ime",
+  "@pleaseEnterActorFirstName": {"description": "Actor first name validation message"},
+  "pleaseEnterActorLastName": "Molimo unesite prezime",
+  "@pleaseEnterActorLastName": {"description": "Actor last name validation message"},
+  "pleaseEnterActorBiography": "Molimo unesite biografiju",
+  "@pleaseEnterActorBiography": {"description": "Actor biography validation message"},
+  "actorCreatedSuccessfully": "Glumac uspješno kreiran",
+  "@actorCreatedSuccessfully": {"description": "Actor created success message"},
+  "actorUpdatedSuccessfully": "Glumac uspješno ažuriran",
+  "@actorUpdatedSuccessfully": {"description": "Actor updated success message"},
+  "actorDeletedSuccessfully": "Glumac uspješno obrisan",
+  "@actorDeletedSuccessfully": {"description": "Actor deleted success message"},
+  "actorRestoredSuccessfully": "Glumac uspješno vraćen",
+  "@actorRestoredSuccessfully": {"description": "Actor restored success message"},
+  "failedToSaveActor": "Greška pri čuvanju glumca",
+  "@failedToSaveActor": {"description": "Failed to save actor message"},
+  "failedToDeleteActor": "Greška pri brisanju glumca",
+  "@failedToDeleteActor": {"description": "Failed to delete actor message"},
+  "failedToRestoreActor": "Greška pri vraćanju glumca",
+  "@failedToRestoreActor": {"description": "Failed to restore actor message"},
+  "confirmDeleteActor": "Da li ste sigurni da želite obrisati \"{name}\"?",
+  "@confirmDeleteActor": {
+    "description": "Confirm delete actor message",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "John Doe"
+      }
+    }
+  },
+  "confirmRestoreActor": "Da li ste sigurni da želite vratiti glumca \"{name}\"?",
+  "@confirmRestoreActor": {
+    "description": "Confirm restore actor dialog content",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "John Doe"
+      }
+    }
+  },
+  "unnamedActor": "Bezimena glumac",
+  "@unnamedActor": {"description": "Unnamed actor placeholder"}
 }

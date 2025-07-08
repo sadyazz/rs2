@@ -1016,5 +1016,71 @@
     }
   },
   "unnamedGenre": "Unnamed Genre",
-  "@unnamedGenre": {"description": "Unnamed genre placeholder"}
+  "@unnamedGenre": {"description": "Unnamed genre placeholder"},
+  "actorsList": "Actors List",
+  "@actorsList": {"description": "Actors list page title"},
+  "manageActors": "Manage Actors",
+  "@manageActors": {"description": "Manage actors subtitle"},
+  "noActorsFound": "No actors found",
+  "@noActorsFound": {"description": "No actors found message"},
+  "noActorsMatchSearch": "No actors match your search",
+  "@noActorsMatchSearch": {"description": "No actors match search message"},
+  "loadingActors": "Loading actors...",
+  "@loadingActors": {"description": "Loading actors message"},
+  "noActorsLoaded": "No actors loaded",
+  "@noActorsLoaded": {"description": "No actors loaded message"},
+  "addActor": "Add Actor",
+  "@addActor": {"description": "Add actor button text"},
+  "editActor": "Edit Actor",
+  "@editActor": {"description": "Edit actor button text"},
+  "deleteActor": "Delete Actor",
+  "@deleteActor": {"description": "Delete actor button text"},
+  "actorFirstName": "First Name",
+  "@actorFirstName": {"description": "Actor first name field label"},
+  "actorLastName": "Last Name",
+  "@actorLastName": {"description": "Actor last name field label"},
+  "actorBiography": "Biography",
+  "@actorBiography": {"description": "Actor biography field label"},
+  "pleaseEnterActorFirstName": "Please enter first name",
+  "@pleaseEnterActorFirstName": {"description": "Actor first name validation message"},
+  "pleaseEnterActorLastName": "Please enter last name",
+  "@pleaseEnterActorLastName": {"description": "Actor last name validation message"},
+  "pleaseEnterActorBiography": "Please enter biography",
+  "@pleaseEnterActorBiography": {"description": "Actor biography validation message"},
+  "actorCreatedSuccessfully": "Actor created successfully",
+  "@actorCreatedSuccessfully": {"description": "Actor created success message"},
+  "actorUpdatedSuccessfully": "Actor updated successfully",
+  "@actorUpdatedSuccessfully": {"description": "Actor updated success message"},
+  "actorDeletedSuccessfully": "Actor deleted successfully",
+  "@actorDeletedSuccessfully": {"description": "Actor deleted success message"},
+  "actorRestoredSuccessfully": "Actor restored successfully",
+  "@actorRestoredSuccessfully": {"description": "Actor restored success message"},
+  "failedToSaveActor": "Failed to save actor",
+  "@failedToSaveActor": {"description": "Failed to save actor message"},
+  "failedToDeleteActor": "Failed to delete actor",
+  "@failedToDeleteActor": {"description": "Failed to delete actor message"},
+  "failedToRestoreActor": "Failed to restore actor",
+  "@failedToRestoreActor": {"description": "Failed to restore actor message"},
+  "confirmDeleteActor": "Are you sure you want to delete \"{name}\"?",
+  "@confirmDeleteActor": {
+    "description": "Confirm delete actor message",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "John Doe"
+      }
+    }
+  },
+  "confirmRestoreActor": "Are you sure you want to restore the actor \"{name}\"?",
+  "@confirmRestoreActor": {
+    "description": "Confirm restore actor dialog content",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "John Doe"
+      }
+    }
+  },
+  "unnamedActor": "Unnamed Actor",
+  "@unnamedActor": {"description": "Unnamed actor placeholder"}
 }
