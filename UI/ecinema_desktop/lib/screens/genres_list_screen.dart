@@ -5,6 +5,7 @@ import 'package:ecinema_desktop/providers/genre_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'edit_genre_screen.dart';
 
 class GenresListScreen extends StatefulWidget {
   const GenresListScreen({super.key});
@@ -285,17 +286,15 @@ class _GenresListScreenState extends State<GenresListScreen> {
           height: 36,
           child: ElevatedButton.icon(
             onPressed: () async {
-              // TODO: Navigate to edit genre screen
-              // final result = await Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => EditGenreScreen(),
-              //   ),
-              // );
-              // 
-              // if (result == true) {
-              //   _resetPagination();
-              // }
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EditGenreScreen(),
+                ),
+              );
+              if (result == true) {
+                _resetPagination();
+              }
             },
             icon: const Icon(Icons.add, size: 18),
             label: Text(l10n.addGenre),
@@ -404,17 +403,15 @@ class _GenresListScreenState extends State<GenresListScreen> {
     final l10n = AppLocalizations.of(context)!;
     return InkWell(
       onTap: () async {
-        // TODO: Navigate to edit genre screen
-        // final result = await Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => EditGenreScreen(genre: genre),
-        //   ),
-        // );
-        // 
-        // if (result == true) {
-        //   _resetPagination();
-        // }
+        final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditGenreScreen(genre: genre),
+          ),
+        );
+        if (result == true) {
+          _resetPagination();
+        }
       },
       borderRadius: BorderRadius.circular(16),
       child: Container(
