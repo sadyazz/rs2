@@ -1082,5 +1082,7 @@
     }
   },
   "unnamedActor": "Unnamed Actor",
-  "@unnamedActor": {"description": "Unnamed actor placeholder"}
+  "@unnamedActor": {"description": "Unnamed actor placeholder"},
+  "dateOfBirth": "Date of Birth",
+  "@dateOfBirth": {"description": "Date of birth field label"}
 }

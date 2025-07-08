@@ -2,6 +2,7 @@ import 'package:ecinema_desktop/layouts/master_screen.dart';
 import 'package:ecinema_desktop/models/actor.dart';
 import 'package:ecinema_desktop/models/search_result.dart';
 import 'package:ecinema_desktop/providers/actor_provider.dart';
+import 'package:ecinema_desktop/screens/edit_actor_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -121,6 +122,164 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
       currentPage = 0;
     });
     _loadActors();
+  }
+
+  void _showActorOptions(Actor actor) {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.actions),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.edit),
+              title: Text(l10n.edit),
+              onTap: () {
+                Navigator.pop(context);
+                _editActor(actor);
+              },
+            ),
+            if (actor.isDeleted == true)
+              ListTile(
+                leading: const Icon(Icons.restore, color: Colors.green),
+                title: Text(l10n.restore),
+                onTap: () {
+                  Navigator.pop(context);
+                  _restoreActor(actor);
+                },
+              )
+            else
+              ListTile(
+                leading: const Icon(Icons.delete, color: Colors.red),
+                title: Text(l10n.delete),
+                onTap: () {
+                  Navigator.pop(context);
+                  _deleteActor(actor);
+                },
+              ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.close),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _editActor(Actor actor) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditActorScreen(actor: actor),
+      ),
+    );
+    
+    if (result == true) {
+      _resetPagination();
+    }
+  }
+
+  void _deleteActor(Actor actor) async {
+    final l10n = AppLocalizations.of(context)!;
+    final actorName = '${actor.firstName ?? ''} ${actor.lastName ?? ''}'.trim().isEmpty 
+        ? l10n.unnamedActor 
+        : '${actor.firstName ?? ''} ${actor.lastName ?? ''}'.trim();
+    
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.deleteActor),
+        content: Text(l10n.confirmDeleteActor(actorName)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.close),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            child: Text(l10n.delete),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      try {
+        await provider.softDelete(actor.id!);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.actorDeletedSuccessfully),
+            backgroundColor: Colors.green,
+          ),
+        );
+        _resetPagination();
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.failedToDeleteActor),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  void _restoreActor(Actor actor) async {
+    final l10n = AppLocalizations.of(context)!;
+    final actorName = '${actor.firstName ?? ''} ${actor.lastName ?? ''}'.trim().isEmpty 
+        ? l10n.unnamedActor 
+        : '${actor.firstName ?? ''} ${actor.lastName ?? ''}'.trim();
+    
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.restore),
+        content: Text(l10n.confirmRestoreActor(actorName)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.close),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.white,
+            ),
+            child: Text(l10n.restore),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      try {
+        await provider.restore(actor.id!);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.actorRestoredSuccessfully),
+            backgroundColor: Colors.green,
+          ),
+        );
+        _resetPagination();
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.failedToRestoreActor),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -286,17 +445,16 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
           height: 36,
           child: ElevatedButton.icon(
             onPressed: () async {
-              // TODO: Navigate to edit actor screen
-              // final result = await Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => EditActorScreen(),
-              //   ),
-              // );
-              // 
-              // if (result == true) {
-              //   _resetPagination();
-              // }
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditActorScreen(),
+                ),
+              );
+              
+              if (result == true) {
+                _resetPagination();
+              }
             },
             icon: const Icon(Icons.add, size: 18),
             label: Text(l10n.addActor),
@@ -405,17 +563,19 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
     final l10n = AppLocalizations.of(context)!;
     return InkWell(
       onTap: () async {
-        // TODO: Navigate to edit actor screen
-        // final result = await Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => EditActorScreen(actor: actor),
-        //   ),
-        // );
-        // 
-        // if (result == true) {
-        //   _resetPagination();
-        // }
+        final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditActorScreen(actor: actor),
+          ),
+        );
+        
+        if (result == true) {
+          _resetPagination();
+        }
+      },
+      onSecondaryTap: () {
+        _showActorOptions(actor);
       },
       borderRadius: BorderRadius.circular(16),
       child: Container(
@@ -533,13 +693,14 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
                         ),
                       ),
                     ),
+
                 ],
               ),
             ),
             Expanded(
               flex: 2,
               child: Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -555,37 +716,80 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     if (actor.biography != null && actor.biography!.isNotEmpty) ...[
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 2),
                       Flexible(
                         child: Text(
                           actor.biography!,
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
-                          maxLines: 2,
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
                     const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: actor.isActive == true 
-                            ? Colors.green[100] 
-                            : Colors.red[100],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        actor.isActive == true ? l10n.active : l10n.inactive,
-                        style: TextStyle(
-                          color: actor.isActive == true 
-                              ? Colors.green[700] 
-                              : Colors.red[700],
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: actor.isActive == true 
+                                ? Colors.green[100] 
+                                : Colors.red[100],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            actor.isActive == true ? l10n.active : l10n.inactive,
+                            style: TextStyle(
+                              color: actor.isActive == true 
+                                  ? Colors.green[700] 
+                                  : Colors.red[700],
+                              fontSize: 10,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
-                      ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            InkWell(
+                              onTap: () => _editActor(actor),
+                              borderRadius: BorderRadius.circular(4),
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                child: Icon(
+                                  Icons.edit,
+                                  size: 16,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            InkWell(
+                              onTap: () {
+                                if (actor.isDeleted == true) {
+                                  _restoreActor(actor);
+                                } else {
+                                  _deleteActor(actor);
+                                }
+                              },
+                              borderRadius: BorderRadius.circular(4),
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                child: Icon(
+                                  actor.isDeleted == true ? Icons.restore : Icons.delete,
+                                  size: 16,
+                                  color: actor.isDeleted == true 
+                                      ? Colors.green 
+                                      : Colors.red,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),

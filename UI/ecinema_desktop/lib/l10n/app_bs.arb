@@ -1046,5 +1046,7 @@
     }
   },
   "unnamedActor": "Bezimena glumac",
-  "@unnamedActor": {"description": "Unnamed actor placeholder"}
+  "@unnamedActor": {"description": "Unnamed actor placeholder"},
+  "dateOfBirth": "Datum rođenja",
+  "@dateOfBirth": {"description": "Date of birth field label"}
 }
