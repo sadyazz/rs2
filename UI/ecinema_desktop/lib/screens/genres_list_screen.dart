@@ -126,7 +126,7 @@ class _GenresListScreenState extends State<GenresListScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return MasterScreen(l10n.genresList,
+    return MasterScreen(l10n.genres,
       Padding(
         padding: const EdgeInsets.fromLTRB(32.0, 16.0, 32.0, 16.0),
         child: Column(
