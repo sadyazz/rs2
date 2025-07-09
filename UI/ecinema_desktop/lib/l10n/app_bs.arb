@@ -1048,5 +1048,63 @@
   "unnamedActor": "Bezimena glumac",
   "@unnamedActor": {"description": "Unnamed actor placeholder"},
   "dateOfBirth": "Datum rođenja",
-  "@dateOfBirth": {"description": "Date of birth field label"}
+  "@dateOfBirth": {"description": "Date of birth field label"},
+  "addScreeningFormat": "Dodaj format projekcije",
+  "@addScreeningFormat": {"description": "Add screening format button text"},
+  "editScreeningFormat": "Uredi format projekcije",
+  "@editScreeningFormat": {"description": "Edit screening format button text"},
+  "deleteScreeningFormat": "Obriši format projekcije",
+  "@deleteScreeningFormat": {"description": "Delete screening format button text"},
+  "screeningFormatName": "Naziv formata projekcije",
+  "@screeningFormatName": {"description": "Screening format name field label"},
+  "priceMultiplier": "Multiplikator cijene",
+  "@priceMultiplier": {"description": "Price multiplier field label"},
+  "pleaseEnterScreeningFormatName": "Molimo unesite naziv formata projekcije",
+  "@pleaseEnterScreeningFormatName": {"description": "Screening format name validation message"},
+  "pleaseEnterPriceMultiplier": "Molimo unesite multiplikator cijene",
+  "@pleaseEnterPriceMultiplier": {"description": "Price multiplier validation message"},
+  "screeningFormatCreatedSuccessfully": "Format projekcije uspješno kreiran",
+  "@screeningFormatCreatedSuccessfully": {"description": "Screening format created success message"},
+  "screeningFormatUpdatedSuccessfully": "Format projekcije uspješno ažuriran",
+  "@screeningFormatUpdatedSuccessfully": {"description": "Screening format updated success message"},
+  "screeningFormatDeletedSuccessfully": "Format projekcije uspješno obrisan",
+  "@screeningFormatDeletedSuccessfully": {"description": "Screening format deleted success message"},
+  "screeningFormatRestoredSuccessfully": "Format projekcije uspješno vraćen",
+  "@screeningFormatRestoredSuccessfully": {"description": "Screening format restored success message"},
+  "failedToSaveScreeningFormat": "Greška pri čuvanju formata projekcije",
+  "@failedToSaveScreeningFormat": {"description": "Failed to save screening format message"},
+  "failedToDeleteScreeningFormat": "Greška pri brisanju formata projekcije",
+  "@failedToDeleteScreeningFormat": {"description": "Failed to delete screening format message"},
+  "failedToRestoreScreeningFormat": "Greška pri vraćanju formata projekcije",
+  "@failedToRestoreScreeningFormat": {"description": "Failed to restore screening format message"},
+  "confirmDeleteScreeningFormat": "Da li ste sigurni da želite obrisati \"{name}\"?",
+  "@confirmDeleteScreeningFormat": {
+    "description": "Confirm delete screening format message",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "3D"
+      }
+    }
+  },
+  "confirmRestoreScreeningFormat": "Da li ste sigurni da želite vratiti format projekcije \"{name}\"?",
+  "@confirmRestoreScreeningFormat": {
+    "description": "Confirm restore screening format dialog content",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "3D"
+      }
+    }
+  },
+  "unnamedScreeningFormat": "Bezimena format projekcije",
+  "@unnamedScreeningFormat": {"description": "Unnamed screening format placeholder"},
+  "loadingScreeningFormats": "Učitavanje formata projekcija...",
+  "@loadingScreeningFormats": {"description": "Loading screening formats message"},
+  "noScreeningFormatsLoaded": "Nema učitanih formata projekcija",
+  "@noScreeningFormatsLoaded": {"description": "No screening formats loaded message"},
+  "noScreeningFormatsFound": "Nema pronađenih formata projekcija",
+  "@noScreeningFormatsFound": {"description": "No screening formats found message"},
+  "editScreeningFormatScreenComingSoon": "Ekran za uređivanje formata projekcije - Dolazi uskoro",
+  "@editScreeningFormatScreenComingSoon": {"description": "Edit screening format screen coming soon message"}
 }

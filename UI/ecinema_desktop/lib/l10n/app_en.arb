@@ -1084,5 +1084,63 @@
   "unnamedActor": "Unnamed Actor",
   "@unnamedActor": {"description": "Unnamed actor placeholder"},
   "dateOfBirth": "Date of Birth",
-  "@dateOfBirth": {"description": "Date of birth field label"}
+  "@dateOfBirth": {"description": "Date of birth field label"},
+  "addScreeningFormat": "Add Screening Format",
+  "@addScreeningFormat": {"description": "Add screening format button text"},
+  "editScreeningFormat": "Edit Screening Format",
+  "@editScreeningFormat": {"description": "Edit screening format button text"},
+  "deleteScreeningFormat": "Delete Screening Format",
+  "@deleteScreeningFormat": {"description": "Delete screening format button text"},
+  "screeningFormatName": "Screening Format Name",
+  "@screeningFormatName": {"description": "Screening format name field label"},
+  "priceMultiplier": "Price Multiplier",
+  "@priceMultiplier": {"description": "Price multiplier field label"},
+  "pleaseEnterScreeningFormatName": "Please enter screening format name",
+  "@pleaseEnterScreeningFormatName": {"description": "Screening format name validation message"},
+  "pleaseEnterPriceMultiplier": "Please enter price multiplier",
+  "@pleaseEnterPriceMultiplier": {"description": "Price multiplier validation message"},
+  "screeningFormatCreatedSuccessfully": "Screening format created successfully",
+  "@screeningFormatCreatedSuccessfully": {"description": "Screening format created success message"},
+  "screeningFormatUpdatedSuccessfully": "Screening format updated successfully",
+  "@screeningFormatUpdatedSuccessfully": {"description": "Screening format updated success message"},
+  "screeningFormatDeletedSuccessfully": "Screening format deleted successfully",
+  "@screeningFormatDeletedSuccessfully": {"description": "Screening format deleted success message"},
+  "screeningFormatRestoredSuccessfully": "Screening format restored successfully",
+  "@screeningFormatRestoredSuccessfully": {"description": "Screening format restored success message"},
+  "failedToSaveScreeningFormat": "Failed to save screening format",
+  "@failedToSaveScreeningFormat": {"description": "Failed to save screening format message"},
+  "failedToDeleteScreeningFormat": "Failed to delete screening format",
+  "@failedToDeleteScreeningFormat": {"description": "Failed to delete screening format message"},
+  "failedToRestoreScreeningFormat": "Failed to restore screening format",
+  "@failedToRestoreScreeningFormat": {"description": "Failed to restore screening format message"},
+  "confirmDeleteScreeningFormat": "Are you sure you want to delete \"{name}\"?",
+  "@confirmDeleteScreeningFormat": {
+    "description": "Confirm delete screening format message",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "3D"
+      }
+    }
+  },
+  "confirmRestoreScreeningFormat": "Are you sure you want to restore the screening format \"{name}\"?",
+  "@confirmRestoreScreeningFormat": {
+    "description": "Confirm restore screening format dialog content",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "3D"
+      }
+    }
+  },
+  "unnamedScreeningFormat": "Unnamed Screening Format",
+  "@unnamedScreeningFormat": {"description": "Unnamed screening format placeholder"},
+  "loadingScreeningFormats": "Loading screening formats...",
+  "@loadingScreeningFormats": {"description": "Loading screening formats message"},
+  "noScreeningFormatsLoaded": "No screening formats loaded",
+  "@noScreeningFormatsLoaded": {"description": "No screening formats loaded message"},
+  "noScreeningFormatsFound": "No screening formats found",
+  "@noScreeningFormatsFound": {"description": "No screening formats found message"},
+  "editScreeningFormatScreenComingSoon": "Edit screening format screen - Coming soon",
+  "@editScreeningFormatScreenComingSoon": {"description": "Edit screening format screen coming soon message"}
 }
