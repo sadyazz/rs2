@@ -8,6 +8,5 @@ namespace eCinema.Model.Responses
         public decimal PriceMultiplier { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
-        public int ScreeningsCount { get; set; }
     }
 } 

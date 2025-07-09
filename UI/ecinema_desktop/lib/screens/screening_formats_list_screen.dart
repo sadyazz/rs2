@@ -2,6 +2,7 @@ import 'package:ecinema_desktop/layouts/master_screen.dart';
 import 'package:ecinema_desktop/models/screening_format.dart';
 import 'package:ecinema_desktop/models/search_result.dart';
 import 'package:ecinema_desktop/providers/screening_format_provider.dart';
+import 'package:ecinema_desktop/screens/edit_screening_format_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -229,6 +230,7 @@ class _ScreeningFormatsListScreenState extends State<ScreeningFormatsListScreen>
           ],
         ),
       ),
+      showDrawer: false,
     );
   }
 
@@ -379,13 +381,15 @@ class _ScreeningFormatsListScreenState extends State<ScreeningFormatsListScreen>
           height: 36,
           child: ElevatedButton.icon(
             onPressed: () async {
-              // TODO: Navigate to edit screening format screen
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(l10n.editScreeningFormatScreenComingSoon),
-                  backgroundColor: Colors.orange,
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EditScreeningFormatScreen(),
                 ),
               );
+              if (result == true) {
+                _resetPagination();
+              }
             },
             icon: const Icon(Icons.add, size: 18),
             label: Text(l10n.addScreeningFormat),
@@ -494,13 +498,15 @@ class _ScreeningFormatsListScreenState extends State<ScreeningFormatsListScreen>
     final l10n = AppLocalizations.of(context)!;
     return InkWell(
       onTap: () async {
-        // TODO: Navigate to edit screening format screen
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.editScreeningFormatScreenComingSoon),
-            backgroundColor: Colors.orange,
+        final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditScreeningFormatScreen(screeningFormat: screeningFormat),
           ),
         );
+        if (result == true) {
+          _resetPagination();
+        }
       },
       borderRadius: BorderRadius.circular(16),
       child: Container(
@@ -643,13 +649,15 @@ class _ScreeningFormatsListScreenState extends State<ScreeningFormatsListScreen>
                           children: [
                             InkWell(
                               onTap: () async {
-                                // TODO: Navigate to edit screening format screen
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(l10n.editScreeningFormatScreenComingSoon),
-                                    backgroundColor: Colors.orange,
+                                final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditScreeningFormatScreen(screeningFormat: screeningFormat),
                                   ),
                                 );
+                                if (result == true) {
+                                  _resetPagination();
+                                }
                               },
                               borderRadius: BorderRadius.circular(4),
                               child: Container(

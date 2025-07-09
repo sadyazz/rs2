@@ -6,6 +6,7 @@ part 'screening_format.g.dart';
 class ScreeningFormat {
   int? id;
   String? name;
+  String? description;
   double? priceMultiplier;
   bool? isActive;
   bool? isDeleted;
@@ -13,6 +14,7 @@ class ScreeningFormat {
   ScreeningFormat({
     this.id,
     this.name,
+    this.description,
     this.priceMultiplier,
     this.isActive,
     this.isDeleted,
