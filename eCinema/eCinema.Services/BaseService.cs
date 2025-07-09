@@ -111,6 +111,10 @@ namespace eCinema.Services
                 {
                     query = query.Cast<Database.Entities.User>().Where(u => !u.isDeleted).Cast<TEntity>();
                 }
+                else if (typeof(TEntity) == typeof(Database.Entities.ScreeningFormat))
+                {
+                    query = query.Cast<Database.Entities.ScreeningFormat>().Where(sf => !sf.IsDeleted).Cast<TEntity>();
+                }
             }
 
             if (search.IsActive.HasValue)
@@ -150,6 +154,10 @@ namespace eCinema.Services
                 else if (typeof(TEntity) == typeof(Database.Entities.User))
                 {
                     query = query.Cast<Database.Entities.User>().Where(u => u.IsActive == search.IsActive.Value).Cast<TEntity>();
+                }
+                else if (typeof(TEntity) == typeof(Database.Entities.ScreeningFormat))
+                {
+                    query = query.Cast<Database.Entities.ScreeningFormat>().Where(sf => sf.IsActive == search.IsActive.Value).Cast<TEntity>();
                 }
             }
 

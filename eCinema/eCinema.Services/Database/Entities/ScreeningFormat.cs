@@ -20,6 +20,8 @@ namespace eCinema.Services.Database.Entities
         
         public bool IsActive { get; set; } = true;
         
+        public bool IsDeleted { get; set; } = false;
+        
         public virtual ICollection<Screening> Screenings { get; set; } = new HashSet<Screening>();
     }
 } 
