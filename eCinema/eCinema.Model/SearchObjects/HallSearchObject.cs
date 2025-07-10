@@ -10,5 +10,6 @@ namespace eCinema.Model.SearchObjects
         public string? SoundSystem { get; set; }
         public int? MinCapacity { get; set; }
         public int? MaxCapacity { get; set; }
+        public bool IncludeDeleted { get; set; } = false;
     }
 } 

@@ -24,6 +24,7 @@ namespace eCinema.Services.Database.Entities
         public string Location { get; set; } = string.Empty;
         
         public bool IsActive { get; set; } = true;
+        public bool IsDeleted { get; set; } = false;
         
         public virtual ICollection<Screening> Screenings { get; set; } = new HashSet<Screening>();
         public virtual ICollection<Seat> Seats { get; set; } = new HashSet<Seat>();

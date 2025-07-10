@@ -2,6 +2,7 @@ import 'package:ecinema_desktop/layouts/master_screen.dart';
 import 'package:ecinema_desktop/screens/genres_list_screen.dart';
 import 'package:ecinema_desktop/screens/actors_list_screen.dart';
 import 'package:ecinema_desktop/screens/screening_formats_list_screen.dart';
+import 'package:ecinema_desktop/screens/halls_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -367,9 +368,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _navigateToHalls() {
-    // TODO: Navigate to halls management screen
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Halls management - Coming soon')),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HallsListScreen(),
+      ),
     );
   }
 

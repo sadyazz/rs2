@@ -23,6 +23,10 @@ namespace eCinema.Services
 
         protected override IQueryable<Hall> ApplyFilter(IQueryable<Hall> query, HallSearchObject search)
         {
+            if (!search.IncludeDeleted)
+            {
+                query = query.Where(x => !x.IsDeleted);
+            }
             query = base.ApplyFilter(query, search);
             
             if (!string.IsNullOrWhiteSpace(search.Name))
