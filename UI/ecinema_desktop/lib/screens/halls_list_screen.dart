@@ -220,7 +220,7 @@ class _HallsListScreenState extends State<HallsListScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return MasterScreen(l10n.halls,
+    return MasterScreen(l10n.hallsAndSeats,
       Padding(
         padding: const EdgeInsets.fromLTRB(32.0, 16.0, 32.0, 16.0),
         child: Column(

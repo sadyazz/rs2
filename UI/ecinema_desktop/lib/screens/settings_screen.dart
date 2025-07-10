@@ -120,7 +120,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onTap: () => _navigateToScreeningFormats(),
                   ),
                   _buildManagementTile(
-                    title: l10n.halls,
+                    title: l10n.hallsAndSeats,
                     subtitle: l10n.manageHalls,
                     icon: Icons.event_seat,
                     onTap: () => _navigateToHalls(),
