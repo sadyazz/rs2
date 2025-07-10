@@ -2,6 +2,7 @@ import 'package:ecinema_desktop/layouts/master_screen.dart';
 import 'package:ecinema_desktop/models/hall.dart';
 import 'package:ecinema_desktop/models/search_result.dart';
 import 'package:ecinema_desktop/providers/hall_provider.dart';
+import 'package:ecinema_desktop/screens/edit_hall_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -380,13 +381,15 @@ class _HallsListScreenState extends State<HallsListScreen> {
           height: 36,
           child: ElevatedButton.icon(
             onPressed: () async {
-              // TODO: Navigate to edit hall screen
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(l10n.editHallScreenComingSoon),
-                  backgroundColor: Colors.orange,
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EditHallScreen(),
                 ),
               );
+              if (result == true) {
+                _resetPagination();
+              }
             },
             icon: const Icon(Icons.add, size: 18),
             label: Text(l10n.addHall),
@@ -495,13 +498,15 @@ class _HallsListScreenState extends State<HallsListScreen> {
     final l10n = AppLocalizations.of(context)!;
     return InkWell(
       onTap: () async {
-        // TODO: Navigate to edit hall screen
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.editHallScreenComingSoon),
-            backgroundColor: Colors.orange,
+        final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditHallScreen(hall: hall),
           ),
         );
+        if (result == true) {
+          _resetPagination();
+        }
       },
       borderRadius: BorderRadius.circular(16),
       child: Container(
@@ -644,13 +649,15 @@ class _HallsListScreenState extends State<HallsListScreen> {
                           children: [
                             InkWell(
                               onTap: () async {
-                                // TODO: Navigate to edit hall screen
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(l10n.editHallScreenComingSoon),
-                                    backgroundColor: Colors.orange,
+                                final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditHallScreen(hall: hall),
                                   ),
                                 );
+                                if (result == true) {
+                                  _resetPagination();
+                                }
                               },
                               borderRadius: BorderRadius.circular(4),
                               child: Container(
