@@ -59,6 +59,117 @@ class _MasterScreenState extends State<MasterScreen> {
           ),
           child: Column(
             children: [
+              // Header Design
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(20, 40, 20, 30),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.white.withOpacity(0.15),
+                      Colors.white.withOpacity(0.05),
+                    ],
+                  ),
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.white.withOpacity(0.2),
+                      width: 1,
+                    ),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.3),
+                              width: 1,
+                            ),
+                          ),
+                          child: Icon(
+                            Icons.movie,
+                            color: Colors.white,
+                            size: 28,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'eCinema',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                              Text(
+                                l10n.managementSystem,
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.8),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.2),
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.person,
+                            color: Colors.white.withOpacity(0.8),
+                            size: 16,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Administrator',
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.9),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const Spacer(),
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              
               Expanded(
                 child: ListView(
                   children: [
@@ -73,18 +184,6 @@ class _MasterScreenState extends State<MasterScreen> {
                     _buildListTile(
                       icon: Icons.schedule,
                       title: l10n.screenings,
-                    ),
-                    _buildListTile(
-                      icon: Icons.event_seat,
-                      title: l10n.seatsHalls,
-                    ),
-                    _buildListTile(
-                      icon: Icons.article,
-                      title: l10n.news,
-                    ),
-                    _buildListTile(
-                      icon: Icons.people,
-                      title: l10n.users,
                     ),
                     _buildListTile(
                       icon: Icons.analytics,
@@ -273,7 +372,9 @@ class _MasterScreenState extends State<MasterScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  color: isSelected ? Theme.of(context).colorScheme.primary : Colors.black87,
+                  color: isSelected 
+                      ? Theme.of(context).colorScheme.primary 
+                      : Theme.of(context).colorScheme.onSurface,
                 ),
               ),
             ),
@@ -322,9 +423,6 @@ class _MasterScreenState extends State<MasterScreen> {
               Navigator.push(context, MaterialPageRoute(builder: (context) => MoviesListScreen()));
             } else if (title == l10n.screenings) {
               Navigator.push(context, MaterialPageRoute(builder: (context) => ScreeningsListScreen()));
-            } else if (title == l10n.seatsHalls) {
-            } else if (title == l10n.news) {
-            } else if (title == l10n.users) {
             } else if (title == l10n.reports) {
             } else if (title == l10n.settings) {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsScreen()));
