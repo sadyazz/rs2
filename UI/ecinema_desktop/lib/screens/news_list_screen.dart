@@ -2,6 +2,7 @@ import 'package:ecinema_desktop/layouts/master_screen.dart';
 import 'package:ecinema_desktop/models/news.dart';
 import 'package:ecinema_desktop/models/search_result.dart';
 import 'package:ecinema_desktop/providers/news_provider.dart';
+import 'package:ecinema_desktop/screens/edit_news_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -502,7 +503,15 @@ class _NewsListScreenState extends State<NewsListScreen> {
           height: 36,
           child: ElevatedButton.icon(
             onPressed: () async {
-              // TODO: Add news article functionality
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EditNewsScreen(),
+                ),
+              );
+              if (result == true) {
+                _resetPagination();
+              }
             },
             icon: const Icon(Icons.add, size: 18),
             label: Text('Add News'),
@@ -611,7 +620,15 @@ class _NewsListScreenState extends State<NewsListScreen> {
     final l10n = AppLocalizations.of(context)!;
     return InkWell(
       onTap: () async {
-        // TODO: Edit news article functionality
+        final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditNewsScreen(news: news),
+          ),
+        );
+        if (result == true) {
+          _resetPagination();
+        }
       },
       borderRadius: BorderRadius.circular(16),
       child: Container(
@@ -769,7 +786,15 @@ class _NewsListScreenState extends State<NewsListScreen> {
                           children: [
                             InkWell(
                               onTap: () async {
-                                // TODO: Edit news article functionality
+                                final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditNewsScreen(news: news),
+                                  ),
+                                );
+                                if (result == true) {
+                                  _resetPagination();
+                                }
                               },
                               borderRadius: BorderRadius.circular(4),
                               child: Container(
