@@ -6,6 +6,7 @@ import 'package:ecinema_desktop/screens/edit_news_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class NewsListScreen extends StatefulWidget {
   const NewsListScreen({super.key});
@@ -159,11 +160,11 @@ class _NewsListScreenState extends State<NewsListScreen> {
     final l10n = AppLocalizations.of(context)!;
     final newsTitle = news.title;
     
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Delete News Article'),
-        content: Text('Are you sure you want to delete news article "$newsTitle"?'),
+          final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(l10n.deleteNewsArticle),
+          content: Text(l10n.confirmDeleteNewsArticle(newsTitle ?? '')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -186,7 +187,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
         await provider.softDelete(news.id!);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('News article deleted successfully'),
+            content: Text(l10n.newsArticleDeletedSuccessfully),
             backgroundColor: Colors.green,
           ),
         );
@@ -194,7 +195,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to delete news article'),
+            content: Text(l10n.failedToDeleteNewsArticle),
             backgroundColor: Colors.red,
           ),
         );
@@ -206,11 +207,11 @@ class _NewsListScreenState extends State<NewsListScreen> {
     final l10n = AppLocalizations.of(context)!;
     final newsTitle = news.title;
     
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Restore News Article'),
-        content: Text('Are you sure you want to restore news article "$newsTitle"?'),
+          final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(l10n.restoreNewsArticle),
+          content: Text(l10n.confirmRestoreNewsArticle(newsTitle ?? '')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -233,7 +234,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
         await provider.restore(news.id!);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('News article restored successfully'),
+            content: Text(l10n.newsArticleRestoredSuccessfully),
             backgroundColor: Colors.green,
           ),
         );
@@ -241,7 +242,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to restore news article'),
+            content: Text(l10n.failedToRestoreNewsArticle),
             backgroundColor: Colors.red,
           ),
         );
@@ -252,7 +253,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return MasterScreen('News Articles',
+    return MasterScreen(l10n.newsArticles,
       Padding(
         padding: const EdgeInsets.fromLTRB(32.0, 16.0, 32.0, 16.0),
         child: Column(
@@ -353,7 +354,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
                             Row(
                               children: [
                                 Text(
-                                  'Include Deleted',
+                                  l10n.includeDeleted,
                                   style: TextStyle(
                                     color: Theme.of(context).colorScheme.onSurface,
                                   ),
@@ -370,79 +371,37 @@ class _NewsListScreenState extends State<NewsListScreen> {
                             const SizedBox(height: 12),
                             Row(
                               children: [
-                                Text(
-                                  'From Publish Date',
-                                  style: TextStyle(
-                                    color: Theme.of(context).colorScheme.onSurface,
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
                                 Expanded(
-                                  child: TextButton(
-                                    onPressed: () async {
-                                      final date = await showDatePicker(
-                                        context: context,
-                                        initialDate: localFromPublishDate ?? DateTime.now(),
-                                        firstDate: DateTime(2020),
-                                        lastDate: DateTime(2030),
-                                      );
-                                      if (date != null) {
-                                        setState(() => localFromPublishDate = date);
-                                      }
-                                    },
-                                    child: Text(
-                                      localFromPublishDate != null 
-                                          ? '${localFromPublishDate!.day}/${localFromPublishDate!.month}/${localFromPublishDate!.year}'
-                                          : 'Select Date',
+                                  child: FormBuilderDateTimePicker(
+                                    name: 'fromPublishDate',
+                                    decoration: InputDecoration(
+                                      labelText: l10n.fromPublishDate,
+                                      border: const OutlineInputBorder(),
+                                      prefixIcon: const Icon(Icons.calendar_today),
                                     ),
-                                  ),
-                                ),
-                                if (localFromPublishDate != null)
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() => localFromPublishDate = null);
+                                    inputType: InputType.date,
+                                    initialValue: localFromPublishDate,
+                                    onChanged: (value) {
+                                      setState(() => localFromPublishDate = value);
                                     },
-                                    icon: Icon(Icons.clear, size: 16),
-                                  ),
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            Row(
-                              children: [
-                                Text(
-                                  'To Publish Date',
-                                  style: TextStyle(
-                                    color: Theme.of(context).colorScheme.onSurface,
                                   ),
                                 ),
-                                const SizedBox(width: 8),
+                                const SizedBox(width: 16),
                                 Expanded(
-                                  child: TextButton(
-                                    onPressed: () async {
-                                      final date = await showDatePicker(
-                                        context: context,
-                                        initialDate: localToPublishDate ?? DateTime.now(),
-                                        firstDate: DateTime(2020),
-                                        lastDate: DateTime(2030),
-                                      );
-                                      if (date != null) {
-                                        setState(() => localToPublishDate = date);
-                                      }
-                                    },
-                                    child: Text(
-                                      localToPublishDate != null 
-                                          ? '${localToPublishDate!.day}/${localToPublishDate!.month}/${localToPublishDate!.year}'
-                                          : 'Select Date',
+                                  child: FormBuilderDateTimePicker(
+                                    name: 'toPublishDate',
+                                    decoration: InputDecoration(
+                                      labelText: l10n.toPublishDate,
+                                      border: const OutlineInputBorder(),
+                                      prefixIcon: const Icon(Icons.calendar_today),
                                     ),
+                                    inputType: InputType.date,
+                                    initialValue: localToPublishDate,
+                                    onChanged: (value) {
+                                      setState(() => localToPublishDate = value);
+                                    },
                                   ),
                                 ),
-                                if (localToPublishDate != null)
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() => localToPublishDate = null);
-                                    },
-                                    icon: Icon(Icons.clear, size: 16),
-                                  ),
                               ],
                             ),
                           ],
@@ -514,7 +473,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
               }
             },
             icon: const Icon(Icons.add, size: 18),
-            label: Text('Add News'),
+            label: Text(l10n.addNews),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green[600],
               foregroundColor: Colors.white,
@@ -539,7 +498,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
               CircularProgressIndicator(),
               SizedBox(height: 16),
               Text(
-                'Loading news articles...',
+                l10n.loadingNewsArticles,
                 style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
             ],
@@ -557,7 +516,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
               Icon(Icons.article, size: 64, color: Colors.grey),
               SizedBox(height: 16),
               Text(
-                'No news articles loaded',
+                l10n.noNewsArticlesLoaded,
                 style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
             ],
@@ -575,12 +534,12 @@ class _NewsListScreenState extends State<NewsListScreen> {
               Icon(Icons.article, size: 64, color: Colors.grey),
               SizedBox(height: 16),
               Text(
-                'No news articles found',
+                l10n.noNewsArticlesFound,
                 style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
               SizedBox(height: 8),
               Text(
-                'Try adjusting your search criteria',
+                l10n.tryAdjustingSearchCriteria,
                 style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
             ],
@@ -598,7 +557,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 6,
-                  childAspectRatio: 1.2,
+                  childAspectRatio: 1.0,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                 ),
@@ -700,7 +659,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              'Deleted',
+                              l10n.deleted,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 10,
@@ -748,9 +707,9 @@ class _NewsListScreenState extends State<NewsListScreen> {
                     Text(
                       news.content != null && news.content!.isNotEmpty 
                           ? news.content!.length > 35 
-                              ? '${news.content!.substring(0, 35)}...'
-                              : news.content!
-                          : 'No content',
+                                                        ? '${news.content!.substring(0, 35)}...'
+                          : news.content!
+                      : l10n.noContent,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontSize: 8,
@@ -771,7 +730,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            news.isActive == true ? 'Active' : 'Inactive',
+                            news.isActive == true ? l10n.active : l10n.inactive,
                             style: TextStyle(
                               color: news.isActive == true 
                                   ? Colors.green[700] 

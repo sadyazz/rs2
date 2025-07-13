@@ -57,7 +57,7 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
     final isEditing = widget.news != null;
     
     return MasterScreen(
-      isEditing ? 'Edit News Article' : 'Add News Article',
+      isEditing ? l10n.editNewsArticle : l10n.addNewsArticle,
       Column(
         children: [
           _buildForm(),
@@ -79,14 +79,14 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
           children: [
             FormBuilderTextField(
               name: 'title',
-              decoration: const InputDecoration(
-                labelText: 'Title',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.title),
+              decoration: InputDecoration(
+                labelText: l10n.title,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.title),
               ),
               validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: 'Please enter a title'),
-                FormBuilderValidators.maxLength(100, errorText: 'Title must be less than 100 characters'),
+                FormBuilderValidators.required(errorText: l10n.pleaseEnterTitle),
+                FormBuilderValidators.maxLength(100, errorText: l10n.titleTooLong),
               ]),
             ),
             
@@ -94,14 +94,14 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
             
             FormBuilderTextField(
               name: 'content',
-              decoration: const InputDecoration(
-                labelText: 'Content',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.article),
+              decoration: InputDecoration(
+                labelText: l10n.content,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.article),
               ),
               maxLines: 8,
               validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: 'Please enter content'),
+                FormBuilderValidators.required(errorText: l10n.pleaseEnterContent),
               ]),
             ),
             
@@ -112,10 +112,10 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                 Expanded(
                   child: FormBuilderDateTimePicker(
                     name: 'publishDate',
-                    decoration: const InputDecoration(
-                      labelText: 'Publish Date',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.calendar_today),
+                    decoration: InputDecoration(
+                      labelText: l10n.publishDate,
+                      border: const OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.calendar_today),
                     ),
                     inputType: InputType.date,
                   ),
@@ -124,9 +124,9 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                 Expanded(
                   child: FormBuilderSwitch(
                     name: 'isActive',
-                    title: const Text('Active'),
-                    decoration: const InputDecoration(
-                      labelText: 'Make this article visible',
+                    title: Text(l10n.active),
+                    decoration: InputDecoration(
+                      labelText: l10n.makeArticleVisible,
                     ),
                   ),
                 ),
@@ -165,16 +165,16 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                   if (widget.news != null) {
                     await provider.update(widget.news!.id!, formData);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('News article updated successfully'),
+                      SnackBar(
+                        content: Text(l10n.newsArticleUpdatedSuccessfully),
                         backgroundColor: Colors.green,
                       ),
                     );
                   } else {
                     await provider.insert(formData);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('News article created successfully'),
+                      SnackBar(
+                        content: Text(l10n.newsArticleCreatedSuccessfully),
                         backgroundColor: Colors.green,
                       ),
                     );
@@ -184,7 +184,7 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Error: $e'),
+                      content: Text(l10n.failedToSaveNewsArticle),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -195,7 +195,7 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
               backgroundColor: Theme.of(context).colorScheme.primary,
               foregroundColor: Colors.white,
             ),
-            child: Text(widget.news == null ? 'Add News Article' : 'Update News Article'),
+            child: Text(widget.news == null ? l10n.addNewsArticle : l10n.updateNewsArticle),
           ),
         ],
       ),
