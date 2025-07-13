@@ -1,37 +1,38 @@
 import 'package:ecinema_desktop/layouts/master_screen.dart';
-import 'package:ecinema_desktop/models/genre.dart';
+import 'package:ecinema_desktop/models/promotion.dart';
 import 'package:ecinema_desktop/models/search_result.dart';
-import 'package:ecinema_desktop/providers/genre_provider.dart';
+import 'package:ecinema_desktop/providers/promotion_provider.dart';
+import 'package:ecinema_desktop/screens/edit_promotion_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'edit_genre_screen.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
-class GenresListScreen extends StatefulWidget {
-  const GenresListScreen({super.key});
+class PromotionsListScreen extends StatefulWidget {
+  const PromotionsListScreen({super.key});
 
   @override
-  State<GenresListScreen> createState() => _GenresListScreenState();
+  State<PromotionsListScreen> createState() => _PromotionsListScreenState();
 }
 
-class _GenresListScreenState extends State<GenresListScreen> {
-  late GenreProvider provider;
+class _PromotionsListScreenState extends State<PromotionsListScreen> {
+  late PromotionProvider provider;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    provider = context.read<GenreProvider>();
+    provider = context.read<PromotionProvider>();
   }
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadGenres();
+      _loadPromotions();
     });
   }
 
-  SearchResult<Genre>? result;
+  SearchResult<Promotion>? result;
   int currentPage = 0;
   int pageSize = 18;
   bool isLoading = false;
@@ -39,8 +40,14 @@ class _GenresListScreenState extends State<GenresListScreen> {
   final TextEditingController _searchController = TextEditingController();
   bool isActive = true;
   bool includeDeleted = false;
+  DateTime? fromStartDate;
+  DateTime? toStartDate;
+  DateTime? fromEndDate;
+  DateTime? toEndDate;
+  double? minDiscount;
+  double? maxDiscount;
 
-  Future<void> _loadGenres() async {
+  Future<void> _loadPromotions() async {
     try {
       setState(() {
         isLoading = true;
@@ -50,23 +57,49 @@ class _GenresListScreenState extends State<GenresListScreen> {
         'page': currentPage,
         'pageSize': pageSize,
         'includeTotalCount': true,
-        'isActive': true,
         'includeDeleted': includeDeleted,
       };
+      
+      if (fromStartDate != null) {
+        filter['fromStartDate'] = fromStartDate!.toIso8601String();
+      }
+      
+      if (toStartDate != null) {
+        filter['toStartDate'] = toStartDate!.toIso8601String();
+      }
+      
+      if (fromEndDate != null) {
+        filter['fromEndDate'] = fromEndDate!.toIso8601String();
+      }
+      
+      if (toEndDate != null) {
+        filter['toEndDate'] = toEndDate!.toIso8601String();
+      }
+      
+      if (minDiscount != null) {
+        filter['minDiscount'] = minDiscount;
+      }
+      
+      if (maxDiscount != null) {
+        filter['maxDiscount'] = maxDiscount;
+      }
+      
+      print('Loading promotions with filter: $filter');
       result = await provider.get(filter: filter);
+      print('Promotions result: ${result?.items?.length} items');
       setState(() {
         result = result;
         isLoading = false;
       });
     } catch (e) {
-      print('Error loading genres: $e');
+      print('Error loading promotions: $e');
       setState(() {
         isLoading = false;
       });
     }
   }
 
-  Future<void> _searchGenres() async {
+  Future<void> _searchPromotions() async {
     try {
       setState(() {
         isLoading = true;
@@ -84,6 +117,30 @@ class _GenresListScreenState extends State<GenresListScreen> {
         filter["name"] = _searchController.text;
       }
       
+      if (fromStartDate != null) {
+        filter['fromStartDate'] = fromStartDate!.toIso8601String();
+      }
+      
+      if (toStartDate != null) {
+        filter['toStartDate'] = toStartDate!.toIso8601String();
+      }
+      
+      if (fromEndDate != null) {
+        filter['fromEndDate'] = fromEndDate!.toIso8601String();
+      }
+      
+      if (toEndDate != null) {
+        filter['toEndDate'] = toEndDate!.toIso8601String();
+      }
+      
+      if (minDiscount != null) {
+        filter['minDiscount'] = minDiscount;
+      }
+      
+      if (maxDiscount != null) {
+        filter['maxDiscount'] = maxDiscount;
+      }
+      
       result = await provider.get(filter: filter);
       setState(() {
         result = result;
@@ -91,7 +148,7 @@ class _GenresListScreenState extends State<GenresListScreen> {
         isLoading = false;
       });
     } catch (e) {
-      print('Error searching genres: $e');
+      print('Error searching promotions: $e');
       setState(() {
         isLoading = false;
       });
@@ -103,7 +160,7 @@ class _GenresListScreenState extends State<GenresListScreen> {
       setState(() {
         currentPage++;
       });
-      _loadGenres();
+      _loadPromotions();
     }
   }
 
@@ -112,26 +169,32 @@ class _GenresListScreenState extends State<GenresListScreen> {
       setState(() {
         currentPage--;
       });
-      _loadGenres();
+      _loadPromotions();
     }
   }
 
   void _resetPagination() {
     setState(() {
       currentPage = 0;
+      fromStartDate = null;
+      toStartDate = null;
+      fromEndDate = null;
+      toEndDate = null;
+      minDiscount = null;
+      maxDiscount = null;
     });
-    _loadGenres();
+    _loadPromotions();
   }
 
-  void _deleteGenre(Genre genre) async {
+  void _deletePromotion(Promotion promotion) async {
     final l10n = AppLocalizations.of(context)!;
-    final genreName = genre.name ?? l10n.unnamedGenre;
+    final promotionName = promotion.name;
     
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(l10n.deleteGenre),
-        content: Text(l10n.confirmDeleteGenre(genreName)),
+        title: Text(l10n.deletePromotion),
+        content: Text(l10n.confirmDeletePromotion(promotionName ?? '')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -151,10 +214,10 @@ class _GenresListScreenState extends State<GenresListScreen> {
 
     if (confirmed == true) {
       try {
-        await provider.softDelete(genre.id!);
+        await provider.softDelete(promotion.id!);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.genreDeletedSuccessfully),
+            content: Text(l10n.promotionDeletedSuccessfully),
             backgroundColor: Colors.green,
           ),
         );
@@ -162,7 +225,7 @@ class _GenresListScreenState extends State<GenresListScreen> {
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.failedToDeleteGenre),
+            content: Text(l10n.failedToDeletePromotion),
             backgroundColor: Colors.red,
           ),
         );
@@ -170,15 +233,15 @@ class _GenresListScreenState extends State<GenresListScreen> {
     }
   }
 
-  void _restoreGenre(Genre genre) async {
+  void _restorePromotion(Promotion promotion) async {
     final l10n = AppLocalizations.of(context)!;
-    final genreName = genre.name ?? l10n.unnamedGenre;
+    final promotionName = promotion.name;
     
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(l10n.restore),
-        content: Text(l10n.confirmRestoreGenre(genreName)),
+        title: Text(l10n.restorePromotion),
+        content: Text(l10n.confirmRestorePromotion(promotionName ?? '')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -198,10 +261,10 @@ class _GenresListScreenState extends State<GenresListScreen> {
 
     if (confirmed == true) {
       try {
-        await provider.restore(genre.id!);
+        await provider.restore(promotion.id!);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.genreRestoredSuccessfully),
+            content: Text(l10n.promotionRestoredSuccessfully),
             backgroundColor: Colors.green,
           ),
         );
@@ -209,7 +272,7 @@ class _GenresListScreenState extends State<GenresListScreen> {
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.failedToRestoreGenre),
+            content: Text(l10n.failedToRestorePromotion),
             backgroundColor: Colors.red,
           ),
         );
@@ -220,7 +283,7 @@ class _GenresListScreenState extends State<GenresListScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return MasterScreen(l10n.genres,
+    return MasterScreen(l10n.promotions,
       Padding(
         padding: const EdgeInsets.fromLTRB(32.0, 16.0, 32.0, 16.0),
         child: Column(
@@ -271,7 +334,7 @@ class _GenresListScreenState extends State<GenresListScreen> {
           height: 36,
           child: ElevatedButton.icon(
             onPressed: () async {
-              await _searchGenres();
+              await _searchPromotions();
             },
             icon: const Icon(Icons.search, size: 18),
             label: Text(l10n.search),
@@ -294,6 +357,12 @@ class _GenresListScreenState extends State<GenresListScreen> {
                 builder: (context) {
                   bool localIsActive = isActive;
                   bool localIncludeDeleted = includeDeleted;
+                  DateTime? localFromStartDate = fromStartDate;
+                  DateTime? localToStartDate = toStartDate;
+                  DateTime? localFromEndDate = fromEndDate;
+                  DateTime? localToEndDate = toEndDate;
+                  double? localMinDiscount = minDiscount;
+                  double? localMaxDiscount = maxDiscount;
                   return StatefulBuilder(
                     builder: (context, setState) => AlertDialog(
                       insetPadding: const EdgeInsets.symmetric(horizontal: 80),
@@ -332,6 +401,116 @@ class _GenresListScreenState extends State<GenresListScreen> {
                                 ),
                               ],
                             ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: FormBuilderDateTimePicker(
+                                    name: 'fromStartDate',
+                                    decoration: InputDecoration(
+                                      labelText: l10n.fromStartDate,
+                                      border: const OutlineInputBorder(),
+                                      prefixIcon: const Icon(Icons.calendar_today),
+                                    ),
+                                    inputType: InputType.date,
+                                    initialValue: localFromStartDate,
+                                    onChanged: (value) {
+                                      setState(() => localFromStartDate = value);
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: FormBuilderDateTimePicker(
+                                    name: 'toStartDate',
+                                    decoration: InputDecoration(
+                                      labelText: l10n.toStartDate,
+                                      border: const OutlineInputBorder(),
+                                      prefixIcon: const Icon(Icons.calendar_today),
+                                    ),
+                                    inputType: InputType.date,
+                                    initialValue: localToStartDate,
+                                    onChanged: (value) {
+                                      setState(() => localToStartDate = value);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: FormBuilderDateTimePicker(
+                                    name: 'fromEndDate',
+                                    decoration: InputDecoration(
+                                      labelText: l10n.fromEndDate,
+                                      border: const OutlineInputBorder(),
+                                      prefixIcon: const Icon(Icons.calendar_today),
+                                    ),
+                                    inputType: InputType.date,
+                                    initialValue: localFromEndDate,
+                                    onChanged: (value) {
+                                      setState(() => localFromEndDate = value);
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: FormBuilderDateTimePicker(
+                                    name: 'toEndDate',
+                                    decoration: InputDecoration(
+                                      labelText: l10n.toEndDate,
+                                      border: const OutlineInputBorder(),
+                                      prefixIcon: const Icon(Icons.calendar_today),
+                                    ),
+                                    inputType: InputType.date,
+                                    initialValue: localToEndDate,
+                                    onChanged: (value) {
+                                      setState(() => localToEndDate = value);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                      labelText: 'Min Discount',
+                                      border: OutlineInputBorder(),
+                                      prefixIcon: Icon(Icons.percent),
+                                      hintText: '0.0',
+                                    ),
+                                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        localMinDiscount = double.tryParse(value);
+                                      });
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: TextField(
+                                    decoration: const InputDecoration(
+                                      labelText: 'Max Discount',
+                                      border: OutlineInputBorder(),
+                                      prefixIcon: Icon(Icons.percent),
+                                      hintText: '100.0',
+                                    ),
+                                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        localMaxDiscount = double.tryParse(value);
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -343,6 +522,18 @@ class _GenresListScreenState extends State<GenresListScreen> {
                               isActive = true;
                               localIncludeDeleted = false;
                               includeDeleted = false;
+                              localFromStartDate = null;
+                              fromStartDate = null;
+                              localToStartDate = null;
+                              toStartDate = null;
+                              localFromEndDate = null;
+                              fromEndDate = null;
+                              localToEndDate = null;
+                              toEndDate = null;
+                              localMinDiscount = null;
+                              minDiscount = null;
+                              localMaxDiscount = null;
+                              maxDiscount = null;
                             });
                           },
                           child: Text(l10n.reset),
@@ -356,8 +547,14 @@ class _GenresListScreenState extends State<GenresListScreen> {
                             setState(() {
                               isActive = localIsActive;
                               includeDeleted = localIncludeDeleted;
+                              fromStartDate = localFromStartDate;
+                              toStartDate = localToStartDate;
+                              fromEndDate = localFromEndDate;
+                              toEndDate = localToEndDate;
+                              minDiscount = localMinDiscount;
+                              maxDiscount = localMaxDiscount;
                             });
-                            await _searchGenres();
+                            await _searchPromotions();
                             Navigator.pop(context);
                           },
                           child: Text(l10n.apply),
@@ -384,7 +581,7 @@ class _GenresListScreenState extends State<GenresListScreen> {
               final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const EditGenreScreen(),
+                  builder: (context) => const EditPromotionScreen(),
                 ),
               );
               if (result == true) {
@@ -392,7 +589,7 @@ class _GenresListScreenState extends State<GenresListScreen> {
               }
             },
             icon: const Icon(Icons.add, size: 18),
-            label: Text(l10n.addGenre),
+            label: Text(l10n.addPromotion),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green[600],
               foregroundColor: Colors.white,
@@ -417,7 +614,7 @@ class _GenresListScreenState extends State<GenresListScreen> {
               CircularProgressIndicator(),
               SizedBox(height: 16),
               Text(
-                l10n.loadingGenres,
+                l10n.loadingPromotions,
                 style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
             ],
@@ -432,10 +629,10 @@ class _GenresListScreenState extends State<GenresListScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.theater_comedy_outlined, size: 64, color: Colors.grey),
+              Icon(Icons.local_offer, size: 64, color: Colors.grey),
               SizedBox(height: 16),
               Text(
-                l10n.noGenresLoaded,
+                l10n.noPromotionsLoaded,
                 style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
             ],
@@ -450,15 +647,15 @@ class _GenresListScreenState extends State<GenresListScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.theater_comedy_outlined, size: 64, color: Colors.grey),
+              Icon(Icons.local_offer, size: 64, color: Colors.grey),
               SizedBox(height: 16),
               Text(
-                l10n.noGenresFound,
+                l10n.noPromotionsFound,
                 style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
               SizedBox(height: 8),
               Text(
-                l10n.tryAdjustingSearch,
+                l10n.tryAdjustingSearchCriteria,
                 style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
             ],
@@ -476,14 +673,14 @@ class _GenresListScreenState extends State<GenresListScreen> {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 6,
-                  childAspectRatio: 1.2,
+                  childAspectRatio: 1.0,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                 ),
                 itemCount: result!.items!.length,
                 itemBuilder: (context, index) {
-                  final genre = result!.items![index];
-                  return _buildGenreCard(genre);
+                  final promotion = result!.items![index];
+                  return _buildPromotionCard(promotion);
                 },
               ),
             ),
@@ -494,14 +691,14 @@ class _GenresListScreenState extends State<GenresListScreen> {
     );
   }
 
-  Widget _buildGenreCard(Genre genre) {
+  Widget _buildPromotionCard(Promotion promotion) {
     final l10n = AppLocalizations.of(context)!;
     return InkWell(
       onTap: () async {
         final result = await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => EditGenreScreen(genre: genre),
+            builder: (context) => EditPromotionScreen(promotion: promotion),
           ),
         );
         if (result == true) {
@@ -544,13 +741,13 @@ class _GenresListScreenState extends State<GenresListScreen> {
                     ),
                     child: Center(
                       child: Icon(
-                        Icons.theater_comedy,
+                        Icons.local_offer,
                         size: 48,
                         color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ),
-                  if (genre.isDeleted == true)
+                  if (promotion.isDeleted == true)
                     Positioned(
                       top: 10,
                       right: 10,
@@ -595,32 +792,47 @@ class _GenresListScreenState extends State<GenresListScreen> {
             Expanded(
               flex: 2,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 8.0),
+                padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 6.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      genre.name ?? l10n.unnamedGenre,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      promotion.name ?? 'Untitled',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: Theme.of(context).colorScheme.onSurface,
+                        fontSize: 13,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (genre.description != null && genre.description!.isNotEmpty) ...[
-                      const SizedBox(height: 2),
-                      Flexible(
-                        child: Text(
-                          genre.description!,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                    const SizedBox(height: 1),
+                    if (promotion.code != null) ...[
+                      Text(
+                        'Code: ${promotion.code}',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
+                      const SizedBox(height: 1),
                     ],
+                    Text(
+                      promotion.description != null && promotion.description!.isNotEmpty 
+                          ? promotion.description!.length > 35 
+                              ? '${promotion.description!.substring(0, 35)}...'
+                              : promotion.description!
+                          : l10n.noDescription,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontSize: 8,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     const Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -628,15 +840,15 @@ class _GenresListScreenState extends State<GenresListScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: genre.isActive == true 
+                            color: promotion.isActive == true 
                                 ? Colors.green[100] 
                                 : Colors.red[100],
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            genre.isActive == true ? l10n.active : l10n.inactive,
+                            promotion.isActive == true ? l10n.active : l10n.inactive,
                             style: TextStyle(
-                              color: genre.isActive == true 
+                              color: promotion.isActive == true 
                                   ? Colors.green[700] 
                                   : Colors.red[700],
                               fontSize: 10,
@@ -652,7 +864,7 @@ class _GenresListScreenState extends State<GenresListScreen> {
                                 final result = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => EditGenreScreen(genre: genre),
+                                    builder: (context) => EditPromotionScreen(promotion: promotion),
                                   ),
                                 );
                                 if (result == true) {
@@ -672,19 +884,19 @@ class _GenresListScreenState extends State<GenresListScreen> {
                             const SizedBox(width: 4),
                             InkWell(
                               onTap: () {
-                                if (genre.isDeleted == true) {
-                                  _restoreGenre(genre);
+                                if (promotion.isDeleted == true) {
+                                  _restorePromotion(promotion);
                                 } else {
-                                  _deleteGenre(genre);
+                                  _deletePromotion(promotion);
                                 }
                               },
                               borderRadius: BorderRadius.circular(4),
                               child: Container(
                                 padding: const EdgeInsets.all(4),
                                 child: Icon(
-                                  genre.isDeleted == true ? Icons.restore : Icons.delete,
+                                  promotion.isDeleted == true ? Icons.restore : Icons.delete,
                                   size: 16,
-                                  color: genre.isDeleted == true 
+                                  color: promotion.isDeleted == true 
                                       ? Colors.green 
                                       : Colors.red,
                                 ),
@@ -791,7 +1003,7 @@ class _GenresListScreenState extends State<GenresListScreen> {
               ),
               const SizedBox(height: 1),
               Text(
-                '$currentItems ${l10n.ofText} $totalCount',
+                '$currentItems of $totalCount',
                 style: TextStyle(
                   fontSize: 10,
                   color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
@@ -845,4 +1057,4 @@ class _GenresListScreenState extends State<GenresListScreen> {
       ),
     );
   }
-}
+} 

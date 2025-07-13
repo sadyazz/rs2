@@ -1,7 +1,5 @@
 import 'package:ecinema_desktop/models/seat.dart';
 import 'package:ecinema_desktop/providers/base_provider.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class SeatProvider extends BaseProvider<Seat> {
   SeatProvider() : super("Seat");

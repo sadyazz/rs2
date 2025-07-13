@@ -295,6 +295,7 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
           ],
         ),
       ),
+      showDrawer: false,
     );
   }
 
