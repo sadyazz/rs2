@@ -35,6 +35,13 @@ namespace eCinema.Services
                 query = query.Where(x => x.Content.Contains(search.Content));
             }
 
+            if (!string.IsNullOrWhiteSpace(search.FTS))
+            {
+                query = query.Where(x => 
+                    x.Title.Contains(search.FTS) || 
+                    x.Content.Contains(search.FTS));
+            }
+
             if (search.FromPublishDate.HasValue)
             {
                 query = query.Where(x => x.PublishDate >= search.FromPublishDate.Value);

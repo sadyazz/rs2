@@ -9,7 +9,9 @@ import 'package:ecinema_desktop/providers/actor_provider.dart';
 import 'package:ecinema_desktop/providers/theme_provider.dart';
 import 'package:ecinema_desktop/providers/hall_provider.dart';
 import 'package:ecinema_desktop/providers/seat_provider.dart';
+import 'package:ecinema_desktop/providers/user_provider.dart';
 import 'package:ecinema_desktop/providers/screening_format_provider.dart';
+import 'package:ecinema_desktop/providers/news_provider.dart';
 import 'package:ecinema_desktop/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -27,7 +29,9 @@ void main() {
     ChangeNotifierProvider(create: (_) => ThemeProvider()),
     ChangeNotifierProvider(create: (_) => HallProvider()),
     ChangeNotifierProvider(create: (_) => SeatProvider()),
+    ChangeNotifierProvider(create: (_) => UserProvider()),
     ChangeNotifierProvider(create: (_) => ScreeningFormatProvider()),
+    ChangeNotifierProvider(create: (_) => NewsProvider()),
   ], child: const MyApp()));
 }
 
