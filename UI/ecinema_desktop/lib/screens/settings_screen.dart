@@ -144,12 +144,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     onTap: () => _navigateToUsers(),
                   ),
                   _buildManagementTile(
-                    title: l10n.roles,
-                    subtitle: l10n.manageRoles,
-                    icon: Icons.security,
-                    onTap: () => _navigateToRoles(),
-                  ),
-                  _buildManagementTile(
                     title: l10n.newsArticles,
                     subtitle: l10n.manageNewsArticles,
                     icon: Icons.article,
@@ -385,13 +379,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       MaterialPageRoute(
         builder: (context) => UsersListScreen(),
       ),
-    );
-  }
-
-  void _navigateToRoles() {
-    // TODO: Navigate to roles management screen
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Roles management - Coming soon')),
     );
   }
 
