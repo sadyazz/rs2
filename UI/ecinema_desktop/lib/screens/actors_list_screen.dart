@@ -542,7 +542,7 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 6,
-                  childAspectRatio: 1.2,
+                  childAspectRatio: 1.1,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                 ),
@@ -716,20 +716,6 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    if (actor.biography != null && actor.biography!.isNotEmpty) ...[
-                      const SizedBox(height: 2),
-                      Flexible(
-                        child: Text(
-                          actor.biography!,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                    const Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -757,37 +743,68 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
                           children: [
                             InkWell(
                               onTap: () => _editActor(actor),
-                              borderRadius: BorderRadius.circular(4),
+                              borderRadius: BorderRadius.circular(8),
                               child: Container(
-                                padding: const EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                                  ),
+                                ),
                                 child: Icon(
-                                  Icons.edit,
+                                  Icons.edit_outlined,
                                   size: 16,
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 4),
-                            InkWell(
-                              onTap: () {
-                                if (actor.isDeleted == true) {
+                            const SizedBox(width: 6),
+                            if (actor.isDeleted == true)
+                              InkWell(
+                                onTap: () {
                                   _restoreActor(actor);
-                                } else {
+                                },
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: Colors.green.withOpacity(0.2),
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.restore,
+                                    size: 16,
+                                    color: Colors.green[600],
+                                  ),
+                                ),
+                              )
+                            else
+                              InkWell(
+                                onTap: () {
                                   _deleteActor(actor);
-                                }
-                              },
-                              borderRadius: BorderRadius.circular(4),
-                              child: Container(
-                                padding: const EdgeInsets.all(4),
-                                child: Icon(
-                                  actor.isDeleted == true ? Icons.restore : Icons.delete,
-                                  size: 16,
-                                  color: actor.isDeleted == true 
-                                      ? Colors.green 
-                                      : Colors.red,
+                                },
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: Colors.red.withOpacity(0.2),
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.delete_outline,
+                                    size: 16,
+                                    color: Colors.red[600],
+                                  ),
                                 ),
                               ),
-                            ),
                           ],
                         ),
                       ],

@@ -84,9 +84,7 @@ class _PromotionsListScreenState extends State<PromotionsListScreen> {
         filter['maxDiscount'] = maxDiscount;
       }
       
-      print('Loading promotions with filter: $filter');
       result = await provider.get(filter: filter);
-      print('Promotions result: ${result?.items?.length} items');
       setState(() {
         result = result;
         isLoading = false;
@@ -801,9 +799,9 @@ class _PromotionsListScreenState extends State<PromotionsListScreen> {
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: Theme.of(context).colorScheme.onSurface,
-                        fontSize: 13,
+                        fontSize: 15,
                       ),
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 1),
@@ -813,27 +811,12 @@ class _PromotionsListScreenState extends State<PromotionsListScreen> {
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 11,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 1),
                     ],
-                    Text(
-                      promotion.description != null && promotion.description!.isNotEmpty 
-                          ? promotion.description!.length > 35 
-                              ? '${promotion.description!.substring(0, 35)}...'
-                              : promotion.description!
-                          : l10n.noDescription,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontSize: 8,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -871,37 +854,68 @@ class _PromotionsListScreenState extends State<PromotionsListScreen> {
                                   _resetPagination();
                                 }
                               },
-                              borderRadius: BorderRadius.circular(4),
+                              borderRadius: BorderRadius.circular(8),
                               child: Container(
-                                padding: const EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                                  ),
+                                ),
                                 child: Icon(
-                                  Icons.edit,
+                                  Icons.edit_outlined,
                                   size: 16,
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 4),
-                            InkWell(
-                              onTap: () {
-                                if (promotion.isDeleted == true) {
+                            const SizedBox(width: 6),
+                            if (promotion.isDeleted == true)
+                              InkWell(
+                                onTap: () {
                                   _restorePromotion(promotion);
-                                } else {
+                                },
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: Colors.green.withOpacity(0.2),
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.restore,
+                                    size: 16,
+                                    color: Colors.green[600],
+                                  ),
+                                ),
+                              )
+                            else
+                              InkWell(
+                                onTap: () {
                                   _deletePromotion(promotion);
-                                }
-                              },
-                              borderRadius: BorderRadius.circular(4),
-                              child: Container(
-                                padding: const EdgeInsets.all(4),
-                                child: Icon(
-                                  promotion.isDeleted == true ? Icons.restore : Icons.delete,
-                                  size: 16,
-                                  color: promotion.isDeleted == true 
-                                      ? Colors.green 
-                                      : Colors.red,
+                                },
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: Colors.red.withOpacity(0.2),
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.delete_outline,
+                                    size: 16,
+                                    color: Colors.red[600],
+                                  ),
                                 ),
                               ),
-                            ),
                           ],
                         ),
                       ],

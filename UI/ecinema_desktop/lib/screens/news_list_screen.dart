@@ -69,7 +69,6 @@ class _NewsListScreenState extends State<NewsListScreen> {
         filter['authorId'] = authorId;
       }
       
-      print('Loading news with filter: $filter');
       result = await provider.get(filter: filter);
       print('News result: ${result?.items?.length} items');
       setState(() {
@@ -687,7 +686,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
                         color: Theme.of(context).colorScheme.onSurface,
                         fontSize: 13,
                       ),
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 1),
@@ -702,21 +701,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 1),
                     ],
-                    Text(
-                      news.content != null && news.content!.isNotEmpty 
-                          ? news.content!.length > 35 
-                                                        ? '${news.content!.substring(0, 35)}...'
-                          : news.content!
-                      : l10n.noContent,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontSize: 8,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
                     const Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -755,37 +740,68 @@ class _NewsListScreenState extends State<NewsListScreen> {
                                   _resetPagination();
                                 }
                               },
-                              borderRadius: BorderRadius.circular(4),
+                              borderRadius: BorderRadius.circular(8),
                               child: Container(
-                                padding: const EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                                  ),
+                                ),
                                 child: Icon(
-                                  Icons.edit,
+                                  Icons.edit_outlined,
                                   size: 16,
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 4),
-                            InkWell(
-                              onTap: () {
-                                if (news.isDeleted == true) {
+                            const SizedBox(width: 6),
+                            if (news.isDeleted == true)
+                              InkWell(
+                                onTap: () {
                                   _restoreNews(news);
-                                } else {
+                                },
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: Colors.green.withOpacity(0.2),
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.restore,
+                                    size: 16,
+                                    color: Colors.green[600],
+                                  ),
+                                ),
+                              )
+                            else
+                              InkWell(
+                                onTap: () {
                                   _deleteNews(news);
-                                }
-                              },
-                              borderRadius: BorderRadius.circular(4),
-                              child: Container(
-                                padding: const EdgeInsets.all(4),
-                                child: Icon(
-                                  news.isDeleted == true ? Icons.restore : Icons.delete,
-                                  size: 16,
-                                  color: news.isDeleted == true 
-                                      ? Colors.green 
-                                      : Colors.red,
+                                },
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: Colors.red.withOpacity(0.2),
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.delete_outline,
+                                    size: 16,
+                                    color: Colors.red[600],
+                                  ),
                                 ),
                               ),
-                            ),
                           ],
                         ),
                       ],

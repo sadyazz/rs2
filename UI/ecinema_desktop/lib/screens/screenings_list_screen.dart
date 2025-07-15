@@ -52,7 +52,6 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
   bool isActive = true;
   bool includeDeleted = false;
 
-  // Metoda za učitavanje screenings
   Future<void> _loadScreenings() async {
     try {
       setState(() {
