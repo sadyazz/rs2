@@ -31,25 +31,7 @@ namespace eCinema.Services
         public async Task<List<UserResponse>> GetAsync(UserSearchObject search)
         {
             var query = _context.Users.AsQueryable();
-            
-            if (!string.IsNullOrEmpty(search.Username))
-            {
-                query = query.Where(u => u.Username.Contains(search.Username));
-            }
-            
-            if (!string.IsNullOrEmpty(search.Email))
-            {
-                query = query.Where(u => u.Email.Contains(search.Email));
-            }
-            
-            if (!string.IsNullOrEmpty(search.FTS))
-            {
-                query = query.Where(u => 
-                    u.FirstName.Contains(search.FTS) || 
-                    u.LastName.Contains(search.FTS) || 
-                    u.Username.Contains(search.FTS) || 
-                    u.Email.Contains(search.FTS));
-            }
+            query = ApplyFilter(query, search);
             
             var users = await query.Include(u => u.Role).ToListAsync();
             return users.Select(MapToResponse).ToList();
@@ -173,6 +155,15 @@ namespace eCinema.Services
 
             if (!string.IsNullOrWhiteSpace(search.LastName))
                 query = query.Where(x => x.LastName.Contains(search.LastName));
+
+            if (!string.IsNullOrWhiteSpace(search.FTS))
+            {
+                query = query.Where(x => 
+                    x.FirstName.Contains(search.FTS) || 
+                    x.LastName.Contains(search.FTS) || 
+                    x.Username.Contains(search.FTS) || 
+                    x.Email.Contains(search.FTS));
+            }
 
             if (search.RoleId.HasValue)
                 query = query.Where(x => x.RoleId == search.RoleId.Value);

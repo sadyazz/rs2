@@ -109,7 +109,7 @@ namespace eCinema.Services
                 }
                 else if (typeof(TEntity) == typeof(Database.Entities.User))
                 {
-                    query = query.Cast<Database.Entities.User>().Where(u => !u.isDeleted).Cast<TEntity>();
+                    query = query.Cast<Database.Entities.User>().Where(u => !u.IsDeleted).Cast<TEntity>();
                 }
                 else if (typeof(TEntity) == typeof(Database.Entities.ScreeningFormat))
                 {

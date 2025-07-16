@@ -14,6 +14,7 @@ namespace eCinema.Model.Responses
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? LastModifiedAt { get; set; }
+        public bool IsDeleted { get; set; }
         public byte[]? Image {get;set;}
         public RoleResponse Role { get; set; } = new RoleResponse();
     }

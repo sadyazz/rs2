@@ -43,7 +43,7 @@ namespace eCinema.Services.Database.Entities
         
         public bool ReceiveNotifications { get; set; } = true;
 
-        public bool isDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
 
         public byte[]? Image { get; set; }
 
