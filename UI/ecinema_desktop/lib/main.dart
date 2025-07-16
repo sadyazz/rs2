@@ -13,6 +13,7 @@ import 'package:ecinema_desktop/providers/user_provider.dart';
 import 'package:ecinema_desktop/providers/screening_format_provider.dart';
 import 'package:ecinema_desktop/providers/news_provider.dart';
 import 'package:ecinema_desktop/providers/promotion_provider.dart';
+import 'package:ecinema_desktop/providers/dashboard_provider.dart';
 import 'package:ecinema_desktop/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -34,6 +35,7 @@ void main() {
     ChangeNotifierProvider(create: (_) => ScreeningFormatProvider()),
     ChangeNotifierProvider(create: (_) => NewsProvider()),
     ChangeNotifierProvider(create: (_) => PromotionProvider()),
+    ChangeNotifierProvider(create: (_) => DashboardProvider()),
   ], child: const MyApp()));
 }
 
