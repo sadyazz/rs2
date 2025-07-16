@@ -66,6 +66,7 @@ builder.Services.AddTransient<IPromotionService, PromotionService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IReservationService, ReservationService>();
 builder.Services.AddTransient<IReviewService, ReviewService>();
+builder.Services.AddTransient<IDashboardService, DashboardService>();
 
 builder.Services.AddTransient<BaseReservationState>();
 builder.Services.AddTransient<InitialReservationState>();
