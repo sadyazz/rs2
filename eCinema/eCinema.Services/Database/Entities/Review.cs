@@ -23,6 +23,10 @@ namespace eCinema.Services.Database.Entities
 
         public bool IsDeleted { get; set; } = false;
         
+        public bool IsSpoiler { get; set; } = false;
+        
+        public bool IsEdited { get; set; } = false;
+        
         [Required]
         public int UserId { get; set; }
         
