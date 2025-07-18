@@ -39,9 +39,9 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
   bool isLoading = false;
 
   final TextEditingController _searchController = TextEditingController();
-  final TextEditingController _movieIdController = TextEditingController();
-  final TextEditingController _hallIdController = TextEditingController();
-  final TextEditingController _screeningFormatIdController = TextEditingController();
+  final TextEditingController _movieTitleController = TextEditingController();
+  final TextEditingController _hallNameController = TextEditingController();
+  final TextEditingController _screeningFormatNameController = TextEditingController();
   final TextEditingController _languageController = TextEditingController();
   final TextEditingController _minBasePriceController = TextEditingController();
   final TextEditingController _maxBasePriceController = TextEditingController();
@@ -62,7 +62,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
         'page': currentPage,
         'pageSize': pageSize,
         'includeTotalCount': true,
-        'isDeleted': includeDeleted,
+        'includeDeleted': includeDeleted,
         'isActive': isActive,
       };
       result = await provider.get(filter: filter);
@@ -93,20 +93,20 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
         'pageSize': pageSize,
         'includeTotalCount': true,
         'isActive': isActive,
-        'isDeleted': includeDeleted,
+        'includeDeleted': includeDeleted,
       };
       
       if (_searchController.text.isNotEmpty) {
         filter["fts"] = _searchController.text;
       }
-      if (_movieIdController.text.isNotEmpty) {
-        filter["movieId"] = int.tryParse(_movieIdController.text);
+      if (_movieTitleController.text.isNotEmpty) {
+        filter["movieTitle"] = _movieTitleController.text;
       }
-      if (_hallIdController.text.isNotEmpty) {
-        filter["hallId"] = int.tryParse(_hallIdController.text);
+      if (_hallNameController.text.isNotEmpty) {
+        filter["hallName"] = _hallNameController.text;
       }
-      if (_screeningFormatIdController.text.isNotEmpty) {
-        filter["screeningFormatId"] = int.tryParse(_screeningFormatIdController.text);
+      if (_screeningFormatNameController.text.isNotEmpty) {
+        filter["screeningFormatName"] = _screeningFormatNameController.text;
       }
       if (_languageController.text.isNotEmpty) {
         filter["language"] = _languageController.text;
@@ -118,16 +118,22 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
         filter["maxBasePrice"] = double.tryParse(_maxBasePriceController.text);
       }
       if (_fromStartTimeController.text.isNotEmpty) {
-        filter["fromStartTime"] = _fromStartTimeController.text;
+        try {
+          final date = DateTime.parse(_fromStartTimeController.text);
+          filter["fromStartTime"] = date.toIso8601String();
+        } catch (e) {
+          print('Invalid fromStartTime format: ${_fromStartTimeController.text}');
+        }
       }
       if (_toStartTimeController.text.isNotEmpty) {
-        filter["toStartTime"] = _toStartTimeController.text;
+        try {
+          final date = DateTime.parse(_toStartTimeController.text);
+          filter["toStartTime"] = date.toIso8601String();
+        } catch (e) {
+          print('Invalid toStartTime format: ${_toStartTimeController.text}');
+        }
       }
       
-      filter["hasSubtitles"] = hasSubtitles;
-      filter["hasAvailableSeats"] = hasAvailableSeats;
-      
-      print('Search filter: $filter');
       result = await provider.get(filter: filter);
       setState(() {
         result = result;
@@ -143,7 +149,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
   }
 
   void _goToNextPage() {
-    if (result != null && result!.items!.length == pageSize) {
+    if (result != null && result!.items != null && result!.items!.length == pageSize) {
       setState(() {
         currentPage++;
       });
@@ -265,10 +271,9 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               TextField(
-                                controller: _movieIdController,
-                                keyboardType: TextInputType.number,
+                                controller: _movieTitleController,
                                 decoration: InputDecoration(
-                                  labelText: l10n.movieId,
+                                  labelText: l10n.movieTitle,
                                   border: roundedBorder,
                                   enabledBorder: roundedBorder,
                                   focusedBorder: roundedBorder,
@@ -278,10 +283,9 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                               ),
                               const SizedBox(height: 12),
                               TextField(
-                                controller: _hallIdController,
-                                keyboardType: TextInputType.number,
+                                controller: _hallNameController,
                                 decoration: InputDecoration(
-                                  labelText: l10n.hallId,
+                                  labelText: l10n.hallName,
                                   border: roundedBorder,
                                   enabledBorder: roundedBorder,
                                   focusedBorder: roundedBorder,
@@ -291,10 +295,9 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                               ),
                               const SizedBox(height: 12),
                               TextField(
-                                controller: _screeningFormatIdController,
-                                keyboardType: TextInputType.number,
+                                controller: _screeningFormatNameController,
                                 decoration: InputDecoration(
-                                  labelText: l10n.screeningFormatId,
+                                  labelText: l10n.screeningFormatName,
                                   border: roundedBorder,
                                   enabledBorder: roundedBorder,
                                   focusedBorder: roundedBorder,
@@ -349,27 +352,113 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                                 ],
                               ),
                               const SizedBox(height: 12),
-                              TextField(
-                                controller: _fromStartTimeController,
-                                decoration: InputDecoration(
-                                  labelText: l10n.fromStartTime,
-                                  border: roundedBorder,
-                                  enabledBorder: roundedBorder,
-                                  focusedBorder: roundedBorder,
-                                  filled: true,
-                                  fillColor: Theme.of(context).colorScheme.surface,
+                              InkWell(
+                                onTap: () async {
+                                  final DateTime? picked = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2020),
+                                    lastDate: DateTime(2030),
+                                  );
+                                  if (picked != null) {
+                                    _fromStartTimeController.text = picked.toIso8601String().split('T')[0];
+                                  }
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Theme.of(context).colorScheme.outline),
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: Theme.of(context).colorScheme.surface,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.calendar_today,
+                                        color: Theme.of(context).colorScheme.primary,
+                                        size: 20,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          _fromStartTimeController.text.isEmpty 
+                                              ? l10n.fromStartTime 
+                                              : _fromStartTimeController.text,
+                                          style: TextStyle(
+                                            color: _fromStartTimeController.text.isEmpty 
+                                                ? Theme.of(context).colorScheme.onSurface.withOpacity(0.6)
+                                                : Theme.of(context).colorScheme.onSurface,
+                                          ),
+                                        ),
+                                      ),
+                                      if (_fromStartTimeController.text.isNotEmpty)
+                                        InkWell(
+                                          onTap: () {
+                                            _fromStartTimeController.clear();
+                                          },
+                                          child: Icon(
+                                            Icons.clear,
+                                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                                            size: 18,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 12),
-                              TextField(
-                                controller: _toStartTimeController,
-                                decoration: InputDecoration(
-                                  labelText: l10n.toStartTime,
-                                  border: roundedBorder,
-                                  enabledBorder: roundedBorder,
-                                  focusedBorder: roundedBorder,
-                                  filled: true,
-                                  fillColor: Theme.of(context).colorScheme.surface,
+                              InkWell(
+                                onTap: () async {
+                                  final DateTime? picked = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2020),
+                                    lastDate: DateTime(2030),
+                                  );
+                                  if (picked != null) {
+                                    _toStartTimeController.text = picked.toIso8601String().split('T')[0];
+                                  }
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Theme.of(context).colorScheme.outline),
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: Theme.of(context).colorScheme.surface,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.calendar_today,
+                                        color: Theme.of(context).colorScheme.primary,
+                                        size: 20,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          _toStartTimeController.text.isEmpty 
+                                              ? l10n.toStartTime 
+                                              : _toStartTimeController.text,
+                                          style: TextStyle(
+                                            color: _toStartTimeController.text.isEmpty 
+                                                ? Theme.of(context).colorScheme.onSurface.withOpacity(0.6)
+                                                : Theme.of(context).colorScheme.onSurface,
+                                          ),
+                                        ),
+                                      ),
+                                      if (_toStartTimeController.text.isNotEmpty)
+                                        InkWell(
+                                          onTap: () {
+                                            _toStartTimeController.clear();
+                                          },
+                                          child: Icon(
+                                            Icons.clear,
+                                            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                                            size: 18,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 12),
@@ -452,9 +541,9 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                         TextButton(
                           onPressed: () {
                             _searchController.clear();
-                            _movieIdController.clear();
-                            _hallIdController.clear();
-                            _screeningFormatIdController.clear();
+                            _movieTitleController.clear();
+                            _hallNameController.clear();
+                            _screeningFormatNameController.clear();
                             _languageController.clear();
                             _minBasePriceController.clear();
                             _maxBasePriceController.clear();
@@ -585,7 +674,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
       );
     }
     
-    if (result!.items!.isEmpty) {
+    if (result!.items != null && result!.items!.isEmpty) {
       return Expanded(
         child: Center(
           child: Column(
@@ -631,9 +720,10 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                   crossAxisSpacing: 24,
                   mainAxisSpacing: 24,
                 ),
-                itemCount: result!.items!.length,
+                itemCount: result!.items != null ? result!.items!.length : 0,
                 itemBuilder: (context, index) {
-                  final screening = result!.items![index];
+                  final screening = result!.items != null ? result!.items![index] : null;
+                  if (screening == null) return const SizedBox.shrink();
                   return _buildScreeningCard(screening);
                 },
               ),
@@ -651,7 +741,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
     if (result == null) return const SizedBox.shrink();
     
     final totalCount = result!.totalCount ?? 0;
-    final currentItems = result!.items!.length;
+    final currentItems = result!.items != null ? result!.items!.length : 0;
     final hasNextPage = currentItems == pageSize;
     final hasPreviousPage = currentPage > 0;
     final totalPages = (totalCount / pageSize).ceil();
@@ -1285,7 +1375,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(l10n.confirmDeletion),
-        content: Text('Are you sure you want to delete the screening for "${screening.movieTitle ?? l10n.unknownMovie}"?'),
+        content: Text(l10n.confirmDeleteScreeningMessage(screening.movieTitle ?? l10n.unknownMovie)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -1297,7 +1387,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
               _deleteScreening(screening);
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Delete'),
+            child: Text(l10n.delete),
           ),
         ],
       ),
@@ -1336,7 +1426,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(l10n.confirmRestoration),
-        content: Text('Are you sure you want to restore the screening for "${screening.movieTitle ?? l10n.unknownMovie}"?'),
+        content: Text(l10n.confirmRestoreScreeningMessage(screening.movieTitle ?? l10n.unknownMovie)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -1348,7 +1438,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
               _restoreScreening(screening);
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-            child: const Text('Restore'),
+            child: Text(l10n.restore),
           ),
         ],
       ),

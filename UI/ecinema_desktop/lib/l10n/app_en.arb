@@ -697,6 +697,10 @@
   "@movieId": {
     "description": "Movie ID field label"
   },
+  "movieTitle": "Movie Title",
+  "@movieTitle": {
+    "description": "Movie title field label"
+  },
   "hallId": "Hall ID",
   "@hallId": {
     "description": "Hall ID field label"
@@ -776,6 +780,34 @@
   "failedToRestoreScreening": "Failed to restore screening",
   "@failedToRestoreScreening": {
     "description": "Failed to restore screening message"
+  },
+  "confirmDeleteScreeningMessage": "Are you sure you want to delete the screening for \"{movieTitle}\"?",
+  "@confirmDeleteScreeningMessage": {
+    "description": "Confirm delete screening message",
+    "placeholders": {
+      "movieTitle": {
+        "type": "String",
+        "example": "Movie Title"
+      }
+    }
+  },
+  "confirmRestoreScreeningMessage": "Are you sure you want to restore the screening for \"{movieTitle}\"?",
+  "@confirmRestoreScreeningMessage": {
+    "description": "Confirm restore screening message",
+    "placeholders": {
+      "movieTitle": {
+        "type": "String",
+        "example": "Movie Title"
+      }
+    }
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete button text"
+  },
+  "restore": "Restore",
+  "@restore": {
+    "description": "Restore button text"
   },
   "unknownMovie": "Unknown Movie",
   "@unknownMovie": {

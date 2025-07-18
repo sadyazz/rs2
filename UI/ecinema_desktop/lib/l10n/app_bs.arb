@@ -669,6 +669,10 @@
   "@movieId": {
     "description": "Movie ID field label"
   },
+  "movieTitle": "Naziv filma",
+  "@movieTitle": {
+    "description": "Movie title field label"
+  },
   "hallId": "ID sale",
   "@hallId": {
     "description": "Hall ID field label"
@@ -748,6 +752,34 @@
   "failedToRestoreScreening": "Greška pri vraćanju projekcije",
   "@failedToRestoreScreening": {
     "description": "Failed to restore screening message"
+  },
+  "confirmDeleteScreeningMessage": "Da li ste sigurni da želite obrisati projekciju za \"{movieTitle}\"?",
+  "@confirmDeleteScreeningMessage": {
+    "description": "Confirm delete screening message",
+    "placeholders": {
+      "movieTitle": {
+        "type": "String",
+        "example": "Naziv filma"
+      }
+    }
+  },
+  "confirmRestoreScreeningMessage": "Da li ste sigurni da želite vratiti projekciju za \"{movieTitle}\"?",
+  "@confirmRestoreScreeningMessage": {
+    "description": "Confirm restore screening message",
+    "placeholders": {
+      "movieTitle": {
+        "type": "String",
+        "example": "Naziv filma"
+      }
+    }
+  },
+  "delete": "Obriši",
+  "@delete": {
+    "description": "Delete button text"
+  },
+  "restore": "Vrati",
+  "@restore": {
+    "description": "Restore button text"
   },
   "unknownMovie": "Nepoznat film",
   "@unknownMovie": {

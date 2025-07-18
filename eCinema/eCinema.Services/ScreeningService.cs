@@ -44,14 +44,29 @@ namespace eCinema.Services
                 query = query.Where(x => x.MovieId == search.MovieId.Value);
             }
 
+            if (!string.IsNullOrWhiteSpace(search.MovieTitle))
+            {
+                query = query.Where(x => x.Movie.Title.Contains(search.MovieTitle));
+            }
+
             if (search.HallId.HasValue)
             {
                 query = query.Where(x => x.HallId == search.HallId.Value);
             }
 
+            if (!string.IsNullOrWhiteSpace(search.HallName))
+            {
+                query = query.Where(x => x.Hall.Name.Contains(search.HallName));
+            }
+
             if (search.ScreeningFormatId.HasValue)
             {
                 query = query.Where(x => x.ScreeningFormatId == search.ScreeningFormatId.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search.ScreeningFormatName))
+            {
+                query = query.Where(x => x.Format != null && x.Format.Name.Contains(search.ScreeningFormatName));
             }
 
             if (!string.IsNullOrWhiteSpace(search.Language))
