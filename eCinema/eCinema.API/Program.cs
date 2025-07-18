@@ -1,5 +1,6 @@
 using eCinema.Services;
 using eCinema.Services.Database;
+using eCinema.Services.Auth;
 using Microsoft.EntityFrameworkCore;
 using Mapster;
 using MapsterMapper;
@@ -13,6 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddeCinemaDbContext(connectionString);
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 //TEMP
 builder.Services.AddCors(options =>
