@@ -199,6 +199,10 @@
   "@ok": {
     "description": "OK button text"
   },
+  "edited": "(uređeno)",
+  "@edited": {
+    "description": "Text shown when a review has been edited"
+  },
   "cancel": "Otkaži",
   "@cancel": {
     "description": "Cancel button text"
@@ -1436,5 +1440,17 @@
   "welcomeToECinema": "Dobrodošli u eCinema Management System",
   "@welcomeToECinema": {"description": "Dashboard welcome message"},
   "heresWhatHappening": "Evo šta se dešava sa vašim bioskopom danas",
-  "@heresWhatHappening": {"description": "Dashboard subtitle"}
+  "@heresWhatHappening": {"description": "Dashboard subtitle"},
+  "spoiler": "Spoiler",
+  "@spoiler": {"description": "Spoiler label"},
+  "markAsSpoiler": "Označi kao spoiler",
+  "@markAsSpoiler": {"description": "Mark as spoiler button text"},
+  "unmarkAsSpoiler": "Ukloni oznaku spoiler",
+  "@unmarkAsSpoiler": {"description": "Unmark as spoiler button text"},
+  "reviewMarkedAsSpoiler": "Recenzija označena kao spoiler",
+  "@reviewMarkedAsSpoiler": {"description": "Review marked as spoiler success message"},
+  "reviewUnmarkedAsSpoiler": "Uklonjena oznaka spoiler iz recenzije",
+  "@reviewUnmarkedAsSpoiler": {"description": "Review unmarked as spoiler success message"},
+  "failedToUpdateReview": "Greška pri ažuriranju recenzije",
+  "@failedToUpdateReview": {"description": "Failed to update review error message"}
 }

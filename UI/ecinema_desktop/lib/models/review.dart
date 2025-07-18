@@ -25,6 +25,12 @@ class Review {
   @JsonKey(name: 'isDeleted')
   final bool isDeleted;
   
+  @JsonKey(name: 'isSpoiler')
+  final bool isSpoiler;
+  
+  @JsonKey(name: 'isEdited')
+  final bool? isEdited;
+  
   @JsonKey(name: 'userId')
   final int userId;
   
@@ -48,6 +54,8 @@ class Review {
     this.modifiedAt,
     required this.isActive,
     required this.isDeleted,
+    required this.isSpoiler,
+    this.isEdited,
     required this.userId,
     required this.userName,
     required this.userEmail,
@@ -67,6 +75,8 @@ class Review {
     DateTime? modifiedAt,
     bool? isActive,
     bool? isDeleted,
+    bool? isSpoiler,
+    bool? isEdited,
     int? userId,
     String? userName,
     String? userEmail,
@@ -81,6 +91,8 @@ class Review {
       modifiedAt: modifiedAt ?? this.modifiedAt,
       isActive: isActive ?? this.isActive,
       isDeleted: isDeleted ?? this.isDeleted,
+      isSpoiler: isSpoiler ?? this.isSpoiler,
+      isEdited: isEdited ?? this.isEdited ?? false,
       userId: userId ?? this.userId,
       userName: userName ?? this.userName,
       userEmail: userEmail ?? this.userEmail,
@@ -91,7 +103,7 @@ class Review {
 
   @override
   String toString() {
-    return 'Review(id: $id, rating: $rating, comment: $comment, createdAt: $createdAt, isActive: $isActive, userName: $userName, movieTitle: $movieTitle)';
+    return 'Review(id: $id, rating: $rating, comment: $comment, createdAt: $createdAt, isActive: $isActive, isSpoiler: $isSpoiler, userName: $userName, movieTitle: $movieTitle)';
   }
 
   @override

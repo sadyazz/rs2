@@ -309,67 +309,63 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
 
   Widget _buildReviewCard(Review review) {
     final l10n = AppLocalizations.of(context)!;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: isDark 
-            ? Theme.of(context).colorScheme.surfaceVariant
-            : Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               children: [
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.primary.withOpacity(0.8)],
-                    ),
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: Center(
-                    child: Text(
-                      review.userName.isNotEmpty ? review.userName[0].toUpperCase() : 'U',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
+                CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  radius: 20,
+                  child: Text(
+                    review.userName.isNotEmpty ? review.userName[0].toUpperCase() : 'U',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        review.userName.isNotEmpty ? review.userName : l10n.unknownUser,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            review.userName.isNotEmpty ? review.userName : l10n.unknownUser,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          if (review.isSpoiler)
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.red[600],
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                l10n.spoiler,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                       Text(
-                        _formatDate(review.createdAt),
+                        _formatDate(review.createdAt) + ((review.isEdited ?? false) ? ' ${l10n.edited}' : ''),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                           fontSize: 12,
@@ -378,51 +374,32 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                     ],
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.amber.shade100,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.star,
-                        color: Colors.amber.shade600,
+                Row(
+                  children: [
+                    ...List.generate(5, (index) {
+                      return Icon(
+                        index < review.rating
+                            ? Icons.star
+                            : Icons.star_border,
+                        color: Colors.amber,
                         size: 16,
+                      );
+                    }),
+                    const SizedBox(width: 4),
+                    Text(
+                      '${review.rating}/5',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
                       ),
-                      const SizedBox(width: 4),
-                      Text(
-                        review.rating.toString(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.amber.shade700,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),
             
-            Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 6),
-              child: Row(
-                children: List.generate(5, (index) {
-                  return Icon(
-                    index < review.rating
-                        ? Icons.star
-                        : Icons.star_border,
-                    color: Colors.amber,
-                    size: 20,
-                  );
-                }),
-              ),
-            ),
-            
             if (review.comment != null && review.comment!.isNotEmpty) ...[
+              const SizedBox(height: 12),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -431,32 +408,102 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                       review.comment!,
                       style: TextStyle(
                         fontSize: 14,
-                        height: 1.5,
+                        height: 1.4,
                         color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    onPressed: () => _deleteReview(review),
-                    icon: const Icon(Icons.delete, size: 18),
-                    tooltip: l10n.deleteReview,
-                    style: IconButton.styleFrom(
-                      foregroundColor: Colors.red.shade700,
+                  InkWell(
+                    onTap: () => _toggleSpoilerStatus(review),
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: review.isSpoiler 
+                            ? Colors.red.withOpacity(0.1)
+                            : Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: review.isSpoiler 
+                              ? Colors.red.withOpacity(0.2)
+                              : Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                        ),
+                      ),
+                      child: Icon(
+                        review.isSpoiler ? Icons.visibility : Icons.visibility_off,
+                        size: 16,
+                        color: review.isSpoiler ? Colors.red[600] : Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  InkWell(
+                    onTap: () => _deleteReview(review),
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: Colors.red.withOpacity(0.2),
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.delete_outline,
+                        size: 16,
+                        color: Colors.red[600],
+                      ),
                     ),
                   ),
                 ],
               ),
             ] else ...[
+              const SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  IconButton(
-                    onPressed: () => _deleteReview(review),
-                    icon: const Icon(Icons.delete, size: 18),
-                    tooltip: 'Delete review',
-                    style: IconButton.styleFrom(
-                      foregroundColor: Colors.red.shade700,
+                  InkWell(
+                    onTap: () => _toggleSpoilerStatus(review),
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: review.isSpoiler 
+                            ? Colors.red.withOpacity(0.1)
+                            : Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: review.isSpoiler 
+                              ? Colors.red.withOpacity(0.2)
+                              : Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                        ),
+                      ),
+                      child: Icon(
+                        review.isSpoiler ? Icons.visibility : Icons.visibility_off,
+                        size: 16,
+                        color: review.isSpoiler ? Colors.red[600] : Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  InkWell(
+                    onTap: () => _deleteReview(review),
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: Colors.red.withOpacity(0.2),
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.delete_outline,
+                        size: 16,
+                        color: Colors.red[600],
+                      ),
                     ),
                   ),
                 ],
@@ -466,6 +513,33 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _toggleSpoilerStatus(Review review) async {
+    if (provider == null || review.id == null) return;
+    try {
+      final success = await provider.toggleSpoilerStatus(review.id!);
+      
+      if (success) {
+        await _loadReviews();
+        final l10n = AppLocalizations.of(context)!;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(review.isSpoiler ? l10n.reviewUnmarkedAsSpoiler : l10n.reviewMarkedAsSpoiler),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      print('Error toggling spoiler status: $e');
+      final l10n = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.failedToUpdateReview),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   String _formatDate(DateTime date) {

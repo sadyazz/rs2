@@ -199,6 +199,10 @@
   "@ok": {
     "description": "OK button text"
   },
+  "edited": "(edited)",
+  "@edited": {
+    "description": "Text shown when a review has been edited"
+  },
   "cancel": "Cancel",
   "@cancel": {
     "description": "Cancel button text"
@@ -1472,5 +1476,17 @@
   "welcomeToECinema": "Welcome to eCinema Management System",
   "@welcomeToECinema": {"description": "Dashboard welcome message"},
   "heresWhatHappening": "Here's what's happening with your cinema today",
-  "@heresWhatHappening": {"description": "Dashboard subtitle"}
+  "@heresWhatHappening": {"description": "Dashboard subtitle"},
+  "spoiler": "Spoiler",
+  "@spoiler": {"description": "Spoiler label"},
+  "markAsSpoiler": "Mark as Spoiler",
+  "@markAsSpoiler": {"description": "Mark as spoiler button text"},
+  "unmarkAsSpoiler": "Unmark as Spoiler",
+  "@unmarkAsSpoiler": {"description": "Unmark as spoiler button text"},
+  "reviewMarkedAsSpoiler": "Review marked as spoiler",
+  "@reviewMarkedAsSpoiler": {"description": "Review marked as spoiler success message"},
+  "reviewUnmarkedAsSpoiler": "Review unmarked as spoiler",
+  "@reviewUnmarkedAsSpoiler": {"description": "Review unmarked as spoiler success message"},
+  "failedToUpdateReview": "Failed to update review",
+  "@failedToUpdateReview": {"description": "Failed to update review error message"}
 }
