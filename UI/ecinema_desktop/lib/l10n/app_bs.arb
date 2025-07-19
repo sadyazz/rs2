@@ -1484,5 +1484,45 @@
   "reviewUnmarkedAsSpoiler": "Uklonjena oznaka spoiler iz recenzije",
   "@reviewUnmarkedAsSpoiler": {"description": "Review unmarked as spoiler success message"},
   "failedToUpdateReview": "Greška pri ažuriranju recenzije",
-  "@failedToUpdateReview": {"description": "Failed to update review error message"}
+  "@failedToUpdateReview": {"description": "Failed to update review error message"},
+  "cinemaReports": "Izveštaji Kina",
+  "@cinemaReports": {
+    "description": "Cinema reports title"
+  },
+  "totalIncome": "Ukupan prihod",
+  "@totalIncome": {
+    "description": "Total income label"
+  },
+  "top5WatchedMovies": "Top 5 gledanih filmova",
+  "@top5WatchedMovies": {
+    "description": "Top 5 watched movies section title"
+  },
+  "revenueByMovie": "Prihod po filmu",
+  "@revenueByMovie": {
+    "description": "Revenue by movie section title"
+  },
+  "top5Customers": "Top 5 kupaca",
+  "@top5Customers": {
+    "description": "Top 5 customers section title"
+  },
+  "revenue": "Prihod",
+  "@revenue": {
+    "description": "Revenue label"
+  },
+  "totalSpent": "Ukupno potrošeno",
+  "@totalSpent": {
+    "description": "Total spent label"
+  },
+  "refresh": "Osveži",
+  "@refresh": {
+    "description": "Refresh button label"
+  },
+  "noDataAvailable": "Nema dostupnih podataka",
+  "@noDataAvailable": {
+    "description": "No data available message"
+  },
+  "reservations": "Rezervacije",
+  "@reservations": {
+    "description": "Reservations label"
+  }
 }

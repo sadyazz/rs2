@@ -1520,5 +1520,45 @@
   "reviewUnmarkedAsSpoiler": "Review unmarked as spoiler",
   "@reviewUnmarkedAsSpoiler": {"description": "Review unmarked as spoiler success message"},
   "failedToUpdateReview": "Failed to update review",
-  "@failedToUpdateReview": {"description": "Failed to update review error message"}
+  "@failedToUpdateReview": {"description": "Failed to update review error message"},
+  "cinemaReports": "Cinema Reports",
+  "@cinemaReports": {
+    "description": "Cinema reports title"
+  },
+  "totalIncome": "Total Income",
+  "@totalIncome": {
+    "description": "Total income label"
+  },
+  "top5WatchedMovies": "Top 5 Watched Movies",
+  "@top5WatchedMovies": {
+    "description": "Top 5 watched movies section title"
+  },
+  "revenueByMovie": "Revenue by Movie",
+  "@revenueByMovie": {
+    "description": "Revenue by movie section title"
+  },
+  "top5Customers": "Top 5 Customers",
+  "@top5Customers": {
+    "description": "Top 5 customers section title"
+  },
+  "revenue": "Revenue",
+  "@revenue": {
+    "description": "Revenue label"
+  },
+  "totalSpent": "Total Spent",
+  "@totalSpent": {
+    "description": "Total spent label"
+  },
+  "refresh": "Refresh",
+  "@refresh": {
+    "description": "Refresh button label"
+  },
+  "noDataAvailable": "No data available",
+  "@noDataAvailable": {
+    "description": "No data available message"
+  },
+  "reservations": "Reservations",
+  "@reservations": {
+    "description": "Reservations label"
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:ecinema_desktop/screens/dashboard_screen.dart';
 import 'package:ecinema_desktop/screens/movies_list_screen.dart';
+import 'package:ecinema_desktop/screens/reports_screen.dart';
 import 'package:ecinema_desktop/screens/screenings_list_screen.dart';
 import 'package:ecinema_desktop/screens/settings_screen.dart';
 import 'package:ecinema_desktop/providers/language_provider.dart';
@@ -424,6 +425,7 @@ class _MasterScreenState extends State<MasterScreen> {
             } else if (title == l10n.screenings) {
               Navigator.push(context, MaterialPageRoute(builder: (context) => ScreeningsListScreen()));
             } else if (title == l10n.reports) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ReportsScreen()));
             } else if (title == l10n.settings) {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsScreen()));
             }
