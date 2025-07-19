@@ -31,5 +31,70 @@ namespace eCinema.Services
 
             return stats;
         }
+
+        public async Task<int> GetUserCountAsync()
+        {
+            return await _context.Users.CountAsync();
+        }
+
+        public async Task<decimal> GetTotalCinemaIncomeAsync()
+        {
+            return await _context.Reservations
+                .Where(r => r.Status == "Paid")
+                .SumAsync(r => r.TotalPrice);
+        }
+
+        public async Task<List<MovieRevenueResponse>> GetTop5WatchedMoviesAsync()
+        {
+            return await _context.Reservations
+                .Where(r => r.Status == "Paid")
+                .GroupBy(r => r.Screening.Movie)
+                .Select(g => new MovieRevenueResponse
+                {
+                    MovieId = g.Key.Id,
+                    MovieTitle = g.Key.Title,
+                    MovieImage = g.Key.Image != null ? Convert.ToBase64String(g.Key.Image) : null,
+                    ReservationCount = g.Count(),
+                    TotalRevenue = g.Sum(r => r.TotalPrice)
+                })
+                .OrderByDescending(m => m.ReservationCount)
+                .Take(5)
+                .ToListAsync();
+        }
+
+        public async Task<List<MovieRevenueResponse>> GetRevenueByMovieAsync()
+        {
+            return await _context.Reservations
+                .Where(r => r.Status == "Paid")
+                .GroupBy(r => r.Screening.Movie)
+                .Select(g => new MovieRevenueResponse
+                {
+                    MovieId = g.Key.Id,
+                    MovieTitle = g.Key.Title,
+                    MovieImage = g.Key.Image != null ? Convert.ToBase64String(g.Key.Image) : null,
+                    ReservationCount = g.Count(),
+                    TotalRevenue = g.Sum(r => r.TotalPrice)
+                })
+                .OrderByDescending(m => m.TotalRevenue)
+                .ToListAsync();
+        }
+
+        public async Task<List<TopCustomerResponse>> GetTop5CustomersAsync()
+        {
+            return await _context.Reservations
+                .Where(r => r.Status == "Paid")
+                .GroupBy(r => r.User)
+                .Select(g => new TopCustomerResponse
+                {
+                    UserId = g.Key.Id,
+                    UserName = g.Key.FirstName + " " + g.Key.LastName,
+                    Email = g.Key.Email,
+                    ReservationCount = g.Count(),
+                    TotalSpent = g.Sum(r => r.TotalPrice)
+                })
+                .OrderByDescending(c => c.TotalSpent)
+                .Take(5)
+                .ToListAsync();
+        }
     }
 } 
