@@ -2,13 +2,37 @@ version: '3.8'
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: unless-stopped
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Sifra123!
-      - MSSQL_PID=Express
+      - MSSQL_PID=Developer
     ports:
       - "1433:1433"
+    expose: 
+      - "1433"
+    networks:
+      - ecinema-2025
     volumes:
       - sqlserver_data:/var/opt/mssql
 volumes:
   sqlserver_data: 
+
+  ecinema-api:
+    build:
+      context: .
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=eCinemaDb;User=sa;Password=Sifra123!;ConnectRetryCount=0;TrustServerCertificate=True
+    ports:
+      - "5190:5190"
+    networks:
+      - ecinema-2025
+    links:
+      - sqlserver
+    depends_on:
+      - sqlserver
+
+networks:
+  ecinema-2025:
+    driver: bridge
