@@ -1,0 +1,118 @@
+{
+  "welcome": "Welcome",
+  "@welcome": {
+    "description": "Welcome text"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings navigation item"
+  },
+  "helpSupport": "Help & Support",
+  "@helpSupport": {
+    "description": "Help and support navigation item"
+  },
+  "about": "About",
+  "@about": {
+    "description": "About navigation item"
+  },
+  "logout": "Logout",
+  "@logout": {
+    "description": "Logout button text"
+  },
+  "logoutConfirmation": "Are you sure you want to logout?",
+  "@logoutConfirmation": {
+    "description": "Logout confirmation dialog text"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Language setting text"
+  },
+  "english": "English",
+  "@english": {
+    "description": "English language option"
+  },
+  "bosnian": "Bosnian",
+  "@bosnian": {
+    "description": "Bosnian language option"
+  },
+  "username": "Username",
+  "@username": {
+    "description": "Username field label"
+  },
+  "password": "Password",
+  "@password": {
+    "description": "Password field label"
+  },
+  "login": "Login",
+  "@login": {
+    "description": "Login button text"
+  },
+  "welcomeToEcinema": "Welcome to eCinema!",
+  "@welcomeToEcinema": {
+    "description": "Welcome message"
+  },
+  "loginSuccessful": "Login successful!",
+  "@loginSuccessful": {
+    "description": "Login success message"
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Error dialog title"
+  },
+  "pleaseEnterUsername": "Please enter your username",
+  "@pleaseEnterUsername": {
+    "description": "Username validation message"
+  },
+  "usernameMinLength": "Username must be at least 3 characters",
+  "@usernameMinLength": {
+    "description": "Username minimum length validation"
+  },
+  "pleaseEnterPassword": "Please enter your password",
+  "@pleaseEnterPassword": {
+    "description": "Password validation message"
+  },
+  "passwordMinLength": "Password must be at least 6 characters",
+  "@passwordMinLength": {
+    "description": "Password minimum length validation"
+  },
+  "forgotPassword": "Forgot password?",
+  "@forgotPassword": {
+    "description": "Forgot password link text"
+  },
+  "home": "Home",
+  "@home": {
+    "description": "Home navigation item"
+  },
+  "tickets": "Tickets",
+  "@tickets": {
+    "description": "Tickets navigation item"
+  },
+  "notifications": "Notifications",
+  "@notifications": {
+    "description": "Notifications navigation item"
+  },
+  "profile": "Profile",
+  "@profile": {
+    "description": "Profile navigation item"
+  },
+  "welcomeBack": "Welcome back!",
+  "@welcomeBack": {
+    "description": "Welcome back message"
+  },
+  "successfullyLoggedIn": "You have successfully logged in.",
+  "@successfullyLoggedIn": {
+    "description": "Success login message"
+  },
+  "bookYourTickets": "Book your movie tickets here!",
+  "@bookYourTickets": {
+    "description": "Tickets screen description"
+  },
+  "stayUpdated": "Stay updated with latest news!",
+  "@stayUpdated": {
+    "description": "Notifications screen description"
+  }
+} 

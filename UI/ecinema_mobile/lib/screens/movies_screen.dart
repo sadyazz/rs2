@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class MoviesScreen extends StatelessWidget {
+  const MoviesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -21,27 +18,27 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      child: Center(
+      child: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.movie_creation_rounded,
+              Icons.movie,
               size: 100,
-              color: const Color(0xFF4F8593),
+              color: Color(0xFF4F8593),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24),
             Text(
-              l10n.welcomeToEcinema,
+              'Movies Screen',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: const Color(0xFF4F8593),
+                color: Color(0xFF4F8593),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16),
             Text(
-              l10n.successfullyLoggedIn,
+              'Coming soon...',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
@@ -52,4 +49,4 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-}
+} 

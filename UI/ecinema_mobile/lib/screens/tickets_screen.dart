@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class TicketsScreen extends StatelessWidget {
+  const TicketsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +26,13 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.movie_creation_rounded,
+              Icons.confirmation_number,
               size: 100,
               color: const Color(0xFF4F8593),
             ),
             const SizedBox(height: 24),
             Text(
-              l10n.welcomeToEcinema,
+              l10n.tickets,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -41,7 +41,7 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              l10n.successfullyLoggedIn,
+              l10n.bookYourTickets,
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
@@ -52,4 +52,4 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-}
+} 

@@ -1,0 +1,118 @@
+{
+  "welcome": "Dobrodošli",
+  "@welcome": {
+    "description": "Welcome text"
+  },
+  "settings": "Postavke",
+  "@settings": {
+    "description": "Settings navigation item"
+  },
+  "helpSupport": "Pomoć i podrška",
+  "@helpSupport": {
+    "description": "Help and support navigation item"
+  },
+  "about": "O nama",
+  "@about": {
+    "description": "About navigation item"
+  },
+  "logout": "Odjava",
+  "@logout": {
+    "description": "Logout button text"
+  },
+  "logoutConfirmation": "Da li ste sigurni da se želite odjaviti?",
+  "@logoutConfirmation": {
+    "description": "Logout confirmation dialog text"
+  },
+  "cancel": "Otkaži",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "language": "Jezik",
+  "@language": {
+    "description": "Language setting text"
+  },
+  "english": "Engleski",
+  "@english": {
+    "description": "English language option"
+  },
+  "bosnian": "Bosanski",
+  "@bosnian": {
+    "description": "Bosnian language option"
+  },
+  "username": "Korisničko ime",
+  "@username": {
+    "description": "Username field label"
+  },
+  "password": "Lozinka",
+  "@password": {
+    "description": "Password field label"
+  },
+  "login": "Prijava",
+  "@login": {
+    "description": "Login button text"
+  },
+  "welcomeToEcinema": "Dobrodošli u eCinema!",
+  "@welcomeToEcinema": {
+    "description": "Welcome message"
+  },
+  "loginSuccessful": "Prijava uspješna!",
+  "@loginSuccessful": {
+    "description": "Login success message"
+  },
+  "error": "Greška",
+  "@error": {
+    "description": "Error dialog title"
+  },
+  "pleaseEnterUsername": "Molimo unesite korisničko ime",
+  "@pleaseEnterUsername": {
+    "description": "Username validation message"
+  },
+  "usernameMinLength": "Korisničko ime mora imati najmanje 3 karaktera",
+  "@usernameMinLength": {
+    "description": "Username minimum length validation"
+  },
+  "pleaseEnterPassword": "Molimo unesite lozinku",
+  "@pleaseEnterPassword": {
+    "description": "Password validation message"
+  },
+  "passwordMinLength": "Lozinka mora imati najmanje 6 karaktera",
+  "@passwordMinLength": {
+    "description": "Password minimum length validation"
+  },
+  "forgotPassword": "Zaboravili ste lozinku?",
+  "@forgotPassword": {
+    "description": "Forgot password link text"
+  },
+  "home": "Početna",
+  "@home": {
+    "description": "Home navigation item"
+  },
+  "tickets": "Karte",
+  "@tickets": {
+    "description": "Tickets navigation item"
+  },
+  "notifications": "Obavijesti",
+  "@notifications": {
+    "description": "Notifications navigation item"
+  },
+  "profile": "Profil",
+  "@profile": {
+    "description": "Profile navigation item"
+  },
+  "welcomeBack": "Dobrodošli nazad!",
+  "@welcomeBack": {
+    "description": "Welcome back message"
+  },
+  "successfullyLoggedIn": "Uspješno ste se prijavili.",
+  "@successfullyLoggedIn": {
+    "description": "Success login message"
+  },
+  "bookYourTickets": "Rezervišite svoje karte za film ovdje!",
+  "@bookYourTickets": {
+    "description": "Tickets screen description"
+  },
+  "stayUpdated": "Ostanite informisani o najnovijim vijestima!",
+  "@stayUpdated": {
+    "description": "Notifications screen description"
+  }
+} 
