@@ -130,5 +130,101 @@
   "lightMode": "Light Mode",
   "@lightMode": {
     "description": "Light mode option"
+  },
+  "dontKnowWhatToWatch": "Don't know what to watch?",
+  "@dontKnowWhatToWatch": {
+    "description": "Movie suggestion banner title"
+  },
+  "letUsSuggestMovie": "Let us suggest a movie for you!",
+  "@letUsSuggestMovie": {
+    "description": "Movie suggestion banner subtitle"
+  },
+  "loadingMovies": "Loading movies...",
+  "@loadingMovies": {
+    "description": "Loading movies text"
+  },
+  "filterBy": "Filter by:",
+  "@filterBy": {
+    "description": "Filter section title"
+  },
+  "genre": "Genre",
+  "@genre": {
+    "description": "Genre filter label"
+  },
+  "allGenres": "All genres",
+  "@allGenres": {
+    "description": "All genres option"
+  },
+  "action": "Action",
+  "@action": {
+    "description": "Action genre"
+  },
+  "drama": "Drama",
+  "@drama": {
+    "description": "Drama genre"
+  },
+  "comedy": "Comedy",
+  "@comedy": {
+    "description": "Comedy genre"
+  },
+  "horror": "Horror",
+  "@horror": {
+    "description": "Horror genre"
+  },
+  "scifi": "Sci-Fi",
+  "@scifi": {
+    "description": "Sci-Fi genre"
+  },
+  "adventure": "Adventure",
+  "@adventure": {
+    "description": "Adventure genre"
+  },
+  "animated": "Animated",
+  "@animated": {
+    "description": "Animated genre"
+  },
+  "duration": "Duration",
+  "@duration": {
+    "description": "Duration filter label"
+  },
+  "upTo90Minutes": "Up to 90 minutes",
+  "@upTo90Minutes": {
+    "description": "Duration option"
+  },
+  "minimumRating": "Minimum rating",
+  "@minimumRating": {
+    "description": "Minimum rating filter label"
+  },
+  "suggestMovie": "Suggest movie",
+  "@suggestMovie": {
+    "description": "Suggest movie button"
+  },
+  "reset": "Reset",
+  "@reset": {
+    "description": "Reset button"
+  },
+  "upTo60Minutes": "Up to 60 minutes",
+  "@upTo60Minutes": {
+    "description": "Duration option up to 60 minutes"
+  },
+  "upTo120Minutes": "Up to 120 minutes",
+  "@upTo120Minutes": {
+    "description": "Duration option up to 120 minutes"
+  },
+  "upTo150Minutes": "Up to 150 minutes",
+  "@upTo150Minutes": {
+    "description": "Duration option up to 150 minutes"
+  },
+  "upTo180Minutes": "Up to 180 minutes",
+  "@upTo180Minutes": {
+    "description": "Duration option up to 180 minutes"
+  },
+  "anyDuration": "Any duration",
+  "@anyDuration": {
+    "description": "Duration option for any duration"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
   }
 } 

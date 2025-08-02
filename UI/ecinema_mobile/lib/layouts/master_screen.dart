@@ -79,27 +79,39 @@ class _MasterScreenState extends State<MasterScreen> {
     ];
     
     return Scaffold(
-      appBar: widget.showAppBar ? AppBar(
-        title: Text(
-          widget.title ?? _titles[_currentIndex],
-          style: TextStyle(
-            color: widget.transparentAppBar ? colorScheme.primary : colorScheme.onPrimary,
-          ),
+      appBar: widget.showAppBar
+    ? PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: AppBar(
+          title: widget.transparentAppBar && !widget.showBackButton
+              ? const SizedBox.shrink()
+              : Text(
+                  widget.title ?? _titles[_currentIndex],
+                  style: TextStyle(
+                    color: widget.transparentAppBar
+                        ? colorScheme.primary
+                        : colorScheme.onSurface,
+                  ),
+                ),
+          backgroundColor: widget.transparentAppBar ? Colors.transparent : colorScheme.surface,
+          elevation: widget.transparentAppBar ? 0 : 4,
+          centerTitle: false,
+          automaticallyImplyLeading: false,
+          leading: widget.showBackButton
+              ? IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                                      color: widget.transparentAppBar
+                      ? colorScheme.primary
+                      : colorScheme.onSurface,
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
+                )
+              : null,
         ),
-        backgroundColor: widget.transparentAppBar ? Colors.transparent : colorScheme.primary,
-        foregroundColor: widget.transparentAppBar ? colorScheme.primary : colorScheme.onPrimary,
-        elevation: widget.transparentAppBar ? 0 : 0,
-        centerTitle: false,
-        leading: widget.showBackButton 
-          ? IconButton(
-              icon: Icon(
-                Icons.arrow_back, 
-                color: widget.transparentAppBar ? colorScheme.primary : colorScheme.onPrimary,
-              ),
-              onPressed: () => Navigator.of(context).pop(),
-            )
-          : null,
-      ) : null,
+      )
+    : null,
+
       body: widget.child ?? IndexedStack(
         index: _currentIndex,
         children: _screens,

@@ -275,7 +275,7 @@ class _LoginPageState extends State<LoginPage> {
       AuthProvider.username = _usernameController.text.trim();
       AuthProvider.password = _passwordController.text;
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => MasterScreen(null, null, showAppBar: false)),
+        MaterialPageRoute(builder: (context) => MasterScreen("", null, showAppBar: false)),
       );
     } on Exception catch (e) {
       // Show error dialog

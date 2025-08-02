@@ -130,5 +130,101 @@
   "lightMode": "Svijetla tema",
   "@lightMode": {
     "description": "Light mode option"
+  },
+  "dontKnowWhatToWatch": "Ne znaš šta da gledaš?",
+  "@dontKnowWhatToWatch": {
+    "description": "Movie suggestion banner title"
+  },
+  "letUsSuggestMovie": "Dozvoli da ti predložimo film!",
+  "@letUsSuggestMovie": {
+    "description": "Movie suggestion banner subtitle"
+  },
+  "loadingMovies": "Učitavanje filmova...",
+  "@loadingMovies": {
+    "description": "Loading movies text"
+  },
+  "filterBy": "Filtriraj po:",
+  "@filterBy": {
+    "description": "Filter section title"
+  },
+  "genre": "Žanr",
+  "@genre": {
+    "description": "Genre filter label"
+  },
+  "allGenres": "Svi žanrovi",
+  "@allGenres": {
+    "description": "All genres option"
+  },
+  "action": "Akcija",
+  "@action": {
+    "description": "Action genre"
+  },
+  "drama": "Drama",
+  "@drama": {
+    "description": "Drama genre"
+  },
+  "comedy": "Komedija",
+  "@comedy": {
+    "description": "Comedy genre"
+  },
+  "horror": "Horror",
+  "@horror": {
+    "description": "Horror genre"
+  },
+  "scifi": "Sci-Fi",
+  "@scifi": {
+    "description": "Sci-Fi genre"
+  },
+  "adventure": "Avantura",
+  "@adventure": {
+    "description": "Adventure genre"
+  },
+  "animated": "Animirani",
+  "@animated": {
+    "description": "Animated genre"
+  },
+  "duration": "Trajanje",
+  "@duration": {
+    "description": "Duration filter label"
+  },
+  "upTo90Minutes": "Do 90 minuta",
+  "@upTo90Minutes": {
+    "description": "Duration option"
+  },
+  "minimumRating": "Minimalna ocjena",
+  "@minimumRating": {
+    "description": "Minimum rating filter label"
+  },
+  "suggestMovie": "Predloži film",
+  "@suggestMovie": {
+    "description": "Suggest movie button"
+  },
+  "reset": "Resetuj",
+  "@reset": {
+    "description": "Reset button"
+  },
+  "upTo60Minutes": "Do 60 minuta",
+  "@upTo60Minutes": {
+    "description": "Duration option up to 60 minutes"
+  },
+  "upTo120Minutes": "Do 120 minuta",
+  "@upTo120Minutes": {
+    "description": "Duration option up to 120 minutes"
+  },
+  "upTo150Minutes": "Do 150 minuta",
+  "@upTo150Minutes": {
+    "description": "Duration option up to 150 minutes"
+  },
+  "upTo180Minutes": "Do 180 minuta",
+  "@upTo180Minutes": {
+    "description": "Duration option up to 180 minutes"
+  },
+  "anyDuration": "Bilo koje trajanje",
+  "@anyDuration": {
+    "description": "Duration option for any duration"
+  },
+  "cancel": "Otkaži",
+  "@cancel": {
+    "description": "Cancel button text"
   }
 } 
