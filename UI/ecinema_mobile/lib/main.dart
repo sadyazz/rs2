@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'providers/auth_provider.dart';
-import 'providers/movie_provider.dart';
 import 'providers/language_provider.dart';
+import 'providers/theme_provider.dart';
 import 'layouts/master_screen.dart';
-import 'l10n/l10n.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,23 +15,32 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => LanguageProvider(),
-      child: Consumer<LanguageProvider>(
-        builder: (context, languageProvider, child) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LanguageProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+      ],
+      child: Consumer2<LanguageProvider, ThemeProvider>(
+        builder: (context, languageProvider, themeProvider, child) {
+          if (!languageProvider.isInitialized) {
+            return MaterialApp(
+              home: Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            );
+          }
+
           return MaterialApp(
             title: 'eCinema Mobile',
             debugShowCheckedModeBanner: false,
+            theme: themeProvider.getLightTheme(),
+            darkTheme: themeProvider.getDarkTheme(),
+            themeMode: themeProvider.themeMode,
             localizationsDelegates: LanguageProvider.localizationsDelegates,
             supportedLocales: LanguageProvider.supportedLocales,
             locale: languageProvider.currentLocale,
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: const Color(0xFF4F8593),
-                brightness: Brightness.light,
-              ),
-              useMaterial3: true,
-            ),
             home: const LoginPage(),
           );
         },
@@ -66,6 +73,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
     
     return Scaffold(
       body: Container(
@@ -76,8 +84,8 @@ class _LoginPageState extends State<LoginPage> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              const Color(0xFF4F8593).withOpacity(0.1),
-              const Color(0xFF4F8593).withOpacity(0.05),
+              colorScheme.primary.withOpacity(0.1),
+              colorScheme.primary.withOpacity(0.05),
             ],
           ),
         ),
@@ -95,14 +103,14 @@ class _LoginPageState extends State<LoginPage> {
                     Icon(
                       Icons.movie_creation_rounded,
                       size: 80,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: colorScheme.primary,
                     ),
                     const SizedBox(height: 24),
                     Text(
                       'eCinema',
                       style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: colorScheme.primary,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -110,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                     Text(
                       l10n.welcomeBack,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Colors.grey[600],
+                        color: colorScheme.onSurface.withOpacity(0.7),
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -119,22 +127,22 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _usernameController,
                       decoration: InputDecoration(
                         labelText: l10n.username,
-                        prefixIcon: const Icon(Icons.person_outline),
+                        prefixIcon: Icon(Icons.person_outline, color: colorScheme.onSurface),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
+                          borderSide: BorderSide(color: colorScheme.outline),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: colorScheme.primary,
                           ),
                         ),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: colorScheme.surface,
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
@@ -155,10 +163,11 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _passwordController,
                       decoration: InputDecoration(
                         labelText: l10n.password,
-                        prefixIcon: const Icon(Icons.lock_outline),
+                        prefixIcon: Icon(Icons.lock_outline, color: colorScheme.onSurface),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                            color: colorScheme.onSurface,
                           ),
                           onPressed: () {
                             setState(() {
@@ -171,16 +180,16 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey.shade300),
+                          borderSide: BorderSide(color: colorScheme.outline),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: colorScheme.primary,
                           ),
                         ),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: colorScheme.surface,
                       ),
                       obscureText: _obscurePassword,
                       validator: (value) {
@@ -207,7 +216,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text(
                           l10n.forgotPassword,
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
+                            color: colorScheme.primary,
                           ),
                         ),
                       ),
@@ -216,8 +225,8 @@ class _LoginPageState extends State<LoginPage> {
                     ElevatedButton(
                       onPressed: _isLoading ? null : _handleLogin,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4F8593),
-                        foregroundColor: Colors.white,
+                        backgroundColor: colorScheme.primary,
+                        foregroundColor: colorScheme.onPrimary,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -225,12 +234,12 @@ class _LoginPageState extends State<LoginPage> {
                         elevation: 0,
                       ),
                       child: _isLoading
-                          ? const SizedBox(
+                          ? SizedBox(
                               height: 20,
                               width: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor: AlwaysStoppedAnimation<Color>(colorScheme.onPrimary),
                               ),
                             )
                           : Text(
@@ -265,12 +274,6 @@ class _LoginPageState extends State<LoginPage> {
     try {
       AuthProvider.username = _usernameController.text.trim();
       AuthProvider.password = _passwordController.text;
-      MovieProvider movieProvider = MovieProvider();
-      
-      var result = await movieProvider.get();
-    
-      
-      // Navigate to MasterScreen (with bottom navigation)
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => MasterScreen(null, null, showAppBar: false)),
       );

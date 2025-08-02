@@ -1560,5 +1560,17 @@
   "reservations": "Reservations",
   "@reservations": {
     "description": "Reservations label"
+  },
+  "theme": "Theme",
+  "@theme": {
+    "description": "Theme setting label"
+  },
+  "darkMode": "Dark Mode",
+  "@darkMode": {
+    "description": "Dark mode option"
+  },
+  "lightMode": "Light Mode",
+  "@lightMode": {
+    "description": "Light mode option"
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/language_provider.dart';
+import '../providers/theme_provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -11,106 +12,144 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
     
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            const Color(0xFF4F8593).withOpacity(0.1),
-            const Color(0xFF4F8593).withOpacity(0.05),
-          ],
+    return SingleChildScrollView(
+      child: Container(
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              colorScheme.primary.withOpacity(0.1),
+              colorScheme.primary.withOpacity(0.05),
+            ],
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 40),
-            CircleAvatar(
-              radius: 50,
-              backgroundColor: const Color(0xFF4F8593),
-              child: Icon(
-                Icons.person,
-                size: 50,
-                color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 40),
+              CircleAvatar(
+                radius: 50,
+                backgroundColor: colorScheme.primary,
+                child: Icon(
+                  Icons.person,
+                  size: 50,
+                  color: colorScheme.onPrimary,
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              l10n.welcome,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFF4F8593),
+              const SizedBox(height: 24),
+              Text(
+                l10n.welcome,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.primary,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '${l10n.username}: ${AuthProvider.username ?? "N/A"}',
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
+              const SizedBox(height: 8),
+              Text(
+                '${l10n.username}: ${AuthProvider.username ?? "N/A"}',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: colorScheme.onSurface.withOpacity(0.7),
+                ),
               ),
-            ),
-            const SizedBox(height: 40),
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.settings, color: Color(0xFF4F8593)),
-                title: Text(l10n.settings),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  // TODO: Navigate to settings
+              const SizedBox(height: 40),
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.settings, color: colorScheme.primary),
+                  title: Text(l10n.settings),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  onTap: () {
+                    // TODO: Navigate to settings
+                  },
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.language, color: colorScheme.primary),
+                  title: Text(l10n.language),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  onTap: () {
+                    _showLanguageDialog(context);
+                  },
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: Consumer<ThemeProvider>(
+                    builder: (context, themeProvider, child) {
+                      return Icon(
+                        themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                        color: colorScheme.primary,
+                      );
+                    },
+                  ),
+                  title: Text(l10n.theme),
+                  subtitle: Consumer<ThemeProvider>(
+                    builder: (context, themeProvider, child) {
+                      return Text(
+                        themeProvider.isDarkMode ? l10n.darkMode : l10n.lightMode,
+                      );
+                    },
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  onTap: () {
+                    print('Theme toggle pressed!');
+                    try {
+                      final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+                      print('ThemeProvider found!');
+                      print('Current theme mode: ${themeProvider.themeMode}');
+                      print('Is dark mode: ${themeProvider.isDarkMode}');
+                      themeProvider.toggleTheme();
+                      print('Theme toggled! New mode: ${themeProvider.isDarkMode}');
+                    } catch (e) {
+                      print('Error accessing ThemeProvider: $e');
+                    }
+                  },
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.help, color: colorScheme.primary),
+                  title: Text(l10n.helpSupport),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  onTap: () {
+                    // TODO: Navigate to help
+                  },
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: Icon(Icons.info, color: colorScheme.primary),
+                  title: Text(l10n.about),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  onTap: () {
+                    // TODO: Navigate to about
+                  },
+                ),
+              ),
+              const SizedBox(height: 40),
+              ElevatedButton.icon(
+                onPressed: () {
+                  _showLogoutDialog(context);
                 },
+                icon: const Icon(Icons.logout),
+                label: Text(l10n.logout),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
               ),
-            ),
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.language, color: Color(0xFF4F8593)),
-                title: Text(l10n.language),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  _showLanguageDialog(context);
-                },
-              ),
-            ),
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.help, color: Color(0xFF4F8593)),
-                title: Text(l10n.helpSupport),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  // TODO: Navigate to help
-                },
-              ),
-            ),
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.info, color: Color(0xFF4F8593)),
-                title: Text(l10n.about),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  // TODO: Navigate to about
-                },
-              ),
-            ),
-            const Spacer(),
-            ElevatedButton.icon(
-              onPressed: () {
-                _showLogoutDialog(context);
-              },
-              icon: const Icon(Icons.logout),
-              label: Text(l10n.logout),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              ),
-            ),
-          ],
+              const SizedBox(height: 40),
+            ],
+          ),
         ),
       ),
     );

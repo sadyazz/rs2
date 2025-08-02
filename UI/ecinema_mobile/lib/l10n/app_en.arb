@@ -114,5 +114,21 @@
   "stayUpdated": "Stay updated with latest news!",
   "@stayUpdated": {
     "description": "Notifications screen description"
+  },
+  "searchMovies": "Search movies",
+  "@searchMovies": {
+    "description": "Search movies placeholder text"
+  },
+  "theme": "Theme",
+  "@theme": {
+    "description": "Theme setting label"
+  },
+  "darkMode": "Dark Mode",
+  "@darkMode": {
+    "description": "Dark mode option"
+  },
+  "lightMode": "Light Mode",
+  "@lightMode": {
+    "description": "Light mode option"
   }
 } 

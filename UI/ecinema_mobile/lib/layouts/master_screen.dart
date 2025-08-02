@@ -4,6 +4,8 @@ import '../screens/home_screen.dart';
 import '../screens/tickets_screen.dart';
 import '../screens/notifications_screen.dart';
 import '../screens/profile_screen.dart';
+import 'package:ecinema_mobile/providers/language_provider.dart';
+import 'package:provider/provider.dart';
 
 class MasterScreen extends StatefulWidget {
   MasterScreen(this.title, this.child, {
@@ -39,7 +41,35 @@ class _MasterScreenState extends State<MasterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
+    final colorScheme = Theme.of(context).colorScheme;
+    
+    // Check if localization is available
+    if (l10n == null) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+    
+    // Check if LanguageProvider is initialized
+    try {
+      final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
+      if (!languageProvider.isInitialized) {
+        return Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      }
+    } catch (e) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     
     final List<String> _titles = [
       'eCinema',
@@ -50,14 +80,22 @@ class _MasterScreenState extends State<MasterScreen> {
     
     return Scaffold(
       appBar: widget.showAppBar ? AppBar(
-        title: Text(widget.title ?? _titles[_currentIndex]),
-        backgroundColor: widget.transparentAppBar ? Colors.transparent : const Color(0xFF4F8593),
-        foregroundColor: widget.transparentAppBar ? const Color(0xFF4F8593) : Colors.white,
+        title: Text(
+          widget.title ?? _titles[_currentIndex],
+          style: TextStyle(
+            color: widget.transparentAppBar ? colorScheme.primary : colorScheme.onPrimary,
+          ),
+        ),
+        backgroundColor: widget.transparentAppBar ? Colors.transparent : colorScheme.primary,
+        foregroundColor: widget.transparentAppBar ? colorScheme.primary : colorScheme.onPrimary,
         elevation: widget.transparentAppBar ? 0 : 0,
         centerTitle: false,
         leading: widget.showBackButton 
           ? IconButton(
-              icon: Icon(Icons.arrow_back, color: widget.transparentAppBar ? const Color(0xFF4F8593) : Colors.white),
+              icon: Icon(
+                Icons.arrow_back, 
+                color: widget.transparentAppBar ? colorScheme.primary : colorScheme.onPrimary,
+              ),
               onPressed: () => Navigator.of(context).pop(),
             )
           : null,
@@ -66,37 +104,41 @@ class _MasterScreenState extends State<MasterScreen> {
         index: _currentIndex,
         children: _screens,
       ),
-      bottomNavigationBar: widget.showBottomNav ? Container(
-        height: 80,
-        decoration: BoxDecoration(
-          color: const Color(0xFF2C3E50),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: const Offset(0, -2),
-            ),
-          ],
+       extendBody: true,
+      bottomNavigationBar: widget.showBottomNav ? ClipRRect(
+  borderRadius: const BorderRadius.only(
+    topLeft: Radius.circular(20),
+    topRight: Radius.circular(20),
+  ),
+  child: Container(
+    height: 80,
+    decoration: BoxDecoration(
+      color: colorScheme.surface,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          blurRadius: 10,
+          offset: const Offset(0, -2),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildNavItem(0, Icons.home_outlined, Icons.home),
-            _buildNavItem(1, Icons.confirmation_number_outlined, Icons.confirmation_number),
-            _buildNavItem(2, Icons.notifications_outlined, Icons.notifications),
-            _buildNavItem(3, Icons.person_outline, Icons.person),
-          ],
-        ),
-      ) : null,
+      ],
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildNavItem(0, Icons.home_outlined, Icons.home, colorScheme),
+        _buildNavItem(1, Icons.confirmation_number_outlined, Icons.confirmation_number, colorScheme),
+        _buildNavItem(2, Icons.notifications_outlined, Icons.notifications, colorScheme),
+        _buildNavItem(3, Icons.person_outline, Icons.person, colorScheme),
+      ],
+    ),
+  ),
+) : null,
+
       floatingActionButton: widget.floatingActionButton,
     );
   }
 
-  Widget _buildNavItem(int index, IconData icon, IconData activeIcon) {
+  Widget _buildNavItem(int index, IconData icon, IconData activeIcon, ColorScheme colorScheme) {
     final isSelected = _currentIndex == index;
     return GestureDetector(
       onTap: () {
@@ -110,7 +152,7 @@ class _MasterScreenState extends State<MasterScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Icon(
           isSelected ? activeIcon : icon,
-          color: isSelected ? const Color(0xFF4F8593) : Colors.grey[400],
+          color: isSelected ? colorScheme.primary : colorScheme.onSurface.withOpacity(0.6),
           size: 28,
         ),
       ),

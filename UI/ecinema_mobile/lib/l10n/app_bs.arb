@@ -114,5 +114,21 @@
   "stayUpdated": "Ostanite informisani o najnovijim vijestima!",
   "@stayUpdated": {
     "description": "Notifications screen description"
+  },
+  "searchMovies": "Pretraži filmove",
+  "@searchMovies": {
+    "description": "Search movies placeholder text"
+  },
+  "theme": "Tema",
+  "@theme": {
+    "description": "Theme setting label"
+  },
+  "darkMode": "Tamna tema",
+  "@darkMode": {
+    "description": "Dark mode option"
+  },
+  "lightMode": "Svijetla tema",
+  "@lightMode": {
+    "description": "Light mode option"
   }
 } 

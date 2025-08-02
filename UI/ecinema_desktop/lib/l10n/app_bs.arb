@@ -1524,5 +1524,17 @@
   "reservations": "Rezervacije",
   "@reservations": {
     "description": "Reservations label"
+  },
+  "theme": "Tema",
+  "@theme": {
+    "description": "Theme setting label"
+  },
+  "darkMode": "Tamna tema",
+  "@darkMode": {
+    "description": "Dark mode option"
+  },
+  "lightMode": "Svijetla tema",
+  "@lightMode": {
+    "description": "Light mode option"
   }
 }
