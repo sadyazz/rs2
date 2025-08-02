@@ -226,5 +226,17 @@
   "cancel": "Otkaži",
   "@cancel": {
     "description": "Cancel button text"
+  },
+  "noMoviesFound": "Nema pronađenih filmova",
+  "@noMoviesFound": {
+    "description": "Dialog title when no movies are found"
+  },
+  "noMoviesFoundMessage": "Nema filmova koji odgovaraju kriterijima",
+  "@noMoviesFoundMessage": {
+    "description": "Message when no movies match the search criteria"
+  },
+  "ok": "U redu",
+  "@ok": {
+    "description": "OK button text"
   }
 } 

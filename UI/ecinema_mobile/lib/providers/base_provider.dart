@@ -22,6 +22,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     if (filter != null) {
       var queryString = getQueryString(filter);
       url = "$url?$queryString";
+      print('BaseProvider - URL with filter: $url');
     }
 
     var uri = Uri.parse(url);
@@ -31,11 +32,15 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
+      
+      print('BaseProvider - Raw API response: $data');
 
       var result = SearchResult<T>();
 
       result.totalCount = data['totalCount'];
       result.items = List<T>.from(data["items"].map((e) => fromJson(e)));
+
+      print('BaseProvider - Parsed totalCount: ${result.totalCount}, items length: ${result.items?.length}');
 
       return result;
     } else {
@@ -151,8 +156,6 @@ abstract class BaseProvider<T> with ChangeNotifier {
     String username = AuthProvider.username ?? "";
     String password = AuthProvider.password ?? "";
 
-    print("passed creds: $username, $password");
-
     String basicAuth =
         "Basic ${base64Encode(utf8.encode('$username:$password'))}";
 
@@ -184,7 +187,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
         }
         query += '$prefix$key=$encoded';
       } else if (value is DateTime) {
-        query += '$prefix$key=${(value as DateTime).toIso8601String()}';
+        query += '$prefix$key=${(value).toIso8601String()}';
       } else if (value is List || value is Map) {
         if (value is List) value = value.asMap();
         value.forEach((k, v) {

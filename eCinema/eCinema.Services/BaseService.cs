@@ -32,7 +32,7 @@ namespace eCinema.Services
 
             if(search.Page.HasValue)
             {
-                query = query.Skip(search.Page.Value * search.PageSize.Value);
+                query = query.Skip((search.Page.Value - 1) * search.PageSize.Value);
             }
 
             if(search.PageSize.HasValue)

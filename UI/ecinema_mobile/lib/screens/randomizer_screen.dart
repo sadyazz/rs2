@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../layouts/master_screen.dart';
+import '../providers/movie_provider.dart';
+import '../providers/genre_provider.dart';
+import '../models/genre.dart';
+import 'package:provider/provider.dart';
 
 class RandomizerScreen extends StatefulWidget {
   const RandomizerScreen({super.key});
@@ -16,6 +20,23 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
   String _selectedGenre = 'all';
   String _selectedDuration = '90';
   double _selectedRating = 4.0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadGenres();
+    });
+  }
+
+  Future<void> _loadGenres() async {
+    try {
+      final genreProvider = context.read<GenreProvider>();
+      await genreProvider.loadGenres(reset: true);
+    } catch (e) {
+      print('Error loading genres: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,16 +102,10 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
   }
 
   Widget _buildGenreFilter(AppLocalizations l10n, ColorScheme colorScheme) {
-    final genres = [
-      {'key': 'all', 'label': l10n.allGenres},
-      {'key': 'action', 'label': l10n.action},
-      {'key': 'drama', 'label': l10n.drama},
-      {'key': 'comedy', 'label': l10n.comedy},
-      {'key': 'horror', 'label': l10n.horror},
-      {'key': 'scifi', 'label': l10n.scifi},
-      {'key': 'adventure', 'label': l10n.adventure},
-      {'key': 'animated', 'label': l10n.animated},
-    ];
+    final genreProvider = context.watch<GenreProvider>();
+    
+    final allGenresOption = Genre(id: -1, name: l10n.allGenres);
+    final allGenres = [allGenresOption, ...genreProvider.genres];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,39 +119,101 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
           ),
         ),
         const SizedBox(height: 12),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: genres.map((genre) {
-            final isSelected = _selectedGenre == genre['key'];
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  _selectedGenre = genre['key']!;
-                });
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: isSelected ? const Color(0xFF4F8593) : colorScheme.surfaceVariant,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: isSelected ? const Color(0xFF4F8593) : colorScheme.outline.withOpacity(0.3),
-                    width: 1,
-                  ),
+        genreProvider.isLoading && genreProvider.genres.isEmpty
+            ? Center(
+                child: CircularProgressIndicator(
+                  color: colorScheme.primary,
                 ),
-                child: Text(
-                  genre['label']!,
-                  style: TextStyle(
-                    color: isSelected ? Colors.white : colorScheme.onSurfaceVariant,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+              )
+            : Column(
+                                children: [
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      ...allGenres.map((genre) {
+                        final isSelected = _selectedGenre == (genre.id == -1 ? 'all' : genre.name);
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedGenre = genre.id == -1 ? 'all' : genre.name ?? '';
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: isSelected ? const Color(0xFF4F8593) : colorScheme.surfaceVariant,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: isSelected ? const Color(0xFF4F8593) : colorScheme.outline.withOpacity(0.3),
+                                width: 1,
+                              ),
+                            ),
+                            child: Text(
+                              genre.name ?? '',
+                              style: TextStyle(
+                                color: isSelected ? Colors.white : colorScheme.onSurfaceVariant,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      if (genreProvider.hasMore && !genreProvider.isLoading)
+                        GestureDetector(
+                          onTap: () {
+                            genreProvider.loadGenres();
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: colorScheme.surfaceVariant,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: colorScheme.outline.withOpacity(0.3),
+                                width: 1,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.expand_more,
+                                  color: colorScheme.onSurfaceVariant,
+                                  size: 16,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Load More',
+                                  style: TextStyle(
+                                    color: colorScheme.onSurfaceVariant,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
-                ),
+                  if (genreProvider.isLoading && genreProvider.genres.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: Center(
+                        child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: colorScheme.primary,
+                            strokeWidth: 2,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
-            );
-          }).toList(),
-        ),
       ],
     );
   }
@@ -153,7 +230,7 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
 
     final selectedOption = durationOptions.firstWhere(
       (option) => option['key'] == _selectedDuration,
-      orElse: () => durationOptions[1], // Default to 90 minutes
+      orElse: () => durationOptions[1],
     );
 
     return Column(
@@ -470,31 +547,49 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
   }
 
   Future<void> _generateRandomMovie() async {
+    final l10n = AppLocalizations.of(context)!;
+    
     setState(() {
       _isLoading = true;
     });
 
-    // Simulate API call
-    await Future.delayed(const Duration(seconds: 2));
+    try {
+      final movieProvider = context.read<MovieProvider>();
+      
+      final recommendation = await movieProvider.getRecommendation(
+        genre: _selectedGenre == 'all' ? 'all' : _selectedGenre,
+        duration: _selectedDuration,
+        minRating: _selectedRating,
+      );
 
-    // Mock movie suggestions
-    final movies = [
-      'The Shawshank Redemption',
-      'The Godfather',
-      'Pulp Fiction',
-      'The Dark Knight',
-      'Fight Club',
-      'Inception',
-      'Interstellar',
-      'The Matrix',
-      'Forrest Gump',
-      'Goodfellas',
-    ];
-
-    setState(() {
-      _selectedMovie = movies[DateTime.now().millisecond % movies.length];
-      _isLoading = false;
-    });
+      setState(() {
+        _selectedMovie = recommendation['title'] ?? 'Unknown Movie';
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      
+      String errorMessage = l10n.noMoviesFoundMessage;
+      if (e.toString().contains('No movies found matching the criteria')) {
+        errorMessage = l10n.noMoviesFoundMessage;
+      }
+      
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(l10n.noMoviesFound),
+          content: Text(errorMessage),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   void _resetFilters() {

@@ -1,4 +1,3 @@
-using eCinema.Model;
 using eCinema.Model.Requests;
 using eCinema.Model.Responses;
 using eCinema.Model.SearchObjects;
@@ -233,5 +232,46 @@ namespace eCinema.Services
             return response;
         }
 
+        public async Task<MovieResponse?> GetRandomMovieRecommendationAsync(string? genreName, int? maxDuration, float? minRating)
+        {
+            var query = _context.Movies
+                .Include(m => m.Genres)
+                .ThenInclude(mg => mg.Genre)
+                .Include(m => m.Actors)
+                .ThenInclude(ca => ca.Actor)
+                .Include(m => m.Reviews.Where(r => r.IsActive))
+                .Where(m => m.IsActive)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(genreName) && genreName.ToLower() != "all")
+            {
+                query = query.Where(m => m.Genres.Any(mg => mg.Genre.Name.ToLower().Contains(genreName.ToLower())));
+            }
+
+            if (maxDuration.HasValue)
+            {
+                query = query.Where(m => m.DurationMinutes <= maxDuration.Value);
+            }
+
+            var movies = await query.ToListAsync();
+
+            foreach (var movie in movies)
+            {
+                await RecalculateMovieGrade(movie);
+            }
+
+            if (minRating.HasValue)
+            {
+                movies = movies.Where(m => m.Grade >= minRating.Value).ToList();
+            }
+
+            if (!movies.Any())
+                return null;
+
+            var random = new Random();
+            var randomMovie = movies[random.Next(movies.Count)];
+
+            return MapToResponse(randomMovie);
+        }
     }
 }

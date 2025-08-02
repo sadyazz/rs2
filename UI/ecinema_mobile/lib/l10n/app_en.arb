@@ -226,5 +226,17 @@
   "cancel": "Cancel",
   "@cancel": {
     "description": "Cancel button text"
+  },
+  "noMoviesFound": "No Movies Found",
+  "@noMoviesFound": {
+    "description": "Dialog title when no movies are found"
+  },
+  "noMoviesFoundMessage": "No movies found matching the criteria",
+  "@noMoviesFoundMessage": {
+    "description": "Message when no movies match the search criteria"
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "OK button text"
   }
 } 
