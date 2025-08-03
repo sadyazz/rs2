@@ -156,45 +156,91 @@ class ProfileScreen extends StatelessWidget {
 
   void _showLanguageDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
     
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Row(
-            children: [
-              const Icon(Icons.language, color: Color(0xFF4F8593), size: 24),
-              const SizedBox(width: 12),
-              Text(l10n.language),
-            ],
-          ),
+          title: Text(l10n.language),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ListTile(
-                leading: const Text('🇺'),
-                title: Text(l10n.english),
-                onTap: () {
-                  _changeLanguage(context, const Locale('en'));
-                },
+              _buildLanguageOption(
+                context,
+                languageProvider,
+                'en',
+                // l10n.english,
+                'English',
+                '🇺🇸',
               ),
-              ListTile(
-                leading: const Text('🇧'),
-                title: Text(l10n.bosnian),
-                onTap: () {
-                  _changeLanguage(context, const Locale('bs'));
-                },
+              const SizedBox(height: 8),
+              _buildLanguageOption(
+                context,
+                languageProvider,
+                'bs',
+                // l10n.bosnian,
+                'Bosanski',
+                '🇧🇦',
               ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(l10n.cancel),
-            ),
-          ],
         );
       },
+    );
+  }
+
+  Widget _buildLanguageOption(
+    BuildContext context,
+    LanguageProvider languageProvider,
+    String languageCode,
+    String languageName,
+    String flag,
+  ) {
+    final isSelected = languageProvider.getCurrentLanguageCode() == languageCode;
+    
+    return InkWell(
+      onTap: () {
+        _changeLanguage(context, Locale(languageCode));
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: isSelected ? Theme.of(context).colorScheme.primary.withOpacity(0.1) : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected ? Theme.of(context).colorScheme.primary : Colors.grey.shade300,
+            width: isSelected ? 2 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Text(
+              flag,
+              style: const TextStyle(fontSize: 20),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                languageName,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  color: isSelected 
+                      ? Theme.of(context).colorScheme.primary 
+                      : Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+            ),
+            if (isSelected)
+              Icon(
+                Icons.check_circle,
+                color: Theme.of(context).colorScheme.primary,
+                size: 20,
+              ),
+          ],
+        ),
+      ),
     );
   }
 
