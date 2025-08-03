@@ -7,6 +7,7 @@ import '../providers/utils.dart';
 import '../models/movie.dart';
 import '../models/genre.dart';
 import '../models/search_result.dart';
+import 'movie_details_screen.dart';
 
 class MoviesListScreen extends StatefulWidget {
   const MoviesListScreen({super.key});
@@ -42,7 +43,6 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
     try {
       final genreProvider = context.read<GenreProvider>();
       await genreProvider.loadGenres(reset: true);
-      print('Loaded ${genreProvider.genres.length} genres: ${genreProvider.genres.map((g) => g.name).join(', ')}');
     } catch (e) {
       print('Error loading genres: $e');
     }
@@ -379,7 +379,17 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   }
 
     Widget _buildMovieCard(Movie movie, AppLocalizations l10n, ColorScheme colorScheme) {
-    return Container(
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MovieDetailsScreen(movie: movie),
+          ),
+        );
+      },
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: colorScheme.surface,
@@ -524,9 +534,9 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
           ),
         ],
       ),
-    );
-  }
-
+    ),
+  );
+}
 
 
   Widget _buildPaginationControls(AppLocalizations l10n, ColorScheme colorScheme) {

@@ -7,6 +7,8 @@ import 'providers/theme_provider.dart';
 import 'providers/movie_provider.dart';
 import 'providers/genre_provider.dart';
 import 'providers/screening_provider.dart';
+import 'providers/actor_provider.dart';
+import 'providers/review_provider.dart';
 import 'layouts/master_screen.dart';
 
 void main() {
@@ -25,6 +27,8 @@ class MyApp extends StatelessWidget {
                     ChangeNotifierProvider(create: (_) => MovieProvider()),
         ChangeNotifierProvider(create: (_) => GenreProvider()),
         ChangeNotifierProvider(create: (_) => ScreeningProvider()),
+        ChangeNotifierProvider(create: (_) => ActorProvider()),
+        ChangeNotifierProvider(create: (_) => ReviewProvider()),
       ],
       child: Consumer2<LanguageProvider, ThemeProvider>(
         builder: (context, languageProvider, themeProvider, child) {

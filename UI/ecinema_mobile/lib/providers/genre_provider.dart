@@ -5,7 +5,6 @@ class GenreProvider extends BaseProvider<Genre> {
   List<Genre> _genres = [];
   bool _isLoading = false;
   bool _hasMore = true;
-  int _currentPage = 1;
 
   List<Genre> get genres => _genres;
   bool get isLoading => _isLoading;

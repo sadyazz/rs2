@@ -1,6 +1,3 @@
-import 'movie.dart';
-import 'hall.dart';
-
 class Screening {
   int? id;
   DateTime? startTime;

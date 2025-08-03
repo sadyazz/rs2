@@ -298,5 +298,171 @@
   "noShowingsAvailable": "Nema dostupnih projekcija",
   "@noShowingsAvailable": {
     "description": "No showings available text"
+  },
+  "screeningTimes": "Termini projekcija",
+  "@screeningTimes": {
+    "description": "Screening times section title"
+  },
+  "noAvailableDates": "Nema dostupnih datuma",
+  "@noAvailableDates": {
+    "description": "No available dates text"
+  },
+  "noAvailableScreenings": "Nema dostupnih projekcija",
+  "@noAvailableScreenings": {
+    "description": "No available screenings text"
+  },
+  "noAvailableTimes": "Nema dostupnih vremena",
+  "@noAvailableTimes": {
+    "description": "No available times text"
+  },
+  "reserveTicket": "Rezerviši kartu",
+  "@reserveTicket": {
+    "description": "Reserve ticket button text"
+  },
+  "addToFavorites": "Dodaj u favorite",
+  "@addToFavorites": {
+    "description": "Add to favorites button text"
+  },
+  "description": "Opis",
+  "@description": {
+    "description": "Description section title"
+  },
+  "actors": "Glumci",
+  "@actors": {
+    "description": "Actors section title"
+  },
+  "actorInfoComingSoon": "Nema pronađenih glumaca.",
+  "@actorInfoComingSoon": {
+    "description": "Actor information coming soon text"
+  },
+  "monday": "PON",
+  "@monday": {
+    "description": "Monday abbreviation"
+  },
+  "tuesday": "UTO",
+  "@tuesday": {
+    "description": "Tuesday abbreviation"
+  },
+  "wednesday": "SRI",
+  "@wednesday": {
+    "description": "Wednesday abbreviation"
+  },
+  "thursday": "ČET",
+  "@thursday": {
+    "description": "Thursday abbreviation"
+  },
+  "friday": "PET",
+  "@friday": {
+    "description": "Friday abbreviation"
+  },
+  "saturday": "SUB",
+  "@saturday": {
+    "description": "Saturday abbreviation"
+  },
+  "sunday": "NED",
+  "@sunday": {
+    "description": "Sunday abbreviation"
+  },
+  "subtitles": "Titlovi",
+  "@subtitles": {
+    "description": "Subtitles label"
+  },
+  "format": "Format",
+  "@format": {
+    "description": "Format label"
+  },
+  "hall": "Sala",
+  "@hall": {
+    "description": "Hall label"
+  },
+  "currentLanguage": "Trenutno",
+  "@currentLanguage": {
+    "description": "Current language indicator"
+  },
+  "reviews2": "Recenzije",
+  "@reviews2": {
+    "description": "Reviews section title"
+  },
+  "viewAllReviews": "Pogledaj sve recenzije",
+  "@viewAllReviews": {
+    "description": "View all reviews button text"
+  },
+  "noReviewsYet": "Još nema recenzija",
+  "@noReviewsYet": {
+    "description": "No reviews available text"
+  },
+  "andMoreReviews": "{count} više recenzija",
+  "@andMoreReviews": {
+    "description": "And more reviews text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "unknownUser": "Nepoznati korisnik",
+  "@unknownUser": {
+    "description": "Unknown user text"
+  },
+  "today": "Danas",
+  "@today": {
+    "description": "Today text"
+  },
+  "yesterday": "Jučer",
+  "@yesterday": {
+    "description": "Yesterday text"
+  },
+  "daysAgo": "prije {count} dana",
+  "@daysAgo": {
+    "description": "Days ago text",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "loadingReviews": "Učitavanje recenzija...",
+  "@loadingReviews": {
+    "description": "Loading reviews text"
+  },
+  "averageRating": "Prosječna ocjena",
+  "@averageRating": {
+    "description": "Average rating label"
+  },
+  "outOf5": "od 5",
+  "@outOf5": {
+    "description": "Out of 5 stars text"
+  },
+  "totalReviews": "Ukupno recenzija",
+  "@totalReviews": {
+    "description": "Total reviews label"
+  },
+  "reviews": "recenzija",
+  "@reviews": {
+    "description": "Reviews text"
+  },
+  "positiveReviews": "Pozitivne recenzije",
+  "@positiveReviews": {
+    "description": "Positive reviews label"
+  },
+  "stars4Plus": "4+ zvjezdice",
+  "@stars4Plus": {
+    "description": "4+ stars text"
+  },
+  "noReviewsMessage": "Budi prvi koji će recenzirati ovaj film!",
+  "@noReviewsMessage": {
+    "description": "No reviews message"
+  },
+  "spoiler": "SPOILER",
+  "@spoiler": {
+    "description": "Spoiler warning text"
+  },
+  "edited": "(uređeno)",
+  "@edited": {
+    "description": "Edited indicator text"
+  },
+  "spoilerContent": "Sadržaj sa spoilerom",
+  "@spoilerContent": {
+    "description": "Spoiler content warning text"
   }
 } 
