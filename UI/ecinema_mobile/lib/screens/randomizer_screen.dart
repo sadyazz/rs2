@@ -422,55 +422,6 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
     );
   }
 
-  Widget _buildRandomizerButton(AppLocalizations l10n, ColorScheme colorScheme) {
-    return Container(
-      width: double.infinity,
-      height: 120,
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: colorScheme.shadow.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: _isLoading ? null : _generateRandomMovie,
-          borderRadius: BorderRadius.circular(20),
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.shuffle,
-                  size: 48,
-                  color: _isLoading ? colorScheme.onSurface.withOpacity(0.5) : colorScheme.primary,
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  _isLoading ? l10n.loadingMovies : l10n.letUsSuggestMovie,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: _isLoading ? colorScheme.onSurface.withOpacity(0.5) : colorScheme.primary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildResult(AppLocalizations l10n, ColorScheme colorScheme) {
     if (_selectedMovie == null) {
       return Expanded(

@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'randomizer_screen.dart';
+import 'movies_list_screen.dart';
+import '../providers/genre_provider.dart';
+import '../providers/movie_provider.dart';
+import '../providers/utils.dart';
+import '../models/genre.dart';
+import '../models/movie.dart';
+import '../models/search_result.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,11 +19,57 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
+  SearchResult<Movie>? result = null;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadGenres();
+      _loadMovies();
+    });
+  }
 
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadGenres() async {
+    try {
+      final genreProvider = context.read<GenreProvider>();
+      await genreProvider.loadGenres(reset: true);
+    } catch (e) {
+      print('Error loading genres: $e');
+    }
+  }
+
+  Future<void> _loadMovies() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      
+      final movieProvider = context.read<MovieProvider>();
+      var filter = <String, dynamic>{
+        'page': 0,
+        'pageSize': 4,
+        'includeTotalCount': true,
+        'isActive': true,
+      };
+      
+      result = await movieProvider.get(filter: filter);
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Error loading movies: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -26,7 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return SingleChildScrollView(
       child: Container(
         width: double.infinity,
-        height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -40,43 +93,16 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 40),
               _buildSearchBar(l10n, colorScheme),
               const SizedBox(height: 16),
               _buildMovieSuggestionBanner(l10n, colorScheme),
-              const SizedBox(height: 32),
-              Expanded(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.movie_creation_rounded,
-                        size: 100,
-                        color: colorScheme.primary,
-                      ),
-                      const SizedBox(height: 24),
-                      Text(
-                        l10n.welcomeToEcinema,
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: colorScheme.primary,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        l10n.successfullyLoggedIn,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: colorScheme.onSurface.withOpacity(0.7),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              const SizedBox(height: 16),
+              _buildNowShowingSection(l10n, colorScheme),
+              _buildMoviesGrid(l10n, colorScheme),
+              const SizedBox(height: 100),
             ],
           ),
         ),
@@ -127,7 +153,6 @@ class _HomeScreenState extends State<HomeScreen> {
           fontSize: 16,
         ),
         onSubmitted: (value) {
-          // Handle search submission
           print('Search submitted: $value');
         },
       ),
@@ -230,6 +255,270 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildNowShowingSection(AppLocalizations l10n, ColorScheme colorScheme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              l10n.nowShowing,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: colorScheme.onSurface,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MoviesListScreen(),
+                  ),
+                );
+              },
+              child: Text(
+                l10n.viewAll,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.primary,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+      ],
+    );
+  }
+
+
+
+  Widget _buildMoviesGrid(AppLocalizations l10n, ColorScheme colorScheme) {
+    if (isLoading) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              color: colorScheme.primary,
+            ),
+            Text(
+              l10n.loadingMovies,
+              style: TextStyle(
+                fontSize: 16,
+                color: colorScheme.onSurface.withOpacity(0.7),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (result == null || result!.items == null || result!.items!.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.movie_outlined,
+              size: 64,
+              color: colorScheme.onSurface.withOpacity(0.5),
+            ),
+            Text(
+              l10n.noMoviesAvailable,
+              style: TextStyle(
+                fontSize: 18,
+                color: colorScheme.onSurface.withOpacity(0.7),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return GridView.builder(
+       shrinkWrap: true,
+       physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(top: 16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.6,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 16,
+      ),
+      itemCount: result!.items!.length,
+      itemBuilder: (context, index) {
+        final movie = result!.items![index];
+        return _buildMovieCard(movie, l10n, colorScheme);
+      },
+    );
+  }
+
+  Widget _buildMovieCard(Movie movie, AppLocalizations l10n, ColorScheme colorScheme) {
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.shadow.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 3,
+            child: Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        colorScheme.surfaceVariant,
+                        colorScheme.outline.withOpacity(0.3),
+                      ],
+                    ),
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                  ),
+                  child: movie.image != null && movie.image!.isNotEmpty
+                      ? ClipRRect(
+                          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                          child: imageFromString(movie.image!),
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.movie, size: 40, color: colorScheme.onSurfaceVariant),
+                            const SizedBox(height: 6),
+                            Text(
+                              l10n.noImage,
+                              style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                ),
+                if (movie.grade != null)
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Colors.amber[600],
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.15),
+                            spreadRadius: 0,
+                            blurRadius: 3,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.star, size: 12, color: Colors.white),
+                          const SizedBox(width: 2),
+                          Text(
+                            movie.grade!.toStringAsFixed(1),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    movie.title ?? 'Unknown Title',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      height: 1.2,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    movie.director ?? 'Unknown Director',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: colorScheme.onSurface.withOpacity(0.7),
+                      height: 1.2,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (movie.genres != null && movie.genres!.isNotEmpty)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: colorScheme.primaryContainer,
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: colorScheme.primary.withOpacity(0.3), width: 0.5),
+                      ),
+                      child: Text(
+                        movie.genres!.first.name ?? 'Unknown',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: colorScheme.onPrimaryContainer,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  if (movie.durationMinutes != null)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.access_time, size: 12, color: colorScheme.onSurface.withOpacity(0.6)),
+                        const SizedBox(width: 3),
+                        Text(
+                          "${movie.durationMinutes}m",
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: colorScheme.onSurface.withOpacity(0.7),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

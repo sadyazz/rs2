@@ -23,6 +23,8 @@ abstract class BaseProvider<T> with ChangeNotifier {
       var queryString = getQueryString(filter);
       url = "$url?$queryString";
       print('BaseProvider - URL with filter: $url');
+    } else {
+      print('BaseProvider - URL without filter: $url');
     }
 
     var uri = Uri.parse(url);
@@ -32,15 +34,13 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
-      
-      print('BaseProvider - Raw API response: $data');
 
       var result = SearchResult<T>();
 
       result.totalCount = data['totalCount'];
       result.items = List<T>.from(data["items"].map((e) => fromJson(e)));
 
-      print('BaseProvider - Parsed totalCount: ${result.totalCount}, items length: ${result.items?.length}');
+
 
       return result;
     } else {

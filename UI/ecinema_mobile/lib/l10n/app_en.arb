@@ -238,5 +238,65 @@
   "ok": "OK",
   "@ok": {
     "description": "OK button text"
+  },
+  "nowShowing": "Now Showing",
+  "@nowShowing": {
+    "description": "Now showing movies section title"
+  },
+  "viewAll": "View All",
+  "@viewAll": {
+    "description": "View all movies button text"
+  },
+  "previous": "Previous",
+  "@previous": {
+    "description": "Previous page button text"
+  },
+  "next": "Next",
+  "@next": {
+    "description": "Next page button text"
+  },
+  "ofText": "of",
+  "@ofText": {
+    "description": "Pagination 'of' text"
+  },
+  "noMoviesAvailable": "No movies available",
+  "@noMoviesAvailable": {
+    "description": "No movies available text"
+  },
+  "noImage": "No Image",
+  "@noImage": {
+    "description": "No image text"
+  },
+  "showings": "Screenings",
+  "@showings": {
+    "description": "Screenings screen title"
+  },
+  "time": "Time",
+  "@time": {
+    "description": "Time label"
+  },
+  "date": "Date",
+  "@date": {
+    "description": "Date label"
+  },
+  "hall": "Hall",
+  "@hall": {
+    "description": "Hall label"
+  },
+  "price": "Price",
+  "@price": {
+    "description": "Price label"
+  },
+  "searchShowings": "Search screenings",
+  "@searchShowings": {
+    "description": "Search screenings placeholder text"
+  },
+  "loadingShowings": "Loading screenings...",
+  "@loadingShowings": {
+    "description": "Loading screenings text"
+  },
+  "noShowingsAvailable": "No screenings available",
+  "@noShowingsAvailable": {
+    "description": "No screenings available text"
   }
 } 

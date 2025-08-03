@@ -238,5 +238,65 @@
   "ok": "U redu",
   "@ok": {
     "description": "OK button text"
+  },
+  "nowShowing": "U kinima",
+  "@nowShowing": {
+    "description": "Now showing movies section title"
+  },
+  "viewAll": "Pogledaj sve",
+  "@viewAll": {
+    "description": "View all movies button text"
+  },
+  "previous": "Prethodna",
+  "@previous": {
+    "description": "Previous page button text"
+  },
+  "next": "Sljedeća",
+  "@next": {
+    "description": "Next page button text"
+  },
+  "ofText": "od",
+  "@ofText": {
+    "description": "Pagination 'of' text"
+  },
+  "noMoviesAvailable": "Nema dostupnih filmova",
+  "@noMoviesAvailable": {
+    "description": "No movies available text"
+  },
+  "noImage": "Nema slike",
+  "@noImage": {
+    "description": "No image text"
+  },
+  "showings": "Projekcije",
+  "@showings": {
+    "description": "Showings screen title"
+  },
+  "time": "Vrijeme",
+  "@time": {
+    "description": "Time label"
+  },
+  "date": "Datum",
+  "@date": {
+    "description": "Date label"
+  },
+  "hall": "Sala",
+  "@hall": {
+    "description": "Hall label"
+  },
+  "price": "Cijena",
+  "@price": {
+    "description": "Price label"
+  },
+  "searchShowings": "Pretraži projekcije",
+  "@searchShowings": {
+    "description": "Search showings placeholder text"
+  },
+  "loadingShowings": "Učitavanje projekcija...",
+  "@loadingShowings": {
+    "description": "Loading showings text"
+  },
+  "noShowingsAvailable": "Nema dostupnih projekcija",
+  "@noShowingsAvailable": {
+    "description": "No showings available text"
   }
 } 

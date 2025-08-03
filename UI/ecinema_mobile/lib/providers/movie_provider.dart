@@ -2,13 +2,14 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'base_provider.dart';
+import '../models/movie.dart';
 
-class MovieProvider extends BaseProvider<dynamic> {
+class MovieProvider extends BaseProvider<Movie> {
   MovieProvider() : super("Movie");
 
   @override
-  dynamic fromJson(data) {
-    return data;
+  Movie fromJson(data) {
+    return Movie.fromJson(data);
   }
 
   Future<dynamic> getRecommendation({
