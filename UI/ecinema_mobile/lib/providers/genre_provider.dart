@@ -23,8 +23,6 @@ class GenreProvider extends BaseProvider<Genre> {
 
     if (reset) {
       _genres.clear();
-      _currentPage = 1;
-      _hasMore = true;
     }
 
     _isLoading = true;
@@ -33,21 +31,13 @@ class GenreProvider extends BaseProvider<Genre> {
     try {
       final result = await get(filter: {
         'isActive': true,
-        'pageSize': 6,
-        'page': _currentPage,
+        'pageSize': 50,
+        'page': 0,
         'includeTotalCount': true
       });
       
-      final newGenres = result.items ?? [];
-      _genres.addAll(newGenres);
-      
-      final totalCount = result.totalCount ?? 0;
-      final loadedCount = _genres.length;
-      _hasMore = loadedCount < totalCount;
-      
-      if (_hasMore) {
-        _currentPage++;
-      }
+      _genres = result.items ?? [];
+      _hasMore = false;
     } catch (e) {
       print('Error loading genres: $e');
     } finally {
