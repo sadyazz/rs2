@@ -6,7 +6,6 @@ import 'movies_list_screen.dart';
 import '../providers/genre_provider.dart';
 import '../providers/movie_provider.dart';
 import '../providers/utils.dart';
-import '../models/genre.dart';
 import '../models/movie.dart';
 import '../models/search_result.dart';
 
@@ -20,7 +19,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   SearchResult<Movie>? result = null;
+  SearchResult<Movie>? comingSoonResult = null;
   bool isLoading = false;
+  bool isLoadingComingSoon = false;
 
   @override
   void initState() {
@@ -28,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadGenres();
       _loadMovies();
+      _loadComingSoonMovies();
     });
   }
 
@@ -57,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
         'page': 0,
         'pageSize': 4,
         'includeTotalCount': true,
-        'isActive': true,
+        'includeDeleted': false,
       };
       
       result = await movieProvider.get(filter: filter);
@@ -68,6 +70,32 @@ class _HomeScreenState extends State<HomeScreen> {
       print('Error loading movies: $e');
       setState(() {
         isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _loadComingSoonMovies() async {
+    try {
+      setState(() {
+        isLoadingComingSoon = true;
+      });
+      
+      final movieProvider = context.read<MovieProvider>();
+      var filter = <String, dynamic>{
+        'page': 0,
+        'pageSize': 4,
+        'includeTotalCount': true,
+        'isComingSoon': true,
+      };
+      
+      comingSoonResult = await movieProvider.get(filter: filter);
+      setState(() {
+        isLoadingComingSoon = false;
+      });
+    } catch (e) {
+      print('Error loading coming soon movies: $e');
+      setState(() {
+        isLoadingComingSoon = false;
       });
     }
   }
@@ -102,6 +130,9 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 16),
               _buildNowShowingSection(l10n, colorScheme),
               _buildMoviesGrid(l10n, colorScheme),
+              const SizedBox(height: 32),
+              _buildComingSoonSection(l10n, colorScheme),
+              _buildComingSoonMoviesGrid(l10n, colorScheme),
               const SizedBox(height: 100),
             ],
           ),
@@ -299,7 +330,88 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _buildComingSoonSection(AppLocalizations l10n, ColorScheme colorScheme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              l10n.comingSoon,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+      ],
+    );
+  }
 
+  Widget _buildComingSoonMoviesGrid(AppLocalizations l10n, ColorScheme colorScheme) {
+    if (isLoadingComingSoon) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              color: colorScheme.primary,
+            ),
+            Text(
+              l10n.loadingMovies,
+              style: TextStyle(
+                fontSize: 16,
+                color: colorScheme.onSurface.withOpacity(0.7),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (comingSoonResult == null || comingSoonResult!.items == null || comingSoonResult!.items!.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.movie_outlined,
+              size: 64,
+              color: colorScheme.onSurface.withOpacity(0.5),
+            ),
+            Text(
+              l10n.noMoviesAvailable,
+              style: TextStyle(
+                fontSize: 18,
+                color: colorScheme.onSurface.withOpacity(0.7),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return GridView.builder(
+       shrinkWrap: true,
+       physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(top: 16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.6,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 16,
+      ),
+      itemCount: comingSoonResult!.items!.length,
+      itemBuilder: (context, index) {
+        final movie = comingSoonResult!.items![index];
+        return _buildMovieCard(movie, l10n, colorScheme, showGrade: false);
+      },
+    );
+  }
 
   Widget _buildMoviesGrid(AppLocalizations l10n, ColorScheme colorScheme) {
     if (isLoading) {
@@ -357,12 +469,12 @@ class _HomeScreenState extends State<HomeScreen> {
       itemCount: result!.items!.length,
       itemBuilder: (context, index) {
         final movie = result!.items![index];
-        return _buildMovieCard(movie, l10n, colorScheme);
+        return _buildMovieCard(movie, l10n, colorScheme, showGrade: true);
       },
     );
   }
 
-  Widget _buildMovieCard(Movie movie, AppLocalizations l10n, ColorScheme colorScheme) {
+  Widget _buildMovieCard(Movie movie, AppLocalizations l10n, ColorScheme colorScheme, {bool showGrade = true}) {
     return Container(
       decoration: BoxDecoration(
         color: colorScheme.surface,
@@ -413,7 +525,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                 ),
-                if (movie.grade != null)
+                if (movie.grade != null && showGrade)
                   Positioned(
                     top: 8,
                     right: 8,

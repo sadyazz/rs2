@@ -243,6 +243,10 @@
   "@nowShowing": {
     "description": "Now showing movies section title"
   },
+  "comingSoon": "Uskoro u kinima",
+  "@comingSoon": {
+    "description": "Coming soon movies section title"
+  },
   "viewAll": "Pogledaj sve",
   "@viewAll": {
     "description": "View all movies button text"
@@ -464,5 +468,65 @@
   "spoilerContent": "Sadržaj sa spoilerom",
   "@spoilerContent": {
     "description": "Spoiler content warning text"
+  },
+  "myMovieLists": "Moje liste filmova",
+  "@myMovieLists": {
+    "description": "My movie lists section title"
+  },
+  "wishlist": "Lista želja",
+  "@wishlist": {
+    "description": "Wishlist title"
+  },
+  "watchedMovies": "Pregledani filmovi",
+  "@watchedMovies": {
+    "description": "Watched movies title"
+  },
+  "favorites": "Favoriti",
+  "@favorites": {
+    "description": "Favorites title"
+  },
+  "movies": "filmova",
+  "@movies": {
+    "description": "Movies text"
+  },
+  "settings": "Postavke",
+  "@settings": {
+    "description": "Settings section title"
+  },
+  "myReservations": "Moje rezervacije",
+  "@myReservations": {
+    "description": "My reservations title"
+  },
+  "editProfile": "Uredi profil",
+  "@editProfile": {
+    "description": "Edit profile title"
+  },
+  "paymentMethods": "Načini plaćanja",
+  "@paymentMethods": {
+    "description": "Payment methods title"
+  },
+  "reservationsDescription": "Pregled i upravljanje rezervacijama",
+  "@reservationsDescription": {
+    "description": "Reservations description"
+  },
+  "editProfileDescription": "Promijeni lične podatke",
+  "@editProfileDescription": {
+    "description": "Edit profile description"
+  },
+  "paymentMethodsDescription": "Upravljaj kreditnim karticama",
+  "@paymentMethodsDescription": {
+    "description": "Payment methods description"
+  },
+  "languageDescription": "Promijeni jezik aplikacije",
+  "@languageDescription": {
+    "description": "Language description"
+  },
+  "themeDescription": "Promijeni temu aplikacije",
+  "@themeDescription": {
+    "description": "Theme description"
+  },
+  "logoutDescription": "Odjavi se iz aplikacije",
+  "@logoutDescription": {
+    "description": "Logout description"
   }
 } 

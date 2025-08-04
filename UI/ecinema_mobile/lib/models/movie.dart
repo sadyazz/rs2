@@ -17,7 +17,7 @@ class Movie {
   String? image;
   String? trailerUrl;
   double? grade;
-  bool? isActive;
+  bool? isComingSoon;
   List<Actor>? actors;
   final bool isDeleted;
 
@@ -33,7 +33,7 @@ class Movie {
     this.image,
     this.trailerUrl,
     this.grade,
-    this.isActive,
+    this.isComingSoon,
     this.actors,
     required this.isDeleted,
   });

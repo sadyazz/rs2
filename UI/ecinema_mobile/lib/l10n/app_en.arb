@@ -243,6 +243,10 @@
   "@nowShowing": {
     "description": "Now showing movies section title"
   },
+  "comingSoon": "Coming Soon",
+  "@comingSoon": {
+    "description": "Coming soon movies section title"
+  },
   "viewAll": "View All",
   "@viewAll": {
     "description": "View all movies button text"
@@ -464,5 +468,65 @@
   "spoilerContent": "Spoiler content",
   "@spoilerContent": {
     "description": "Spoiler content warning text"
+  },
+  "myMovieLists": "My Movie Lists",
+  "@myMovieLists": {
+    "description": "My movie lists section title"
+  },
+  "wishlist": "Wishlist",
+  "@wishlist": {
+    "description": "Wishlist title"
+  },
+  "watchedMovies": "Watched Movies",
+  "@watchedMovies": {
+    "description": "Watched movies title"
+  },
+  "favorites": "Favorites",
+  "@favorites": {
+    "description": "Favorites title"
+  },
+  "movies": "movies",
+  "@movies": {
+    "description": "Movies text"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings section title"
+  },
+  "myReservations": "My Reservations",
+  "@myReservations": {
+    "description": "My reservations title"
+  },
+  "editProfile": "Edit Profile",
+  "@editProfile": {
+    "description": "Edit profile title"
+  },
+  "paymentMethods": "Payment Methods",
+  "@paymentMethods": {
+    "description": "Payment methods title"
+  },
+  "reservationsDescription": "View and manage reservations",
+  "@reservationsDescription": {
+    "description": "Reservations description"
+  },
+  "editProfileDescription": "Change personal data",
+  "@editProfileDescription": {
+    "description": "Edit profile description"
+  },
+  "paymentMethodsDescription": "Manage credit cards",
+  "@paymentMethodsDescription": {
+    "description": "Payment methods description"
+  },
+  "languageDescription": "Change application language",
+  "@languageDescription": {
+    "description": "Language description"
+  },
+  "themeDescription": "Change application theme",
+  "@themeDescription": {
+    "description": "Theme description"
+  },
+  "logoutDescription": "Sign out of application",
+  "@logoutDescription": {
+    "description": "Logout description"
   }
 } 
