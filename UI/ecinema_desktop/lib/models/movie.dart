@@ -17,9 +17,9 @@ class Movie {
   String? image;
   String? trailerUrl;
   double? grade;
-  bool? isActive;
   List<Actor>? actors;
   final bool isDeleted;
+  final bool? isComingSoon;
 
   Movie({
     this.id,
@@ -33,9 +33,9 @@ class Movie {
     this.image,
     this.trailerUrl,
     this.grade,
-    this.isActive,
     this.actors,
     required this.isDeleted,
+    this.isComingSoon,
   });
 
   factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);

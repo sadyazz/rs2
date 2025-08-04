@@ -92,7 +92,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     try {
       var filter = <String, dynamic>{
         'movieId': widget.movie.id,
-        'isActive': true,
+        'includeDeleted': false,
       };
       
       reviewsResult = await reviewProvider!.get(filter: filter);
@@ -117,7 +117,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
       try {
         var filter = <String, dynamic>{
-          'isActive': true,
         };
 
         var genres = await genreProvider!.get(filter: filter);
@@ -143,7 +142,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
       try {
         var filter = <String, dynamic>{
-          'isActive': true,
         };
 
         var actors = await actorProvider!.get(filter: filter);
@@ -294,20 +292,21 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                     ),
                                   ),
                                 ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                  decoration: BoxDecoration(
-                                    color: movie.isActive == true ? Colors.green[600] : Colors.red[600],
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    movie.isActive == true ? l10n.active : l10n.inactive,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
+                                if (movie.isDeleted == true)
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      color: Colors.red[600],
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Text(
+                                      l10n.deleted,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                   ),
-                                ),
                               ],
                             ),
                             

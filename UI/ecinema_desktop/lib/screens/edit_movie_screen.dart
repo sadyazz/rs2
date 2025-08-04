@@ -36,6 +36,7 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
   SearchResult<Actor>? actorsResult;  
 
   bool isLoading = true;
+  bool isComingSoon = false;
 
   @override
   void didChangeDependencies() {
@@ -62,8 +63,9 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
         'releaseDate': widget.movie!.releaseDate,
         'trailerUrl': widget.movie!.trailerUrl,
         'image': widget.movie!.image,
-        'isActive': widget.movie!.isActive ?? true,
-      };   
+        'isComingSoon': widget.movie!.isComingSoon ?? false,
+      };
+      isComingSoon = widget.movie!.isComingSoon ?? false;
     }
 
     initForm();
@@ -304,13 +306,30 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
             
             SizedBox(height: 16),
             
-            FormBuilderSwitch(
-              name: 'isActive',
-              title: Text(l10n.isActive),
-              decoration: InputDecoration(
-                labelText: l10n.movieStatus,
-              ),
+            Row(
+              children: [
+                Text(
+                  l10n.comingSoon,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Switch(
+                  value: isComingSoon,
+                  onChanged: (value) {
+                    setState(() {
+                      isComingSoon = value;
+                    });
+                  },
+                ),
+              ],
             ),
+            
+            SizedBox(height: 16),
+
           ],
         ),
       ),
@@ -356,12 +375,12 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
                     formData['releaseYear'] = int.parse(formData['releaseYear']);
                   }
                   
-                  if (formData['releaseDate'] != null && formData['releaseDate'] is DateTime) {
+                                    if (formData['releaseDate'] != null && formData['releaseDate'] is DateTime) {
                     formData['releaseDate'] = formData['releaseDate'].toIso8601String();
                   }
                   
-                  formData['isActive'] = formData['isActive'] ?? true;
-
+                  formData['isComingSoon'] = isComingSoon;
+                  
                   if (_imageBase64 != null) {
                     formData['image'] = _imageBase64;
                   }
