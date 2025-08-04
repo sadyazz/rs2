@@ -3,7 +3,6 @@ class ScreeningFormat {
   String? name;
   String? description;
   double? priceMultiplier;
-  bool? isActive;
   bool? isDeleted;
 
   ScreeningFormat({
@@ -11,7 +10,6 @@ class ScreeningFormat {
     this.name,
     this.description,
     this.priceMultiplier,
-    this.isActive,
     this.isDeleted,
   });
 
@@ -20,7 +18,6 @@ class ScreeningFormat {
     name = json['name'];
     description = json['description'];
     priceMultiplier = json['priceMultiplier']?.toDouble();
-    isActive = json['isActive'];
     isDeleted = json['isDeleted'];
   }
 
@@ -30,7 +27,6 @@ class ScreeningFormat {
     data['name'] = name;
     data['description'] = description;
     data['priceMultiplier'] = priceMultiplier;
-    data['isActive'] = isActive;
     data['isDeleted'] = isDeleted;
     return data;
   }

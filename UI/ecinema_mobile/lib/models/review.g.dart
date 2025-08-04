@@ -8,31 +8,34 @@ part of 'review.dart';
 
 Review _$ReviewFromJson(Map<String, dynamic> json) => Review(
   id: (json['id'] as num?)?.toInt(),
-  userName: json['userName'] as String,
-  rating: (json['rating'] as num).toDouble(),
-  comment: json['comment'] as String?,
-  createdAt: DateTime.parse(json['createdAt'] as String),
-  updatedAt:
-      json['updatedAt'] == null
-          ? null
-          : DateTime.parse(json['updatedAt'] as String),
-  isActive: json['isActive'] as bool,
-  isDeleted: json['isDeleted'] as bool,
-  isSpoiler: json['isSpoiler'] as bool,
-  isEdited: json['isEdited'] as bool?,
+  userId: (json['userId'] as num?)?.toInt(),
   movieId: (json['movieId'] as num?)?.toInt(),
+  rating: (json['rating'] as num?)?.toInt(),
+  comment: json['comment'] as String?,
+  isDeleted: json['isDeleted'] as bool?,
+  isSpoiler: json['isSpoiler'] as bool?,
+  createdAt:
+      json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
+  modifiedAt:
+      json['modifiedAt'] == null
+          ? null
+          : DateTime.parse(json['modifiedAt'] as String),
+  isEdited: json['isEdited'] as bool?,
+  userName: json['userName'] as String?,
 );
 
 Map<String, dynamic> _$ReviewToJson(Review instance) => <String, dynamic>{
   'id': instance.id,
-  'userName': instance.userName,
+  'userId': instance.userId,
+  'movieId': instance.movieId,
   'rating': instance.rating,
   'comment': instance.comment,
-  'createdAt': instance.createdAt.toIso8601String(),
-  'updatedAt': instance.updatedAt?.toIso8601String(),
-  'isActive': instance.isActive,
   'isDeleted': instance.isDeleted,
   'isSpoiler': instance.isSpoiler,
+  'createdAt': instance.createdAt?.toIso8601String(),
+  'modifiedAt': instance.modifiedAt?.toIso8601String(),
   'isEdited': instance.isEdited,
-  'movieId': instance.movieId,
+  'userName': instance.userName,
 };

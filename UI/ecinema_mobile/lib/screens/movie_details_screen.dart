@@ -93,8 +93,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         'page': 0,
         'pageSize': 10,
         'includeTotalCount': true,
-        'isActive': true,
         'movieId': widget.movie.id,
+        'includeDeleted': false,
       };
       
       
@@ -125,7 +125,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         'page': 0,
         'pageSize': 50,
         'includeTotalCount': true,
-        'isActive': true,
+        'movieId': widget.movie.id,
+        'includeDeleted': false,
       };
       
       if (widget.movie.title != null && widget.movie.title!.isNotEmpty) {
@@ -929,7 +930,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 backgroundColor: colorScheme.primary,
                 radius: 16,
                 child: Text(
-                  review.userName.isNotEmpty ? review.userName[0].toUpperCase() : 'U',
+                  (review.userName?.isNotEmpty == true) ? review.userName![0].toUpperCase() : 'U',
                   style: TextStyle(
                     color: colorScheme.onPrimary,
                     fontWeight: FontWeight.bold,
@@ -945,7 +946,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     Row(
                       children: [
                         Text(
-                          review.userName.isNotEmpty ? review.userName : l10n.unknownUser,
+                          (review.userName?.isNotEmpty == true) ? review.userName! : l10n.unknownUser,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
@@ -953,7 +954,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        if (review.isSpoiler)
+                        if (review.isSpoiler == true)
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
@@ -972,7 +973,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       ],
                     ),
                     Text(
-                      _formatDate(review.createdAt),
+                      _formatDate(review.createdAt ?? DateTime.now()),
                       style: TextStyle(
                         color: colorScheme.onSurface.withOpacity(0.6),
                         fontSize: 12,
@@ -985,7 +986,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 children: [
                   ...List.generate(5, (index) {
                     return Icon(
-                      index < review.rating
+                      index < (review.rating ?? 0)
                           ? Icons.star
                           : Icons.star_border,
                       color: Colors.amber,
@@ -1007,7 +1008,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
           ),
           if (review.comment != null && review.comment!.isNotEmpty) ...[
             const SizedBox(height: 8),
-            if (review.isSpoiler)
+            if (review.isSpoiler == true)
               _buildSpoilerContent(review, l10n, colorScheme)
             else
               Text(

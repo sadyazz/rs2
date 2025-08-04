@@ -5,7 +5,6 @@ class Screening {
   double? basePrice;
   String? language;
   bool? hasSubtitles;
-  bool? isActive;
   bool? isDeleted;
   int? movieId;
   String? movieTitle;
@@ -25,7 +24,6 @@ class Screening {
     this.basePrice,
     this.language,
     this.hasSubtitles,
-    this.isActive,
     this.isDeleted,
     this.movieId,
     this.movieTitle,
@@ -46,7 +44,6 @@ class Screening {
     basePrice = json['basePrice']?.toDouble();
     language = json['language'];
     hasSubtitles = json['hasSubtitles'];
-    isActive = json['isActive'];
     isDeleted = json['isDeleted'];
     movieId = json['movieId'];
     movieTitle = json['movieTitle'];
@@ -68,7 +65,6 @@ class Screening {
     data['basePrice'] = basePrice;
     data['language'] = language;
     data['hasSubtitles'] = hasSubtitles;
-    data['isActive'] = isActive;
     data['isDeleted'] = isDeleted;
     data['movieId'] = movieId;
     data['movieTitle'] = movieTitle;

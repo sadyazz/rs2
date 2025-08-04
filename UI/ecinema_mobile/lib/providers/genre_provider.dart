@@ -29,10 +29,10 @@ class GenreProvider extends BaseProvider<Genre> {
 
     try {
       final result = await get(filter: {
-        'isActive': true,
         'pageSize': 50,
         'page': 0,
-        'includeTotalCount': true
+        'includeTotalCount': true,
+        'includeDeleted': false
       });
       
       _genres = result.items ?? [];

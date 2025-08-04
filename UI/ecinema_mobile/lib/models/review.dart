@@ -5,29 +5,29 @@ part 'review.g.dart';
 @JsonSerializable()
 class Review {
   int? id;
-  String userName;
-  double rating;
-  String? comment;
-  DateTime createdAt;
-  DateTime? updatedAt;
-  bool isActive;
-  bool isDeleted;
-  bool isSpoiler;
-  bool? isEdited;
+  int? userId;
   int? movieId;
+  int? rating;
+  String? comment;
+  bool? isDeleted;
+  bool? isSpoiler;
+  DateTime? createdAt;
+  DateTime? modifiedAt;
+  bool? isEdited;
+  String? userName;
 
   Review({
     this.id,
-    required this.userName,
-    required this.rating,
-    this.comment,
-    required this.createdAt,
-    this.updatedAt,
-    required this.isActive,
-    required this.isDeleted,
-    required this.isSpoiler,
-    this.isEdited,
+    this.userId,
     this.movieId,
+    this.rating,
+    this.comment,
+    this.isDeleted,
+    this.isSpoiler,
+    this.createdAt,
+    this.modifiedAt,
+    this.isEdited,
+    this.userName,
   });
 
   factory Review.fromJson(Map<String, dynamic> json) => _$ReviewFromJson(json);

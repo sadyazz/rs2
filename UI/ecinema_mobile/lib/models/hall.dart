@@ -5,7 +5,6 @@ class Hall {
   String? screenType;
   String? soundSystem;
   int? capacity;
-  bool? isActive;
   bool? isDeleted;
 
   Hall({
@@ -15,7 +14,6 @@ class Hall {
     this.screenType,
     this.soundSystem,
     this.capacity,
-    this.isActive,
     this.isDeleted,
   });
 
@@ -26,7 +24,6 @@ class Hall {
     screenType = json['screenType'];
     soundSystem = json['soundSystem'];
     capacity = json['capacity'];
-    isActive = json['isActive'];
     isDeleted = json['isDeleted'];
   }
 
@@ -38,7 +35,6 @@ class Hall {
     data['screenType'] = screenType;
     data['soundSystem'] = soundSystem;
     data['capacity'] = capacity;
-    data['isActive'] = isActive;
     data['isDeleted'] = isDeleted;
     return data;
   }

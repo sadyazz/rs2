@@ -41,10 +41,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
       final reviewProvider = context.read<ReviewProvider>();
       var filter = <String, dynamic>{
         'movieId': widget.movie.id,
-        'isActive': true,
-        'page': currentPage,
-        'pageSize': pageSize,
-        'includeTotalCount': true,
+        'includeDeleted': false,
       };
       
       result = await reviewProvider.get(filter: filter);
@@ -190,7 +187,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                 backgroundColor: colorScheme.primary,
                 radius: 20,
                 child: Text(
-                  review.userName.isNotEmpty ? review.userName[0].toUpperCase() : 'U',
+                  (review.userName?.isNotEmpty == true) ? review.userName![0].toUpperCase() : 'U',
                   style: TextStyle(
                     color: colorScheme.onPrimary,
                     fontWeight: FontWeight.bold,
@@ -206,7 +203,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                     Row(
                       children: [
                         Text(
-                          review.userName.isNotEmpty ? review.userName : l10n.unknownUser,
+                          (review.userName?.isNotEmpty == true) ? review.userName! : l10n.unknownUser,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
@@ -214,7 +211,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        if (review.isSpoiler)
+                        if (review.isSpoiler == true)
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
@@ -233,7 +230,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                       ],
                     ),
                     Text(
-                      _formatDate(review.createdAt) + ((review.isEdited ?? false) ? ' ${l10n.edited}' : ''),
+                      _formatDate(review.createdAt ?? DateTime.now()) + ((review.isEdited ?? false) ? ' ${l10n.edited}' : ''),
                       style: TextStyle(
                         color: colorScheme.onSurface.withOpacity(0.6),
                         fontSize: 12,
@@ -246,7 +243,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                 children: [
                   ...List.generate(5, (index) {
                     return Icon(
-                      index < review.rating
+                      index < (review.rating ?? 0)
                           ? Icons.star
                           : Icons.star_border,
                       color: Colors.amber,
@@ -269,7 +266,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
           
           if (review.comment != null && review.comment!.isNotEmpty) ...[
             const SizedBox(height: 12),
-            if (review.isSpoiler)
+            if (review.isSpoiler == true)
               _buildSpoilerContent(review, l10n, colorScheme)
             else
               Text(

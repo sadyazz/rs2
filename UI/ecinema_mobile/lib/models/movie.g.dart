@@ -24,7 +24,7 @@ Movie _$MovieFromJson(Map<String, dynamic> json) => Movie(
   image: json['image'] as String?,
   trailerUrl: json['trailerUrl'] as String?,
   grade: (json['grade'] as num?)?.toDouble(),
-  isActive: json['isActive'] as bool?,
+  isComingSoon: json['isComingSoon'] as bool?,
   actors:
       (json['actors'] as List<dynamic>?)
           ?.map((e) => Actor.fromJson(e as Map<String, dynamic>))
@@ -44,7 +44,7 @@ Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{
   'image': instance.image,
   'trailerUrl': instance.trailerUrl,
   'grade': instance.grade,
-  'isActive': instance.isActive,
+  'isComingSoon': instance.isComingSoon,
   'actors': instance.actors,
   'isDeleted': instance.isDeleted,
 };

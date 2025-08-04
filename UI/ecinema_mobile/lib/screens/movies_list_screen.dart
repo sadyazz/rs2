@@ -5,7 +5,6 @@ import '../providers/movie_provider.dart';
 import '../providers/genre_provider.dart';
 import '../providers/utils.dart';
 import '../models/movie.dart';
-import '../models/genre.dart';
 import '../models/search_result.dart';
 import 'movie_details_screen.dart';
 
@@ -58,7 +57,8 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
         'page': 0,
         'pageSize': pageSize,
         'includeTotalCount': true,
-        'isActive': true,
+        'includeDeleted': false,
+        'isComingSoon': false,
       };
       
       if (_searchController.text.trim().isNotEmpty) {
@@ -94,7 +94,8 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
         'page': currentPage,
         'pageSize': pageSize,
         'includeTotalCount': true,
-        'isActive': true,
+        'includeDeleted': false,
+        'isComingSoon': false,
       };
       
       result = await movieProvider.get(filter: filter);
@@ -109,18 +110,11 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
     }
   }
 
-  void _resetPagination() {
-    setState(() {
-      currentPage = 0;
-    });
-    _loadMovies();
-  }
-
   void _goToNextPage() {
     if (result != null) {
       final totalCount = result!.totalCount ?? 0;
-      final totalPages = (totalCount / pageSize).ceil();
-      if (currentPage < totalPages) {
+      final currentItems = result!.items!.length;
+      if (currentItems == pageSize && (currentPage + 1) * pageSize < totalCount) {
         setState(() {
           currentPage++;
         });
@@ -545,7 +539,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
     final totalCount = result!.totalCount ?? 0;
     final currentItems = result!.items!.length;
     final totalPages = (totalCount / pageSize).ceil();
-    final hasNextPage = currentPage < totalPages;
+    final hasNextPage = currentItems == pageSize && (currentPage + 1) * pageSize < totalCount;
     final hasPreviousPage = currentPage > 0;
     
 

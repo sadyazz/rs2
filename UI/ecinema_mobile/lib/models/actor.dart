@@ -4,23 +4,21 @@ part 'actor.g.dart';
 
 @JsonSerializable()
 class Actor {
-  int? id;
-  String? firstName;
-  String? lastName;
-  DateTime? dateOfBirth;
+  final int id;
+  final String? firstName;
+  final String? lastName;
+  final String? image;
   final String? biography;
-  String? image;
-  final bool isActive;
+  final DateTime? dateOfBirth;
   final bool isDeleted;
 
   Actor({
-    this.id,
+    required this.id,
     this.firstName,
     this.lastName,
-    this.dateOfBirth,
-    this.biography,
     this.image,
-    required this.isActive,
+    this.biography,
+    this.dateOfBirth,
     required this.isDeleted,
   });
 

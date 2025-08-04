@@ -22,35 +22,43 @@ class MovieProvider extends BaseProvider<Movie> {
     
     var queryParams = <String, String>{};
 
-    // Add genre filter if not "all"
     if (genre != "all") {
       queryParams['genreName'] = genre;
     }
 
-    // Add duration filter
     if (duration != "any") {
       var maxDuration = int.parse(duration);
       queryParams['maxDuration'] = maxDuration.toString();
     }
 
-    // Add rating filter
-    if (minRating > 0) {
-      queryParams['minRating'] = minRating.toString();
+    print('MovieProvider - minRating: $minRating, type: ${minRating.runtimeType}');
+    if (minRating >= 1.0) {
+      queryParams['minRating'] = minRating.toInt().toString();
+      print('MovieProvider - Adding minRating to query params: ${minRating.toInt().toString()}');
+    } else {
+      print('MovieProvider - minRating not added to query params (minRating < 1.0)');
     }
+    
+    queryParams['debugMinRating'] = minRating.toString();
 
     var uri = Uri.parse(url).replace(queryParameters: queryParams);
     var headers = createHeaders();
 
-    print('MovieProvider - URL: $uri');
-    print('MovieProvider - Query params: $queryParams');
-
     var response = await http.get(uri, headers: headers);
 
-    if (isValidResponse(response)) {
+    if (response.statusCode == 200) {
+      if (response.body == null || response.body.isEmpty || response.body == 'null') {
+        return null;
+      }
       var data = jsonDecode(response.body);
-      return fromJson(data);
+      if (data == null) {
+        return null;
+      }
+      return data;
+    } else if (response.statusCode == 404) {
+      return null;
     } else {
-      throw new Exception("No movies found matching the criteria");
+      throw Exception('Error: ${response.statusCode}');
     }
   }
 } 
