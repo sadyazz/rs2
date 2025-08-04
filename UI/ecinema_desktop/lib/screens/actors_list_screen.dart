@@ -38,7 +38,6 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
   bool isLoading = false;
 
   final TextEditingController _searchController = TextEditingController();
-  bool isActive = true;
   bool includeDeleted = false;
 
   Future<void> _loadActors() async {
@@ -51,7 +50,6 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
         'page': currentPage,
         'pageSize': pageSize,
         'includeTotalCount': true,
-        'isActive': true,
         'includeDeleted': includeDeleted,
       };
       result = await provider.get(filter: filter);
@@ -77,7 +75,6 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
         'page': 0,
         'pageSize': pageSize,
         'includeTotalCount': true,
-        'isActive': isActive,
         'includeDeleted': includeDeleted,
       };
       
@@ -357,7 +354,6 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
               showDialog(
                 context: context,
                 builder: (context) {
-                  bool localIsActive = isActive;
                   bool localIncludeDeleted = includeDeleted;
                   return StatefulBuilder(
                     builder: (context, setState) => AlertDialog(
@@ -367,18 +363,7 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Row(
-                              children: [
-                                Text(l10n.isActive),
-                                const SizedBox(width: 8),
-                                Switch(
-                                  value: localIsActive,
-                                  onChanged: (val) {
-                                    setState(() => localIsActive = val);
-                                  },
-                                ),
-                              ],
-                            ),
+
                             const SizedBox(height: 12),
                             Row(
                               children: [
@@ -404,8 +389,6 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
                         TextButton(
                           onPressed: () {
                             setState(() {
-                              localIsActive = true;
-                              isActive = true;
                               localIncludeDeleted = false;
                               includeDeleted = false;
                             });
@@ -419,7 +402,6 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
                         ElevatedButton(
                           onPressed: () async {
                             setState(() {
-                              isActive = localIsActive;
                               includeDeleted = localIncludeDeleted;
                             });
                             await _searchActors();
@@ -722,15 +704,15 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: actor.isActive == true 
+                            color: actor.isDeleted != true 
                                 ? Colors.green[100] 
                                 : Colors.red[100],
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            actor.isActive == true ? l10n.active : l10n.inactive,
+                            actor.isDeleted != true ? l10n.active : l10n.inactive,
                             style: TextStyle(
-                              color: actor.isActive == true 
+                              color: actor.isDeleted != true 
                                   ? Colors.green[700] 
                                   : Colors.red[700],
                               fontSize: 10,

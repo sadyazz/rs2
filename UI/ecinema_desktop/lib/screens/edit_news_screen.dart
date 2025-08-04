@@ -33,14 +33,12 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
         'title': widget.news!.title ?? '',
         'content': widget.news!.content ?? '',
         'publishDate': widget.news!.publishDate ?? DateTime.now(),
-        'isActive': widget.news!.isActive ?? true,
       };
     } else {
       _initialValue = {
         'title': '',
         'content': '',
         'publishDate': DateTime.now(),
-        'isActive': true,
       };
     }
   }
@@ -121,15 +119,7 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                Expanded(
-                  child: FormBuilderSwitch(
-                    name: 'isActive',
-                    title: Text(l10n.active),
-                    decoration: InputDecoration(
-                      labelText: l10n.makeArticleVisible,
-                    ),
-                  ),
-                ),
+
               ],
             ),
           ],
@@ -160,7 +150,7 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                     formData['publishDate'] = formData['publishDate'].toIso8601String();
                   }
                   
-                  formData['isActive'] = formData['isActive'] ?? true;
+
 
                   if (widget.news != null) {
                     await provider.update(widget.news!.id!, formData);

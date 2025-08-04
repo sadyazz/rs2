@@ -10,7 +10,6 @@ class Actor {
   DateTime? dateOfBirth;
   final String? biography;
   String? image;
-  final bool isActive;
   final bool isDeleted;
 
   Actor({
@@ -20,7 +19,6 @@ class Actor {
     this.dateOfBirth,
     this.biography,
     this.image,
-    required this.isActive,
     required this.isDeleted,
   });
 

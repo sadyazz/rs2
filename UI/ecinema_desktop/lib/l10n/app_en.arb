@@ -99,6 +99,10 @@
   "@grade": {
     "description": "Grade column header"
   },
+  "comingSoon": "Coming Soon",
+  "@comingSoon": {
+    "description": "Coming soon label"
+  },
   "actions": "Actions",
   "@actions": {
     "description": "Actions column header"

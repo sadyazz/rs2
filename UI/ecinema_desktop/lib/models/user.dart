@@ -11,7 +11,6 @@ class User {
   final String username;
   final String email;
   final String? phoneNumber;
-  final bool isActive;
   final bool isDeleted;
   final Role? role;
   final DateTime? createdAt;
@@ -23,7 +22,6 @@ class User {
     required this.username,
     required this.email,
     this.phoneNumber,
-    this.isActive = true,
     this.isDeleted = false,
     this.role,
     this.createdAt,
@@ -40,7 +38,6 @@ class User {
     String? username,
     String? email,
     String? phoneNumber,
-    bool? isActive,
     bool? isDeleted,
     Role? role,
     DateTime? createdAt,
@@ -52,7 +49,6 @@ class User {
       username: username ?? this.username,
       email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,
-      isActive: isActive ?? this.isActive,
       isDeleted: isDeleted ?? this.isDeleted,
       role: role ?? this.role,
       createdAt: createdAt ?? this.createdAt,

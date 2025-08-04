@@ -53,7 +53,6 @@ class _EditScreeningFormatScreenState extends State<EditScreeningFormatScreen> {
           'name': widget.screeningFormat?.name ?? '',
           'description': widget.screeningFormat?.description ?? '',
           'priceMultiplier': (widget.screeningFormat?.priceMultiplier ?? 1.0).toString(),
-          'isActive': widget.screeningFormat?.isActive ?? true,
         },
         child: Column(
           children: [
@@ -110,10 +109,7 @@ class _EditScreeningFormatScreenState extends State<EditScreeningFormatScreen> {
             
             const SizedBox(height: 16),
             
-            FormBuilderSwitch(
-              name: 'isActive',
-              title: Text(l10n.isActive),
-            ),
+
           ],
         ),
       ),
@@ -172,7 +168,6 @@ class _EditScreeningFormatScreenState extends State<EditScreeningFormatScreen> {
         name: formData['name'],
         description: formData['description'],
         priceMultiplier: double.tryParse(formData['priceMultiplier']) ?? 1.0,
-        isActive: formData['isActive'],
         isDeleted: widget.screeningFormat?.isDeleted ?? false,
       );
 

@@ -38,7 +38,6 @@ class _NewsListScreenState extends State<NewsListScreen> {
   bool isLoading = false;
 
   final TextEditingController _searchController = TextEditingController();
-  bool isActive = true;
   bool includeDeleted = false;
   DateTime? fromPublishDate;
   DateTime? toPublishDate;
@@ -93,7 +92,6 @@ class _NewsListScreenState extends State<NewsListScreen> {
         'page': 0,
         'pageSize': pageSize,
         'includeTotalCount': true,
-        'isActive': isActive,
         'includeDeleted': includeDeleted,
       };
       
@@ -324,7 +322,6 @@ class _NewsListScreenState extends State<NewsListScreen> {
               showDialog(
                 context: context,
                 builder: (context) {
-                  bool localIsActive = isActive;
                   bool localIncludeDeleted = includeDeleted;
                   DateTime? localFromPublishDate = fromPublishDate;
                   DateTime? localToPublishDate = toPublishDate;
@@ -337,18 +334,6 @@ class _NewsListScreenState extends State<NewsListScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Row(
-                              children: [
-                                Text(l10n.isActive),
-                                const SizedBox(width: 8),
-                                Switch(
-                                  value: localIsActive,
-                                  onChanged: (val) {
-                                    setState(() => localIsActive = val);
-                                  },
-                                ),
-                              ],
-                            ),
                             const SizedBox(height: 12),
                             Row(
                               children: [
@@ -410,8 +395,6 @@ class _NewsListScreenState extends State<NewsListScreen> {
                         TextButton(
                           onPressed: () {
                             setState(() {
-                              localIsActive = true;
-                              isActive = true;
                               localIncludeDeleted = false;
                               includeDeleted = false;
                               localFromPublishDate = null;
@@ -431,7 +414,6 @@ class _NewsListScreenState extends State<NewsListScreen> {
                         ElevatedButton(
                           onPressed: () async {
                             setState(() {
-                              isActive = localIsActive;
                               includeDeleted = localIncludeDeleted;
                               fromPublishDate = localFromPublishDate;
                               toPublishDate = localToPublishDate;
@@ -709,15 +691,15 @@ class _NewsListScreenState extends State<NewsListScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: news.isActive == true 
+                            color: news.isDeleted != true 
                                 ? Colors.green[100] 
                                 : Colors.red[100],
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            news.isActive == true ? l10n.active : l10n.inactive,
+                            news.isDeleted != true ? l10n.active : l10n.inactive,
                             style: TextStyle(
-                              color: news.isActive == true 
+                              color: news.isDeleted != true 
                                   ? Colors.green[700] 
                                   : Colors.red[700],
                               fontSize: 10,

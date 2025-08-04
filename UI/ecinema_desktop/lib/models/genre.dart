@@ -7,14 +7,12 @@ class Genre {
   int? id;
   String? name;
   String? description;
-  bool? isActive;
   bool? isDeleted;
 
   Genre({
     this.id,
     this.name,
     this.description,
-    this.isActive,
     this.isDeleted,
   });
 

@@ -52,7 +52,6 @@ class _EditGenreScreenState extends State<EditGenreScreen> {
         initialValue: {
           'name': widget.genre?.name ?? '',
           'description': widget.genre?.description ?? '',
-          'isActive': widget.genre?.isActive ?? true,
         },
         child: Column(
           children: [
@@ -83,10 +82,7 @@ class _EditGenreScreenState extends State<EditGenreScreen> {
             
             const SizedBox(height: 16),
             
-            FormBuilderSwitch(
-              name: 'isActive',
-              title: Text(l10n.isActive),
-            ),
+
           ],
         ),
       ),
@@ -144,7 +140,6 @@ class _EditGenreScreenState extends State<EditGenreScreen> {
         id: widget.genre?.id,
         name: formData['name'],
         description: formData['description'],
-        isActive: formData['isActive'],
         isDeleted: widget.genre?.isDeleted ?? false,
       );
 

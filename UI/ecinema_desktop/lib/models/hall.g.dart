@@ -13,7 +13,6 @@ Hall _$HallFromJson(Map<String, dynamic> json) => Hall(
       screenType: json['screenType'] as String?,
       soundSystem: json['soundSystem'] as String?,
       capacity: (json['capacity'] as num?)?.toInt(),
-      isActive: json['isActive'] as bool?,
       isDeleted: json['isDeleted'] as bool?,
     );
 
@@ -24,6 +23,5 @@ Map<String, dynamic> _$HallToJson(Hall instance) => <String, dynamic>{
       'screenType': instance.screenType,
       'soundSystem': instance.soundSystem,
       'capacity': instance.capacity,
-      'isActive': instance.isActive,
       'isDeleted': instance.isDeleted,
     };

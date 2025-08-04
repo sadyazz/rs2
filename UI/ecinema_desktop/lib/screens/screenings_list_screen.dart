@@ -35,7 +35,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
 
   SearchResult<Screening>? result = null;
   int currentPage = 0;
-  int pageSize = 15;
+  int pageSize = 12;
   bool isLoading = false;
 
   final TextEditingController _searchController = TextEditingController();
@@ -49,7 +49,6 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
   final TextEditingController _toStartTimeController = TextEditingController();
   bool hasSubtitles = false;
   bool hasAvailableSeats = false;
-  bool isActive = true;
   bool includeDeleted = false;
 
   Future<void> _loadScreenings() async {
@@ -63,7 +62,6 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
         'pageSize': pageSize,
         'includeTotalCount': true,
         'includeDeleted': includeDeleted,
-        'isActive': isActive,
       };
       result = await provider.get(filter: filter);
       setState(() {
@@ -92,7 +90,6 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
         'page': currentPage,
         'pageSize': pageSize,
         'includeTotalCount': true,
-        'isActive': isActive,
         'includeDeleted': includeDeleted,
       };
       
@@ -153,7 +150,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
       setState(() {
         currentPage++;
       });
-      _searchScreenings();
+      _hasActiveFilters() ? _searchScreenings() : _loadScreenings();
     }
   }
 
@@ -162,7 +159,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
       setState(() {
         currentPage--;
       });
-      _searchScreenings();
+      _hasActiveFilters() ? _searchScreenings() : _loadScreenings();
     }
   }
 
@@ -170,7 +167,21 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
     setState(() {
       currentPage = 0;
     });
-    _searchScreenings();
+    _hasActiveFilters() ? _searchScreenings() : _loadScreenings();
+  }
+
+  bool _hasActiveFilters() {
+    return _searchController.text.isNotEmpty ||
+           _movieTitleController.text.isNotEmpty ||
+           _hallNameController.text.isNotEmpty ||
+           _screeningFormatNameController.text.isNotEmpty ||
+           _languageController.text.isNotEmpty ||
+           _minBasePriceController.text.isNotEmpty ||
+           _maxBasePriceController.text.isNotEmpty ||
+           _fromStartTimeController.text.isNotEmpty ||
+           _toStartTimeController.text.isNotEmpty ||
+           hasSubtitles ||
+           hasAvailableSeats;
   }
 
   @override
@@ -256,10 +267,9 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
               showDialog(
                 context: context,
                 builder: (context) {
+                  bool localIncludeDeleted = includeDeleted;
                   bool localHasSubtitles = hasSubtitles;
                   bool localHasAvailableSeats = hasAvailableSeats;
-                  bool localIsActive = isActive;
-                  bool localIncludeDeleted = includeDeleted;
                   return StatefulBuilder(
                     builder: (context, setState) => AlertDialog(
                       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -352,7 +362,9 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                                 ],
                               ),
                               const SizedBox(height: 12),
-                              InkWell(
+                              TextField(
+                                controller: _fromStartTimeController,
+                                readOnly: true,
                                 onTap: () async {
                                   final DateTime? picked = await showDatePicker(
                                     context: context,
@@ -364,50 +376,33 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                                     _fromStartTimeController.text = picked.toIso8601String().split('T')[0];
                                   }
                                 },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Theme.of(context).colorScheme.outline),
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: Theme.of(context).colorScheme.surface,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.calendar_today,
-                                        color: Theme.of(context).colorScheme.primary,
-                                        size: 20,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Expanded(
-                                        child: Text(
-                                          _fromStartTimeController.text.isEmpty 
-                                              ? l10n.fromStartTime 
-                                              : _fromStartTimeController.text,
-                                          style: TextStyle(
-                                            color: _fromStartTimeController.text.isEmpty 
-                                                ? Theme.of(context).colorScheme.onSurface.withOpacity(0.6)
-                                                : Theme.of(context).colorScheme.onSurface,
-                                          ),
-                                        ),
-                                      ),
-                                      if (_fromStartTimeController.text.isNotEmpty)
-                                        InkWell(
-                                          onTap: () {
+                                decoration: InputDecoration(
+                                  labelText: l10n.fromStartTime,
+                                  border: roundedBorder,
+                                  enabledBorder: roundedBorder,
+                                  focusedBorder: roundedBorder,
+                                  filled: true,
+                                  fillColor: Theme.of(context).colorScheme.surface,
+                                  suffixIcon: _fromStartTimeController.text.isNotEmpty
+                                      ? IconButton(
+                                          onPressed: () {
                                             _fromStartTimeController.clear();
                                           },
-                                          child: Icon(
+                                          icon: Icon(
                                             Icons.clear,
                                             color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-                                            size: 18,
                                           ),
+                                        )
+                                      : Icon(
+                                          Icons.calendar_today,
+                                          color: Theme.of(context).colorScheme.primary,
                                         ),
-                                    ],
-                                  ),
                                 ),
                               ),
                               const SizedBox(height: 12),
-                              InkWell(
+                              TextField(
+                                controller: _toStartTimeController,
+                                readOnly: true,
                                 onTap: () async {
                                   final DateTime? picked = await showDatePicker(
                                     context: context,
@@ -419,46 +414,27 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                                     _toStartTimeController.text = picked.toIso8601String().split('T')[0];
                                   }
                                 },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Theme.of(context).colorScheme.outline),
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: Theme.of(context).colorScheme.surface,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.calendar_today,
-                                        color: Theme.of(context).colorScheme.primary,
-                                        size: 20,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Expanded(
-                                        child: Text(
-                                          _toStartTimeController.text.isEmpty 
-                                              ? l10n.toStartTime 
-                                              : _toStartTimeController.text,
-                                          style: TextStyle(
-                                            color: _toStartTimeController.text.isEmpty 
-                                                ? Theme.of(context).colorScheme.onSurface.withOpacity(0.6)
-                                                : Theme.of(context).colorScheme.onSurface,
-                                          ),
-                                        ),
-                                      ),
-                                      if (_toStartTimeController.text.isNotEmpty)
-                                        InkWell(
-                                          onTap: () {
+                                decoration: InputDecoration(
+                                  labelText: l10n.toStartTime,
+                                  border: roundedBorder,
+                                  enabledBorder: roundedBorder,
+                                  focusedBorder: roundedBorder,
+                                  filled: true,
+                                  fillColor: Theme.of(context).colorScheme.surface,
+                                  suffixIcon: _toStartTimeController.text.isNotEmpty
+                                      ? IconButton(
+                                          onPressed: () {
                                             _toStartTimeController.clear();
                                           },
-                                          child: Icon(
+                                          icon: Icon(
                                             Icons.clear,
                                             color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-                                            size: 18,
                                           ),
+                                        )
+                                      : Icon(
+                                          Icons.calendar_today,
+                                          color: Theme.of(context).colorScheme.primary,
                                         ),
-                                    ],
-                                  ),
                                 ),
                               ),
                               const SizedBox(height: 12),
@@ -501,24 +477,6 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                               Row(
                                 children: [
                                   Text(
-                                    l10n.isActive,
-                                    style: TextStyle(
-                                      color: Theme.of(context).colorScheme.onSurface,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Switch(
-                                    value: localIsActive,
-                                    onChanged: (val) {
-                                      setState(() => localIsActive = val);
-                                    },
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              Row(
-                                children: [
-                                  Text(
                                     l10n.includeDeleted,
                                     style: TextStyle(
                                       color: Theme.of(context).colorScheme.onSurface,
@@ -552,13 +510,11 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                             setState(() {
                               localHasSubtitles = false;
                               localHasAvailableSeats = false;
-                              localIsActive = true;
                               localIncludeDeleted = false;
+                              hasSubtitles = false;
+                              hasAvailableSeats = false;
+                              includeDeleted = false;
                             });
-                            hasSubtitles = false;
-                            hasAvailableSeats = false;
-                            isActive = true;
-                            includeDeleted = false;
                             _searchScreenings();
                           },
                           child: Text(l10n.reset),
@@ -569,10 +525,9 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                         ),
                         ElevatedButton(
                           onPressed: () async {
-                            hasSubtitles = localHasSubtitles;
-                            hasAvailableSeats = localHasAvailableSeats;
-                            isActive = localIsActive;
-                            includeDeleted = localIncludeDeleted;
+                           hasSubtitles = localHasSubtitles;
+                           hasAvailableSeats = localHasAvailableSeats;
+                           includeDeleted = localIncludeDeleted;
                             await _searchScreenings();
                             Navigator.pop(context);
                           },
@@ -966,7 +921,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                         decoration: BoxDecoration(
                           color: screening.isDeleted == true
                               ? Colors.grey.withOpacity(0.9)
-                              : screening.isActive == true 
+                              : screening.isDeleted != true 
                                   ? Colors.green.withOpacity(0.9) 
                                   : Colors.red.withOpacity(0.9),
                           borderRadius: BorderRadius.circular(8),
@@ -982,7 +937,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                         child: Text(
                           screening.isDeleted == true 
                               ? l10n.deleted
-                              : screening.isActive == true 
+                              : screening.isDeleted != true 
                                   ? l10n.active
                                   : l10n.inactive,
                           style: const TextStyle(
@@ -1397,10 +1352,10 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
   Future<void> _deleteScreening(Screening screening) async {
     final l10n = AppLocalizations.of(context)!;
     
-    if (provider == null || screening.id == null) return;
+    if (screening.id == null) return;
     
     try {
-      await provider!.softDelete(screening.id!);
+      await provider.softDelete(screening.id!);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(l10n.screeningDeletedSuccessfully),
@@ -1448,10 +1403,10 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
   Future<void> _restoreScreening(Screening screening) async {
     final l10n = AppLocalizations.of(context)!;
     
-    if (provider == null || screening.id == null) return;
+    if (screening.id == null) return;
     
     try {
-      await provider!.restore(screening.id!);
+      await provider.restore(screening.id!);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(l10n.screeningRestoredSuccessfully),

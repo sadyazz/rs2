@@ -38,7 +38,6 @@ class _PromotionsListScreenState extends State<PromotionsListScreen> {
   bool isLoading = false;
 
   final TextEditingController _searchController = TextEditingController();
-  bool isActive = true;
   bool includeDeleted = false;
   DateTime? fromStartDate;
   DateTime? toStartDate;
@@ -107,7 +106,6 @@ class _PromotionsListScreenState extends State<PromotionsListScreen> {
         'page': 0,
         'pageSize': pageSize,
         'includeTotalCount': true,
-        'isActive': isActive,
         'includeDeleted': includeDeleted,
       };
       
@@ -353,7 +351,6 @@ class _PromotionsListScreenState extends State<PromotionsListScreen> {
               showDialog(
                 context: context,
                 builder: (context) {
-                  bool localIsActive = isActive;
                   bool localIncludeDeleted = includeDeleted;
                   DateTime? localFromStartDate = fromStartDate;
                   DateTime? localToStartDate = toStartDate;
@@ -369,18 +366,6 @@ class _PromotionsListScreenState extends State<PromotionsListScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Row(
-                              children: [
-                                Text(l10n.isActive),
-                                const SizedBox(width: 8),
-                                Switch(
-                                  value: localIsActive,
-                                  onChanged: (val) {
-                                    setState(() => localIsActive = val);
-                                  },
-                                ),
-                              ],
-                            ),
                             const SizedBox(height: 12),
                             Row(
                               children: [
@@ -516,8 +501,6 @@ class _PromotionsListScreenState extends State<PromotionsListScreen> {
                         TextButton(
                           onPressed: () {
                             setState(() {
-                              localIsActive = true;
-                              isActive = true;
                               localIncludeDeleted = false;
                               includeDeleted = false;
                               localFromStartDate = null;
@@ -543,7 +526,6 @@ class _PromotionsListScreenState extends State<PromotionsListScreen> {
                         ElevatedButton(
                           onPressed: () async {
                             setState(() {
-                              isActive = localIsActive;
                               includeDeleted = localIncludeDeleted;
                               fromStartDate = localFromStartDate;
                               toStartDate = localToStartDate;
@@ -823,15 +805,15 @@ class _PromotionsListScreenState extends State<PromotionsListScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: promotion.isActive == true 
+                            color: promotion.isDeleted != true 
                                 ? Colors.green[100] 
                                 : Colors.red[100],
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            promotion.isActive == true ? l10n.active : l10n.inactive,
+                            promotion.isDeleted != true ? l10n.active : l10n.inactive,
                             style: TextStyle(
-                              color: promotion.isActive == true 
+                              color: promotion.isDeleted != true 
                                   ? Colors.green[700] 
                                   : Colors.red[700],
                               fontSize: 10,

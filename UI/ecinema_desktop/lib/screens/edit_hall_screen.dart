@@ -94,7 +94,6 @@ class _EditHallScreenState extends State<EditHallScreen> {
           'capacity': (widget.hall?.capacity ?? 1).toString(),
           'screenType': widget.hall?.screenType ?? '',
           'soundSystem': widget.hall?.soundSystem ?? '',
-          'isActive': widget.hall?.isActive ?? true,
         },
         child: Column(
           children: [
@@ -161,10 +160,7 @@ class _EditHallScreenState extends State<EditHallScreen> {
             
             const SizedBox(height: 16),
             
-            FormBuilderSwitch(
-              name: 'isActive',
-              title: Text(l10n.isActive),
-            ),
+
           ],
         ),
       ),
@@ -223,7 +219,6 @@ class _EditHallScreenState extends State<EditHallScreen> {
           capacity: int.tryParse(formData['capacity']) ?? 1,
           screenType: formData['screenType'],
           soundSystem: formData['soundSystem'],
-          isActive: formData['isActive'],
         );
 
         if (widget.hall == null) {
@@ -359,10 +354,10 @@ class _EditHallScreenState extends State<EditHallScreen> {
           width: 30,
           height: 30,
           decoration: BoxDecoration(
-            color: seat.isActive ? Colors.green : Colors.grey,
+            color: Colors.green,
             borderRadius: BorderRadius.circular(4),
             border: Border.all(
-              color: seat.isActive ? Colors.green.shade700 : Colors.grey.shade600,
+              color: Colors.green.shade700,
               width: 1,
             ),
           ),
@@ -372,7 +367,7 @@ class _EditHallScreenState extends State<EditHallScreen> {
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.bold,
-                color: seat.isActive ? Colors.white : Colors.grey.shade300,
+                color: Colors.white,
               ),
             ),
           ),
@@ -394,7 +389,6 @@ class _EditHallScreenState extends State<EditHallScreen> {
             initialValue: {
               'seatNumber': seat.seatNumber.toString(),
               'rowNumber': seat.rowNumber.toString(),
-              'isActive': seat.isActive,
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -415,10 +409,6 @@ class _EditHallScreenState extends State<EditHallScreen> {
                   ]),
                 ),
                 const SizedBox(height: 16),
-                FormBuilderSwitch(
-                  name: 'isActive',
-                  title: Text(l10n.isActive),
-                ),
               ],
             ),
           ),
@@ -436,7 +426,6 @@ class _EditHallScreenState extends State<EditHallScreen> {
                     hallId: widget.hall!.id!,
                     seatNumber: int.tryParse(seatData['seatNumber']) ?? 0,
                     rowNumber: int.tryParse(seatData['rowNumber']) ?? 0,
-                    isActive: seatData['isActive'],
                   );
 
                   final seatProvider = Provider.of<SeatProvider>(context, listen: false);
@@ -543,7 +532,6 @@ class _EditHallScreenState extends State<EditHallScreen> {
             initialValue: {
               'seatNumber': '',
               'rowNumber': '',
-              'isActive': true,
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -564,10 +552,6 @@ class _EditHallScreenState extends State<EditHallScreen> {
                   ]),
                 ),
                 const SizedBox(height: 16),
-                FormBuilderSwitch(
-                  name: 'isActive',
-                  title: Text(l10n.isActive),
-                ),
               ],
             ),
           ),
@@ -585,7 +569,6 @@ class _EditHallScreenState extends State<EditHallScreen> {
                     hallId: widget.hall!.id!,
                     seatNumber: int.tryParse(seatData['seatNumber']) ?? 0,
                     rowNumber: int.tryParse(seatData['rowNumber']) ?? 0,
-                    isActive: seatData['isActive'],
                   );
 
                   final seatProvider = Provider.of<SeatProvider>(context, listen: false);

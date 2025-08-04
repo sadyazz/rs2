@@ -1,4 +1,3 @@
-import 'package:ecinema_desktop/layouts/master_screen.dart';
 import 'package:ecinema_desktop/models/promotion.dart';
 import 'package:ecinema_desktop/providers/promotion_provider.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +35,6 @@ class _EditPromotionScreenState extends State<EditPromotionScreen> {
         'discountPercentage': (widget.promotion!.discountPercentage ?? 0.0).toString(),
         'startDate': widget.promotion!.startDate ?? DateTime.now(),
         'endDate': widget.promotion!.endDate ?? DateTime.now().add(const Duration(days: 30)),
-        'isActive': widget.promotion!.isActive ?? true,
       };
     } else {
       _initialValue = {
@@ -46,7 +44,6 @@ class _EditPromotionScreenState extends State<EditPromotionScreen> {
         'discountPercentage': '0.0',
         'startDate': DateTime.now(),
         'endDate': DateTime.now().add(const Duration(days: 30)),
-        'isActive': true,
       };
     }
   }
@@ -196,10 +193,7 @@ class _EditPromotionScreenState extends State<EditPromotionScreen> {
               
               const SizedBox(height: 16),
               
-              FormBuilderSwitch(
-                name: 'isActive',
-                title: Text(l10n.active),
-              ),
+
             ],
           ),
         ),
@@ -238,7 +232,7 @@ class _EditPromotionScreenState extends State<EditPromotionScreen> {
                     formData['discountPercentage'] = double.tryParse(discountStr) ?? 0.0;
                   }
                   
-                  formData['isActive'] = formData['isActive'] ?? true;
+
 
                   if (widget.promotion != null) {
                     await provider.update(widget.promotion!.id!, formData);

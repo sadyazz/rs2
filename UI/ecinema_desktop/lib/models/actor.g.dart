@@ -15,7 +15,6 @@ Actor _$ActorFromJson(Map<String, dynamic> json) => Actor(
           : DateTime.parse(json['dateOfBirth'] as String),
       biography: json['biography'] as String?,
       image: json['image'] as String?,
-      isActive: json['isActive'] as bool,
       isDeleted: json['isDeleted'] as bool,
     );
 
@@ -26,6 +25,5 @@ Map<String, dynamic> _$ActorToJson(Actor instance) => <String, dynamic>{
       'dateOfBirth': instance.dateOfBirth?.toIso8601String(),
       'biography': instance.biography,
       'image': instance.image,
-      'isActive': instance.isActive,
       'isDeleted': instance.isDeleted,
     };

@@ -10,7 +10,6 @@ class Screening {
   double? basePrice;
   String? language;
   bool? hasSubtitles;
-  bool? isActive;
   bool? isDeleted;
   int? movieId;
   String? movieTitle;
@@ -30,7 +29,6 @@ class Screening {
     this.basePrice,
     this.language,
     this.hasSubtitles,
-    this.isActive,
     this.isDeleted,
     this.movieId,
     this.movieTitle,

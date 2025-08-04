@@ -8,7 +8,6 @@ class ScreeningFormat {
   String? name;
   String? description;
   double? priceMultiplier;
-  bool? isActive;
   bool? isDeleted;
 
   ScreeningFormat({
@@ -16,7 +15,6 @@ class ScreeningFormat {
     this.name,
     this.description,
     this.priceMultiplier,
-    this.isActive,
     this.isDeleted,
   });
 

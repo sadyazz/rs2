@@ -65,7 +65,6 @@ class _EditActorScreenState extends State<EditActorScreen> {
           'lastName': widget.actor?.lastName ?? '',
           'biography': widget.actor?.biography ?? '',
           'dateOfBirth': widget.actor?.dateOfBirth,
-          'isActive': widget.actor?.isActive ?? true,
         },
         child: Column(
           children: [
@@ -202,7 +201,7 @@ class _EditActorScreenState extends State<EditActorScreen> {
                       FormBuilderDateTimePicker(
                         name: 'dateOfBirth',
                         decoration: InputDecoration(
-                          labelText: l10n.dateOfBirth ?? 'Date of Birth',
+                          labelText: l10n.dateOfBirth,
                           border: const OutlineInputBorder(),
                         ),
                         inputType: InputType.date,
@@ -221,10 +220,7 @@ class _EditActorScreenState extends State<EditActorScreen> {
                         ]),
                       ),
                       const SizedBox(height: 16),
-                      FormBuilderSwitch(
-                        name: 'isActive',
-                        title: Text(l10n.isActive),
-                      ),
+
                     ],
                   ),
                 ),
@@ -286,7 +282,6 @@ class _EditActorScreenState extends State<EditActorScreen> {
         biography: formData['biography'],
         dateOfBirth: formData['dateOfBirth'],
         image: _imageBase64,
-        isActive: formData['isActive'] ?? true,
         isDeleted: widget.actor?.isDeleted ?? false,
       );
       if (widget.actor == null) {

@@ -61,7 +61,6 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
         'startTime': widget.screening!.startTime,
         'endTime': widget.screening!.endTime,
         'hasSubtitles': widget.screening!.hasSubtitles ?? false,
-        'isActive': widget.screening!.isActive ?? true,
       };
     }
 
@@ -71,15 +70,12 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
   Future initForm() async {
     try {
       var movieFilter = <String, dynamic>{
-        'isActive': true,
         'isDeleted': false,
       };
       var hallFilter = <String, dynamic>{
-        'isActive': true,
         'isDeleted': false,
       };
       var formatFilter = <String, dynamic>{
-        'isActive': true,
         'isDeleted': false,
       };
 
@@ -101,7 +97,7 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
               'startTime': fullScreening.startTime,
               'endTime': fullScreening.endTime,
               'hasSubtitles': fullScreening.hasSubtitles ?? false,
-              'isActive': fullScreening.isActive ?? true,
+
             };
           }
         } catch (e) {
@@ -159,7 +155,7 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
       }
 
       formData['hasSubtitles'] = formData['hasSubtitles'] ?? false;
-      formData['isActive'] = formData['isActive'] ?? true;
+      
 
       if (widget.screening?.id != null) {
         await provider.update(widget.screening!.id!, formData);
@@ -375,10 +371,7 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
             
             const SizedBox(height: 16),
             
-            FormBuilderSwitch(
-              name: 'isActive',
-              title: Text(l10n.isActive),
-            ),
+            
           ],
         ),
       ),

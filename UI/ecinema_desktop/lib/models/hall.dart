@@ -10,7 +10,6 @@ class Hall {
   String? screenType;
   String? soundSystem;
   int? capacity;
-  bool? isActive;
   bool? isDeleted;
 
   Hall({
@@ -20,7 +19,6 @@ class Hall {
     this.screenType,
     this.soundSystem,
     this.capacity,
-    this.isActive,
     this.isDeleted,
   });
 

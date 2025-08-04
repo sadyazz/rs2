@@ -37,7 +37,6 @@ class _ScreeningFormatsListScreenState extends State<ScreeningFormatsListScreen>
   bool isLoading = false;
 
   final TextEditingController _searchController = TextEditingController();
-  bool isActive = true;
   bool includeDeleted = false;
 
   Future<void> _loadScreeningFormats() async {
@@ -50,7 +49,6 @@ class _ScreeningFormatsListScreenState extends State<ScreeningFormatsListScreen>
         'page': currentPage,
         'pageSize': pageSize,
         'includeTotalCount': true,
-        'isActive': true,
         'includeDeleted': includeDeleted,
       };
       result = await provider.get(filter: filter);
@@ -76,7 +74,6 @@ class _ScreeningFormatsListScreenState extends State<ScreeningFormatsListScreen>
         'page': 0,
         'pageSize': pageSize,
         'includeTotalCount': true,
-        'isActive': isActive,
         'includeDeleted': includeDeleted,
       };
       
@@ -292,7 +289,6 @@ class _ScreeningFormatsListScreenState extends State<ScreeningFormatsListScreen>
               showDialog(
                 context: context,
                 builder: (context) {
-                  bool localIsActive = isActive;
                   bool localIncludeDeleted = includeDeleted;
                   return StatefulBuilder(
                     builder: (context, setState) => AlertDialog(
@@ -302,18 +298,6 @@ class _ScreeningFormatsListScreenState extends State<ScreeningFormatsListScreen>
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Row(
-                              children: [
-                                Text(l10n.isActive),
-                                const SizedBox(width: 8),
-                                Switch(
-                                  value: localIsActive,
-                                  onChanged: (val) {
-                                    setState(() => localIsActive = val);
-                                  },
-                                ),
-                              ],
-                            ),
                             const SizedBox(height: 12),
                             Row(
                               children: [
@@ -339,8 +323,6 @@ class _ScreeningFormatsListScreenState extends State<ScreeningFormatsListScreen>
                         TextButton(
                           onPressed: () {
                             setState(() {
-                              localIsActive = true;
-                              isActive = true;
                               localIncludeDeleted = false;
                               includeDeleted = false;
                             });
@@ -354,7 +336,6 @@ class _ScreeningFormatsListScreenState extends State<ScreeningFormatsListScreen>
                         ElevatedButton(
                           onPressed: () async {
                             setState(() {
-                              isActive = localIsActive;
                               includeDeleted = localIncludeDeleted;
                             });
                             await _searchScreeningFormats();
@@ -615,15 +596,15 @@ class _ScreeningFormatsListScreenState extends State<ScreeningFormatsListScreen>
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: screeningFormat.isActive == true 
+                            color: screeningFormat.isDeleted != true 
                                 ? Colors.green[100] 
                                 : Colors.red[100],
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            screeningFormat.isActive == true ? l10n.active : l10n.inactive,
+                            screeningFormat.isDeleted != true ? l10n.active : l10n.inactive,
                             style: TextStyle(
-                              color: screeningFormat.isActive == true 
+                              color: screeningFormat.isDeleted != true 
                                   ? Colors.green[700] 
                                   : Colors.red[700],
                               fontSize: 10,

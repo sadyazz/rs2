@@ -11,7 +11,6 @@ class Promotion {
   final double? discountPercentage;
   final DateTime? startDate;
   final DateTime? endDate;
-  final bool? isActive;
   final int? reservationCount;
   final bool? isDeleted;
 
@@ -23,7 +22,6 @@ class Promotion {
     this.discountPercentage,
     this.startDate,
     this.endDate,
-    this.isActive,
     this.reservationCount,
     this.isDeleted,
   });

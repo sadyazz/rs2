@@ -99,6 +99,10 @@
   "@grade": {
     "description": "Grade column header"
   },
+  "comingSoon": "Uskoro u kinima",
+  "@comingSoon": {
+    "description": "Coming soon label"
+  },
   "actions": "Akcije",
   "@actions": {
     "description": "Actions column header"

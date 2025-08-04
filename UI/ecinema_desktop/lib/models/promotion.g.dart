@@ -18,7 +18,6 @@ Promotion _$PromotionFromJson(Map<String, dynamic> json) => Promotion(
       endDate: json['endDate'] == null
           ? null
           : DateTime.parse(json['endDate'] as String),
-      isActive: json['isActive'] as bool?,
       reservationCount: (json['reservationCount'] as num?)?.toInt(),
       isDeleted: json['isDeleted'] as bool?,
     );
@@ -31,7 +30,6 @@ Map<String, dynamic> _$PromotionToJson(Promotion instance) => <String, dynamic>{
       'discountPercentage': instance.discountPercentage,
       'startDate': instance.startDate?.toIso8601String(),
       'endDate': instance.endDate?.toIso8601String(),
-      'isActive': instance.isActive,
       'reservationCount': instance.reservationCount,
       'isDeleted': instance.isDeleted,
     };

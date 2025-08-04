@@ -47,7 +47,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     try {
       var filter = <String, dynamic>{
         'movieId': widget.movie.id,
-        'isActive': true,
+        'includeDeleted': false,
         'page': currentPage,
         'pageSize': pageSize,
         'includeTotalCount': true,
@@ -516,7 +516,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
   }
 
   Future<void> _toggleSpoilerStatus(Review review) async {
-    if (provider == null || review.id == null) return;
+    if (review.id == null) return;
     try {
       final success = await provider.toggleSpoilerStatus(review.id!);
       
@@ -781,16 +781,13 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
 
 class _ReviewDialog extends StatefulWidget {
   final String title;
-  final String? initialUserName;
-  final double? initialRating;
-  final String? initialComment;
+
+
+
   final Function(String, double, String) onSave;
 
   const _ReviewDialog({
     required this.title,
-    this.initialUserName,
-    this.initialRating,
-    this.initialComment,
     required this.onSave,
   });
 
@@ -806,9 +803,9 @@ class _ReviewDialogState extends State<_ReviewDialog> {
   @override
   void initState() {
     super.initState();
-    userNameController = TextEditingController(text: widget.initialUserName ?? '');
-    commentController = TextEditingController(text: widget.initialComment ?? '');
-    rating = widget.initialRating ?? 3.0;
+    userNameController = TextEditingController(text: '');
+    commentController = TextEditingController(text: '');
+    rating = 3.0;
   }
 
   @override

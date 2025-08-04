@@ -36,7 +36,6 @@ class _UsersListScreenState extends State<UsersListScreen> {
   bool isLoading = false;
 
   final TextEditingController _searchController = TextEditingController();
-  bool isActive = true;
   bool includeDeleted = false;
 
   Future<void> _loadUsers() async {
@@ -49,7 +48,6 @@ class _UsersListScreenState extends State<UsersListScreen> {
         'page': currentPage,
         'pageSize': pageSize,
         'includeTotalCount': true,
-        'isActive': true,
         'includeDeleted': includeDeleted,
       };
       result = await provider.get(filter: filter);
@@ -75,7 +73,6 @@ class _UsersListScreenState extends State<UsersListScreen> {
         'page': 0,
         'pageSize': pageSize,
         'includeTotalCount': true,
-        'isActive': isActive,
         'includeDeleted': includeDeleted,
       };
       
@@ -291,7 +288,6 @@ class _UsersListScreenState extends State<UsersListScreen> {
               showDialog(
                 context: context,
                 builder: (context) {
-                  bool localIsActive = isActive;
                   bool localIncludeDeleted = includeDeleted;
                   return StatefulBuilder(
                     builder: (context, setState) => AlertDialog(
@@ -301,18 +297,6 @@ class _UsersListScreenState extends State<UsersListScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Row(
-                              children: [
-                                Text(l10n.isActive),
-                                const SizedBox(width: 8),
-                                Switch(
-                                  value: localIsActive,
-                                  onChanged: (val) {
-                                    setState(() => localIsActive = val);
-                                  },
-                                ),
-                              ],
-                            ),
                             const SizedBox(height: 12),
                             Row(
                               children: [
@@ -338,8 +322,6 @@ class _UsersListScreenState extends State<UsersListScreen> {
                         TextButton(
                           onPressed: () {
                             setState(() {
-                              localIsActive = true;
-                              isActive = true;
                               localIncludeDeleted = false;
                               includeDeleted = false;
                             });
@@ -353,7 +335,6 @@ class _UsersListScreenState extends State<UsersListScreen> {
                         ElevatedButton(
                           onPressed: () async {
                             setState(() {
-                              isActive = localIsActive;
                               includeDeleted = localIncludeDeleted;
                             });
                             await _searchUsers();
@@ -630,15 +611,15 @@ class _UsersListScreenState extends State<UsersListScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: user.isActive == true 
+                            color: user.isDeleted != true 
                                 ? Colors.green[100] 
                                 : Colors.red[100],
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            user.isActive == true ? l10n.active : l10n.inactive,
+                            user.isDeleted != true ? l10n.active : l10n.inactive,
                             style: TextStyle(
-                              color: user.isActive == true 
+                              color: user.isDeleted != true 
                                   ? Colors.green[700] 
                                   : Colors.red[700],
                               fontSize: 10,
