@@ -21,8 +21,6 @@ namespace eCinema.Model.Requests
         
         public bool HasSubtitles { get; set; }
         
-        public bool IsActive { get; set; } = true;
-        
         [Required]
         public int MovieId { get; set; }
         

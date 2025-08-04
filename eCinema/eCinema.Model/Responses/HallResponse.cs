@@ -10,7 +10,6 @@ namespace eCinema.Model.Responses
         public string? ScreenType { get; set; }
         public string? SoundSystem { get; set; }
         public string Location { get; set; } = string.Empty;
-        public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
     }
 } 

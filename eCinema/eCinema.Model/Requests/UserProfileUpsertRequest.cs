@@ -31,7 +31,5 @@ namespace eCinema.Model.Requests
         
         [MaxLength(10)]
         public string PostalCode { get; set; } = string.Empty;
-        
-        public bool IsActive { get; set; } = true;
     }
 } 

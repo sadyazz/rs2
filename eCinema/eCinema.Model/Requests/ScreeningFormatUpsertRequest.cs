@@ -14,7 +14,5 @@ namespace eCinema.Model.Requests
         [Required]
         [Range(0.1, 10.0)]
         public decimal PriceMultiplier { get; set; } = 1.0m;
-        
-        public bool IsActive { get; set; } = true;
     }
 } 

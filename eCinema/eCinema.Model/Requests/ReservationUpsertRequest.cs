@@ -23,8 +23,6 @@ namespace eCinema.Model.Requests
         [MaxLength(50)]
         public string Status { get; set; } = "Reserved";
         
-        public bool IsActive { get; set; } = true;
-        
         [Required]
         public int UserId { get; set; }
         

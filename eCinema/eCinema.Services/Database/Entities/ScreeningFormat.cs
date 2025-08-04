@@ -18,8 +18,6 @@ namespace eCinema.Services.Database.Entities
         [Column(TypeName = "decimal(10, 2)")]
         public decimal PriceMultiplier { get; set; } = 1.0m; // 1.0 = regular price, 1.5 = 50% more, etc.
         
-        public bool IsActive { get; set; } = true;
-        
         public bool IsDeleted { get; set; } = false;
         
         public virtual ICollection<Screening> Screenings { get; set; } = new HashSet<Screening>();

@@ -40,10 +40,7 @@ namespace eCinema.Services
                     a.Biography.Contains(search.FTS));
             }
 
-            if (search.IsActive.HasValue)
-            {
-                query = query.Where(a => a.IsActive == search.IsActive.Value);
-            }
+
 
             return query;
         }

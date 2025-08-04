@@ -28,8 +28,6 @@ namespace eCinema.Model.Requests
         [Phone]
         public string? PhoneNumber { get; set; }
         
-        public bool IsActive { get; set; } = true;
-        
         [Required]
         public int RoleId { get; set; }
         public byte[]? Image { get; set; }

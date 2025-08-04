@@ -41,7 +41,6 @@ namespace eCinema.Services
             entity.UserId = currentUser.Id;
             entity.MovieId = request.MovieId;
             entity.CreatedAt = DateTime.UtcNow;
-            entity.IsActive = true;
             entity.IsDeleted = false;
             entity.IsEdited = false;
             entity.IsSpoiler = request.IsSpoiler ?? false;
@@ -96,7 +95,6 @@ namespace eCinema.Services
                 var hasChangesOtherThanSpoiler = 
                     originalReview.Rating != request.Rating ||
                     originalReview.Comment != request.Comment ||
-                    originalReview.IsActive != request.IsActive ||
                     originalReview.IsDeleted != request.IsDeleted;
 
                 if (hasChangesOtherThanSpoiler)
@@ -250,12 +248,12 @@ namespace eCinema.Services
         private async Task RecalculateMovieGrade(int movieId)
         {
             var movie = await _context.Movies
-                .Include(m => m.Reviews.Where(r => r.IsActive))
+                .Include(m => m.Reviews.Where(r => !r.IsDeleted))
                 .FirstOrDefaultAsync(m => m.Id == movieId);
 
             if (movie != null)
             {
-                var activeReviews = movie.Reviews.Where(r => r.IsActive).ToList();
+                var activeReviews = movie.Reviews.Where(r => !r.IsDeleted).ToList();
                 
                 if (activeReviews.Any())
                 {
@@ -325,14 +323,14 @@ namespace eCinema.Services
 
         protected override async Task BeforeInsert(Review entity, ReviewUpsertRequest insert)
         {
-            var movie = await _context.Movies.FirstOrDefaultAsync(x => x.Id == entity.MovieId && x.IsActive);
+            var movie = await _context.Movies.FirstOrDefaultAsync(x => x.Id == entity.MovieId && !x.IsDeleted);
             if (movie == null)
             {
                 throw new InvalidOperationException("The selected movie does not exist or is not active.");
             }
 
             var existingReview = await _context.Reviews
-                .FirstOrDefaultAsync(x => x.UserId == entity.UserId && x.MovieId == entity.MovieId && x.IsActive);
+                .FirstOrDefaultAsync(x => x.UserId == entity.UserId && x.MovieId == entity.MovieId && !x.IsDeleted);
 
             if (existingReview != null)
             {
@@ -342,7 +340,7 @@ namespace eCinema.Services
 
         protected override async Task BeforeUpdate(Review entity, ReviewUpsertRequest update)
         {
-            var movie = await _context.Movies.FirstOrDefaultAsync(x => x.Id == entity.MovieId && x.IsActive);
+            var movie = await _context.Movies.FirstOrDefaultAsync(x => x.Id == entity.MovieId && !x.IsDeleted);
             if (movie == null)
             {
                 throw new InvalidOperationException("The selected movie does not exist or is not active.");
@@ -352,7 +350,7 @@ namespace eCinema.Services
                 .FirstOrDefaultAsync(x => x.UserId == entity.UserId && 
                                         x.MovieId == entity.MovieId && 
                                         x.Id != entity.Id && 
-                                        x.IsActive);
+                                        !x.IsDeleted);
 
             if (existingReview != null)
             {

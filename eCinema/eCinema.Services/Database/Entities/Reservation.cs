@@ -22,8 +22,6 @@ namespace eCinema.Services.Database.Entities
         [MaxLength(50)]
         public string Status { get; set; } = "Reserved"; // Reserved, Paid, Cancelled, etc.
         
-        public bool IsActive { get; set; } = true;
-        
         public int UserId { get; set; }
         public int ScreeningId { get; set; }
         public int SeatId { get; set; }

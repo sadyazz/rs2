@@ -17,7 +17,5 @@ namespace eCinema.Model.Requests
         [Required]
         [Range(1, 100)]
         public int SeatNumber { get; set; }
-        
-        public bool IsActive { get; set; } = true;
     }
 }

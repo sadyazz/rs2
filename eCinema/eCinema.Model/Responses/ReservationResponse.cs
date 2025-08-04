@@ -10,7 +10,6 @@ namespace eCinema.Model.Responses
         public decimal OriginalPrice { get; set; }
         public decimal? DiscountPercentage { get; set; }
         public string Status { get; set; } = string.Empty;
-        public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
         public int UserId { get; set; }
         public string UserName { get; set; } = string.Empty;

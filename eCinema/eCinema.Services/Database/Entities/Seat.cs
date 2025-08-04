@@ -14,8 +14,6 @@ namespace eCinema.Services.Database.Entities
         [Required]
         public int Number { get; set; }
         
-        public bool IsActive { get; set; } = true;
-        
         public int HallId { get; set; }
         
         [ForeignKey(nameof(HallId))]

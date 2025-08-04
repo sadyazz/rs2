@@ -36,7 +36,7 @@ namespace eCinema.Services.Database.Entities
         
         public float Grade { get; set; }
         
-        public bool IsActive { get; set; } = true;
+        public bool IsComingSoon { get; set; } = false;
         
         public bool IsDeleted { get; set; } = false;
         

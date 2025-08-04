@@ -27,7 +27,7 @@ namespace eCinema.Services
                 .ThenInclude(mg => mg.Genre)
                 .Include(m => m.Actors)
                 .ThenInclude(ca => ca.Actor)
-                .Include(m => m.Reviews.Where(r => r.IsActive))
+                .Include(m => m.Reviews.Where(r => !r.IsDeleted))
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (movie == null)
@@ -45,7 +45,7 @@ namespace eCinema.Services
                 .ThenInclude(mg => mg.Genre)
                 .Include(m => m.Actors)
                 .ThenInclude(ca => ca.Actor)
-                .Include(m => m.Reviews.Where(r => r.IsActive))
+                .Include(m => m.Reviews.Where(r => !r.IsDeleted))
                 .AsQueryable();
 
             query = ApplyFilter(query, search);
@@ -82,7 +82,7 @@ namespace eCinema.Services
 
         private async Task RecalculateMovieGrade(Movie movie)
         {
-            var activeReviews = movie.Reviews.Where(r => r.IsActive).ToList();
+            var activeReviews = movie.Reviews.Where(r => !r.IsDeleted).ToList();
 
             if (activeReviews.Any())
             {
@@ -138,6 +138,11 @@ namespace eCinema.Services
             if (search.ReleaseYear.HasValue)
             {
                 query = query.Where(x => x.ReleaseYear == search.ReleaseYear.Value);
+            }
+
+            if (search.IsComingSoon.HasValue)
+            {
+                query = query.Where(x => x.IsComingSoon == search.IsComingSoon.Value);
             }
 
             return query;
@@ -239,8 +244,8 @@ namespace eCinema.Services
                 .ThenInclude(mg => mg.Genre)
                 .Include(m => m.Actors)
                 .ThenInclude(ca => ca.Actor)
-                .Include(m => m.Reviews.Where(r => r.IsActive))
-                .Where(m => m.IsActive)
+                .Include(m => m.Reviews.Where(r => !r.IsDeleted))
+                .Where(m => !m.IsDeleted)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(genreName) && genreName.ToLower() != "all")

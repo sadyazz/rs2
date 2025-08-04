@@ -36,6 +36,5 @@ namespace eCinema.Model.Requests
 
         public byte[]? Image { get; set; }
         
-        public bool IsActive { get; set; } = true;
     }
 } 

@@ -30,10 +30,7 @@ namespace eCinema.Services
                 query = query.Where(r => r.Name.Contains(search.FTS));
             }
 
-            if (search.IsActive.HasValue)
-            {
-                query = query.Where(r => r.IsActive == search.IsActive.Value);
-            }
+
 
             return query;
         }

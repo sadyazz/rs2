@@ -12,6 +12,7 @@ namespace eCinema.Model.SearchObjects
         public float? MinGrade { get; set; }
         public float? MaxGrade { get; set; }
         public int? ReleaseYear { get; set; }
+        public bool? IsComingSoon { get; set; }
         public List<int> GenreIds { get; set; } = new List<int>();
     }
 } 

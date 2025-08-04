@@ -10,8 +10,5 @@ namespace eCinema.Services.Database.Entities
         [Required]
         [MaxLength(50)]
         public string Name { get; set; } = string.Empty;
-        
-        [Required]
-        public bool IsActive { get; set; } = true;
     }
 } 

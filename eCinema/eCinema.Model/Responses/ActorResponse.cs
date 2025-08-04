@@ -10,7 +10,6 @@ namespace eCinema.Model.Responses
         public DateTime? DateOfBirth { get; set; }
         public string? Biography { get; set; }
         public byte[]? Image { get; set; }
-        public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
     }
 } 

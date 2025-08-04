@@ -23,6 +23,5 @@ namespace eCinema.Model.Requests
         [MaxLength(200)]
         public string Location { get; set; } = string.Empty;
         
-        public bool IsActive { get; set; } = true;
     }
 } 

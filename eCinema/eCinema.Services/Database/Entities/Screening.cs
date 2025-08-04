@@ -20,8 +20,6 @@ namespace eCinema.Services.Database.Entities
         public string Language { get; set; } = string.Empty;
         
         public bool HasSubtitles { get; set; }
-        
-        public bool IsActive { get; set; } = true;
 
         public bool IsDeleted { get; set; } = false;
         

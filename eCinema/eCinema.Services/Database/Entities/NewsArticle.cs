@@ -18,8 +18,6 @@ namespace eCinema.Services.Database.Entities
         public byte[]? Image { get; set; }
         
         public DateTime PublishDate { get; set; } = DateTime.UtcNow;
-        
-        public bool IsActive { get; set; } = true;
 
         public bool IsDeleted { get; set; } = false;
         

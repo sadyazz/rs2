@@ -56,7 +56,7 @@ namespace eCinema.Services.Auth
 
             var user = await _context.Users
                 .Include(u => u.Role)
-                .FirstOrDefaultAsync(x => x.Id == userId.Value && x.IsActive, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Id == userId.Value, cancellationToken);
 
             return user;
         }

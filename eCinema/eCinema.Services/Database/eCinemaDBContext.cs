@@ -41,17 +41,9 @@ namespace eCinema.Services.Database
                 .HasIndex(r => r.Name)
                 .IsUnique();
 
-            modelBuilder.Entity<Role>()
-                .Property(r => r.IsActive)
-                .HasDefaultValue(true);
-
             modelBuilder.Entity<Actor>()
                 .HasIndex(a => new { a.FirstName, a.LastName })
                 .IsUnique();
-
-            modelBuilder.Entity<Actor>()
-                .Property(a => a.IsActive)
-                .HasDefaultValue(true);
 
             modelBuilder.Entity<Seat>()
                 .HasOne(s => s.Hall)

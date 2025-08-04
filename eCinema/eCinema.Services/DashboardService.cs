@@ -25,7 +25,7 @@ namespace eCinema.Services
                 TotalShows = await _context.Screenings.CountAsync(),
                 TotalReservations = await _context.Reservations.CountAsync(),
                 ActiveShows = await _context.Screenings
-                    .Where(s => s.StartTime.Date == DateTime.Now.Date && s.IsActive && !s.IsDeleted)
+                    .Where(s => s.StartTime.Date == DateTime.Now.Date && !s.IsDeleted)
                     .CountAsync()
             };
 

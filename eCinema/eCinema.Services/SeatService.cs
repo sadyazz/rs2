@@ -36,8 +36,7 @@ namespace eCinema.Services
                 Id = entity.Id,
                 HallId = entity.HallId,
                 RowNumber = rowNumber,
-                SeatNumber = entity.Number,
-                IsActive = entity.IsActive
+                SeatNumber = entity.Number
             };
             
             return response;
@@ -70,7 +69,6 @@ namespace eCinema.Services
             entity.HallId = request.HallId;
             entity.Row = request.RowNumber.ToString();
             entity.Number = request.SeatNumber;
-            entity.IsActive = request.IsActive;
             return entity;
         }
 
@@ -79,7 +77,6 @@ namespace eCinema.Services
             entity.HallId = request.HallId;
             entity.Row = request.RowNumber.ToString();
             entity.Number = request.SeatNumber;
-            entity.IsActive = request.IsActive;
         }
 
         public override async Task<SeatResponse> CreateAsync(SeatInsertRequest request)

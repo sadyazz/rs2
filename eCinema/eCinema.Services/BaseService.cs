@@ -30,12 +30,12 @@ namespace eCinema.Services
                 totalCount = await query.CountAsync();
             }
 
-            if(search.Page.HasValue)
+            if(search.Page.HasValue && search.PageSize.HasValue)
             {
                 query = query.Skip(search.Page.Value * search.PageSize.Value);
+                query = query.Take(search.PageSize.Value);
             }
-
-            if(search.PageSize.HasValue)
+            else if(search.PageSize.HasValue)
             {
                 query = query.Take(search.PageSize.Value);
             }
@@ -114,50 +114,6 @@ namespace eCinema.Services
                 else if (typeof(TEntity) == typeof(Database.Entities.ScreeningFormat))
                 {
                     query = query.Cast<Database.Entities.ScreeningFormat>().Where(sf => !sf.IsDeleted).Cast<TEntity>();
-                }
-            }
-
-            if (search.IsActive.HasValue)
-            {
-                if (typeof(TEntity) == typeof(Database.Entities.Movie))
-                {
-                    query = query.Cast<Database.Entities.Movie>().Where(m => m.IsActive == search.IsActive.Value).Cast<TEntity>();
-                }
-                else if (typeof(TEntity) == typeof(Database.Entities.Genre))
-                {
-                    query = query.Cast<Database.Entities.Genre>().Where(g => g.IsActive == search.IsActive.Value).Cast<TEntity>();
-                }
-                else if (typeof(TEntity) == typeof(Database.Entities.Actor))
-                {
-                    query = query.Cast<Database.Entities.Actor>().Where(a => a.IsActive == search.IsActive.Value).Cast<TEntity>();
-                }
-                else if (typeof(TEntity) == typeof(Database.Entities.Review))
-                {
-                    query = query.Cast<Database.Entities.Review>().Where(r => r.IsActive == search.IsActive.Value).Cast<TEntity>();
-                }
-                else if (typeof(TEntity) == typeof(Database.Entities.Screening))
-                {
-                    query = query.Cast<Database.Entities.Screening>().Where(s => s.IsActive == search.IsActive.Value).Cast<TEntity>();
-                }
-                else if (typeof(TEntity) == typeof(Database.Entities.Reservation))
-                {
-                    query = query.Cast<Database.Entities.Reservation>().Where(r => r.IsActive == search.IsActive.Value).Cast<TEntity>();
-                }
-                else if (typeof(TEntity) == typeof(Database.Entities.Promotion))
-                {
-                    query = query.Cast<Database.Entities.Promotion>().Where(p => p.IsActive == search.IsActive.Value).Cast<TEntity>();
-                }
-                else if (typeof(TEntity) == typeof(Database.Entities.NewsArticle))
-                {
-                    query = query.Cast<Database.Entities.NewsArticle>().Where(n => n.IsActive == search.IsActive.Value).Cast<TEntity>();
-                }
-                else if (typeof(TEntity) == typeof(Database.Entities.User))
-                {
-                    query = query.Cast<Database.Entities.User>().Where(u => u.IsActive == search.IsActive.Value).Cast<TEntity>();
-                }
-                else if (typeof(TEntity) == typeof(Database.Entities.ScreeningFormat))
-                {
-                    query = query.Cast<Database.Entities.ScreeningFormat>().Where(sf => sf.IsActive == search.IsActive.Value).Cast<TEntity>();
                 }
             }
 

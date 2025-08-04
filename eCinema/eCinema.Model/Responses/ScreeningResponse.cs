@@ -10,7 +10,6 @@ namespace eCinema.Model.Responses
         public decimal BasePrice { get; set; }
         public string Language { get; set; } = string.Empty;
         public bool HasSubtitles { get; set; }
-        public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
         public int MovieId { get; set; }
         public string MovieTitle { get; set; } = string.Empty;

@@ -116,13 +116,13 @@ namespace eCinema.Services
 
         protected override async Task BeforeInsert(Screening entity, ScreeningUpsertRequest insert)
         {
-            var movie = await _context.Movies.FirstOrDefaultAsync(x => x.Id == insert.MovieId && x.IsActive);
+            var movie = await _context.Movies.FirstOrDefaultAsync(x => x.Id == insert.MovieId && !x.IsDeleted);
             if (movie == null)
             {
                 throw new InvalidOperationException("The selected movie does not exist or is not active.");
             }
 
-            var hall = await _context.Halls.FirstOrDefaultAsync(x => x.Id == insert.HallId && x.IsActive);
+            var hall = await _context.Halls.FirstOrDefaultAsync(x => x.Id == insert.HallId && !x.IsDeleted);
             if (hall == null)
             {
                 throw new InvalidOperationException("The selected hall does not exist or is not active.");
@@ -130,7 +130,7 @@ namespace eCinema.Services
 
             if (insert.ScreeningFormatId.HasValue)
             {
-                var format = await _context.ScreeningFormats.FirstOrDefaultAsync(x => x.Id == insert.ScreeningFormatId.Value && x.IsActive);
+                var format = await _context.ScreeningFormats.FirstOrDefaultAsync(x => x.Id == insert.ScreeningFormatId.Value && !x.IsDeleted);
                 if (format == null)
                 {
                     throw new InvalidOperationException("The selected screening format does not exist or is not active.");
@@ -139,7 +139,7 @@ namespace eCinema.Services
 
             var overlappingScreening = await _context.Screenings
                 .FirstOrDefaultAsync(x => x.HallId == insert.HallId &&
-                                   x.IsActive &&
+                                   !x.IsDeleted &&
                                    ((x.StartTime <= insert.StartTime && x.EndTime > insert.StartTime) ||
                                     (x.StartTime < insert.EndTime && x.EndTime >= insert.EndTime) ||
                                     (x.StartTime >= insert.StartTime && x.EndTime <= insert.EndTime)));
@@ -157,13 +157,13 @@ namespace eCinema.Services
 
         protected override async Task BeforeUpdate(Screening entity, ScreeningUpsertRequest update)
         {
-            var movie = await _context.Movies.FirstOrDefaultAsync(x => x.Id == update.MovieId && x.IsActive);
+            var movie = await _context.Movies.FirstOrDefaultAsync(x => x.Id == update.MovieId && !x.IsDeleted);
             if (movie == null)
             {
                 throw new InvalidOperationException("The selected movie does not exist or is not active.");
             }
 
-            var hall = await _context.Halls.FirstOrDefaultAsync(x => x.Id == update.HallId && x.IsActive);
+            var hall = await _context.Halls.FirstOrDefaultAsync(x => x.Id == update.HallId && !x.IsDeleted);
             if (hall == null)
             {
                 throw new InvalidOperationException("The selected hall does not exist or is not active.");
@@ -171,7 +171,7 @@ namespace eCinema.Services
 
             if (update.ScreeningFormatId.HasValue)
             {
-                var format = await _context.ScreeningFormats.FirstOrDefaultAsync(x => x.Id == update.ScreeningFormatId.Value && x.IsActive);
+                var format = await _context.ScreeningFormats.FirstOrDefaultAsync(x => x.Id == update.ScreeningFormatId.Value && !x.IsDeleted);
                 if (format == null)
                 {
                     throw new InvalidOperationException("The selected screening format does not exist or is not active.");
@@ -181,7 +181,7 @@ namespace eCinema.Services
             var overlappingScreening = await _context.Screenings
                 .FirstOrDefaultAsync(x => x.HallId == update.HallId &&
                                    x.Id != entity.Id &&
-                                   x.IsActive &&
+                                   !x.IsDeleted &&
                                    ((x.StartTime <= update.StartTime && x.EndTime > update.StartTime) ||
                                     (x.StartTime < update.EndTime && x.EndTime >= update.EndTime) ||
                                     (x.StartTime >= update.StartTime && x.EndTime <= update.EndTime)));

@@ -19,8 +19,7 @@ class Review {
   @JsonKey(name: 'modifiedAt')
   final DateTime? modifiedAt;
   
-  @JsonKey(name: 'isActive')
-  final bool isActive;
+
   
   @JsonKey(name: 'isDeleted')
   final bool isDeleted;
@@ -52,7 +51,6 @@ class Review {
     this.comment,
     required this.createdAt,
     this.modifiedAt,
-    required this.isActive,
     required this.isDeleted,
     required this.isSpoiler,
     this.isEdited,
@@ -73,7 +71,6 @@ class Review {
     String? comment,
     DateTime? createdAt,
     DateTime? modifiedAt,
-    bool? isActive,
     bool? isDeleted,
     bool? isSpoiler,
     bool? isEdited,
@@ -89,7 +86,6 @@ class Review {
       comment: comment ?? this.comment,
       createdAt: createdAt ?? this.createdAt,
       modifiedAt: modifiedAt ?? this.modifiedAt,
-      isActive: isActive ?? this.isActive,
       isDeleted: isDeleted ?? this.isDeleted,
       isSpoiler: isSpoiler ?? this.isSpoiler,
       isEdited: isEdited ?? this.isEdited ?? false,
@@ -103,7 +99,7 @@ class Review {
 
   @override
   String toString() {
-    return 'Review(id: $id, rating: $rating, comment: $comment, createdAt: $createdAt, isActive: $isActive, isSpoiler: $isSpoiler, userName: $userName, movieTitle: $movieTitle)';
+    return 'Review(id: $id, rating: $rating, comment: $comment, createdAt: $createdAt, isDeleted: $isDeleted, isSpoiler: $isSpoiler, userName: $userName, movieTitle: $movieTitle)';
   }
 
   @override

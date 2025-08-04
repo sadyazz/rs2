@@ -35,10 +35,7 @@ namespace eCinema.Services
                 query = query.Where(x => x.Description != null && x.Description.Contains(search.Description));
             }
 
-            if (search.IsActive.HasValue)
-            {
-                query = query.Where(x => x.IsActive == search.IsActive.Value);
-            }
+
 
             return query;
         }

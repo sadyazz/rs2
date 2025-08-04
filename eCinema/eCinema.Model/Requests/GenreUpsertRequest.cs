@@ -12,7 +12,6 @@ namespace eCinema.Model.Requests
         [MaxLength(200)]
         public string? Description { get; set; }
         
-        public bool IsActive { get; set; } = true;
         
         public bool IsDeleted { get; set; } = false;
     }

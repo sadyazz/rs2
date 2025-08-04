@@ -23,7 +23,6 @@ namespace eCinema.Services.Database.Entities
         [MaxLength(200)]
         public string Location { get; set; } = string.Empty;
         
-        public bool IsActive { get; set; } = true;
         public bool IsDeleted { get; set; } = false;
         
         public virtual ICollection<Screening> Screenings { get; set; } = new HashSet<Screening>();

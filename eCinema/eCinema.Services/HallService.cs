@@ -59,10 +59,7 @@ namespace eCinema.Services
                 query = query.Where(x => x.Capacity <= search.MaxCapacity.Value);
             }
 
-            if (search.IsActive.HasValue)
-            {
-                query = query.Where(x => x.IsActive == search.IsActive.Value);
-            }
+
 
             return query;
         }
