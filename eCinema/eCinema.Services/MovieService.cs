@@ -150,6 +150,8 @@ namespace eCinema.Services
 
         protected override async Task BeforeInsert(Movie entity, MovieUpsertRequest request)
         {
+            entity.IsComingSoon = request.IsComingSoon;
+            
             if (request.GenreIds != null && request.GenreIds.Any())
             {
                 var genres = await _context.Genres
@@ -185,6 +187,8 @@ namespace eCinema.Services
 
         protected override async Task BeforeUpdate(Movie entity, MovieUpsertRequest request)
         {
+            entity.IsComingSoon = request.IsComingSoon;
+            
             entity.Genres.Clear();
 
             if (request.GenreIds != null && request.GenreIds.Any())
