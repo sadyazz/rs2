@@ -45,7 +45,7 @@ class MovieProvider extends BaseProvider<Movie> {
     var response = await http.get(uri, headers: headers);
 
     if (response.statusCode == 200) {
-      if (response.body == null || response.body.isEmpty || response.body == 'null') {
+      if (response.body.isEmpty || response.body == 'null') {
         return null;
       }
       var data = jsonDecode(response.body);

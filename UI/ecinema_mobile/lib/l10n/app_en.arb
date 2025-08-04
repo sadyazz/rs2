@@ -528,5 +528,94 @@
   "logoutDescription": "Sign out of application",
   "@logoutDescription": {
     "description": "Logout description"
+  },
+  "featured": "Featured",
+  "@featured": {
+    "description": "Featured section title"
+  },
+  "latestNews": "Latest News",
+  "@latestNews": {
+    "description": "Latest news section title"
+  },
+  "event": "Event",
+  "@event": {
+    "description": "Event type label"
+  },
+  "promotion": "Promotion",
+  "@promotion": {
+    "description": "Promotion type label"
+  },
+  "news": "News",
+  "@news": {
+    "description": "News type label"
+  },
+  "readMore": "Read more →",
+  "@readMore": {
+    "description": "Read more link text"
+  },
+  "filmMarathon": "Film Marathon: Christopher Nolan's Night",
+  "@filmMarathon": {
+    "description": "Film marathon event title"
+  },
+  "filmMarathonDescription": "Join us for an exclusive film marathon dedicated to director Christopher Nolan. Watch Inception, Interstellar and Oppenheimer in one night with special benefits for visitors.",
+  "@filmMarathonDescription": {
+    "description": "Film marathon event description"
+  },
+  "all": "All",
+  "@all": {
+    "description": "All filter option"
+  },
+  "movieAnnouncements": "Movie Announcements",
+  "@movieAnnouncements": {
+    "description": "Movie announcements filter option"
+  },
+  "promotions": "Promotions",
+  "@promotions": {
+    "description": "Promotions filter option"
+  },
+  "events": "Events",
+  "@events": {
+    "description": "Events filter option"
+  },
+  "loadingNotifications": "Loading notifications...",
+  "@loadingNotifications": {
+    "description": "Loading notifications text"
+  },
+  "errorLoadingData": "Error loading data",
+  "@errorLoadingData": {
+    "description": "Error loading data title"
+  },
+  "errorLoadingDataMessage": "Error loading data: {error}",
+  "@errorLoadingDataMessage": {
+    "description": "Error loading data message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tryAgain": "Try again",
+  "@tryAgain": {
+    "description": "Try again button text"
+  },
+  "discount": "Discount",
+  "@discount": {
+    "description": "Discount label"
+  },
+  "validFrom": "Valid from",
+  "@validFrom": {
+    "description": "Valid from label"
+  },
+  "validTo": "Valid to",
+  "@validTo": {
+    "description": "Valid to label"
+  },
+  "useCodeMessage": "Use the code when booking a ticket to get a discount.",
+  "@useCodeMessage": {
+    "description": "Message about using promotion code"
+  },
+  "code": "Code",
+  "@code": {
+    "description": "Code label"
   }
 } 

@@ -528,5 +528,94 @@
   "logoutDescription": "Odjavi se iz aplikacije",
   "@logoutDescription": {
     "description": "Logout description"
+  },
+  "featured": "Izdvojeno",
+  "@featured": {
+    "description": "Featured section title"
+  },
+  "latestNews": "Najnovije obavijesti",
+  "@latestNews": {
+    "description": "Latest news section title"
+  },
+  "event": "Događaj",
+  "@event": {
+    "description": "Event type label"
+  },
+  "promotion": "Promocija",
+  "@promotion": {
+    "description": "Promotion type label"
+  },
+  "news": "Vijesti",
+  "@news": {
+    "description": "News type label"
+  },
+  "readMore": "Pročitaj više →",
+  "@readMore": {
+    "description": "Read more link text"
+  },
+  "filmMarathon": "Filmski maraton: Noć Christophera Nolana",
+  "@filmMarathon": {
+    "description": "Film marathon event title"
+  },
+  "filmMarathonDescription": "Pridružite nam se na ekskluzivnom filmskom maratonu posvećenom reditelju Christopheru Nolanu. Pogledajte Inception, Interstellar i Oppenheimer u jednoj noći uz posebne pogodnosti za posjetioce.",
+  "@filmMarathonDescription": {
+    "description": "Film marathon event description"
+  },
+  "all": "Sve",
+  "@all": {
+    "description": "All filter option"
+  },
+  "movieAnnouncements": "Najave filmova",
+  "@movieAnnouncements": {
+    "description": "Movie announcements filter option"
+  },
+  "promotions": "Promocije",
+  "@promotions": {
+    "description": "Promotions filter option"
+  },
+  "events": "Događaji",
+  "@events": {
+    "description": "Events filter option"
+  },
+  "loadingNotifications": "Učitavanje obavijesti...",
+  "@loadingNotifications": {
+    "description": "Loading notifications text"
+  },
+  "errorLoadingData": "Greška pri učitavanju podataka",
+  "@errorLoadingData": {
+    "description": "Error loading data title"
+  },
+  "errorLoadingDataMessage": "Greška pri učitavanju podataka: {error}",
+  "@errorLoadingDataMessage": {
+    "description": "Error loading data message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "tryAgain": "Pokušaj ponovo",
+  "@tryAgain": {
+    "description": "Try again button text"
+  },
+  "discount": "Popust",
+  "@discount": {
+    "description": "Discount label"
+  },
+  "validFrom": "Važi od",
+  "@validFrom": {
+    "description": "Valid from label"
+  },
+  "validTo": "Važi do",
+  "@validTo": {
+    "description": "Valid to label"
+  },
+  "useCodeMessage": "Koristite kod prilikom rezervacije karte da biste dobili popust.",
+  "@useCodeMessage": {
+    "description": "Message about using promotion code"
+  },
+  "code": "Kod",
+  "@code": {
+    "description": "Code label"
   }
 } 

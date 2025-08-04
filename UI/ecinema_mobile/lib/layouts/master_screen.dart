@@ -44,7 +44,6 @@ class _MasterScreenState extends State<MasterScreen> {
     final l10n = AppLocalizations.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     
-    // Check if localization is available
     if (l10n == null) {
       return Scaffold(
         body: Center(
@@ -53,7 +52,6 @@ class _MasterScreenState extends State<MasterScreen> {
       );
     }
     
-    // Check if LanguageProvider is initialized
     try {
       final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
       if (!languageProvider.isInitialized) {
