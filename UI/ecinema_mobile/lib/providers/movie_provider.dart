@@ -31,10 +31,8 @@ class MovieProvider extends BaseProvider<Movie> {
       queryParams['maxDuration'] = maxDuration.toString();
     }
 
-    print('MovieProvider - minRating: $minRating, type: ${minRating.runtimeType}');
     if (minRating >= 1.0) {
       queryParams['minRating'] = minRating.toInt().toString();
-      print('MovieProvider - Adding minRating to query params: ${minRating.toInt().toString()}');
     } else {
       print('MovieProvider - minRating not added to query params (minRating < 1.0)');
     }
@@ -54,7 +52,7 @@ class MovieProvider extends BaseProvider<Movie> {
       if (data == null) {
         return null;
       }
-      return data;
+      return fromJson(data);
     } else if (response.statusCode == 404) {
       return null;
     } else {

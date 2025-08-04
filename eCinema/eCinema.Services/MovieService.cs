@@ -271,7 +271,8 @@ namespace eCinema.Services
 
             if (minRating.HasValue)
             {
-                movies = movies.Where(m => m.Grade >= minRating.Value).ToList();
+                var beforeFilter = movies.Count;
+                movies = movies.Where(m => m.Grade >= minRating.Value || m.Grade == 0).ToList();
             }
 
             if (!movies.Any())

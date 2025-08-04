@@ -3,7 +3,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../layouts/master_screen.dart';
 import '../providers/movie_provider.dart';
 import '../providers/genre_provider.dart';
+import '../providers/utils.dart';
 import '../models/genre.dart';
+import '../models/movie.dart';
 import 'package:provider/provider.dart';
 
 class RandomizerScreen extends StatefulWidget {
@@ -16,6 +18,8 @@ class RandomizerScreen extends StatefulWidget {
 class _RandomizerScreenState extends State<RandomizerScreen> {
   bool _isLoading = false;
   String? _selectedMovie;
+  Movie? _selectedMovieData;
+  final ScrollController _scrollController = ScrollController();
   
   String _selectedGenre = 'all';
   String _selectedDuration = '90';
@@ -27,6 +31,12 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadGenres();
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadGenres() async {
@@ -46,9 +56,9 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
     return MasterScreen(
       "",
       SingleChildScrollView(
+        controller: _scrollController,
         child: Container(
           width: double.infinity,
-          height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
@@ -63,12 +73,12 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
             padding: const EdgeInsets.all(24.0),
             child: Column(
               children: [
-                // const SizedBox(height: 8),
                 _buildFilterSection(l10n, colorScheme),
                 const SizedBox(height: 32),
                 _buildActionButtons(l10n, colorScheme),
                 const SizedBox(height: 32),
                 _buildResult(l10n, colorScheme),
+                const SizedBox(height: 100),
               ],
             ),
           ),
@@ -424,7 +434,8 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
 
   Widget _buildResult(AppLocalizations l10n, ColorScheme colorScheme) {
     if (_selectedMovie == null) {
-      return Expanded(
+      return Container(
+        height: 300,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -449,48 +460,139 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
       );
     }
 
-    return Expanded(
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: colorScheme.shadow.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
+    return Container(
+      width: double.infinity,
+      height: 500,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: colorScheme.shadow.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.movie,
-              size: 64,
-              color: colorScheme.primary,
+            Container(
+              width: 120,
+              height: 180,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: colorScheme.shadow.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: _selectedMovieData!.image != null && _selectedMovieData!.image!.isNotEmpty
+                    ? imageFromString(_selectedMovieData!.image!)
+                    : Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              colorScheme.primary,
+                              colorScheme.primary.withOpacity(0.7),
+                            ],
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.movie,
+                          size: 60,
+                          color: Colors.white,
+                        ),
+                      ),
+              ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             Text(
               _selectedMovie!,
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: colorScheme.onSurface,
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
-            Text(
-              'Great choice!',
-              style: TextStyle(
-                fontSize: 16,
-                color: colorScheme.onSurface.withOpacity(0.7),
+            const SizedBox(height: 16),
+            if (_selectedMovieData != null) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.category, size: 16, color: colorScheme.primary),
+                  const SizedBox(width: 8),
+                  Text(
+                    _selectedMovieData!.genres?.isNotEmpty == true
+                        ? _selectedMovieData!.genres!.first.name ?? 'Unknown'
+                        : 'Unknown',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: colorScheme.onSurface.withOpacity(0.7),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Icon(Icons.access_time, size: 16, color: colorScheme.primary),
+                  const SizedBox(width: 8),
+                  Text(
+                    '${_selectedMovieData!.durationMinutes} min',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: colorScheme.onSurface.withOpacity(0.7),
+                    ),
+                  ),
+                ],
               ),
-            ),
+              const SizedBox(height: 8),
+              if (_selectedMovieData!.grade != null && _selectedMovieData!.grade! > 0)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.star, size: 16, color: Colors.amber),
+                    const SizedBox(width: 8),
+                    Text(
+                      '${_selectedMovieData!.grade!.toStringAsFixed(1)}/5',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.amber,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              const SizedBox(height: 16),
+              if (_selectedMovieData!.description != null)
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: colorScheme.surfaceVariant.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    _selectedMovieData!.description!,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: colorScheme.onSurface.withOpacity(0.8),
+                      height: 1.4,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+            ],
           ],
         ),
       ),
@@ -499,14 +601,12 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
 
   Future<void> _generateRandomMovie() async {
     final l10n = AppLocalizations.of(context)!;
-    
     setState(() {
       _isLoading = true;
     });
 
     try {
       final movieProvider = context.read<MovieProvider>();
-      
       final recommendation = await movieProvider.getRecommendation(
         genre: _selectedGenre == 'all' ? 'all' : _selectedGenre,
         duration: _selectedDuration,
@@ -514,24 +614,46 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
       );
 
       setState(() {
-        _selectedMovie = recommendation['title'] ?? 'Unknown Movie';
+        if (recommendation == null) {
+          _selectedMovie = null;
+          _selectedMovieData = null;
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(l10n.noMoviesFound),
+              content: Text(l10n.noMoviesFoundMessage),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text('OK'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          _selectedMovieData = recommendation;
+          _selectedMovie = recommendation.title ?? 'Unknown Movie';
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (_scrollController.hasClients) {
+              _scrollController.animateTo(
+                _scrollController.position.maxScrollExtent,
+                duration: const Duration(milliseconds: 800),
+                curve: Curves.easeInOut,
+              );
+            }
+          });
+        }
         _isLoading = false;
       });
     } catch (e) {
       setState(() {
         _isLoading = false;
       });
-      
-      String errorMessage = l10n.noMoviesFoundMessage;
-      if (e.toString().contains('No movies found matching the criteria')) {
-        errorMessage = l10n.noMoviesFoundMessage;
-      }
-      
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: Text(l10n.noMoviesFound),
-          content: Text(errorMessage),
+          content: Text(l10n.noMoviesFoundMessage),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -549,6 +671,7 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
       _selectedDuration = '90';
       _selectedRating = 4.0;
       _selectedMovie = null;
+      _selectedMovieData = null;
     });
   }
 } 
