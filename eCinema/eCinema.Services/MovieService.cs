@@ -250,6 +250,7 @@ namespace eCinema.Services
                 .ThenInclude(ca => ca.Actor)
                 .Include(m => m.Reviews.Where(r => !r.IsDeleted))
                 .Where(m => !m.IsDeleted)
+                .Where(m => !m.IsComingSoon)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(genreName) && genreName.ToLower() != "all")
