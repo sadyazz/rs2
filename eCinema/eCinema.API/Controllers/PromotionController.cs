@@ -15,5 +15,26 @@ namespace eCinema.API.Controllers
         public PromotionController(IPromotionService service) : base(service)
         {
         }
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public override async Task<PromotionResponse> Create([FromBody] PromotionUpsertRequest request)
+        {
+            return await base.Create(request);
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
+        public override async Task<PromotionResponse> Update(int id, [FromBody] PromotionUpsertRequest request)
+        {
+            return await base.Update(id, request);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
+        public override async Task<bool> Delete(int id)
+        {
+            return await base.Delete(id);
+        }
     }
 } 

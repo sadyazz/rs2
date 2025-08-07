@@ -15,5 +15,26 @@ namespace eCinema.API.Controllers
         public HallController(IHallService service) : base(service)
         {
         }
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public override async Task<HallResponse> Create([FromBody] HallUpsertRequest request)
+        {
+            return await base.Create(request);
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
+        public override async Task<HallResponse> Update(int id, [FromBody] HallUpsertRequest request)
+        {
+            return await base.Update(id, request);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
+        public override async Task<bool> Delete(int id)
+        {
+            return await base.Delete(id);
+        }
     }
 } 

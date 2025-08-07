@@ -15,5 +15,26 @@ namespace eCinema.API.Controllers
         public NewsArticleController(INewsArticleService service) : base(service)
         {
         }
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public override async Task<NewsArticleResponse> Create([FromBody] NewsArticleUpsertRequest request)
+        {
+            return await base.Create(request);
+        }
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
+        public override async Task<NewsArticleResponse> Update(int id, [FromBody] NewsArticleUpsertRequest request)
+        {
+            return await base.Update(id, request);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
+        public override async Task<bool> Delete(int id)
+        {
+            return await base.Delete(id);
+        }
     }
 } 

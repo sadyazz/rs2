@@ -36,5 +36,14 @@ namespace eCinema.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+        [Authorize(Roles = "user")]
+        public override async Task<ReviewResponse> Create([FromBody] ReviewUpsertRequest request)
+        {
+            return await base.Create(request);
+        }
+        
+        
     }
 } 
