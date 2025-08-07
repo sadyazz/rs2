@@ -160,11 +160,14 @@ namespace eCinema.Services
 
                 foreach (var genre in genres)
                 {
-                    entity.Genres.Add(new MovieGenre
+                    if (!entity.Genres.Any(mg => mg.GenreId == genre.Id))
                     {
-                        Movie = entity,
-                        Genre = genre
-                    });
+                        entity.Genres.Add(new MovieGenre
+                        {
+                            Movie = entity,
+                            Genre = genre
+                        });
+                    }
                 }
             }
 
@@ -176,11 +179,14 @@ namespace eCinema.Services
 
                 foreach (var actor in actors)
                 {
-                    entity.Actors.Add(new MovieActor
+                    if (!entity.Actors.Any(ma => ma.ActorId == actor.Id))
                     {
-                        Movie = entity,
-                        Actor = actor
-                    });
+                        entity.Actors.Add(new MovieActor
+                        {
+                            Movie = entity,
+                            Actor = actor
+                        });
+                    }
                 }
             }
         }
@@ -189,7 +195,15 @@ namespace eCinema.Services
         {
             entity.IsComingSoon = request.IsComingSoon;
             
-            entity.Genres.Clear();
+            var existingMovieGenres = await _context.MovieGenres
+                .Where(mg => mg.MovieId == entity.Id)
+                .ToListAsync();
+            _context.MovieGenres.RemoveRange(existingMovieGenres);
+
+            var existingMovieActors = await _context.MovieActors
+                .Where(ma => ma.MovieId == entity.Id)
+                .ToListAsync();
+            _context.MovieActors.RemoveRange(existingMovieActors);
 
             if (request.GenreIds != null && request.GenreIds.Any())
             {
@@ -206,7 +220,6 @@ namespace eCinema.Services
                     });
                 }
             }
-            entity.Actors.Clear();
 
             if (request.ActorIds != null && request.ActorIds.Any())
             {
@@ -223,7 +236,6 @@ namespace eCinema.Services
                     });
                 }
             }
-
         }
 
         protected override MovieResponse MapToResponse(Movie movie)
@@ -231,11 +243,13 @@ namespace eCinema.Services
             var response = _mapper.Map<MovieResponse>(movie);
 
             response.Genres = movie.Genres?
-                .Select(mg => _mapper.Map<GenreResponse>(mg.Genre))
+                .GroupBy(mg => mg.GenreId)
+                .Select(g => _mapper.Map<GenreResponse>(g.First().Genre))
                 .ToList() ?? new List<GenreResponse>();
 
             response.Actors = movie.Actors?
-                .Select(ma => _mapper.Map<ActorResponse>(ma.Actor))
+                .GroupBy(ma => ma.ActorId)
+                .Select(g => _mapper.Map<ActorResponse>(g.First().Actor))
                 .ToList() ?? new List<ActorResponse>();
 
             return response;
