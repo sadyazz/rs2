@@ -7,6 +7,7 @@ import '../providers/utils.dart';
 import '../models/genre.dart';
 import '../models/movie.dart';
 import 'package:provider/provider.dart';
+import 'movie_details_screen.dart';
 
 class RandomizerScreen extends StatefulWidget {
   const RandomizerScreen({super.key});
@@ -460,146 +461,180 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
       );
     }
 
-    return Container(
-      width: double.infinity,
-      height: 500,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: colorScheme.shadow.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 120,
-              height: 180,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.shadow.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: _selectedMovieData!.image != null && _selectedMovieData!.image!.isNotEmpty
-                    ? imageFromString(_selectedMovieData!.image!)
-                    : Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              colorScheme.primary,
-                              colorScheme.primary.withOpacity(0.7),
-                            ],
+    return GestureDetector(
+      onTap: () {
+        if (_selectedMovieData != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MovieDetailsScreen(movie: _selectedMovieData!),
+            ),
+          );
+        }
+      },
+      child: Container(
+        width: double.infinity,
+        height: 500,
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: colorScheme.shadow.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 120,
+                height: 180,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: colorScheme.shadow.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: _selectedMovieData!.image != null && _selectedMovieData!.image!.isNotEmpty
+                      ? imageFromString(_selectedMovieData!.image!)
+                      : Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                colorScheme.primary,
+                                colorScheme.primary.withOpacity(0.7),
+                              ],
+                            ),
+                          ),
+                          child: Icon(
+                            Icons.movie,
+                            size: 60,
+                            color: Colors.white,
                           ),
                         ),
-                        child: Icon(
-                          Icons.movie,
-                          size: 60,
-                          color: Colors.white,
-                        ),
-                      ),
+                ),
               ),
-            ),
-            const SizedBox(height: 24),
-            Text(
-              _selectedMovie!,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: colorScheme.onSurface,
+              const SizedBox(height: 24),
+              Text(
+                _selectedMovie!,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: colorScheme.onSurface,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-            if (_selectedMovieData != null) ...[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.category, size: 16, color: colorScheme.primary),
-                  const SizedBox(width: 8),
-                  Text(
-                    _selectedMovieData!.genres?.isNotEmpty == true
-                        ? _selectedMovieData!.genres!.first.name ?? 'Unknown'
-                        : 'Unknown',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: colorScheme.onSurface.withOpacity(0.7),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Icon(Icons.access_time, size: 16, color: colorScheme.primary),
-                  const SizedBox(width: 8),
-                  Text(
-                    '${_selectedMovieData!.durationMinutes} min',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: colorScheme.onSurface.withOpacity(0.7),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              if (_selectedMovieData!.grade != null && _selectedMovieData!.grade! > 0)
+              const SizedBox(height: 16),
+              if (_selectedMovieData != null) ...[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.star, size: 16, color: Colors.amber),
+                    Icon(Icons.category, size: 16, color: colorScheme.primary),
                     const SizedBox(width: 8),
                     Text(
-                      '${_selectedMovieData!.grade!.toStringAsFixed(1)}/5',
+                      _selectedMovieData!.genres?.isNotEmpty == true
+                          ? _selectedMovieData!.genres!.first.name ?? 'Unknown'
+                          : 'Unknown',
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.amber,
-                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface.withOpacity(0.7),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Icon(Icons.access_time, size: 16, color: colorScheme.primary),
+                    const SizedBox(width: 8),
+                    Text(
+                      '${_selectedMovieData!.durationMinutes} min',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: colorScheme.onSurface.withOpacity(0.7),
                       ),
                     ),
                   ],
                 ),
-              const SizedBox(height: 16),
-              if (_selectedMovieData!.description != null)
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: colorScheme.surfaceVariant.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(8),
+                const SizedBox(height: 8),
+                if (_selectedMovieData!.grade != null && _selectedMovieData!.grade! > 0)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.star, size: 16, color: Colors.amber),
+                      const SizedBox(width: 8),
+                      Text(
+                        '${_selectedMovieData!.grade!.toStringAsFixed(1)}/5',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.amber,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
-                  child: Text(
-                    _selectedMovieData!.description!,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: colorScheme.onSurface.withOpacity(0.8),
-                      height: 1.4,
+                const SizedBox(height: 16),
+                if (_selectedMovieData!.description != null)
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: colorScheme.surfaceVariant.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    textAlign: TextAlign.center,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
+                    child: Text(
+                      _selectedMovieData!.description!,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: colorScheme.onSurface.withOpacity(0.8),
+                        height: 1.4,
+                      ),
+                      textAlign: TextAlign.center,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
+              ],
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.touch_app,
+                    size: 16,
+                    color: colorScheme.primary.withOpacity(0.7),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    l10n.tapToViewDetails,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: colorScheme.onSurface.withOpacity(0.6),
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
             ],
-          ],
+          ),
         ),
       ),
     );
   }
 
   Future<void> _generateRandomMovie() async {
+    if (!mounted) return;
+    
     final l10n = AppLocalizations.of(context)!;
     setState(() {
       _isLoading = true;
@@ -613,23 +648,12 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
         minRating: _selectedRating,
       );
 
+      if (!mounted) return;
+
       setState(() {
         if (recommendation == null) {
           _selectedMovie = null;
           _selectedMovieData = null;
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text(l10n.noMoviesFound),
-              content: Text(l10n.noMoviesFoundMessage),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text('OK'),
-                ),
-              ],
-            ),
-          );
         } else {
           _selectedMovieData = recommendation;
           _selectedMovie = recommendation.title ?? 'Unknown Movie';
@@ -645,18 +669,39 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
         }
         _isLoading = false;
       });
+
+      if (recommendation == null && mounted) {
+        if (!mounted) return;
+        showDialog(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            title: Text(l10n.noMoviesFound),
+            content: Text(l10n.noMoviesFoundMessage),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
     } catch (e) {
+      if (!mounted) return;
+      
       setState(() {
         _isLoading = false;
       });
+      
+      if (!mounted) return;
       showDialog(
         context: context,
-        builder: (context) => AlertDialog(
+        builder: (dialogContext) => AlertDialog(
           title: Text(l10n.noMoviesFound),
           content: Text(l10n.noMoviesFoundMessage),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.pop(dialogContext),
               child: Text('OK'),
             ),
           ],

@@ -617,5 +617,9 @@
   "code": "Kod",
   "@code": {
     "description": "Code label"
+  },
+  "tapToViewDetails": "Dodirnite za detalje",
+  "@tapToViewDetails": {
+    "description": "Tap to view details text"
   }
 } 
