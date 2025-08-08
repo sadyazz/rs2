@@ -5,11 +5,10 @@ import '../models/movie.dart';
 import '../models/screening.dart';
 import '../models/actor.dart';
 import '../providers/screening_provider.dart';
-import '../providers/actor_provider.dart';
 import '../providers/review_provider.dart';
+import '../providers/user_movie_list_provider.dart';
 import '../providers/utils.dart';
 import '../models/review.dart';
-import '../models/search_result.dart';
 import 'reviews_screen.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
@@ -28,10 +27,16 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   bool isLoadingScreenings = false;
   bool isLoadingActors = false;
   bool isLoadingReviews = false;
+  bool isLoadingWatchlistStatus = false;
+  bool isLoadingFavoritesStatus = false;
+  bool isInWatchlist = false;
+  bool isInFavorites = false;
   String selectedDate = '';
   String selectedTime = '';
   String selectedLocation = 'Sarajevo';
   Set<int> revealedSpoilers = <int>{};
+
+  bool get isComingSoon => widget.movie.isComingSoon == true;
 
   @override
   void initState() {
@@ -39,6 +44,118 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     _loadScreenings();
     _loadActors();
     _loadReviews();
+    _loadListStatuses();
+  }
+
+  Future<void> _loadListStatuses() async {
+    try {
+      setState(() {
+        isLoadingWatchlistStatus = true;
+        isLoadingFavoritesStatus = true;
+      });
+
+      final userMovieListProvider = context.read<UserMovieListProvider>();
+      
+      final watchlistStatus = await userMovieListProvider.isMovieInList(widget.movie.id!, 'watchlist');
+      final favoritesStatus = await userMovieListProvider.isMovieInList(widget.movie.id!, 'favorites');
+
+      setState(() {
+        isInWatchlist = watchlistStatus;
+        isInFavorites = favoritesStatus;
+        isLoadingWatchlistStatus = false;
+        isLoadingFavoritesStatus = false;
+      });
+    } catch (e) {
+      print('Error loading list statuses: $e');
+      setState(() {
+        isLoadingWatchlistStatus = false;
+        isLoadingFavoritesStatus = false;
+      });
+    }
+  }
+
+  Future<void> _toggleWatchlist() async {
+    try {
+      setState(() {
+        isLoadingWatchlistStatus = true;
+      });
+
+      final userMovieListProvider = context.read<UserMovieListProvider>();
+      
+      if (isInWatchlist) {
+        await userMovieListProvider.removeMovieFromList(widget.movie.id!, 'watchlist');
+      } else {
+        await userMovieListProvider.addMovieToList(widget.movie.id!, 'watchlist');
+      }
+
+      setState(() {
+        isInWatchlist = !isInWatchlist;
+        isLoadingWatchlistStatus = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            isInWatchlist 
+                ? 'Added to watchlist' 
+                : 'Removed from watchlist',
+          ),
+        ),
+      );
+    } catch (e) {
+      print('Error toggling watchlist: $e');
+      setState(() {
+        isLoadingWatchlistStatus = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error updating watchlist'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _toggleFavorites() async {
+    try {
+      setState(() {
+        isLoadingFavoritesStatus = true;
+      });
+
+      final userMovieListProvider = context.read<UserMovieListProvider>();
+      
+      if (isInFavorites) {
+        await userMovieListProvider.removeMovieFromList(widget.movie.id!, 'favorites');
+      } else {
+        await userMovieListProvider.addMovieToList(widget.movie.id!, 'favorites');
+      }
+
+      setState(() {
+        isInFavorites = !isInFavorites;
+        isLoadingFavoritesStatus = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            isInFavorites 
+                ? 'Added to favorites' 
+                : 'Removed from favorites',
+          ),
+        ),
+      );
+    } catch (e) {
+      print('Error toggling favorites: $e');
+      setState(() {
+        isLoadingFavoritesStatus = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error updating favorites'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   void _updateSelectedTime() {
@@ -100,7 +217,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       
       final result = await reviewProvider.get(filter: filter);
       
-      if (result != null && result.items != null) {
+      if (result.items != null) {
         setState(() {
           reviews = result.items!.cast<Review>();
         });
@@ -135,7 +252,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
       final result = await screeningProvider.get(filter: filter);
       
-      if (result != null && result.items != null) {
+      if (result.items != null) {
         setState(() {
           screenings = result.items!.cast<Screening>();
         });
@@ -207,15 +324,22 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 children: [
                   _buildMovieInfo(l10n, colorScheme),
                   const SizedBox(height: 24),
-                  _buildActionButtons(l10n, colorScheme),
+                  if (isComingSoon)
+                    _buildComingSoonActions(l10n, colorScheme)
+                  else
+                    _buildActionButtons(l10n, colorScheme),
                   const SizedBox(height: 24),
-                  _buildScreeningsSection(l10n, colorScheme),
-                  const SizedBox(height: 24),
+                  if (!isComingSoon) ...[
+                    _buildScreeningsSection(l10n, colorScheme),
+                    const SizedBox(height: 24),
+                  ],
                   _buildMovieDescription(l10n, colorScheme),
                   const SizedBox(height: 24),
                   _buildActorsSection(l10n, colorScheme),
-                  const SizedBox(height: 24),
-                  _buildReviewsSection(l10n, colorScheme),
+                  if (!isComingSoon) ...[
+                    const SizedBox(height: 24),
+                    _buildReviewsSection(l10n, colorScheme),
+                  ],
                 ],
               ),
             ),
@@ -223,6 +347,106 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         ],
       ),
     );
+  }
+
+  Widget _buildComingSoonActions(AppLocalizations l10n, ColorScheme colorScheme) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: isLoadingWatchlistStatus ? null : _toggleWatchlist,
+                icon: isLoadingWatchlistStatus 
+                    ? SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Icon(
+                        isInWatchlist ? Icons.bookmark : Icons.bookmark_add,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                label: Text(
+                  isInWatchlist ? 'Remove from Watchlist' : l10n.addToWatchlist,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isInWatchlist 
+                      ? Colors.grey[600]
+                      : const Color(0xFF4F8593),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: colorScheme.primaryContainer.withOpacity(0.3),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: colorScheme.primary.withOpacity(0.3),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.event,
+                color: colorScheme.primary,
+                size: 24,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.releaseDate,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    Text(
+                      _formatReleaseDate(widget.movie.releaseDate),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _formatReleaseDate(DateTime? releaseDate) {
+    if (releaseDate == null) return 'TBA';
+    
+    final l10n = AppLocalizations.of(context)!;
+    final months = [
+      l10n.january, l10n.february, l10n.march, l10n.april, l10n.may, l10n.june,
+      l10n.july, l10n.august, l10n.september, l10n.october, l10n.november, l10n.december
+    ];
+    
+    return '${months[releaseDate.month - 1]} ${releaseDate.day}, ${releaseDate.year}';
   }
 
   Widget _buildMovieInfo(AppLocalizations l10n, ColorScheme colorScheme) {
@@ -276,7 +500,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 ],
               ),
             ),
-            if (widget.movie.grade != null)
+            if (widget.movie.grade != null && !isComingSoon)
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
@@ -299,46 +523,100 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   }
 
   Widget _buildActionButtons(AppLocalizations l10n, ColorScheme colorScheme) {
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          child: ElevatedButton.icon(
-            onPressed: () {
-              // TODO: Implement ticket reservation
-            },
-            icon: const Icon(Icons.movie_filter_rounded, color: Colors.white, size: 24,),
-            label: Text(
-              l10n.reserveTicket,
-              style: const TextStyle(color: Colors.white),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF4F8593),
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  // TODO: Implement ticket reservation
+                },
+                icon: const Icon(Icons.movie_filter_rounded, color: Colors.white, size: 24),
+                label: Text(
+                  l10n.reserveTicket,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF4F8593),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
               ),
             ),
-          ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: isLoadingFavoritesStatus ? null : _toggleFavorites,
+                icon: isLoadingFavoritesStatus 
+                    ? SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Icon(
+                        isInFavorites ? Icons.favorite : Icons.favorite_border,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                label: Text(
+                  isInFavorites ? 'Remove from Favorites' : l10n.addToFavorites,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isInFavorites 
+                      ? Colors.red[600]
+                      : const Color(0xFF4F8593),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: ElevatedButton.icon(
-            onPressed: () {
-              // TODO: Implement add to favorites
-            },
-            icon: const Icon(Icons.favorite, color: Colors.white, size: 24,),
-            label: Text(
-              l10n.addToFavorites,
-              style: const TextStyle(color: Colors.white),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF4F8593),
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: isLoadingWatchlistStatus ? null : _toggleWatchlist,
+                icon: isLoadingWatchlistStatus 
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Icon(
+                        isInWatchlist ? Icons.bookmark : Icons.bookmark_add,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                label: Text(
+                  isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist',
+                  style: const TextStyle(color: Colors.white, fontSize: 12),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isInWatchlist 
+                      ? Colors.grey[600]
+                      : const Color(0xFF4F8593),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ],
     );
@@ -359,7 +637,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         const SizedBox(height: 16),
         _buildDateSelector(l10n, colorScheme),
         const SizedBox(height: 12),
-        // _buildLocationInfo(colorScheme), // Zakomentarisano kao što je traženo
         const SizedBox(height: 16),
         _buildTimeSelector(l10n, colorScheme),
       ],
@@ -459,60 +736,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         },
       ),
     );
-  }
-
-  Widget _buildLocationInfo(AppLocalizations l10n, ColorScheme colorScheme) {
-    final location = _extractLocationFromScreenings();
-    
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceVariant.withOpacity(0.8),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: colorScheme.outline.withOpacity(0.2),
-          width: 1,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                location,
-                style: TextStyle(
-                  color: colorScheme.onSurface,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const Spacer(),
-              Icon(
-                Icons.location_on,
-                color: colorScheme.onSurface,
-                size: 20,
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          _buildTimeSelector(l10n, colorScheme),
-        ],
-      ),
-    );
-  }
-
-  String _extractLocationFromScreenings() {
-    if (screenings.isEmpty) return 'Sarajevo';
-    
-    final locations = <String>{};
-    for (final screening in screenings) {
-      if (screening.hallName != null && screening.hallName!.isNotEmpty) {
-        locations.add(screening.hallName!);
-      }
-    }
-    
-    return locations.isNotEmpty ? locations.first : 'Sarajevo';
   }
 
   List<String> _extractDatesFromScreenings(AppLocalizations l10n) {

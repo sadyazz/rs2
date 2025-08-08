@@ -473,9 +473,9 @@
   "@myMovieLists": {
     "description": "My movie lists section title"
   },
-  "wishlist": "Wishlist",
-  "@wishlist": {
-    "description": "Wishlist title"
+  "watchlist": "Watchlist",
+  "@watchlist": {
+    "description": "Watchlist title"
   },
   "watchedMovies": "Watched Movies",
   "@watchedMovies": {
@@ -621,5 +621,61 @@
   "tapToViewDetails": "Tap to view details",
   "@tapToViewDetails": {
     "description": "Tap to view details text"
+  },
+  "addToWatchlist": "Add to Watchlist",
+  "@addToWatchlist": {
+    "description": "Add to watchlist button text"
+  },
+  "releaseDate": "Release Date",
+  "@releaseDate": {
+    "description": "Release date label"
+  },
+  "january": "January",
+  "@january": {
+    "description": "January month name"
+  },
+  "february": "February",
+  "@february": {
+    "description": "February month name"
+  },
+  "march": "March",
+  "@march": {
+    "description": "March month name"
+  },
+  "april": "April",
+  "@april": {
+    "description": "April month name"
+  },
+  "may": "May",
+  "@may": {
+    "description": "May month name"
+  },
+  "june": "June",
+  "@june": {
+    "description": "June month name"
+  },
+  "july": "July",
+  "@july": {
+    "description": "July month name"
+  },
+  "august": "August",
+  "@august": {
+    "description": "August month name"
+  },
+  "september": "September",
+  "@september": {
+    "description": "September month name"
+  },
+  "october": "October",
+  "@october": {
+    "description": "October month name"
+  },
+  "november": "November",
+  "@november": {
+    "description": "November month name"
+  },
+  "december": "December",
+  "@december": {
+    "description": "December month name"
   }
 } 

@@ -473,9 +473,9 @@
   "@myMovieLists": {
     "description": "My movie lists section title"
   },
-  "wishlist": "Lista želja",
-  "@wishlist": {
-    "description": "Wishlist title"
+  "watchlist": "Lista za gledanje",
+  "@watchlist": {
+    "description": "Watchlist title"
   },
   "watchedMovies": "Pregledani filmovi",
   "@watchedMovies": {
@@ -621,5 +621,61 @@
   "tapToViewDetails": "Dodirnite za detalje",
   "@tapToViewDetails": {
     "description": "Tap to view details text"
+  },
+  "addToWatchlist": "Dodaj u listu za gledanje",
+  "@addToWatchlist": {
+    "description": "Add to watchlist button text"
+  },
+  "releaseDate": "Datum izlaska",
+  "@releaseDate": {
+    "description": "Release date label"
+  },
+  "january": "Januar",
+  "@january": {
+    "description": "January month name"
+  },
+  "february": "Februar",
+  "@february": {
+    "description": "February month name"
+  },
+  "march": "Mart",
+  "@march": {
+    "description": "March month name"
+  },
+  "april": "April",
+  "@april": {
+    "description": "April month name"
+  },
+  "may": "Maj",
+  "@may": {
+    "description": "May month name"
+  },
+  "june": "Juni",
+  "@june": {
+    "description": "June month name"
+  },
+  "july": "Juli",
+  "@july": {
+    "description": "July month name"
+  },
+  "august": "Avgust",
+  "@august": {
+    "description": "August month name"
+  },
+  "september": "Septembar",
+  "@september": {
+    "description": "September month name"
+  },
+  "october": "Oktobar",
+  "@october": {
+    "description": "October month name"
+  },
+  "november": "Novembar",
+  "@november": {
+    "description": "November month name"
+  },
+  "december": "Decembar",
+  "@december": {
+    "description": "December month name"
   }
 } 
