@@ -4,8 +4,7 @@ using eCinema.Model.Responses;
 using eCinema.Model.SearchObjects;
 using eCinema.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eCinema.API.Controllers
 {
@@ -19,12 +18,35 @@ namespace eCinema.API.Controllers
         {
             _userService = service;
         }
-
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<UserResponse>> Login(UserLoginRequest request)
         {
             var user = await _userService.AuthenticateAsync(request);
+            if (user == null)
+            {
+                return Unauthorized("Wrong username or password.");
+            }
             return Ok(user);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public async Task<ActionResult<UserResponse>> Register(UserUpsertRequest request)
+        {
+            try
+            {
+                var user = await _userService.RegisterAsync(request);
+                return Ok(user);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while creating the user.");
+            }
         }
 
         // [HttpGet]

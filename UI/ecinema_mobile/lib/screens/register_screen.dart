@@ -1,103 +1,34 @@
-import 'package:ecinema_mobile/providers/news_provider.dart';
-import 'package:ecinema_mobile/providers/promotion_provider.dart';
-// import 'package:ecinema_mobile/providers/user_movie_list_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
-import 'providers/language_provider.dart';
-import 'providers/theme_provider.dart';
-import 'providers/movie_provider.dart';
-import 'providers/genre_provider.dart';
-import 'providers/screening_provider.dart';
-import 'providers/actor_provider.dart';
-import 'providers/review_provider.dart';
-import 'providers/user_provider.dart';
-import 'layouts/master_screen.dart';
-import 'screens/register_screen.dart';
+import '../providers/user_provider.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => LanguageProvider()),
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => MovieProvider()),
-        ChangeNotifierProvider(create: (_) => GenreProvider()),
-        ChangeNotifierProvider(create: (_) => ScreeningProvider()),
-        ChangeNotifierProvider(create: (_) => ActorProvider()),
-        ChangeNotifierProvider(create: (_) => ReviewProvider()),
-        ChangeNotifierProvider(create: (_) => NewsProvider()),
-        ChangeNotifierProvider(create: (_) => PromotionProvider()),
-        // ChangeNotifierProvider(create: (_) => UserMovieListProvider()),
-      ],
-      child: Consumer2<LanguageProvider, ThemeProvider>(
-        builder: (context, languageProvider, themeProvider, child) {
-          if (!languageProvider.isInitialized) {
-            return const MaterialApp(
-              home: Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ),
-            );
-          }
-
-          return MaterialApp(
-            title: 'eCinema Mobile',
-            debugShowCheckedModeBanner: false,
-            theme: themeProvider.getLightTheme(),
-            darkTheme: themeProvider.getDarkTheme(),
-            themeMode: themeProvider.themeMode,
-            localizationsDelegates: [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [
-              Locale('en'),
-              Locale('bs'),
-            ],
-            locale: languageProvider.currentLocale,
-            initialRoute: '/login',
-            routes: {
-              '/login': (context) => const LoginPage(),
-              '/register': (context) => const RegisterPage(),
-              '/home': (context) => MasterScreen("", null, showAppBar: false),
-            },
-          );
-        },
-      ),
-    );
-  }
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
-
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
   bool _isLoading = false;
 
   @override
   void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -132,13 +63,13 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      Icons.movie_creation_rounded,
+                      Icons.person_add_rounded,
                       size: 80,
                       color: colorScheme.primary,
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'eCinema',
+                      l10n.createAccount,
                       style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: colorScheme.primary,
@@ -147,30 +78,89 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      l10n.welcomeBack,
+                      l10n.joinEcinemaToday,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: colorScheme.onSurface.withOpacity(0.7),
                       ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 48),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: _firstNameController,
+                            decoration: InputDecoration(
+                              labelText: l10n.firstName,
+                              prefixIcon: Icon(Icons.person_outline, color: colorScheme.onSurface),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              filled: true,
+                              fillColor: colorScheme.surface,
+                            ),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return l10n.pleaseEnterFirstName;
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: TextFormField(
+                            controller: _lastNameController,
+                            decoration: InputDecoration(
+                              labelText: l10n.lastName,
+                              prefixIcon: Icon(Icons.person_outline, color: colorScheme.onSurface),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              filled: true,
+                              fillColor: colorScheme.surface,
+                            ),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return l10n.pleaseEnterLastName;
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: l10n.email,
+                        prefixIcon: Icon(Icons.email_outlined, color: colorScheme.onSurface),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        filled: true,
+                        fillColor: colorScheme.surface,
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return l10n.pleaseEnterEmail;
+                        }
+                        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                          return l10n.pleaseEnterValidEmail;
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
                     TextFormField(
                       controller: _usernameController,
                       decoration: InputDecoration(
                         labelText: l10n.username,
-                        prefixIcon: Icon(Icons.person_outline, color: colorScheme.onSurface),
+                        prefixIcon: Icon(Icons.account_circle_outlined, color: colorScheme.onSurface),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: colorScheme.outline),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: colorScheme.primary,
-                          ),
                         ),
                         filled: true,
                         fillColor: colorScheme.surface,
@@ -183,10 +173,6 @@ class _LoginPageState extends State<LoginPage> {
                           return l10n.usernameMinLength;
                         }
                         return null;
-                      },
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) {
-                        FocusScope.of(context).nextFocus();
                       },
                     ),
                     const SizedBox(height: 16),
@@ -209,16 +195,6 @@ class _LoginPageState extends State<LoginPage> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: colorScheme.outline),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: colorScheme.primary,
-                          ),
-                        ),
                         filled: true,
                         fillColor: colorScheme.surface,
                       ),
@@ -232,29 +208,44 @@ class _LoginPageState extends State<LoginPage> {
                         }
                         return null;
                       },
-                      textInputAction: TextInputAction.done,
-                      onFieldSubmitted: (_) {
-                        _handleLogin();
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _confirmPasswordController,
+                      decoration: InputDecoration(
+                        labelText: l10n.confirmPassword,
+                        prefixIcon: Icon(Icons.lock_outline, color: colorScheme.onSurface),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscureConfirmPassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                            color: colorScheme.onSurface,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscureConfirmPassword = !_obscureConfirmPassword;
+                            });
+                          },
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        filled: true,
+                        fillColor: colorScheme.surface,
+                      ),
+                      obscureText: _obscureConfirmPassword,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return l10n.pleaseConfirmPassword;
+                        }
+                        if (value != _passwordController.text) {
+                          return l10n.passwordsDoNotMatch;
+                        }
+                        return null;
                       },
                     ),
-                    const SizedBox(height: 8),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {
-                          // TODO: Implement forgot password
-                        },
-                        child: Text(
-                          l10n.forgotPassword,
-                          style: TextStyle(
-                            color: colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 32),
                     ElevatedButton(
-                      onPressed: _isLoading ? null : _handleLogin,
+                      onPressed: _isLoading ? null : _handleRegister,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: colorScheme.primary,
                         foregroundColor: colorScheme.onPrimary,
@@ -274,7 +265,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             )
                           : Text(
-                              l10n.login,
+                              l10n.register,
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -285,15 +276,15 @@ class _LoginPageState extends State<LoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          l10n.dontHaveAccount,
+                          l10n.alreadyHaveAccount,
                           style: TextStyle(
                             color: colorScheme.onSurface.withOpacity(0.7),
                           ),
                         ),
                         TextButton(
-                          onPressed: () => Navigator.of(context).pushNamed('/register'),
+                          onPressed: () => Navigator.of(context).pop(),
                           child: Text(
-                            l10n.register,
+                            l10n.login,
                             style: TextStyle(
                               color: colorScheme.primary,
                               fontWeight: FontWeight.bold,
@@ -312,7 +303,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> _handleLogin() async {
+  Future<void> _handleRegister() async {
     final l10n = AppLocalizations.of(context)!;
     
     if (!_formKey.currentState!.validate()) {
@@ -324,29 +315,47 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      final username = _usernameController.text.trim();
-      final password = _passwordController.text;
-      
-      final success = await UserProvider.login(username, password);
-      
+      final success = await UserProvider.register(
+        firstName: _firstNameController.text.trim(),
+        lastName: _lastNameController.text.trim(),
+        email: _emailController.text.trim(),
+        username: _usernameController.text.trim(),
+        password: _passwordController.text,
+      );
+
       if (success) {
-        Navigator.of(context).pushReplacementNamed('/home');
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(l10n.success),
+            content: Text(l10n.accountCreatedSuccessfully),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+                child: Text(l10n.ok),
+              ),
+            ],
+          ),
+        );
       } else {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
             title: Text(l10n.error),
-            content: Text(l10n.invalidCredentials),
+            content: Text(l10n.failedToCreateAccount),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
+                child: Text(l10n.ok),
               ),
             ],
           ),
         );
       }
-    } on Exception catch (e) {
+    } catch (e) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -355,7 +364,7 @@ class _LoginPageState extends State<LoginPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
+              child: Text(l10n.ok),
             ),
           ],
         ),
@@ -366,6 +375,4 @@ class _LoginPageState extends State<LoginPage> {
       });
     }
   }
-}
-
-
+} 

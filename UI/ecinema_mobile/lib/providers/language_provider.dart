@@ -13,6 +13,7 @@ class LanguageProvider extends ChangeNotifier {
   bool get isInitialized => _isInitialized;
 
   LanguageProvider() {
+    _isInitialized = true;
     _loadSavedLanguage();
   }
 
@@ -21,11 +22,9 @@ class LanguageProvider extends ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       final languageCode = prefs.getString(_languageKey) ?? 'en';
       _currentLocale = Locale(languageCode);
-      _isInitialized = true;
       notifyListeners();
     } catch (e) {
       _currentLocale = const Locale('en');
-      _isInitialized = true;
       notifyListeners();
     }
   }
@@ -58,12 +57,12 @@ class LanguageProvider extends ChangeNotifier {
     return _currentLocale.languageCode;
   }
 
-  static final List<LocalizationsDelegate<dynamic>> localizationsDelegates = [
+  List<LocalizationsDelegate<dynamic>> get localizationsDelegates => [
     AppLocalizations.delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalWidgetsLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
   ];
 
-  static final List<Locale> supportedLocales = L10n.all;
+  List<Locale> get supportedLocales => L10n.all;
 } 
