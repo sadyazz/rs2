@@ -25,6 +25,7 @@ namespace eCinema.Services.Database
         public DbSet<Review> Reviews { get; set; } = null!;
         public DbSet<Promotion> Promotions { get; set; } = null!;
         public DbSet<NewsArticle> NewsArticles { get; set; } = null!;
+        public DbSet<UserMovieList> UserMovieLists { get; set; } = null!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -143,6 +144,22 @@ namespace eCinema.Services.Database
                 .WithMany(g => g.MovieGenres)
                 .HasForeignKey(mg => mg.GenreId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserMovieList>()
+                .HasOne(uml => uml.User)
+                .WithMany()
+                .HasForeignKey(uml => uml.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserMovieList>()
+                .HasOne(uml => uml.Movie)
+                .WithMany()
+                .HasForeignKey(uml => uml.MovieId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserMovieList>()
+                .HasIndex(uml => new { uml.UserId, uml.MovieId, uml.ListType })
+                .IsUnique();
         }
     }
 } 
