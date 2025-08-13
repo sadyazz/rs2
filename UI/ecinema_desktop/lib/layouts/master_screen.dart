@@ -60,7 +60,6 @@ class _MasterScreenState extends State<MasterScreen> {
           ),
           child: Column(
             children: [
-              // Header Design
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.fromLTRB(20, 40, 20, 30),
@@ -492,9 +491,12 @@ class _MasterScreenState extends State<MasterScreen> {
   }
 
   void _performLogout() {
-    AuthProvider.username = '';
-    AuthProvider.password = '';
+    AuthProvider.logout();
     
-    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+    Navigator.pushAndRemoveUntil(
+      context, 
+      MaterialPageRoute(builder: (context) => LoginPage()),
+      (route) => false
+    );
   }
 }

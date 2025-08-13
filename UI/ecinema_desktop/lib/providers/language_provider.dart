@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LanguageProvider extends ChangeNotifier {
   static const String _languageKey = 'selected_language';
   Locale _currentLocale = const Locale('en');
-  bool _isInitialized = false;
+  bool _isInitialized = true;
 
   Locale get currentLocale => _currentLocale;
   bool get isInitialized => _isInitialized;
@@ -18,11 +18,9 @@ class LanguageProvider extends ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       final languageCode = prefs.getString(_languageKey) ?? 'en';
       _currentLocale = Locale(languageCode);
-      _isInitialized = true;
       notifyListeners();
     } catch (e) {
       _currentLocale = const Locale('en');
-      _isInitialized = true;
       notifyListeners();
     }
   }

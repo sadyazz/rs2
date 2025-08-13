@@ -191,13 +191,25 @@
   "@pleaseEnterUsername": {
     "description": "Username validation message"
   },
+  "pleaseEnterEmail": "Please enter your email",
+  "@pleaseEnterEmail": {
+    "description": "Email validation message"
+  },
   "pleaseEnterPassword": "Please enter your password",
   "@pleaseEnterPassword": {
     "description": "Password validation message"
   },
+  "passwordMinLength": "Password must be at least 6 characters",
+  "@passwordMinLength": {
+    "description": "Password minimum length validation"
+  },
   "error": "Error",
   "@error": {
     "description": "Error dialog title"
+  },
+  "success": "Success",
+  "@success": {
+    "description": "Success dialog title"
   },
   "ok": "OK",
   "@ok": {
@@ -1576,5 +1588,81 @@
   "lightMode": "Light Mode",
   "@lightMode": {
     "description": "Light mode option"
+  },
+  "dontHaveAdminAccount": "Don't have an admin account?",
+  "@dontHaveAdminAccount": {
+    "description": "Don't have admin account text"
+  },
+  "register": "Register",
+  "@register": {
+    "description": "Register button text"
+  },
+  "adminRegistration": "Admin Registration",
+  "@adminRegistration": {
+    "description": "Admin registration page title"
+  },
+  "createNewAdminAccount": "Create a new administrator account",
+  "@createNewAdminAccount": {
+    "description": "Admin registration subtitle"
+  },
+  "firstName": "First Name",
+  "@firstName": {
+    "description": "First name field label"
+  },
+  "lastName": "Last Name",
+  "@lastName": {
+    "description": "Last name field label"
+  },
+  "phoneNumberOptional": "Phone Number (Optional)",
+  "@phoneNumberOptional": {
+    "description": "Phone number field label (optional)"
+  },
+  "confirmPassword": "Confirm Password",
+  "@confirmPassword": {
+    "description": "Confirm password field label"
+  },
+  "pleaseEnterFirstName": "Please enter first name",
+  "@pleaseEnterFirstName": {
+    "description": "First name validation message"
+  },
+  "pleaseEnterLastName": "Please enter last name",
+  "@pleaseEnterLastName": {
+    "description": "Last name validation message"
+  },
+  "pleaseEnterValidEmail": "Please enter valid email",
+  "@pleaseEnterValidEmail": {
+    "description": "Email validation message"
+  },
+  "usernameMinLength": "Username must be at least 3 characters",
+  "@usernameMinLength": {
+    "description": "Username minimum length validation"
+  },
+  "pleaseConfirmPassword": "Please confirm password",
+  "@pleaseConfirmPassword": {
+    "description": "Password confirmation validation message"
+  },
+  "passwordsDoNotMatch": "Passwords do not match",
+  "@passwordsDoNotMatch": {
+    "description": "Password mismatch validation message"
+  },
+  "accountCreatedSuccessfully": "Admin account created successfully",
+  "@accountCreatedSuccessfully": {
+    "description": "Account created success message"
+  },
+  "failedToCreateAccount": "Failed to create admin account",
+  "@failedToCreateAccount": {
+    "description": "Failed to create account message"
+  },
+  "alreadyHaveAccount": "Already have an account?",
+  "@alreadyHaveAccount": {
+    "description": "Already have account text"
+  },
+  "invalidCredentials": "Invalid credentials",
+  "@invalidCredentials": {
+    "description": "Invalid credentials error message"
+  },
+  "adminAccessRequired": "You do not have permission to use this application. Only administrators can access the desktop application.",
+  "@adminAccessRequired": {
+    "description": "Admin access required error message"
   }
 }
