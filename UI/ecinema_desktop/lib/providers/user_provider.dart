@@ -9,6 +9,12 @@ class UserProvider extends BaseProvider<User> {
 
   @override
   User fromJson(data) {
+    if (data is Map<String, dynamic>) {
+      if (data['role'] != null) {
+        print('DEBUG: Role data type: ${data['role'].runtimeType}');
+        print('DEBUG: Role data content: ${data['role']}');
+      }
+    }
     return User.fromJson(data);
   }
 
@@ -74,6 +80,35 @@ class UserProvider extends BaseProvider<User> {
     } catch (e) {
       print('Register error: $e');
       return false;
+    }
+  }
+
+  Future<void> updateUserRole(int userId, Map<String, dynamic> request) async {
+    try {
+      final headers = createHeaders();
+      print('DEBUG: Sending request to update user role');
+      print('DEBUG: URL: http://localhost:5190/User/$userId/role');
+      print('DEBUG: Headers: $headers');
+      print('DEBUG: Request body: $request');
+      
+      final response = await http.put(
+        Uri.parse('http://localhost:5190/User/$userId/role'),
+        headers: headers,
+        body: jsonEncode(request),
+      );
+      
+      print('DEBUG: Response status: ${response.statusCode}');
+      print('DEBUG: Response body: ${response.body}');
+      
+      if (response.statusCode == 200) {
+        return;
+      } else {
+        final errorData = jsonDecode(response.body);
+        throw Exception(errorData['message'] ?? 'Failed to update user role');
+      }
+    } catch (e) {
+      print('DEBUG: Error in updateUserRole: $e');
+      throw Exception('Failed to update user role: $e');
     }
   }
 } 

@@ -89,5 +89,54 @@ namespace eCinema.API.Controllers
         //         return NotFound();
         //     return Ok(result);
         // }
+
+        [HttpPut("{id}/role")]
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult<UserResponse>> UpdateUserRole(int id, [FromBody] UpdateUserRoleRequest request)
+        {
+            try
+            {
+                var user = await _userService.GetByIdAsync(id);
+                if (user == null)
+                    return NotFound();
+
+                var updateRequest = new UserUpsertRequest
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Username = user.Username,
+                    PhoneNumber = user.PhoneNumber,
+                    Password = string.Empty,
+                    RoleId = request.RoleId
+                };
+
+                var updatedUser = await _userService.UpdateAsync(id, updateRequest);
+                if (updatedUser == null)
+                    return NotFound();
+
+                if (request.IsDeleted)
+                {
+                    await _userService.SoftDeleteAsync(id);
+                }
+                else if (user.IsDeleted)
+                {
+                    await _userService.RestoreAsync(id);
+                }
+
+                var finalUser = await _userService.GetByIdAsync(id);
+                return Ok(finalUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+    }
+
+    public class UpdateUserRoleRequest
+    {
+        public int RoleId { get; set; }
+        public bool IsDeleted { get; set; }
     }
 } 

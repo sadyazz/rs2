@@ -1762,5 +1762,63 @@
   "unnamedRole": "Unnamed Role",
   "@unnamedRole": {
     "description": "Default role name when name is missing"
+  },
+  "editUser": "Edit User",
+  "@editUser": {
+    "description": "Edit user screen title"
+  },
+  "addUser": "Add User",
+  "@addUser": {
+    "description": "Add user screen title"
+  },
+  "firstName": "First Name",
+  "@firstName": {
+    "description": "First name field label"
+  },
+  "lastName": "Last Name",
+  "@lastName": {
+    "description": "Last name field label"
+  },
+  "phoneNumber": "Phone Number",
+  "@phoneNumber": {
+    "description": "Phone number field label"
+  },
+  "role": "Role",
+  "@role": {
+    "description": "Role field label"
+  },
+  "user": "User",
+  "@user": {
+    "description": "User label"
+  },
+  "userUpdatedSuccessfully": "User updated successfully",
+  "@userUpdatedSuccessfully": {
+    "description": "User updated success message"
+  },
+  "userCreatedSuccessfully": "User created successfully",
+  "@userCreatedSuccessfully": {
+    "description": "User created success message"
+  },
+  "failedToSaveUser": "Failed to save user: {error}",
+  "@failedToSaveUser": {
+    "description": "Failed to save user message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "addUser": "Add User",
+  "@addUser": {
+    "description": "Add user button text"
+  },
+  "filters": "Filters",
+  "@filters": {
+    "description": "Filters button text"
+  },
+  "tryAdjustingSearchCriteria": "Try adjusting your search criteria",
+  "@tryAdjustingSearchCriteria": {
+    "description": "Try adjusting search criteria message"
   }
 }

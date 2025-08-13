@@ -1726,5 +1726,63 @@
   "unnamedRole": "Neimenovana Uloga",
   "@unnamedRole": {
     "description": "Default role name when name is missing"
+  },
+  "editUser": "Uredi Korisnika",
+  "@editUser": {
+    "description": "Edit user screen title"
+  },
+  "addUser": "Dodaj Korisnika",
+  "@addUser": {
+    "description": "Add user screen title"
+  },
+  "firstName": "Ime",
+  "@firstName": {
+    "description": "First name field label"
+  },
+  "lastName": "Prezime",
+  "@lastName": {
+    "description": "Last name field label"
+  },
+  "phoneNumber": "Broj Telefona",
+  "@phoneNumber": {
+    "description": "Phone number field label"
+  },
+  "role": "Uloga",
+  "@role": {
+    "description": "Role field label"
+  },
+  "user": "Korisnik",
+  "@user": {
+    "description": "User label"
+  },
+  "userUpdatedSuccessfully": "Korisnik uspješno ažuriran",
+  "@userUpdatedSuccessfully": {
+    "description": "User updated success message"
+  },
+  "userCreatedSuccessfully": "Korisnik uspješno kreiran",
+  "@userCreatedSuccessfully": {
+    "description": "User created success message"
+  },
+  "failedToSaveUser": "Greška pri čuvanju korisnika: {error}",
+  "@failedToSaveUser": {
+    "description": "Failed to save user message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "addUser": "Dodaj Korisnika",
+  "@addUser": {
+    "description": "Add user button text"
+  },
+  "filters": "Filteri",
+  "@filters": {
+    "description": "Filters button text"
+  },
+  "tryAdjustingSearchCriteria": "Pokušajte prilagoditi kriterije pretrage",
+  "@tryAdjustingSearchCriteria": {
+    "description": "Try adjusting search criteria message"
   }
 }

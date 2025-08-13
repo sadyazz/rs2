@@ -5,6 +5,7 @@ import 'package:ecinema_desktop/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'edit_user_screen.dart';
 
 class UsersListScreen extends StatefulWidget {
   const UsersListScreen({super.key});
@@ -349,9 +350,35 @@ class _UsersListScreenState extends State<UsersListScreen> {
               );
             },
             icon: const Icon(Icons.filter_alt_outlined),
-            label: Text('Filters'),
+            label: Text(l10n.filters),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 18),
+              minimumSize: const Size(0, 36),
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        SizedBox(
+          height: 36,
+          child: ElevatedButton.icon(
+            onPressed: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EditUserScreen(),
+                ),
+              );
+              if (result == true) {
+                _loadUsers();
+              }
+            },
+            icon: const Icon(Icons.add, size: 18),
+            label: Text(l10n.addUser),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green[600],
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
               minimumSize: const Size(0, 36),
             ),
           ),
@@ -430,7 +457,7 @@ class _UsersListScreenState extends State<UsersListScreen> {
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 6,
-                  childAspectRatio: 1.0,
+                  childAspectRatio: 0.8,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                 ),
@@ -452,7 +479,28 @@ class _UsersListScreenState extends State<UsersListScreen> {
     final l10n = AppLocalizations.of(context)!;
     return InkWell(
       onTap: () async {
-        // TODO: Edit user functionality
+        try {
+          final freshUser = await provider.getById(user.id!);
+          if (freshUser != null) {
+            final result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditUserScreen(user: freshUser),
+              ),
+            );
+            if (result == true) {
+              _loadUsers();
+            }
+          }
+        } catch (e) {
+          print('Error loading user details: $e');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(l10n.failedToSaveUser('Failed to load user details')),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       },
       borderRadius: BorderRadius.circular(16),
       child: Container(
@@ -632,8 +680,15 @@ class _UsersListScreenState extends State<UsersListScreen> {
                           children: [
                             InkWell(
                               onTap: () async {
-                                // Edit functionality removed for security reasons
-                                // Users should manage their own data through mobile app
+                                final result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditUserScreen(user: user),
+                                  ),
+                                );
+                                if (result == true) {
+                                  _loadUsers();
+                                }
                               },
                               borderRadius: BorderRadius.circular(8),
                               child: Container(

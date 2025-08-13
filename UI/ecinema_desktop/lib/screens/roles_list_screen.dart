@@ -517,27 +517,143 @@ class _RolesListScreenState extends State<RolesListScreen> {
 
   Widget _buildPaginationControls() {
     final l10n = AppLocalizations.of(context)!;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          l10n.totalRoles(result!.totalCount ?? 0),
-          style: const TextStyle(fontSize: 14),
+    if (result == null) return const SizedBox.shrink();
+    
+    final totalCount = result!.totalCount ?? 0;
+    final currentItems = result!.items!.length;
+    final hasNextPage = currentItems == pageSize;
+    final hasPreviousPage = currentPage > 0;
+    final totalPages = (totalCount / pageSize).ceil();
+    
+    return Container(
+      margin: const EdgeInsets.only(top: 4, bottom: 2),
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline.withAlpha(51),
+          width: 1,
         ),
-        Row(
-          children: [
-            IconButton(
-              onPressed: currentPage > 0 ? _goToPreviousPage : null,
-              icon: const Icon(Icons.chevron_left),
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).colorScheme.shadow.withAlpha(13),
+            spreadRadius: 0,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: hasPreviousPage 
+                ? Theme.of(context).colorScheme.primaryContainer
+                : Theme.of(context).colorScheme.surfaceVariant,
             ),
-            Text('${currentPage + 1}', style: const TextStyle(fontSize: 14)),
-            IconButton(
-              onPressed: result!.items!.length == pageSize ? _goToNextPage : null,
-              icon: const Icon(Icons.chevron_right),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: hasPreviousPage ? _goToPreviousPage : null,
+                borderRadius: BorderRadius.circular(6),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.chevron_left,
+                        size: 14,
+                        color: hasPreviousPage 
+                          ? Theme.of(context).colorScheme.onPrimaryContainer
+                          : Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: 2),
+                      Text(
+                        l10n.previous,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          color: hasPreviousPage 
+                            ? Theme.of(context).colorScheme.onPrimaryContainer
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ],
-        ),
-      ],
+          ),
+          
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '${currentPage + 1} / $totalPages',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              const SizedBox(height: 1),
+              Text(
+                '$currentItems ${l10n.ofText} $totalCount',
+                style: TextStyle(
+                  fontSize: 10,
+                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                ),
+              ),
+            ],
+          ),
+          
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: hasNextPage 
+                ? Theme.of(context).colorScheme.primaryContainer
+                : Theme.of(context).colorScheme.surfaceVariant,
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: hasNextPage ? _goToNextPage : null,
+                borderRadius: BorderRadius.circular(6),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        l10n.next,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          color: hasNextPage 
+                            ? Theme.of(context).colorScheme.onPrimaryContainer
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(width: 2),
+                      Icon(
+                        Icons.chevron_right,
+                        size: 14,
+                        color: hasNextPage 
+                          ? Theme.of(context).colorScheme.onPrimaryContainer
+                          : Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

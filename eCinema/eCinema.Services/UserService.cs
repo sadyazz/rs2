@@ -69,7 +69,7 @@ namespace eCinema.Services
                 LastName = request.LastName,
                 Email = request.Email,
                 Username = request.Username,
-                PhoneNumber = request.PhoneNumber ?? string.Empty,
+                PhoneNumber = request.PhoneNumber,
                 RoleId = request.RoleId,
                 CreatedAt = DateTime.UtcNow
             };
@@ -107,7 +107,7 @@ namespace eCinema.Services
             user.LastName = request.LastName;
             user.Email = request.Email;
             user.Username = request.Username;
-            user.PhoneNumber = request.PhoneNumber ?? string.Empty;
+            user.PhoneNumber = request.PhoneNumber;
             user.RoleId = request.RoleId;
 
             if (!string.IsNullOrEmpty(request.Password))
@@ -236,7 +236,7 @@ namespace eCinema.Services
                 LastName = request.LastName,
                 Email = request.Email,
                 Username = request.Username,
-                PhoneNumber = request.PhoneNumber ?? string.Empty,
+                PhoneNumber = request.PhoneNumber,
                 RoleId = request.RoleId,
                 CreatedAt = DateTime.UtcNow
             };
