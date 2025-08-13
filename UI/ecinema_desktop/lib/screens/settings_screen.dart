@@ -6,6 +6,7 @@ import 'package:ecinema_desktop/screens/halls_list_screen.dart';
 import 'package:ecinema_desktop/screens/users_list_screen.dart';
 import 'package:ecinema_desktop/screens/news_list_screen.dart';
 import 'package:ecinema_desktop/screens/promotions_list_screen.dart';
+import 'package:ecinema_desktop/screens/roles_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -154,6 +155,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     subtitle: l10n.managePromotions,
                     icon: Icons.local_offer,
                     onTap: () => _navigateToPromotions(),
+                  ),
+                  _buildManagementTile(
+                    title: l10n.roles,
+                    subtitle: l10n.manageRoles,
+                    icon: Icons.admin_panel_settings,
+                    onTap: () => _navigateToRoles(),
                   ),
                 ],
               ),
@@ -396,6 +403,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => const PromotionsListScreen(),
+      ),
+    );
+  }
+
+  void _navigateToRoles() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const RolesListScreen(),
       ),
     );
   }

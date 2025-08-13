@@ -535,7 +535,7 @@ class _UsersListScreenState extends State<UsersListScreen> {
                         ),
                       ),
                     ),
-                  if (user.role?.name.toLowerCase() == 'admin')
+                  if (user.role?.name?.toLowerCase() == 'admin')
                     Positioned(
                       top: 10,
                       left: 10,

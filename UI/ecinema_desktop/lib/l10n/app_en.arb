@@ -1664,5 +1664,103 @@
   "adminAccessRequired": "You do not have permission to use this application. Only administrators can access the desktop application.",
   "@adminAccessRequired": {
     "description": "Admin access required error message"
+  },
+  "addRole": "Add Role",
+  "@addRole": {
+    "description": "Add role button text"
+  },
+  "editRole": "Edit Role",
+  "@editRole": {
+    "description": "Edit role button text"
+  },
+  "roleName": "Role Name",
+  "@roleName": {
+    "description": "Role name field label"
+  },
+  "enterRoleName": "Enter role name",
+  "@enterRoleName": {
+    "description": "Role name field hint"
+  },
+  "roleNameRequired": "Role name is required",
+  "@roleNameRequired": {
+    "description": "Role name validation message"
+  },
+  "roleNameTooLong": "Role name must be less than 50 characters",
+  "@roleNameTooLong": {
+    "description": "Role name length validation message"
+  },
+  "roleCreatedSuccessfully": "Role created successfully",
+  "@roleCreatedSuccessfully": {
+    "description": "Role created success message"
+  },
+  "roleUpdatedSuccessfully": "Role updated successfully",
+  "@roleUpdatedSuccessfully": {
+    "description": "Role updated success message"
+  },
+  "roleDeletedSuccessfully": "Role deleted successfully",
+  "@roleDeletedSuccessfully": {
+    "description": "Role deleted success message"
+  },
+  "failedToDeleteRole": "Failed to delete role",
+  "@failedToDeleteRole": {
+    "description": "Failed to delete role message"
+  },
+  "confirmDeleteRole": "Are you sure you want to delete this role? This action is permanent and cannot be undone.",
+  "@confirmDeleteRole": {
+    "description": "Role deletion confirmation message"
+  },
+  "deleteRole": "Delete Role",
+  "@deleteRole": {
+    "description": "Delete role button text"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "create": "Create",
+  "@create": {
+    "description": "Create button text"
+  },
+  "update": "Update",
+  "@update": {
+    "description": "Update button text"
+  },
+  "loadingRoles": "Loading roles...",
+  "@loadingRoles": {
+    "description": "Loading roles message"
+  },
+  "noRolesLoaded": "No roles loaded",
+  "@noRolesLoaded": {
+    "description": "No roles loaded message"
+  },
+  "noRolesFound": "No roles found",
+  "@noRolesFound": {
+    "description": "No roles found message"
+  },
+  "tryAdjustingSearch": "Try adjusting your search criteria",
+  "@tryAdjustingSearch": {
+    "description": "Try adjusting search message"
+  },
+  "searchRoles": "Search roles...",
+  "@searchRoles": {
+    "description": "Search roles placeholder"
+  },
+  "totalRoles": "Total: {count} roles",
+  "@totalRoles": {
+    "description": "Total roles count message",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "active": "Active",
+  "@active": {
+    "description": "Active status label"
+  },
+  "unnamedRole": "Unnamed Role",
+  "@unnamedRole": {
+    "description": "Default role name when name is missing"
   }
 }

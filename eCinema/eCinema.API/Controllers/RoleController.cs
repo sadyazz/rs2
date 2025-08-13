@@ -10,6 +10,8 @@ namespace eCinema.API.Controllers
 {
     // [Authorize(Roles = "Administrator")]
     [AllowAnonymous]
+    [ApiController]
+    [Route("[controller]")]
     public class RoleController : BaseCRUDController<RoleResponse, RoleSearchObject, RoleUpsertRequest, RoleUpsertRequest>
     {
         public RoleController(IRoleService service) : base(service)

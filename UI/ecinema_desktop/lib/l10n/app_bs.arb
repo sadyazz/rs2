@@ -1628,5 +1628,103 @@
   "adminAccessRequired": "Nemate dozvolu da koristite ovu aplikaciju. Samo administratori mogu pristupiti desktop aplikaciji.",
   "@adminAccessRequired": {
     "description": "Admin access required error message"
+  },
+  "addRole": "Dodaj Ulogu",
+  "@addRole": {
+    "description": "Add role button text"
+  },
+  "editRole": "Uredi Ulogu",
+  "@editRole": {
+    "description": "Edit role button text"
+  },
+  "roleName": "Naziv Uloge",
+  "@roleName": {
+    "description": "Role name field label"
+  },
+  "enterRoleName": "Unesite naziv uloge",
+  "@enterRoleName": {
+    "description": "Role name field hint"
+  },
+  "roleNameRequired": "Naziv uloge je obavezan",
+  "@roleNameRequired": {
+    "description": "Role name validation message"
+  },
+  "roleNameTooLong": "Naziv uloge mora biti kraći od 50 karaktera",
+  "@roleNameTooLong": {
+    "description": "Role name length validation message"
+  },
+  "roleCreatedSuccessfully": "Uloga uspješno kreirana",
+  "@roleCreatedSuccessfully": {
+    "description": "Role created success message"
+  },
+  "roleUpdatedSuccessfully": "Uloga uspješno ažurirana",
+  "@roleUpdatedSuccessfully": {
+    "description": "Role updated success message"
+  },
+  "roleDeletedSuccessfully": "Uloga uspješno obrisana",
+  "@roleDeletedSuccessfully": {
+    "description": "Role deleted success message"
+  },
+  "failedToDeleteRole": "Greška pri brisanju uloge",
+  "@failedToDeleteRole": {
+    "description": "Failed to delete role message"
+  },
+  "confirmDeleteRole": "Da li ste sigurni da želite obrisati ovu ulogu? Ova radnja je trajna i ne može se poništiti.",
+  "@confirmDeleteRole": {
+    "description": "Role deletion confirmation message"
+  },
+  "deleteRole": "Obriši Ulogu",
+  "@deleteRole": {
+    "description": "Delete role button text"
+  },
+  "cancel": "Otkaži",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "create": "Kreiraj",
+  "@create": {
+    "description": "Create button text"
+  },
+  "update": "Ažuriraj",
+  "@update": {
+    "description": "Update button text"
+  },
+  "loadingRoles": "Učitavanje uloga...",
+  "@loadingRoles": {
+    "description": "Loading roles message"
+  },
+  "noRolesLoaded": "Nema učitane uloge",
+  "@noRolesLoaded": {
+    "description": "No roles loaded message"
+  },
+  "noRolesFound": "Nema pronađenih uloga",
+  "@noRolesFound": {
+    "description": "No roles found message"
+  },
+  "tryAdjustingSearch": "Pokušajte prilagoditi kriterije pretrage",
+  "@tryAdjustingSearch": {
+    "description": "Try adjusting search message"
+  },
+  "searchRoles": "Pretraži uloge...",
+  "@searchRoles": {
+    "description": "Search roles placeholder"
+  },
+  "totalRoles": "Ukupno: {count} uloga",
+  "@totalRoles": {
+    "description": "Total roles count message",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "active": "Aktivna",
+  "@active": {
+    "description": "Active status label"
+  },
+  "unnamedRole": "Neimenovana Uloga",
+  "@unnamedRole": {
+    "description": "Default role name when name is missing"
   }
 }

@@ -1,5 +1,4 @@
 import 'package:ecinema_desktop/l10n/l10n.dart';
-import 'package:ecinema_desktop/providers/auth_provider.dart';
 import 'package:ecinema_desktop/providers/genre_provider.dart';
 import 'package:ecinema_desktop/providers/movie_provider.dart';
 import 'package:ecinema_desktop/providers/screening_provider.dart';
@@ -13,6 +12,7 @@ import 'package:ecinema_desktop/providers/user_provider.dart';
 import 'package:ecinema_desktop/providers/screening_format_provider.dart';
 import 'package:ecinema_desktop/providers/news_provider.dart';
 import 'package:ecinema_desktop/providers/promotion_provider.dart';
+import 'package:ecinema_desktop/providers/role_provider.dart';
 import 'package:ecinema_desktop/providers/dashboard_provider.dart';
 import 'package:ecinema_desktop/screens/dashboard_screen.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +35,7 @@ void main() {
     ChangeNotifierProvider(create: (_) => ScreeningFormatProvider()),
     ChangeNotifierProvider(create: (_) => NewsProvider()),
     ChangeNotifierProvider(create: (_) => PromotionProvider()),
+    ChangeNotifierProvider(create: (_) => RoleProvider()),
     ChangeNotifierProvider(create: (_) => DashboardProvider()),
   ], child: const MyApp()));
 }
