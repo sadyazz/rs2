@@ -25,7 +25,6 @@ namespace eCinema.Model.Requests
         [Required]
         public string Password { get; set; } = string.Empty;
         
-        [Phone]
         public string? PhoneNumber { get; set; }
         
         [Required]

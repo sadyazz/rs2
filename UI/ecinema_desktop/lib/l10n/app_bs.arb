@@ -191,13 +191,25 @@
   "@pleaseEnterUsername": {
     "description": "Username validation message"
   },
+  "pleaseEnterEmail": "Molimo unesite email",
+  "@pleaseEnterEmail": {
+    "description": "Email validation message"
+  },
   "pleaseEnterPassword": "Molimo unesite lozinku",
   "@pleaseEnterPassword": {
     "description": "Password validation message"
   },
+  "passwordMinLength": "Lozinka mora imati najmanje 6 karaktera",
+  "@passwordMinLength": {
+    "description": "Password minimum length validation"
+  },
   "error": "Greška",
   "@error": {
     "description": "Error dialog title"
+  },
+  "success": "Uspjeh",
+  "@success": {
+    "description": "Success dialog title"
   },
   "ok": "U redu",
   "@ok": {
@@ -1465,10 +1477,10 @@
   "@totalReservations": {"description": "Total reservations statistic card title"},
   "activeShows": "Aktivne projekcije",
   "@activeShows": {"description": "Active shows statistic card title"},
+  "todayScreenings": "Današnje projekcije",
+  "@todayScreenings": {"description": "Today's screenings section title"},
   "inCatalog": "U katalogu",
   "@inCatalog": {"description": "In catalog subtitle"},
-  "today": "Danas",
-  "@today": {"description": "Today subtitle"},
   "registered": "Registrovani",
   "@registered": {"description": "Registered subtitle"},
   "allTime": "Sve vrijeme",
@@ -1540,5 +1552,237 @@
   "lightMode": "Svijetla tema",
   "@lightMode": {
     "description": "Light mode option"
+  },
+  "dontHaveAdminAccount": "Nemate admin račun?",
+  "@dontHaveAdminAccount": {
+    "description": "Don't have admin account text"
+  },
+  "register": "Registracija",
+  "@register": {
+    "description": "Register button text"
+  },
+  "adminRegistration": "Admin Registracija",
+  "@adminRegistration": {
+    "description": "Admin registration page title"
+  },
+  "createNewAdminAccount": "Kreirajte novi admin račun",
+  "@createNewAdminAccount": {
+    "description": "Admin registration subtitle"
+  },
+  "firstName": "Ime",
+  "@firstName": {
+    "description": "First name field label"
+  },
+  "lastName": "Prezime",
+  "@lastName": {
+    "description": "Last name field label"
+  },
+  "phoneNumberOptional": "Broj telefona (Opciono)",
+  "@phoneNumberOptional": {
+    "description": "Phone number field label (optional)"
+  },
+  "confirmPassword": "Potvrdi lozinku",
+  "@confirmPassword": {
+    "description": "Confirm password field label"
+  },
+  "pleaseEnterFirstName": "Molimo unesite ime",
+  "@pleaseEnterFirstName": {
+    "description": "First name validation message"
+  },
+  "pleaseEnterLastName": "Molimo unesite prezime",
+  "@pleaseEnterLastName": {
+    "description": "Last name validation message"
+  },
+  "pleaseEnterValidEmail": "Molimo unesite validan email",
+  "@pleaseEnterValidEmail": {
+    "description": "Email validation message"
+  },
+  "usernameMinLength": "Korisničko ime mora imati najmanje 3 karaktera",
+  "@usernameMinLength": {
+    "description": "Username minimum length validation"
+  },
+  "pleaseConfirmPassword": "Molimo potvrdite lozinku",
+  "@pleaseConfirmPassword": {
+    "description": "Password confirmation validation message"
+  },
+  "passwordsDoNotMatch": "Lozinke se ne poklapaju",
+  "@passwordsDoNotMatch": {
+    "description": "Password mismatch validation message"
+  },
+  "accountCreatedSuccessfully": "Admin račun uspješno kreiran",
+  "@accountCreatedSuccessfully": {
+    "description": "Account created success message"
+  },
+  "failedToCreateAccount": "Greška pri kreiranju admin računa",
+  "@failedToCreateAccount": {
+    "description": "Failed to create account message"
+  },
+  "alreadyHaveAccount": "Već imate račun?",
+  "@alreadyHaveAccount": {
+    "description": "Already have account text"
+  },
+  "invalidCredentials": "Neispravni podaci",
+  "@invalidCredentials": {
+    "description": "Invalid credentials error message"
+  },
+  "adminAccessRequired": "Nemate dozvolu da koristite ovu aplikaciju. Samo administratori mogu pristupiti desktop aplikaciji.",
+  "@adminAccessRequired": {
+    "description": "Admin access required error message"
+  },
+  "addRole": "Dodaj Ulogu",
+  "@addRole": {
+    "description": "Add role button text"
+  },
+  "editRole": "Uredi Ulogu",
+  "@editRole": {
+    "description": "Edit role button text"
+  },
+  "roleName": "Naziv Uloge",
+  "@roleName": {
+    "description": "Role name field label"
+  },
+  "enterRoleName": "Unesite naziv uloge",
+  "@enterRoleName": {
+    "description": "Role name field hint"
+  },
+  "roleNameRequired": "Naziv uloge je obavezan",
+  "@roleNameRequired": {
+    "description": "Role name validation message"
+  },
+  "roleNameTooLong": "Naziv uloge mora biti kraći od 50 karaktera",
+  "@roleNameTooLong": {
+    "description": "Role name length validation message"
+  },
+  "roleCreatedSuccessfully": "Uloga uspješno kreirana",
+  "@roleCreatedSuccessfully": {
+    "description": "Role created success message"
+  },
+  "roleUpdatedSuccessfully": "Uloga uspješno ažurirana",
+  "@roleUpdatedSuccessfully": {
+    "description": "Role updated success message"
+  },
+  "roleDeletedSuccessfully": "Uloga uspješno obrisana",
+  "@roleDeletedSuccessfully": {
+    "description": "Role deleted success message"
+  },
+  "failedToDeleteRole": "Greška pri brisanju uloge",
+  "@failedToDeleteRole": {
+    "description": "Failed to delete role message"
+  },
+  "confirmDeleteRole": "Da li ste sigurni da želite obrisati ovu ulogu? Ova radnja je trajna i ne može se poništiti.",
+  "@confirmDeleteRole": {
+    "description": "Role deletion confirmation message"
+  },
+  "deleteRole": "Obriši Ulogu",
+  "@deleteRole": {
+    "description": "Delete role button text"
+  },
+  "cancel": "Otkaži",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "create": "Kreiraj",
+  "@create": {
+    "description": "Create button text"
+  },
+  "update": "Ažuriraj",
+  "@update": {
+    "description": "Update button text"
+  },
+  "loadingRoles": "Učitavanje uloga...",
+  "@loadingRoles": {
+    "description": "Loading roles message"
+  },
+  "noRolesLoaded": "Nema učitane uloge",
+  "@noRolesLoaded": {
+    "description": "No roles loaded message"
+  },
+  "noRolesFound": "Nema pronađenih uloga",
+  "@noRolesFound": {
+    "description": "No roles found message"
+  },
+  "tryAdjustingSearch": "Pokušajte prilagoditi kriterije pretrage",
+  "@tryAdjustingSearch": {
+    "description": "Try adjusting search message"
+  },
+  "searchRoles": "Pretraži uloge...",
+  "@searchRoles": {
+    "description": "Search roles placeholder"
+  },
+  "totalRoles": "Ukupno: {count} uloga",
+  "@totalRoles": {
+    "description": "Total roles count message",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "active": "Aktivna",
+  "@active": {
+    "description": "Active status label"
+  },
+  "unnamedRole": "Neimenovana Uloga",
+  "@unnamedRole": {
+    "description": "Default role name when name is missing"
+  },
+  "editUser": "Uredi Korisnika",
+  "@editUser": {
+    "description": "Edit user screen title"
+  },
+  "addUser": "Dodaj Korisnika",
+  "@addUser": {
+    "description": "Add user screen title"
+  },
+  "firstName": "Ime",
+  "@firstName": {
+    "description": "First name field label"
+  },
+  "lastName": "Prezime",
+  "@lastName": {
+    "description": "Last name field label"
+  },
+  "phoneNumber": "Broj Telefona",
+  "@phoneNumber": {
+    "description": "Phone number field label"
+  },
+  "role": "Uloga",
+  "@role": {
+    "description": "Role field label"
+  },
+  "user": "Korisnik",
+  "@user": {
+    "description": "User label"
+  },
+  "userUpdatedSuccessfully": "Korisnik uspješno ažuriran",
+  "@userUpdatedSuccessfully": {
+    "description": "User updated success message"
+  },
+  "userCreatedSuccessfully": "Korisnik uspješno kreiran",
+  "@userCreatedSuccessfully": {
+    "description": "User created success message"
+  },
+  "failedToSaveUser": "Greška pri čuvanju korisnika: {error}",
+  "@failedToSaveUser": {
+    "description": "Failed to save user message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "addUser": "Dodaj Korisnika",
+  "@addUser": {
+    "description": "Add user button text"
+  },
+  "filters": "Filteri",
+  "@filters": {
+    "description": "Filters button text"
+  },
+  "tryAdjustingSearchCriteria": "Pokušajte prilagoditi kriterije pretrage",
+  "@tryAdjustingSearchCriteria": {
+    "description": "Try adjusting search criteria message"
   }
 }

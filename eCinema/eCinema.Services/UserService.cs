@@ -5,13 +5,7 @@ using eCinema.Model.SearchObjects;
 using eCinema.Services.Database;
 using eCinema.Services.Database.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BCrypt.Net;
 using MapsterMapper;
-using Microsoft.Data.SqlClient;
 using System.Security.Cryptography;
 
 namespace eCinema.Services
@@ -222,6 +216,42 @@ namespace eCinema.Services
             var hash = Convert.FromBase64String(passwordHash);
             var hashBytes = new Rfc2898DeriveBytes(password, salt, Iterations).GetBytes(KeySize);
             return hash.SequenceEqual(hashBytes);
+        }
+
+        public async Task<UserResponse> RegisterAsync(UserUpsertRequest request)
+        {
+            if (await _context.Users.AnyAsync(u => u.Email == request.Email))
+            {
+                throw new InvalidOperationException("A user with this email already exists.");
+            }
+            
+            if (await _context.Users.AnyAsync(u => u.Username == request.Username))
+            {
+                throw new InvalidOperationException("A user with this username already exists.");
+            }
+            
+            var user = new User
+            {
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Email = request.Email,
+                Username = request.Username,
+                PhoneNumber = request.PhoneNumber,
+                RoleId = request.RoleId,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            if (!string.IsNullOrEmpty(request.Password))
+            {
+                byte[] salt;
+                user.PasswordHash = HashPassword(request.Password, out salt);
+                user.PasswordSalt = Convert.ToBase64String(salt);
+            }
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return await GetUserResponseWithRoleAsync(user.Id);
         }
     }
 } 

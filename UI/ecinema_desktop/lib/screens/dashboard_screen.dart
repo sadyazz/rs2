@@ -18,6 +18,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<DashboardProvider>().loadDashboardStats();
+      context.read<DashboardProvider>().loadTodayScreenings();
     });
   }
 
@@ -50,6 +51,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             children: [
               _buildStatsGrid(stats),
               const SizedBox(height: 32),
+              _buildTodayScreeningsSection(),
+              const SizedBox(height: 32),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -78,8 +81,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           title: l10n.totalMovies,
           value: stats.totalMovies?.toString() ?? '0',
           subtitle: l10n.inCatalog,
-          color: Colors.blue,
-          gradient: [Colors.blue.shade400, Colors.blue.shade600],
+          color: Colors.orange,
+          gradient: [Colors.orange.shade400, Colors.orange.shade600],
+          userCountByRole: null,
         ),
         _buildStatCard(
           icon: Icons.schedule,
@@ -88,14 +92,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           subtitle: l10n.today,
           color: Colors.green,
           gradient: [Colors.green.shade400, Colors.green.shade600],
+          userCountByRole: null,
         ),
         _buildStatCard(
           icon: Icons.people,
           title: l10n.totalUsers,
           value: stats.totalUsers?.toString() ?? '0',
           subtitle: l10n.registered,
-          color: Colors.orange,
-          gradient: [Colors.orange.shade400, Colors.orange.shade600],
+          color: Colors.blue,
+          gradient: [Colors.blue.shade400, Colors.blue.shade600],
+          userCountByRole: stats.userCountByRole,
         ),
         _buildStatCard(
           icon: Icons.movie_creation_outlined,
@@ -104,6 +110,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           subtitle: l10n.allTime,
           color: Colors.purple,
           gradient: [Colors.purple.shade400, Colors.purple.shade600],
+          userCountByRole: null,
         ),
       ],
     );
@@ -116,7 +123,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required String subtitle,
     required Color color,
     required List<Color> gradient,
+    Map<String, int>? userCountByRole,
   }) {
+    bool isUserCard = userCountByRole != null && userCountByRole.isNotEmpty;
+    
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -133,8 +143,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
-             child: Padding(
-         padding: const EdgeInsets.all(16.0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -163,30 +173,133 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ],
             ),
-            const Spacer(),
-                         Text(
-               value,
-               style: const TextStyle(
-                 fontSize: 24,
-                 fontWeight: FontWeight.bold,
-                 color: Colors.white,
-               ),
-             ),
-            const SizedBox(height: 4),
-            Text(
-              title,
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.9),
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
+            if (isUserCard) ...[
+              const SizedBox(height: 6),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-            ),
+              const SizedBox(height: 2),
+              Text(
+                title,
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.9),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.2),
+                    width: 0.5,
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: userCountByRole.entries.take(3).map((entry) {
+                    return Column(
+                      children: [
+                        Text(
+                          entry.key.toUpperCase(),
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.8),
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                          child: Text(
+                            entry.value.toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+            ] else ...[
+              const Spacer(),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                title,
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.9),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ],
         ),
       ),
     );
   }
 
+  Widget _buildTodayScreeningsSection() {
+    final l10n = AppLocalizations.of(context)!;
+    return Consumer<DashboardProvider>(
+      builder: (context, dashboardProvider, child) {
+        final todayScreenings = dashboardProvider.todayScreenings;
+        if (todayScreenings == null || todayScreenings.isEmpty) {
+          return const SizedBox.shrink();
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.todayScreenings,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: todayScreenings.length,
+              itemBuilder: (context, index) {
+                final screening = todayScreenings[index];
+                return _buildActivityItem(
+                  icon: Icons.movie_outlined,
+                  title: screening.movieTitle ?? 'Unknown Movie',
+                  subtitle: '${screening.startTime?.hour.toString().padLeft(2, '0')}:${screening.startTime?.minute.toString().padLeft(2, '0')} - ${screening.hallName ?? 'Unknown Hall'}',
+                  color: Colors.purple.shade200,
+                  badge: '${screening.availableSeats ?? 0} seats',
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Widget _buildActivityItem({
     required IconData icon,

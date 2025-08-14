@@ -15,5 +15,6 @@ public interface IUserService : ICRUDService<UserResponse, UserSearchObject, Use
     Task<UserResponse?> UpdateAsync(int id, UserUpsertRequest request);
     Task<bool> DeleteAsync(int id);
     Task<UserResponse?> AuthenticateAsync(UserLoginRequest request);
+    Task<UserResponse> RegisterAsync(UserUpsertRequest request);
 } 
 }

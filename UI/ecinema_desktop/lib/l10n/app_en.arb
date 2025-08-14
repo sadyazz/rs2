@@ -191,13 +191,25 @@
   "@pleaseEnterUsername": {
     "description": "Username validation message"
   },
+  "pleaseEnterEmail": "Please enter your email",
+  "@pleaseEnterEmail": {
+    "description": "Email validation message"
+  },
   "pleaseEnterPassword": "Please enter your password",
   "@pleaseEnterPassword": {
     "description": "Password validation message"
   },
+  "passwordMinLength": "Password must be at least 6 characters",
+  "@passwordMinLength": {
+    "description": "Password minimum length validation"
+  },
   "error": "Error",
   "@error": {
     "description": "Error dialog title"
+  },
+  "success": "Success",
+  "@success": {
+    "description": "Success dialog title"
   },
   "ok": "OK",
   "@ok": {
@@ -1499,8 +1511,10 @@
   "@totalShows": {"description": "Total shows statistic card title"},
   "totalReservations": "Total Reservations",
   "@totalReservations": {"description": "Total reservations statistic card title"},
-  "activeShows": "Active Shows",
-  "@activeShows": {"description": "Active shows statistic card title"},
+  "activeShows": "Active Screenings",
+  "@activeShows": {"description": "Active Screenings statistic card title"},
+  "todayScreenings": "Today's Screenings",
+  "@todayScreenings": {"description": "Today's screenings section title"},
   "inCatalog": "In catalog",
   "@inCatalog": {"description": "In catalog subtitle"},
   "today": "Today",
@@ -1576,5 +1590,237 @@
   "lightMode": "Light Mode",
   "@lightMode": {
     "description": "Light mode option"
+  },
+  "dontHaveAdminAccount": "Don't have an admin account?",
+  "@dontHaveAdminAccount": {
+    "description": "Don't have admin account text"
+  },
+  "register": "Register",
+  "@register": {
+    "description": "Register button text"
+  },
+  "adminRegistration": "Admin Registration",
+  "@adminRegistration": {
+    "description": "Admin registration page title"
+  },
+  "createNewAdminAccount": "Create a new administrator account",
+  "@createNewAdminAccount": {
+    "description": "Admin registration subtitle"
+  },
+  "firstName": "First Name",
+  "@firstName": {
+    "description": "First name field label"
+  },
+  "lastName": "Last Name",
+  "@lastName": {
+    "description": "Last name field label"
+  },
+  "phoneNumberOptional": "Phone Number (Optional)",
+  "@phoneNumberOptional": {
+    "description": "Phone number field label (optional)"
+  },
+  "confirmPassword": "Confirm Password",
+  "@confirmPassword": {
+    "description": "Confirm password field label"
+  },
+  "pleaseEnterFirstName": "Please enter first name",
+  "@pleaseEnterFirstName": {
+    "description": "First name validation message"
+  },
+  "pleaseEnterLastName": "Please enter last name",
+  "@pleaseEnterLastName": {
+    "description": "Last name validation message"
+  },
+  "pleaseEnterValidEmail": "Please enter valid email",
+  "@pleaseEnterValidEmail": {
+    "description": "Email validation message"
+  },
+  "usernameMinLength": "Username must be at least 3 characters",
+  "@usernameMinLength": {
+    "description": "Username minimum length validation"
+  },
+  "pleaseConfirmPassword": "Please confirm password",
+  "@pleaseConfirmPassword": {
+    "description": "Password confirmation validation message"
+  },
+  "passwordsDoNotMatch": "Passwords do not match",
+  "@passwordsDoNotMatch": {
+    "description": "Password mismatch validation message"
+  },
+  "accountCreatedSuccessfully": "Admin account created successfully",
+  "@accountCreatedSuccessfully": {
+    "description": "Account created success message"
+  },
+  "failedToCreateAccount": "Failed to create admin account",
+  "@failedToCreateAccount": {
+    "description": "Failed to create account message"
+  },
+  "alreadyHaveAccount": "Already have an account?",
+  "@alreadyHaveAccount": {
+    "description": "Already have account text"
+  },
+  "invalidCredentials": "Invalid credentials",
+  "@invalidCredentials": {
+    "description": "Invalid credentials error message"
+  },
+  "adminAccessRequired": "You do not have permission to use this application. Only administrators can access the desktop application.",
+  "@adminAccessRequired": {
+    "description": "Admin access required error message"
+  },
+  "addRole": "Add Role",
+  "@addRole": {
+    "description": "Add role button text"
+  },
+  "editRole": "Edit Role",
+  "@editRole": {
+    "description": "Edit role button text"
+  },
+  "roleName": "Role Name",
+  "@roleName": {
+    "description": "Role name field label"
+  },
+  "enterRoleName": "Enter role name",
+  "@enterRoleName": {
+    "description": "Role name field hint"
+  },
+  "roleNameRequired": "Role name is required",
+  "@roleNameRequired": {
+    "description": "Role name validation message"
+  },
+  "roleNameTooLong": "Role name must be less than 50 characters",
+  "@roleNameTooLong": {
+    "description": "Role name length validation message"
+  },
+  "roleCreatedSuccessfully": "Role created successfully",
+  "@roleCreatedSuccessfully": {
+    "description": "Role created success message"
+  },
+  "roleUpdatedSuccessfully": "Role updated successfully",
+  "@roleUpdatedSuccessfully": {
+    "description": "Role updated success message"
+  },
+  "roleDeletedSuccessfully": "Role deleted successfully",
+  "@roleDeletedSuccessfully": {
+    "description": "Role deleted success message"
+  },
+  "failedToDeleteRole": "Failed to delete role",
+  "@failedToDeleteRole": {
+    "description": "Failed to delete role message"
+  },
+  "confirmDeleteRole": "Are you sure you want to delete this role? This action is permanent and cannot be undone.",
+  "@confirmDeleteRole": {
+    "description": "Role deletion confirmation message"
+  },
+  "deleteRole": "Delete Role",
+  "@deleteRole": {
+    "description": "Delete role button text"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "create": "Create",
+  "@create": {
+    "description": "Create button text"
+  },
+  "update": "Update",
+  "@update": {
+    "description": "Update button text"
+  },
+  "loadingRoles": "Loading roles...",
+  "@loadingRoles": {
+    "description": "Loading roles message"
+  },
+  "noRolesLoaded": "No roles loaded",
+  "@noRolesLoaded": {
+    "description": "No roles loaded message"
+  },
+  "noRolesFound": "No roles found",
+  "@noRolesFound": {
+    "description": "No roles found message"
+  },
+  "tryAdjustingSearch": "Try adjusting your search criteria",
+  "@tryAdjustingSearch": {
+    "description": "Try adjusting search message"
+  },
+  "searchRoles": "Search roles...",
+  "@searchRoles": {
+    "description": "Search roles placeholder"
+  },
+  "totalRoles": "Total: {count} roles",
+  "@totalRoles": {
+    "description": "Total roles count message",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "active": "Active",
+  "@active": {
+    "description": "Active status label"
+  },
+  "unnamedRole": "Unnamed Role",
+  "@unnamedRole": {
+    "description": "Default role name when name is missing"
+  },
+  "editUser": "Edit User",
+  "@editUser": {
+    "description": "Edit user screen title"
+  },
+  "addUser": "Add User",
+  "@addUser": {
+    "description": "Add user screen title"
+  },
+  "firstName": "First Name",
+  "@firstName": {
+    "description": "First name field label"
+  },
+  "lastName": "Last Name",
+  "@lastName": {
+    "description": "Last name field label"
+  },
+  "phoneNumber": "Phone Number",
+  "@phoneNumber": {
+    "description": "Phone number field label"
+  },
+  "role": "Role",
+  "@role": {
+    "description": "Role field label"
+  },
+  "user": "User",
+  "@user": {
+    "description": "User label"
+  },
+  "userUpdatedSuccessfully": "User updated successfully",
+  "@userUpdatedSuccessfully": {
+    "description": "User updated success message"
+  },
+  "userCreatedSuccessfully": "User created successfully",
+  "@userCreatedSuccessfully": {
+    "description": "User created success message"
+  },
+  "failedToSaveUser": "Failed to save user: {error}",
+  "@failedToSaveUser": {
+    "description": "Failed to save user message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "addUser": "Add User",
+  "@addUser": {
+    "description": "Add user button text"
+  },
+  "filters": "Filters",
+  "@filters": {
+    "description": "Filters button text"
+  },
+  "tryAdjustingSearchCriteria": "Try adjusting your search criteria",
+  "@tryAdjustingSearchCriteria": {
+    "description": "Try adjusting search criteria message"
   }
 }

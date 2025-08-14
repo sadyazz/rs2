@@ -677,5 +677,93 @@
   "december": "Decembar",
   "@december": {
     "description": "December month name"
+  },
+  "invalidCredentials": "Neispravno korisničko ime ili lozinka",
+  "@invalidCredentials": {
+    "description": "Invalid credentials error message"
+  },
+  "dontHaveAccount": "Nemate račun?",
+  "@dontHaveAccount": {
+    "description": "Don't have account text"
+  },
+  "register": "Registracija",
+  "@register": {
+    "description": "Register button text"
+  },
+  "createAccount": "Kreiraj račun",
+  "@createAccount": {
+    "description": "Create account title"
+  },
+  "joinEcinemaToday": "Pridružite se eCinema danas!",
+  "@joinEcinemaToday": {
+    "description": "Join eCinema today message"
+  },
+  "firstName": "Ime",
+  "@firstName": {
+    "description": "First name field label"
+  },
+  "lastName": "Prezime",
+  "@lastName": {
+    "description": "Last name field label"
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Email field label"
+  },
+  "confirmPassword": "Potvrdi lozinku",
+  "@confirmPassword": {
+    "description": "Confirm password field label"
+  },
+  "pleaseEnterFirstName": "Molimo unesite vaše ime",
+  "@pleaseEnterFirstName": {
+    "description": "First name validation message"
+  },
+  "pleaseEnterLastName": "Molimo unesite vaše prezime",
+  "@pleaseEnterLastName": {
+    "description": "Last name validation message"
+  },
+  "pleaseEnterEmail": "Molimo unesite vaš email",
+  "@pleaseEnterEmail": {
+    "description": "Email validation message"
+  },
+  "pleaseEnterValidEmail": "Molimo unesite ispravan email",
+  "@pleaseEnterValidEmail": {
+    "description": "Valid email validation message"
+  },
+  "pleaseEnterUsername": "Molimo unesite korisničko ime",
+  "@pleaseEnterUsername": {
+    "description": "Username validation message"
+  },
+  "pleaseEnterPassword": "Molimo unesite lozinku",
+  "@pleaseEnterPassword": {
+    "description": "Password validation message"
+  },
+  "pleaseConfirmPassword": "Molimo potvrdite vašu lozinku",
+  "@pleaseConfirmPassword": {
+    "description": "Confirm password validation message"
+  },
+  "passwordsDoNotMatch": "Lozinke se ne poklapaju",
+  "@passwordsDoNotMatch": {
+    "description": "Passwords do not match validation message"
+  },
+  "accountCreatedSuccessfully": "Račun je uspješno kreiran! Molimo prijavite se.",
+  "@accountCreatedSuccessfully": {
+    "description": "Account created successfully message"
+  },
+  "failedToCreateAccount": "Neuspješno kreiranje računa. Molimo pokušajte ponovo.",
+  "@failedToCreateAccount": {
+    "description": "Failed to create account message"
+  },
+  "alreadyHaveAccount": "Već imate račun?",
+  "@alreadyHaveAccount": {
+    "description": "Already have account text"
+  },
+  "success": "Uspjeh",
+  "@success": {
+    "description": "Success dialog title"
+  },
+  "ok": "U redu",
+  "@ok": {
+    "description": "OK button text"
   }
 } 

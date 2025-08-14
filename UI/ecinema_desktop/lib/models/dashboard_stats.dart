@@ -7,6 +7,7 @@ class DashboardStats {
   final int? totalShows;
   final int? totalReservations;
   final int? activeShows;
+  final Map<String, int>? userCountByRole;
 
   DashboardStats({
     this.totalMovies,
@@ -17,9 +18,15 @@ class DashboardStats {
     this.totalShows,
     this.totalReservations,
     this.activeShows,
+    this.userCountByRole,
   });
 
   factory DashboardStats.fromJson(Map<String, dynamic> json) {
+    Map<String, int>? userCountByRole;
+    if (json['userCountByRole'] != null) {
+      userCountByRole = Map<String, int>.from(json['userCountByRole']);
+    }
+    
     return DashboardStats(
       totalMovies: json['totalMovies'],
       totalActors: json['totalActors'],
@@ -29,6 +36,7 @@ class DashboardStats {
       totalShows: json['totalShows'],
       totalReservations: json['totalReservations'],
       activeShows: json['activeShows'],
+      userCountByRole: userCountByRole,
     );
   }
 
@@ -42,6 +50,7 @@ class DashboardStats {
       'totalShows': totalShows,
       'totalReservations': totalReservations,
       'activeShows': activeShows,
+      'userCountByRole': userCountByRole,
     };
   }
 } 

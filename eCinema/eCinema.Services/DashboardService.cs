@@ -26,7 +26,8 @@ namespace eCinema.Services
                 TotalReservations = await _context.Reservations.CountAsync(),
                 ActiveShows = await _context.Screenings
                     .Where(s => s.StartTime.Date == DateTime.Now.Date && !s.IsDeleted)
-                    .CountAsync()
+                    .CountAsync(),
+                UserCountByRole = await GetUserCountByRoleAsync()
             };
 
             return stats;
@@ -35,6 +36,14 @@ namespace eCinema.Services
         public async Task<int> GetUserCountAsync()
         {
             return await _context.Users.CountAsync();
+        }
+
+        public async Task<Dictionary<string, int>> GetUserCountByRoleAsync()
+        {
+            return await _context.Users
+                .Where(u => u.Role != null)
+                .GroupBy(u => u.Role.Name)
+                .ToDictionaryAsync(g => g.Key, g => g.Count());
         }
 
         public async Task<decimal> GetTotalCinemaIncomeAsync()
@@ -94,6 +103,38 @@ namespace eCinema.Services
                 })
                 .OrderByDescending(c => c.TotalSpent)
                 .Take(5)
+                .ToListAsync();
+        }
+
+        public async Task<List<ScreeningResponse>> GetTodayScreeningsAsync()
+        {
+            var today = DateTime.Now.Date;
+            return await _context.Screenings
+                .Where(s => s.StartTime.Date == today && !s.IsDeleted)
+                .Include(s => s.Movie)
+                .Include(s => s.Hall)
+                .Include(s => s.Format)
+                .OrderBy(s => s.StartTime)
+                .Select(s => new ScreeningResponse
+                {
+                    Id = s.Id,
+                    StartTime = s.StartTime,
+                    EndTime = s.EndTime,
+                    BasePrice = s.BasePrice,
+                    Language = s.Language,
+                    HasSubtitles = s.HasSubtitles,
+                    IsDeleted = s.IsDeleted,
+                    MovieId = s.Movie.Id,
+                    MovieTitle = s.Movie.Title,
+                    MovieImage = s.Movie.Image,
+                    HallId = s.Hall.Id,
+                    HallName = s.Hall.Name,
+                    ScreeningFormatId = s.Format != null ? s.Format.Id : null,
+                    ScreeningFormatName = s.Format != null ? s.Format.Name : null,
+                    ScreeningFormatPriceMultiplier = s.Format != null ? s.Format.PriceMultiplier : null,
+                    ReservationsCount = s.Reservations.Count(r => !r.IsDeleted),
+                    AvailableSeats = s.Hall.Capacity - s.Reservations.Count(r => !r.IsDeleted)
+                })
                 .ToListAsync();
         }
     }

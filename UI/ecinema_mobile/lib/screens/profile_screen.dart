@@ -16,7 +16,6 @@ class ProfileScreen extends StatelessWidget {
     return SingleChildScrollView(
       child: Container(
         width: double.infinity,
-        height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -30,125 +29,330 @@ class ProfileScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 40),
-              CircleAvatar(
-                radius: 50,
-                backgroundColor: colorScheme.primary,
+              _buildProfileSection(l10n, colorScheme),
+              const SizedBox(height: 32),
+              _buildMovieListsSection(l10n, colorScheme),
+              const SizedBox(height: 32),
+              _buildSettingsSection(context, l10n, colorScheme),
+              const SizedBox(height: 100),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileSection(AppLocalizations l10n, ColorScheme colorScheme) {
+    return Row(
+      children: [
+        Stack(
+          children: [
+            CircleAvatar(
+              radius: 40,
+              backgroundColor: colorScheme.surfaceVariant,
+              child: Icon(
+                Icons.person,
+                size: 40,
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  color: colorScheme.primary,
+                  shape: BoxShape.circle,
+                ),
                 child: Icon(
-                  Icons.person,
-                  size: 50,
+                  Icons.camera_alt,
+                  size: 14,
                   color: colorScheme.onPrimary,
                 ),
               ),
-              const SizedBox(height: 24),
+            ),
+          ],
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Text(
-                l10n.welcome,
+                AuthProvider.fullName ?? '',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: colorScheme.primary,
+                  color: colorScheme.onSurface,
                 ),
               ),
-              const SizedBox(height: 8),
-              Text(
-                '${l10n.username}: ${AuthProvider.username ?? "N/A"}',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: colorScheme.onSurface.withOpacity(0.7),
-                ),
-              ),
-              const SizedBox(height: 40),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.settings, color: colorScheme.primary),
-                  title: Text(l10n.settings),
-                  trailing: const Icon(Icons.arrow_forward_ios),
-                  onTap: () {
-                    // TODO: Navigate to settings
-                  },
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.language, color: colorScheme.primary),
-                  title: Text(l10n.language),
-                  trailing: const Icon(Icons.arrow_forward_ios),
-                  onTap: () {
-                    _showLanguageDialog(context);
-                  },
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  leading: Consumer<ThemeProvider>(
-                    builder: (context, themeProvider, child) {
-                      return Icon(
-                        themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-                        color: colorScheme.primary,
-                      );
-                    },
+              const SizedBox(height: 4),
+              if (AuthProvider.email != null) ...[
+                Text(
+                  AuthProvider.email!,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: colorScheme.onSurface.withOpacity(0.7),
                   ),
-                  title: Text(l10n.theme),
-                  subtitle: Consumer<ThemeProvider>(
-                    builder: (context, themeProvider, child) {
-                      return Text(
-                        themeProvider.isDarkMode ? l10n.darkMode : l10n.lightMode,
-                      );
-                    },
-                  ),
-                  trailing: const Icon(Icons.arrow_forward_ios),
-                  onTap: () {
-                    print('Theme toggle pressed!');
-                    try {
-                      final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-                      print('ThemeProvider found!');
-                      print('Current theme mode: ${themeProvider.themeMode}');
-                      print('Is dark mode: ${themeProvider.isDarkMode}');
-                      themeProvider.toggleTheme();
-                      print('Theme toggled! New mode: ${themeProvider.isDarkMode}');
-                    } catch (e) {
-                      print('Error accessing ThemeProvider: $e');
-                    }
-                  },
                 ),
-              ),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.help, color: colorScheme.primary),
-                  title: Text(l10n.helpSupport),
-                  trailing: const Icon(Icons.arrow_forward_ios),
-                  onTap: () {
-                    // TODO: Navigate to help
-                  },
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.info, color: colorScheme.primary),
-                  title: Text(l10n.about),
-                  trailing: const Icon(Icons.arrow_forward_ios),
-                  onTap: () {
-                    // TODO: Navigate to about
-                  },
-                ),
-              ),
-              const SizedBox(height: 40),
-              ElevatedButton.icon(
-                onPressed: () {
-                  _showLogoutDialog(context);
-                },
-                icon: const Icon(Icons.logout),
-                label: Text(l10n.logout),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                ),
-              ),
-              const SizedBox(height: 40),
+                const SizedBox(height: 4),
+              ],
             ],
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMovieListsSection(AppLocalizations l10n, ColorScheme colorScheme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.myMovieLists,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onSurface,
+          ),
+        ),
+        const SizedBox(height: 16),
+        _buildMovieListCard(
+          icon: Icons.schedule,
+          title: l10n.watchlist,
+          subtitle: '12 ${l10n.movies}',
+          colorScheme: colorScheme,
+        ),
+        const SizedBox(height: 12),
+        _buildMovieListCard(
+          icon: Icons.check_circle,
+          title: l10n.watchedMovies,
+          subtitle: '28 ${l10n.movies}',
+          colorScheme: colorScheme,
+        ),
+        const SizedBox(height: 12),
+        _buildMovieListCard(
+          icon: Icons.favorite,
+          title: l10n.favorites,
+          subtitle: '8 ${l10n.movies}',
+          colorScheme: colorScheme,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMovieListCard({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required ColorScheme colorScheme,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: colorScheme.outline.withOpacity(0.2),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceVariant,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              icon,
+              color: colorScheme.onSurfaceVariant,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: colorScheme.onSurface.withOpacity(0.7),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Icon(
+            Icons.arrow_forward_ios,
+            color: colorScheme.onSurface.withOpacity(0.5),
+            size: 16,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSettingsSection(BuildContext context, AppLocalizations l10n, ColorScheme colorScheme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.settings,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onSurface,
+          ),
+        ),
+        const SizedBox(height: 16),
+        _buildSettingsCard(
+          icon: Icons.confirmation_number,
+          title: l10n.myReservations,
+          subtitle: l10n.reservationsDescription,
+          colorScheme: colorScheme,
+          onTap: () {
+            // TODO: Navigate to reservations
+          },
+        ),
+        const SizedBox(height: 12),
+        _buildSettingsCard(
+          icon: Icons.edit,
+          title: l10n.editProfile,
+          subtitle: l10n.editProfileDescription,
+          colorScheme: colorScheme,
+          onTap: () {
+            // TODO: Navigate to edit profile
+          },
+        ),
+        const SizedBox(height: 12),
+        _buildSettingsCard(
+          icon: Icons.payment,
+          title: l10n.paymentMethods,
+          subtitle: l10n.paymentMethodsDescription,
+          colorScheme: colorScheme,
+          onTap: () {
+            // TODO: Navigate to payment methods
+          },
+        ),
+        const SizedBox(height: 12),
+        _buildSettingsCard(
+          icon: Icons.language,
+          title: l10n.language,
+          subtitle: l10n.languageDescription,
+          colorScheme: colorScheme,
+          onTap: () {
+            _showLanguageDialog(context);
+          },
+        ),
+        const SizedBox(height: 12),
+        _buildSettingsCard(
+          icon: Icons.dark_mode,
+          title: l10n.theme,
+          subtitle: l10n.themeDescription,
+          colorScheme: colorScheme,
+          onTap: () {
+            final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+            themeProvider.toggleTheme();
+          },
+        ),
+        const SizedBox(height: 12),
+        _buildSettingsCard(
+          icon: Icons.logout,
+          title: l10n.logout,
+          subtitle: l10n.logoutDescription,
+          colorScheme: colorScheme,
+          onTap: () {
+            _showLogoutDialog(context);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSettingsCard({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required ColorScheme colorScheme,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: colorScheme.outline.withOpacity(0.2),
+            width: 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceVariant,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                icon,
+                color: colorScheme.onSurfaceVariant,
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: colorScheme.onSurface.withOpacity(0.7),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: colorScheme.onSurface.withOpacity(0.5),
+              size: 16,
+            ),
+          ],
         ),
       ),
     );
@@ -170,7 +374,6 @@ class ProfileScreen extends StatelessWidget {
                 context,
                 languageProvider,
                 'en',
-                // l10n.english,
                 'English',
                 '🇺🇸',
               ),
@@ -179,7 +382,6 @@ class ProfileScreen extends StatelessWidget {
                 context,
                 languageProvider,
                 'bs',
-                // l10n.bosnian,
                 'Bosanski',
                 '🇧🇦',
               ),
@@ -247,7 +449,6 @@ class ProfileScreen extends StatelessWidget {
   void _changeLanguage(BuildContext context, Locale locale) {
     Navigator.of(context).pop();
     
-    // Change language using Provider
     final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
     languageProvider.changeLanguage(locale);
   }
@@ -274,10 +475,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                AuthProvider.username = null;
-                AuthProvider.password = null;
-                Navigator.of(context).pop();
-                Navigator.of(context).pushReplacementNamed('/login');
+                _performLogout(context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
@@ -288,6 +486,17 @@ class ProfileScreen extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  void _performLogout(BuildContext context) {
+    Navigator.of(context).pop();
+    
+    AuthProvider.logout();
+    
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      '/login',
+      (route) => false,
     );
   }
 } 

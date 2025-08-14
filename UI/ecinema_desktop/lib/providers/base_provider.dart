@@ -45,8 +45,14 @@ abstract class BaseProvider<T> with ChangeNotifier {
     // print("response: ${response.request} ${response.statusCode}, ${response.body}");
   }
 
-  Future<T?> getById(int id) async {
+  Future<T?> getById(int id, {dynamic filter}) async {
     var url = "$_baseUrl$_endpoint/$id";
+    
+    if (filter != null) {
+      var queryString = getQueryString(filter);
+      url = "$url?$queryString";
+    }
+    
     var uri = Uri.parse(url);
     var headers = createHeaders();
 

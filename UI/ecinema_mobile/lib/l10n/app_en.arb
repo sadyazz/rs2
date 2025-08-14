@@ -677,5 +677,93 @@
   "december": "December",
   "@december": {
     "description": "December month name"
+  },
+  "invalidCredentials": "Invalid username or password",
+  "@invalidCredentials": {
+    "description": "Invalid credentials error message"
+  },
+  "dontHaveAccount": "Don't have an account?",
+  "@dontHaveAccount": {
+    "description": "Don't have account text"
+  },
+  "register": "Register",
+  "@register": {
+    "description": "Register button text"
+  },
+  "createAccount": "Create Account",
+  "@createAccount": {
+    "description": "Create account title"
+  },
+  "joinEcinemaToday": "Join eCinema today!",
+  "@joinEcinemaToday": {
+    "description": "Join eCinema today message"
+  },
+  "firstName": "First Name",
+  "@firstName": {
+    "description": "First name field label"
+  },
+  "lastName": "Last Name",
+  "@lastName": {
+    "description": "Last name field label"
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Email field label"
+  },
+  "confirmPassword": "Confirm Password",
+  "@confirmPassword": {
+    "description": "Confirm password field label"
+  },
+  "pleaseEnterFirstName": "Please enter your first name",
+  "@pleaseEnterFirstName": {
+    "description": "First name validation message"
+  },
+  "pleaseEnterLastName": "Please enter your last name",
+  "@pleaseEnterLastName": {
+    "description": "Last name validation message"
+  },
+  "pleaseEnterEmail": "Please enter your email",
+  "@pleaseEnterEmail": {
+    "description": "Email validation message"
+  },
+  "pleaseEnterValidEmail": "Please enter a valid email",
+  "@pleaseEnterValidEmail": {
+    "description": "Valid email validation message"
+  },
+  "pleaseEnterUsername": "Please enter a username",
+  "@pleaseEnterUsername": {
+    "description": "Username validation message"
+  },
+  "pleaseEnterPassword": "Please enter a password",
+  "@pleaseEnterPassword": {
+    "description": "Password validation message"
+  },
+  "pleaseConfirmPassword": "Please confirm your password",
+  "@pleaseConfirmPassword": {
+    "description": "Confirm password validation message"
+  },
+  "passwordsDoNotMatch": "Passwords do not match",
+  "@passwordsDoNotMatch": {
+    "description": "Passwords do not match validation message"
+  },
+  "accountCreatedSuccessfully": "Account created successfully! Please login.",
+  "@accountCreatedSuccessfully": {
+    "description": "Account created successfully message"
+  },
+  "failedToCreateAccount": "Failed to create account. Please try again.",
+  "@failedToCreateAccount": {
+    "description": "Failed to create account message"
+  },
+  "alreadyHaveAccount": "Already have an account?",
+  "@alreadyHaveAccount": {
+    "description": "Already have account text"
+  },
+  "success": "Success",
+  "@success": {
+    "description": "Success dialog title"
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "OK button text"
   }
 } 

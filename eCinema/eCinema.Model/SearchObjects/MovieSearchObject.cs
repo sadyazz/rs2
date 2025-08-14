@@ -14,5 +14,6 @@ namespace eCinema.Model.SearchObjects
         public int? ReleaseYear { get; set; }
         public bool? IsComingSoon { get; set; }
         public List<int> GenreIds { get; set; } = new List<int>();
+        public string? GenreName { get; set; }
     }
 } 

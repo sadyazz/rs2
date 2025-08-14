@@ -115,6 +115,11 @@ namespace eCinema.Services
                 query = query.Where(x => x.Genres.Any(mg => search.GenreIds.Contains(mg.GenreId)));
             }
 
+            if (!string.IsNullOrWhiteSpace(search.GenreName))
+            {
+                query = query.Where(x => x.Genres.Any(mg => mg.Genre.Name.Contains(search.GenreName)));
+            }
+
             if (search.MinDuration.HasValue)
             {
                 query = query.Where(x => x.DurationMinutes >= search.MinDuration.Value);
