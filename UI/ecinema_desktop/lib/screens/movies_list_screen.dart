@@ -94,19 +94,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
         filter["director"] = _directorController.text;
       }
       if (_genresController.text.isNotEmpty) {
-        try {
-          var genreIds = _genresController.text
-              .split(',')
-              .map((e) => int.tryParse(e.trim()))
-              .where((e) => e != null)
-              .cast<int>()
-              .toList();
-          if (genreIds.isNotEmpty) {
-            filter["genreIds"] = genreIds;
-          }
-        } catch (e) {
-          print('Error parsing genre IDs: $e');
-        }
+        filter["genreName"] = _genresController.text.trim();
       }
       if (_minDurationController.text.isNotEmpty) {
         filter["minDuration"] = int.tryParse(_minDurationController.text);
@@ -281,8 +269,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                               TextField(
                                 controller: _genresController,
                                 decoration: InputDecoration(
-                                  labelText: l10n.genreIds,
-                                  hintText: l10n.genreIdsHint,
+                                  labelText: l10n.genre,
                                   border: roundedBorder,
                                   enabledBorder: roundedBorder,
                                   focusedBorder: roundedBorder,
@@ -766,7 +753,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                             child: Wrap(
                               spacing: 2,
                               runSpacing: 1,
-                              children: movie.genres!.take(1).map((genre) => Container(
+                              children: movie.genres!.map((genre) => Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                                 decoration: BoxDecoration(
                                   color: Theme.of(context).colorScheme.primaryContainer,

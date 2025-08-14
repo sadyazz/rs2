@@ -42,6 +42,7 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
   List<Actor> _selectedActors = [];
   TextEditingController _genreSearchController = TextEditingController();
   TextEditingController _actorSearchController = TextEditingController();
+  TextEditingController _releaseYearController = TextEditingController();
 
   @override
   void didChangeDependencies() {
@@ -71,9 +72,21 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
         'isComingSoon': widget.movie!.isComingSoon ?? false,
       };
       isComingSoon = widget.movie!.isComingSoon ?? false;
+      
+      if (widget.movie!.releaseYear != null) {
+        _releaseYearController.text = widget.movie!.releaseYear!.toString();
+      }
     }
 
     initForm();
+  }
+
+  @override
+  void dispose() {
+    _genreSearchController.dispose();
+    _actorSearchController.dispose();
+    _releaseYearController.dispose();
+    super.dispose();
   }
 
     Future initForm() async {
@@ -262,24 +275,29 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
                       
                       SizedBox(height: 16),
                       
-                      _buildSearchableDropdown(
-                        label: l10n.genre,
-                        items: genresResult?.items ?? [],
-                        selectedItems: _selectedGenres,
-                        onItemSelected: (genre) {
-                          setState(() {
-                            if (!_selectedGenres.contains(genre)) {
-                              _selectedGenres.add(genre);
+                      Row(children: [
+                        Expanded(child: FormBuilderDateTimePicker(
+                          decoration: InputDecoration(labelText: l10n.releaseDate),
+                          name: 'releaseDate',
+                          inputType: InputType.date,
+                          onChanged: (value) {
+                            if (value != null) {
+                              setState(() {
+                                _initialValue['releaseYear'] = value.year.toString();
+                                _releaseYearController.text = value.year.toString();
+                              });
                             }
-                          });
-                        },
-                        onItemRemoved: (genre) {
-                          setState(() {
-                            _selectedGenres.remove(genre);
-                          });
-                        },
-                        itemToString: (genre) => genre.name ?? "",
-                      ),
+                          },
+                        )),
+                        const SizedBox(width:10),
+                        Expanded(child: TextField(
+                          controller: _releaseYearController,
+                          decoration: InputDecoration(labelText: l10n.releaseYear),
+                          keyboardType: TextInputType.number,
+                        ))
+                      ],),
+                      
+                      SizedBox(height: 16),
                     ],
                   ),
                 ),
@@ -287,6 +305,27 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
             ),
             
             SizedBox(height: 24),
+            
+            _buildSearchableDropdown(
+              label: l10n.genre,
+              items: genresResult?.items ?? [],
+              selectedItems: _selectedGenres,
+              onItemSelected: (genre) {
+                setState(() {
+                  if (!_selectedGenres.contains(genre)) {
+                    _selectedGenres.add(genre);
+                  }
+                });
+              },
+              onItemRemoved: (genre) {
+                setState(() {
+                  _selectedGenres.remove(genre);
+                });
+              },
+              itemToString: (genre) => genre.name ?? "",
+            ),
+            
+            const SizedBox(height: 16),
             
             Row(children: [
               Expanded(child: _buildSearchableDropdown(
@@ -309,23 +348,7 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
               )),
             ],),
             
-            SizedBox(height: 16),
-            
-            Row(children: [
-              Expanded(child: FormBuilderDateTimePicker(
-                decoration: InputDecoration(labelText: l10n.releaseDate),
-                name: 'releaseDate',
-                inputType: InputType.date,
-              )),
-              SizedBox(width:10),
-              Expanded(child: FormBuilderTextField(
-                decoration: InputDecoration(labelText: l10n.releaseYear),
-                name: 'releaseYear',
-                keyboardType: TextInputType.number,
-              ))
-            ],),
-            
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             
             Row(children: [
               Expanded(child: FormBuilderTextField(
@@ -334,7 +357,7 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
               )),
             ],),
             
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             
             Row(
               children: [
@@ -358,7 +381,7 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
               ],
             ),
             
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
           ],
         ),
@@ -405,6 +428,11 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
                   
                   if (formData['releaseYear'] != null && formData['releaseYear'].toString().isNotEmpty) {
                     formData['releaseYear'] = int.parse(formData['releaseYear']);
+                  }
+                  
+                  // Add release year from controller
+                  if (_releaseYearController.text.isNotEmpty) {
+                    formData['releaseYear'] = int.parse(_releaseYearController.text);
                   }
                   
                                     if (formData['releaseDate'] != null && formData['releaseDate'] is DateTime) {
@@ -466,67 +494,75 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
           ),
         ),
         const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).colorScheme.outline.withOpacity(0.3)),
-            borderRadius: BorderRadius.circular(8),
+        TextField(
+          controller: label == l10n.genre ? _genreSearchController : _actorSearchController,
+          decoration: InputDecoration(
+            labelText: label,
+            hintText: 'Search ${label.toLowerCase()}...',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.outline.withOpacity(0.3)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2),
+            ),
+            contentPadding: const EdgeInsets.all(12),
+            suffixIcon: Icon(Icons.search, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6)),
+            hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5)),
           ),
-          child: Column(
-            children: [
-              TextField(
-                controller: label == l10n.genre ? _genreSearchController : _actorSearchController,
-                decoration: InputDecoration(
-                  hintText: 'Search ${label.toLowerCase()}...',
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.all(12),
-                  suffixIcon: Icon(Icons.search),
-                ),
-                onChanged: (value) {
-                  setState(() {});
-                },
-              ),
-              if ((label == l10n.genre ? _genreSearchController.text : _actorSearchController.text).isNotEmpty)
-                Container(
-                  constraints: BoxConstraints(maxHeight: 200),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: items.where((item) => 
-                      itemToString(item).toLowerCase().contains(
-                        (label == l10n.genre ? _genreSearchController.text : _actorSearchController.text).toLowerCase()
-                      )
-                    ).length,
-                    itemBuilder: (context, index) {
-                      final filteredItems = items.where((item) => 
-                        itemToString(item).toLowerCase().contains(
-                          (label == l10n.genre ? _genreSearchController.text : _actorSearchController.text).toLowerCase()
-                        )
-                      ).toList();
-                      final item = filteredItems[index];
-                      final isSelected = selectedItems.contains(item);
-                      
-                      return ListTile(
-                        title: Text(itemToString(item)),
-                        trailing: isSelected ? Icon(Icons.check, color: Theme.of(context).colorScheme.primary) : null,
-                        onTap: () {
-                          if (isSelected) {
-                            onItemRemoved(item);
-                          } else {
-                            onItemSelected(item);
-                          }
-                          if (label == l10n.genre) {
-                            _genreSearchController.clear();
-                          } else {
-                            _actorSearchController.clear();
-                          }
-                          setState(() {});
-                        },
-                      );
-                    },
-                  ),
-                ),
-            ],
-          ),
+          onChanged: (value) {
+            setState(() {});
+          },
         ),
+        if ((label == l10n.genre ? _genreSearchController.text : _actorSearchController.text).isNotEmpty)
+          Container(
+            margin: const EdgeInsets.only(top: 4),
+            decoration: BoxDecoration(
+              border: Border.all(color: Theme.of(context).colorScheme.outline.withOpacity(0.2)),
+              borderRadius: BorderRadius.circular(8),
+              color: Theme.of(context).colorScheme.surface,
+            ),
+            constraints: BoxConstraints(maxHeight: 200),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: items.where((item) => 
+                itemToString(item).toLowerCase().contains(
+                  (label == l10n.genre ? _genreSearchController.text : _actorSearchController.text).toLowerCase()
+                )
+              ).length,
+              itemBuilder: (context, index) {
+                final filteredItems = items.where((item) => 
+                  itemToString(item).toLowerCase().contains(
+                    (label == l10n.genre ? _genreSearchController.text : _actorSearchController.text).toLowerCase()
+                  )
+                ).toList();
+                final item = filteredItems[index];
+                final isSelected = selectedItems.contains(item);
+                
+                return ListTile(
+                  title: Text(itemToString(item)),
+                  trailing: isSelected ? Icon(Icons.check, color: Theme.of(context).colorScheme.primary) : null,
+                  onTap: () {
+                    if (isSelected) {
+                      onItemRemoved(item);
+                    } else {
+                      onItemSelected(item);
+                    }
+                    if (label == l10n.genre) {
+                      _genreSearchController.clear();
+                    } else {
+                      _actorSearchController.clear();
+                    }
+                    setState(() {});
+                  },
+                );
+              },
+            ),
+          ),
         if (selectedItems.isNotEmpty) ...[
           const SizedBox(height: 8),
           Wrap(
