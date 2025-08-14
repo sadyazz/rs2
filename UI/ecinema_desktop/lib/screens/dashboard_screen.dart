@@ -205,7 +205,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: userCountByRole!.entries.take(3).map((entry) {
+                  children: userCountByRole.entries.take(3).map((entry) {
                     return Column(
                       children: [
                         Text(
