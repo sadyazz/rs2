@@ -8,9 +8,6 @@ namespace eCinema.Model.Requests
         public int HallId { get; set; }
         
         [Required]
-        public int SeatTypeId { get; set; }
-        
-        [Required]
         [Range(1, 100)]
         public int RowNumber { get; set; }
         

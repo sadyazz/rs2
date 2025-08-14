@@ -71,6 +71,20 @@ namespace eCinema.API.Controllers
             }
         }
 
+        [HttpGet("user-count-by-role")]
+        public async Task<IActionResult> GetUserCountByRole()
+        {
+            try
+            {
+                var userCountByRole = await _dashboardService.GetUserCountByRoleAsync();
+                return Ok(userCountByRole);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error retrieving user count by role", error = ex.Message });
+            }
+        }
+
         [HttpGet("total-income")]
         public async Task<IActionResult> GetTotalCinemaIncome()
         {
@@ -124,6 +138,20 @@ namespace eCinema.API.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "Error retrieving top 5 customers", error = ex.Message });
+            }
+        }
+
+        [HttpGet("today-screenings")]
+        public async Task<IActionResult> GetTodayScreenings()
+        {
+            try
+            {
+                var todayScreenings = await _dashboardService.GetTodayScreeningsAsync();
+                return Ok(todayScreenings);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error retrieving today's screenings", error = ex.Message });
             }
         }
     }

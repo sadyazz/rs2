@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import '../models/dashboard_stats.dart';
 import '../models/movie_revenue.dart';
 import '../models/top_customer.dart';
+import '../models/screening.dart';
 import 'auth_provider.dart';
 
 class DashboardProvider extends ChangeNotifier {
@@ -16,6 +17,7 @@ class DashboardProvider extends ChangeNotifier {
   List<MovieRevenue>? _top5Movies;
   List<MovieRevenue>? _revenueByMovie;
   List<TopCustomer>? _top5Customers;
+  List<Screening>? _todayScreenings;
 
   DashboardStats? get stats => _stats;
   bool get isLoading => _isLoading;
@@ -25,6 +27,7 @@ class DashboardProvider extends ChangeNotifier {
   List<MovieRevenue>? get top5Movies => _top5Movies;
   List<MovieRevenue>? get revenueByMovie => _revenueByMovie;
   List<TopCustomer>? get top5Customers => _top5Customers;
+  List<Screening>? get todayScreenings => _todayScreenings;
 
   Future<void> loadDashboardStats() async {
     _isLoading = true;
@@ -150,6 +153,25 @@ class DashboardProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> loadTodayScreenings() async {
+    try {
+      final baseUrl = const String.fromEnvironment("baseUrl", defaultValue: "http://localhost:5190");
+      final url = "$baseUrl/api/Dashboard/today-screenings";
+      final uri = Uri.parse(url);
+      final headers = _createHeaders();
+
+      final response = await http.get(uri, headers: headers);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as List;
+        _todayScreenings = data.map((json) => Screening.fromJson(json)).toList();
+        notifyListeners();
+      }
+    } catch (e) {
+      print('Error loading today\'s screenings: $e');
+    }
+  }
+
   Map<String, String> _createHeaders() {
     String username = AuthProvider.username ?? "";
     String password = AuthProvider.password ?? "";
@@ -174,6 +196,7 @@ class DashboardProvider extends ChangeNotifier {
       loadTop5WatchedMovies(),
       loadRevenueByMovie(),
       loadTop5Customers(),
+      loadTodayScreenings(),
     ]);
   }
 } 

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace eCinema.Model.Responses
 {
     public class DashboardStatsResponse
@@ -10,5 +12,6 @@ namespace eCinema.Model.Responses
         public int? TotalShows { get; set; }
         public int? TotalReservations { get; set; }
         public int? ActiveShows { get; set; }
+        public Dictionary<string, int>? UserCountByRole { get; set; }
     }
 } 
