@@ -93,6 +93,33 @@ class UserProvider extends BaseProvider<User> {
     }
   }
 
+  static Future<bool> changePassword(String currentPassword, String newPassword) async {
+    try {
+      final response = await http.put(
+        Uri.parse('${_baseUrl}User/change-password'),
+        headers: {
+          'Authorization': 'Basic ${base64Encode(utf8.encode('${AuthProvider.username}:${AuthProvider.password}'))}',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'currentPassword': currentPassword,
+          'newPassword': newPassword,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else if (response.statusCode == 400) {
+        final errorMessage = jsonDecode(response.body);
+        throw Exception(errorMessage);
+      }
+      return false;
+    } catch (e) {
+      print('Change password error: $e');
+      rethrow;
+    }
+  }
+
     @override
   User fromJson(data) {
     return User.fromJson(data);

@@ -16,5 +16,6 @@ public interface IUserService : ICRUDService<UserResponse, UserSearchObject, Use
     Task<bool> DeleteAsync(int id);
     Task<UserResponse?> AuthenticateAsync(UserLoginRequest request);
     Task<UserResponse> RegisterAsync(UserUpsertRequest request);
+    Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword);
 } 
 }

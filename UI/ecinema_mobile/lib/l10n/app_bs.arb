@@ -515,6 +515,154 @@
   "@editProfileDescription": {
     "description": "Edit profile description"
   },
+  "profileUpdatedSuccessfully": "Profil uspješno ažuriran",
+  "@profileUpdatedSuccessfully": {
+    "description": "Profile updated success message"
+  },
+  "personalInformation": "Lični podaci",
+  "@personalInformation": {
+    "description": "Personal information section title"
+  },
+  "saveChanges": "Sačuvaj promjene",
+  "@saveChanges": {
+    "description": "Save changes button text"
+  },
+  "phoneNumber": "Broj telefona",
+  "@phoneNumber": {
+    "description": "Phone number field label"
+  },
+  "tapToChangePhoto": "Dodirnite da promijenite fotografiju",
+  "@tapToChangePhoto": {
+    "description": "Tap to change photo instruction text"
+  },
+  "changePassword": "Promijeni lozinku",
+  "@changePassword": {
+    "description": "Change password title"
+  },
+  "changePasswordDescription": "Ažuriraj lozinku računa",
+  "@changePasswordDescription": {
+    "description": "Change password description"
+  },
+  "currentPassword": "Trenutna lozinka",
+  "@currentPassword": {
+    "description": "Current password field label"
+  },
+  "newPassword": "Nova lozinka",
+  "@newPassword": {
+    "description": "New password field label"
+  },
+  "confirmNewPassword": "Potvrdi novu lozinku",
+  "@confirmNewPassword": {
+    "description": "Confirm new password field label"
+  },
+  "passwordChangedSuccessfully": "Lozinka uspješno promijenjena",
+  "@passwordChangedSuccessfully": {
+    "description": "Password changed success message"
+  },
+  "updateYourPassword": "Ažuriraj lozinku",
+  "@updateYourPassword": {
+    "description": "Password update screen title"
+  },
+  "enterCurrentPasswordAndChooseNew": "Unesite trenutnu lozinku i odaberite novu",
+  "@enterCurrentPasswordAndChooseNew": {
+    "description": "Password update screen subtitle"
+  },
+  "passwordInformation": "Informacije o lozinki",
+  "@passwordInformation": {
+    "description": "Password information section title"
+  },
+  "updateYourPassword": "Ažuriraj lozinku",
+  "@updateYourPassword": {
+    "description": "Password update screen title"
+  },
+  "enterCurrentPasswordAndChooseNew": "Unesite trenutnu lozinku i odaberite novu",
+  "@enterCurrentPasswordAndChooseNew": {
+    "description": "Password update screen subtitle"
+  },
+  "currentPassword": "Trenutna lozinka",
+  "@currentPassword": {
+    "description": "Current password field label"
+  },
+  "newPassword": "Nova lozinka",
+  "@newPassword": {
+    "description": "New password field label"
+  },
+  "confirmNewPassword": "Potvrdi novu lozinku",
+  "@confirmNewPassword": {
+    "description": "Confirm new password field label"
+  },
+  "pleaseEnterCurrentPassword": "Molimo unesite vašu trenutnu lozinku",
+  "@pleaseEnterCurrentPassword": {
+    "description": "Current password validation message"
+  },
+  "pleaseEnterNewPassword": "Molimo unesite novu lozinku",
+  "@pleaseEnterNewPassword": {
+    "description": "New password validation message"
+  },
+  "passwordMinLength": "Lozinka mora imati najmanje 6 karaktera",
+  "@passwordMinLength": {
+    "description": "Password minimum length validation"
+  },
+  "pleaseConfirmNewPassword": "Molimo potvrdite vašu novu lozinku",
+  "@pleaseConfirmNewPassword": {
+    "description": "Confirm password validation message"
+  },
+  "passwordsDoNotMatch": "Lozinke se ne poklapaju",
+  "@passwordsDoNotMatch": {
+    "description": "Password confirmation validation message"
+  },
+  "changePassword": "Promijeni lozinku",
+  "@changePassword": {
+    "description": "Change password button text"
+  },
+  "passwordChangedSuccessfully": "Lozinka uspješno promijenjena",
+  "@passwordChangedSuccessfully": {
+    "description": "Password changed success message"
+  },
+  "currentPasswordIncorrect": "Trenutna lozinka nije ispravna",
+  "@currentPasswordIncorrect": {
+    "description": "Current password incorrect error message"
+  },
+  "userNotFound": "Korisnik nije pronađen",
+  "@userNotFound": {
+    "description": "User not found error message"
+  },
+  "errorChangingPassword": "Greška pri promjeni lozinke",
+  "@errorChangingPassword": {
+    "description": "Generic password change error message"
+  },
+  "personalInformation": "Lični podaci",
+  "@personalInformation": {
+    "description": "Personal information section title"
+  },
+  "saveChanges": "Sačuvaj promjene",
+  "@saveChanges": {
+    "description": "Save changes button text"
+  },
+  "profileUpdatedSuccessfully": "Profil uspješno ažuriran",
+  "@profileUpdatedSuccessfully": {
+    "description": "Profile updated success message"
+  },
+  "errorUpdatingProfile": "Greška pri ažuriranju profila",
+  "@errorUpdatingProfile": {
+    "description": "Generic profile update error message"
+  },
+  "tapToChangePhoto": "Dodirnite da promijenite fotografiju",
+  "@tapToChangePhoto": {
+    "description": "Tap to change photo instruction text"
+  },
+  "changeProfilePhoto": "Promijeni fotografiju profila",
+  "@changeProfilePhoto": {
+    "description": "Change profile photo dialog title"
+  },
+  "takePhoto": "Uslikaj fotografiju",
+  "@takePhoto": {
+    "description": "Take photo option"
+  },
+  "chooseFromGallery": "Odaberi iz galerije",
+  "@chooseFromGallery": {
+    "description": "Choose from gallery option"
+  },
   "paymentMethodsDescription": "Upravljaj kreditnim karticama",
   "@paymentMethodsDescription": {
     "description": "Payment methods description"

@@ -7,7 +7,8 @@ import '../providers/language_provider.dart';
 import '../providers/theme_provider.dart';
 import '../providers/user_movie_list_provider.dart';
 import 'movie_list_screen.dart';
-import 'package:flutter/services.dart';
+import 'edit_profile_screen.dart';
+import 'change_password_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -358,7 +359,12 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
           subtitle: l10n.editProfileDescription,
           colorScheme: colorScheme,
           onTap: () {
-            // TODO: Navigate to edit profile
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const EditProfileScreen(),
+              ),
+            ).then((_) => _loadListCounts());
           },
         ),
         const SizedBox(height: 12),
@@ -390,6 +396,21 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
           onTap: () {
             final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
             themeProvider.toggleTheme();
+          },
+        ),
+        const SizedBox(height: 12),
+        _buildSettingsCard(
+          icon: Icons.lock,
+          title: l10n.changePassword,
+          subtitle: l10n.changePasswordDescription,
+          colorScheme: colorScheme,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ChangePasswordScreen(),
+              ),
+            );
           },
         ),
         const SizedBox(height: 12),
@@ -570,6 +591,8 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
     final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
     languageProvider.changeLanguage(locale);
   }
+
+  
 
   void _showLogoutDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;

@@ -515,6 +515,154 @@
   "@editProfileDescription": {
     "description": "Edit profile description"
   },
+  "profileUpdatedSuccessfully": "Profile updated successfully",
+  "@profileUpdatedSuccessfully": {
+    "description": "Profile updated success message"
+  },
+  "personalInformation": "Personal Information",
+  "@personalInformation": {
+    "description": "Personal information section title"
+  },
+  "saveChanges": "Save Changes",
+  "@saveChanges": {
+    "description": "Save changes button text"
+  },
+  "phoneNumber": "Phone Number",
+  "@phoneNumber": {
+    "description": "Phone number field label"
+  },
+  "tapToChangePhoto": "Tap to change photo",
+  "@tapToChangePhoto": {
+    "description": "Tap to change photo instruction text"
+  },
+  "changePassword": "Change Password",
+  "@changePassword": {
+    "description": "Change password title"
+  },
+  "changePasswordDescription": "Update your account password",
+  "@changePasswordDescription": {
+    "description": "Change password description"
+  },
+  "currentPassword": "Current Password",
+  "@currentPassword": {
+    "description": "Current password field label"
+  },
+  "newPassword": "New Password",
+  "@newPassword": {
+    "description": "New password field label"
+  },
+  "confirmNewPassword": "Confirm New Password",
+  "@confirmNewPassword": {
+    "description": "Confirm new password field label"
+  },
+  "passwordChangedSuccessfully": "Password changed successfully",
+  "@passwordChangedSuccessfully": {
+    "description": "Password changed success message"
+  },
+  "updateYourPassword": "Update Your Password",
+  "@updateYourPassword": {
+    "description": "Password update screen title"
+  },
+  "enterCurrentPasswordAndChooseNew": "Enter your current password and choose a new one",
+  "@enterCurrentPasswordAndChooseNew": {
+    "description": "Password update screen subtitle"
+  },
+  "passwordInformation": "Password Information",
+  "@passwordInformation": {
+    "description": "Password information section title"
+  },
+  "updateYourPassword": "Update Your Password",
+  "@updateYourPassword": {
+    "description": "Password update screen title"
+  },
+  "enterCurrentPasswordAndChooseNew": "Enter your current password and choose a new one",
+  "@enterCurrentPasswordAndChooseNew": {
+    "description": "Password update screen subtitle"
+  },
+  "currentPassword": "Current Password",
+  "@currentPassword": {
+    "description": "Current password field label"
+  },
+  "newPassword": "New Password",
+  "@newPassword": {
+    "description": "New password field label"
+  },
+  "confirmNewPassword": "Confirm New Password",
+  "@confirmNewPassword": {
+    "description": "Confirm new password field label"
+  },
+  "pleaseEnterCurrentPassword": "Please enter your current password",
+  "@pleaseEnterCurrentPassword": {
+    "description": "Current password validation message"
+  },
+  "pleaseEnterNewPassword": "Please enter a new password",
+  "@pleaseEnterNewPassword": {
+    "description": "New password validation message"
+  },
+  "passwordMinLength": "Password must be at least 6 characters",
+  "@passwordMinLength": {
+    "description": "Password minimum length validation"
+  },
+  "pleaseConfirmNewPassword": "Please confirm your new password",
+  "@pleaseConfirmNewPassword": {
+    "description": "Confirm password validation message"
+  },
+  "passwordsDoNotMatch": "Passwords do not match",
+  "@passwordsDoNotMatch": {
+    "description": "Password confirmation validation message"
+  },
+  "changePassword": "Change Password",
+  "@changePassword": {
+    "description": "Change password button text"
+  },
+  "passwordChangedSuccessfully": "Password changed successfully",
+  "@passwordChangedSuccessfully": {
+    "description": "Password changed success message"
+  },
+  "currentPasswordIncorrect": "Current password is incorrect",
+  "@currentPasswordIncorrect": {
+    "description": "Current password incorrect error message"
+  },
+  "userNotFound": "User not found",
+  "@userNotFound": {
+    "description": "User not found error message"
+  },
+  "errorChangingPassword": "Error changing password",
+  "@errorChangingPassword": {
+    "description": "Generic password change error message"
+  },
+  "personalInformation": "Personal Information",
+  "@personalInformation": {
+    "description": "Personal information section title"
+  },
+  "saveChanges": "Save Changes",
+  "@saveChanges": {
+    "description": "Save changes button text"
+  },
+  "profileUpdatedSuccessfully": "Profile updated successfully",
+  "@profileUpdatedSuccessfully": {
+    "description": "Profile updated success message"
+  },
+  "errorUpdatingProfile": "Error updating profile",
+  "@errorUpdatingProfile": {
+    "description": "Generic profile update error message"
+  },
+  "tapToChangePhoto": "Tap to change photo",
+  "@tapToChangePhoto": {
+    "description": "Tap to change photo instruction text"
+  },
+  "changeProfilePhoto": "Change Profile Photo",
+  "@changeProfilePhoto": {
+    "description": "Change profile photo dialog title"
+  },
+  "takePhoto": "Take Photo",
+  "@takePhoto": {
+    "description": "Take photo option"
+  },
+  "chooseFromGallery": "Choose from Gallery",
+  "@chooseFromGallery": {
+    "description": "Choose from gallery option"
+  },
   "paymentMethodsDescription": "Manage credit cards",
   "@paymentMethodsDescription": {
     "description": "Payment methods description"

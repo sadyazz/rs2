@@ -5,6 +5,7 @@ using eCinema.Model.SearchObjects;
 using eCinema.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace eCinema.API.Controllers
 {
@@ -132,11 +133,26 @@ namespace eCinema.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-    }
 
-    public class UpdateUserRoleRequest
-    {
-        public int RoleId { get; set; }
-        public bool IsDeleted { get; set; }
+        [HttpPut("change-password")]
+        [Authorize]
+        public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+        {
+            try
+            {
+                var userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+                var result = await _userService.ChangePasswordAsync(userId, request.CurrentPassword, request.NewPassword);
+
+                if (!result)
+                    return BadRequest("Current password is incorrect");
+
+                return Ok("Password changed successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
-} 
+}

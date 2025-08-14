@@ -253,5 +253,24 @@ namespace eCinema.Services
 
             return await GetUserResponseWithRoleAsync(user.Id);
         }
+
+        public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
+{
+    var user = await _context.Users.FindAsync(userId);
+    if (user == null)
+        throw new InvalidOperationException("User not found");
+
+    // Provjera trenutne lozinke
+    if (!VerifyPassword(currentPassword, user.PasswordHash, user.PasswordSalt))
+        return false;
+
+    // Generisanje nove lozinke
+    byte[] salt;
+    user.PasswordHash = HashPassword(newPassword, out salt);
+    user.PasswordSalt = Convert.ToBase64String(salt);
+
+    await _context.SaveChangesAsync();
+    return true;
+}
     }
 } 
