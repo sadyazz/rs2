@@ -486,6 +486,8 @@
     "description": "Favorites title"
   },
   "movies": "filmova",
+  "movie": "film",
+  "movies2to4": "filma",
   "@movies": {
     "description": "Movies text"
   },
@@ -765,5 +767,156 @@
   "ok": "U redu",
   "@ok": {
     "description": "OK button text"
+  },
+  "movieRemovedFromList": "Film uklonjen iz {listName}",
+  "@movieRemovedFromList": {
+    "description": "Movie removed from list success message",
+    "placeholders": {
+      "listName": {
+        "type": "String"
+      }
+    }
+  },
+  "errorRemovingMovie": "Greška pri uklanjanju filma: {error}",
+  "@errorRemovingMovie": {
+    "description": "Error removing movie message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "removeMovie": "Ukloni film",
+  "@removeMovie": {
+    "description": "Remove movie dialog title"
+  },
+  "removeMovieConfirmation": "Da li ste sigurni da želite ukloniti \"{movieTitle}\" iz {listName}?",
+  "@removeMovieConfirmation": {
+    "description": "Remove movie confirmation message",
+    "placeholders": {
+      "movieTitle": {
+        "type": "String"
+      },
+      "listName": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel": "Otkaži",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "remove": "Ukloni",
+  "@remove": {
+    "description": "Remove button text"
+  },
+  "errorLoadingMovies": "Greška pri učitavanju filmova",
+  "@errorLoadingMovies": {
+    "description": "Error loading movies message"
+  },
+  "retry": "Pokušaj ponovo",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "noImage": "Nema slike",
+  "@noImage": {
+    "description": "No image placeholder text"
+  },
+  "director": "Režiser",
+  "@director": {
+    "description": "Director label"
+  },
+  "year": "Godina",
+  "@year": {
+    "description": "Year label"
+  },
+  "duration": "Trajanje",
+  "@duration": {
+    "description": "Duration label"
+  },
+  "minutes": "min",
+  "@minutes": {
+    "description": "Minutes abbreviation"
+  },
+  "removeFromList": "Ukloni iz {listName}",
+  "@removeFromList": {
+    "description": "Remove from list tooltip",
+    "placeholders": {
+      "listName": {
+        "type": "String"
+      }
+    }
+  },
+  "noMoviesInWatchlist": "Još nema filmova u vašoj listi za gledanje",
+  "@noMoviesInWatchlist": {
+    "description": "Empty watchlist message"
+  },
+  "noFavoriteMovies": "Još nema favorita",
+  "@noFavoriteMovies": {
+    "description": "Empty favorites message"
+  },
+  "noWatchedMovies": "Još nema pregledanih filmova",
+  "@noWatchedMovies": {
+    "description": "Empty watched movies message"
+  },
+  "noMoviesInList": "Još nema filmova u ovoj listi",
+  "@noMoviesInList": {
+    "description": "Generic empty list message"
+  },
+  "addedToWatchlist": "Dodano u listu za gledanje",
+  "@addedToWatchlist": {
+    "description": "Added to watchlist success message"
+  },
+  "removedFromWatchlist": "Uklonjeno iz liste za gledanje",
+  "@removedFromWatchlist": {
+    "description": "Removed from watchlist success message"
+  },
+  "addedToFavorites": "Dodano u favorite",
+  "@addedToFavorites": {
+    "description": "Added to favorites success message"
+  },
+  "removedFromFavorites": "Uklonjeno iz favorita",
+  "@removedFromFavorites": {
+    "description": "Removed from favorites success message"
+  },
+  "removeFromWatchlist": "Ukloni iz liste za gledanje",
+  "@removeFromWatchlist": {
+    "description": "Remove from watchlist button text"
+  },
+  "removeFromFavorites": "Ukloni iz favorita",
+  "@removeFromFavorites": {
+    "description": "Remove from favorites button text"
+  },
+  "addToWatchlist": "Dodaj u listu za gledanje",
+  "@addToWatchlist": {
+    "description": "Add to watchlist button text"
+  },
+  "addToFavorites": "Dodaj u favorite",
+  "@addToFavorites": {
+    "description": "Add to favorites button text"
+  },
+  "errorUpdatingWatchlist": "Greška pri ažuriranju liste za gledanje",
+  "@errorUpdatingWatchlist": {
+    "description": "Error updating watchlist message"
+  },
+  "errorUpdatingFavorites": "Greška pri ažuriranju favorita",
+  "@errorUpdatingFavorites": {
+    "description": "Error updating favorites message"
+  },
+  "unknownTitle": "Nepoznat naslov",
+  "@unknownTitle": {
+    "description": "Unknown title placeholder"
+  },
+  "unknown": "Nepozato",
+  "@unknown": {
+    "description": "Unknown placeholder"
+  },
+  "tba": "TBA",
+  "@tba": {
+    "description": "To be announced abbreviation"
+  },
+  "sarajevo": "Sarajevo",
+  "@sarajevo": {
+    "description": "Sarajevo city name"
   }
 } 

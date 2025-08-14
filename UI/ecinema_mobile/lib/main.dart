@@ -1,6 +1,6 @@
 import 'package:ecinema_mobile/providers/news_provider.dart';
 import 'package:ecinema_mobile/providers/promotion_provider.dart';
-// import 'package:ecinema_mobile/providers/user_movie_list_provider.dart';
+import 'package:ecinema_mobile/providers/user_movie_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,6 +16,7 @@ import 'providers/user_provider.dart';
 import 'layouts/master_screen.dart';
 import 'screens/register_screen.dart';
 
+final routeObserver = RouteObserver<ModalRoute>();
 void main() {
   runApp(const MyApp());
 }
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ReviewProvider()),
         ChangeNotifierProvider(create: (_) => NewsProvider()),
         ChangeNotifierProvider(create: (_) => PromotionProvider()),
-        // ChangeNotifierProvider(create: (_) => UserMovieListProvider()),
+        ChangeNotifierProvider(create: (_) => UserMovieListProvider()),
       ],
       child: Consumer2<LanguageProvider, ThemeProvider>(
         builder: (context, languageProvider, themeProvider, child) {
@@ -73,6 +74,7 @@ class MyApp extends StatelessWidget {
               '/register': (context) => const RegisterPage(),
               '/home': (context) => MasterScreen("", null, showAppBar: false),
             },
+            navigatorObservers: [routeObserver]
           );
         },
       ),

@@ -486,6 +486,8 @@
     "description": "Favorites title"
   },
   "movies": "movies",
+  "movie": "movie",
+  "movies2to4": "movies",
   "@movies": {
     "description": "Movies text"
   },
@@ -765,5 +767,156 @@
   "ok": "OK",
   "@ok": {
     "description": "OK button text"
+  },
+  "movieRemovedFromList": "Movie removed from {listName}",
+  "@movieRemovedFromList": {
+    "description": "Movie removed from list success message",
+    "placeholders": {
+      "listName": {
+        "type": "String"
+      }
+    }
+  },
+  "errorRemovingMovie": "Error removing movie: {error}",
+  "@errorRemovingMovie": {
+    "description": "Error removing movie message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "removeMovie": "Remove Movie",
+  "@removeMovie": {
+    "description": "Remove movie dialog title"
+  },
+  "removeMovieConfirmation": "Are you sure you want to remove \"{movieTitle}\" from {listName}?",
+  "@removeMovieConfirmation": {
+    "description": "Remove movie confirmation message",
+    "placeholders": {
+      "movieTitle": {
+        "type": "String"
+      },
+      "listName": {
+        "type": "String"
+      }
+    }
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "remove": "Remove",
+  "@remove": {
+    "description": "Remove button text"
+  },
+  "errorLoadingMovies": "Error loading movies",
+  "@errorLoadingMovies": {
+    "description": "Error loading movies message"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "noImage": "No Image",
+  "@noImage": {
+    "description": "No image placeholder text"
+  },
+  "director": "Director",
+  "@director": {
+    "description": "Director label"
+  },
+  "year": "Year",
+  "@year": {
+    "description": "Year label"
+  },
+  "duration": "Duration",
+  "@duration": {
+    "description": "Duration label"
+  },
+  "minutes": "min",
+  "@minutes": {
+    "description": "Minutes abbreviation"
+  },
+  "removeFromList": "Remove from {listName}",
+  "@removeFromList": {
+    "description": "Remove from list tooltip",
+    "placeholders": {
+      "listName": {
+        "type": "String"
+      }
+    }
+  },
+  "noMoviesInWatchlist": "No movies in your watchlist yet",
+  "@noMoviesInWatchlist": {
+    "description": "Empty watchlist message"
+  },
+  "noFavoriteMovies": "No favorite movies yet",
+  "@noFavoriteMovies": {
+    "description": "Empty favorites message"
+  },
+  "noWatchedMovies": "No watched movies yet",
+  "@noWatchedMovies": {
+    "description": "Empty watched movies message"
+  },
+  "noMoviesInList": "No movies in this list yet",
+  "@noMoviesInList": {
+    "description": "Generic empty list message"
+  },
+  "addedToWatchlist": "Added to watchlist",
+  "@addedToWatchlist": {
+    "description": "Added to watchlist success message"
+  },
+  "removedFromWatchlist": "Removed from watchlist",
+  "@removedFromWatchlist": {
+    "description": "Removed from watchlist success message"
+  },
+  "addedToFavorites": "Added to favorites",
+  "@addedToFavorites": {
+    "description": "Added to favorites success message"
+  },
+  "removedFromFavorites": "Removed from favorites",
+  "@removedFromFavorites": {
+    "description": "Removed from favorites success message"
+  },
+  "removeFromWatchlist": "Remove from Watchlist",
+  "@removeFromWatchlist": {
+    "description": "Remove from watchlist button text"
+  },
+  "removeFromFavorites": "Remove from Favorites",
+  "@removeFromFavorites": {
+    "description": "Remove from favorites button text"
+  },
+  "addToWatchlist": "Add to Watchlist",
+  "@addToWatchlist": {
+    "description": "Add to watchlist button text"
+  },
+  "addToFavorites": "Add to Favorites",
+  "@addToFavorites": {
+    "description": "Add to favorites button text"
+  },
+  "errorUpdatingWatchlist": "Error updating watchlist",
+  "@errorUpdatingWatchlist": {
+    "description": "Error updating watchlist message"
+  },
+  "errorUpdatingFavorites": "Error updating favorites",
+  "@errorUpdatingFavorites": {
+    "description": "Error updating favorites message"
+  },
+  "unknownTitle": "Unknown Title",
+  "@unknownTitle": {
+    "description": "Unknown title placeholder"
+  },
+  "unknown": "Unknown",
+  "@unknown": {
+    "description": "Unknown placeholder"
+  },
+  "tba": "TBA",
+  "@tba": {
+    "description": "To be announced abbreviation"
+  },
+  "sarajevo": "Sarajevo",
+  "@sarajevo": {
+    "description": "Sarajevo city name"
   }
 } 

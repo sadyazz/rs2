@@ -1,46 +1,125 @@
+import 'package:ecinema_mobile/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/language_provider.dart';
 import '../providers/theme_provider.dart';
+import '../providers/user_movie_list_provider.dart';
+import 'movie_list_screen.dart';
+import 'package:flutter/services.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserver, RouteAware {
+  late FocusNode _focusNode;
+  late UserMovieListProvider _listProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+    _focusNode.addListener(_onFocusChange);
+    _listProvider = context.read<UserMovieListProvider>();
+    WidgetsBinding.instance.addObserver(this);
+    _loadListCounts();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    WidgetsBinding.instance.removeObserver(this);
+    _focusNode.removeListener(_onFocusChange);
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    _loadListCounts();
+  }
+
+  void _onFocusChange() {
+    if (_focusNode.hasFocus) {
+      _loadListCounts();
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _loadListCounts();
+    }
+  }
+
+  Future<void> _loadListCounts() async {
+    await _listProvider.loadListCounts();
+  }
+
+  String _getMovieCountText(int count, AppLocalizations l10n) {
+    if (count == 1) {
+      return l10n.movie;
+    } else if (count >= 2 && count <= 4) {
+      return l10n.movies2to4;
+    } else {
+      return l10n.movies;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     
-    return SingleChildScrollView(
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              colorScheme.primary.withOpacity(0.1),
-              colorScheme.primary.withOpacity(0.05),
-            ],
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 40),
-              _buildProfileSection(l10n, colorScheme),
-              const SizedBox(height: 32),
-              _buildMovieListsSection(l10n, colorScheme),
-              const SizedBox(height: 32),
-              _buildSettingsSection(context, l10n, colorScheme),
-              const SizedBox(height: 100),
-            ],
-          ),
-        ),
+    return Focus(
+      focusNode: _focusNode,
+      child: Consumer<UserMovieListProvider>(
+        builder: (context, listProvider, child) {
+          return RefreshIndicator(
+            onRefresh: _loadListCounts,
+            child: SingleChildScrollView(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      colorScheme.primary.withOpacity(0.1),
+                      colorScheme.primary.withOpacity(0.05),
+                    ],
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 40),
+                      _buildProfileSection(l10n, colorScheme),
+                      const SizedBox(height: 32),
+                      _buildMovieListsSection(context, l10n, colorScheme, listProvider),
+                      const SizedBox(height: 32),
+                      _buildSettingsSection(context, l10n, colorScheme),
+                      const SizedBox(height: 100),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -92,9 +171,9 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 4),
-              if (AuthProvider.email != null) ...[
+              if (AuthProvider.username != null) ...[
                 Text(
-                  AuthProvider.email!,
+                  '@${AuthProvider.username!}',
                   style: TextStyle(
                     fontSize: 14,
                     color: colorScheme.onSurface.withOpacity(0.7),
@@ -109,7 +188,8 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMovieListsSection(AppLocalizations l10n, ColorScheme colorScheme) {
+  Widget _buildMovieListsSection(BuildContext context, AppLocalizations l10n, 
+      ColorScheme colorScheme, UserMovieListProvider listProvider) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -125,22 +205,55 @@ class ProfileScreen extends StatelessWidget {
         _buildMovieListCard(
           icon: Icons.schedule,
           title: l10n.watchlist,
-          subtitle: '12 ${l10n.movies}',
+          subtitle: listProvider.isLoading ? '...' : '${listProvider.watchlistCount} ${_getMovieCountText(listProvider.watchlistCount, l10n)}',
           colorScheme: colorScheme,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MovieListScreen(
+                  listType: 'watchlist',
+                  title: l10n.watchlist,
+                ),
+              ),
+            ).then((_) => _loadListCounts());
+          },
         ),
         const SizedBox(height: 12),
         _buildMovieListCard(
           icon: Icons.check_circle,
           title: l10n.watchedMovies,
-          subtitle: '28 ${l10n.movies}',
+          subtitle: listProvider.isLoading ? '...' : '${listProvider.watchedCount} ${_getMovieCountText(listProvider.watchedCount, l10n)}',
           colorScheme: colorScheme,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MovieListScreen(
+                  listType: 'watched',
+                  title: l10n.watchedMovies,
+                ),
+              ),
+            ).then((_) => _loadListCounts());
+          },
         ),
         const SizedBox(height: 12),
         _buildMovieListCard(
           icon: Icons.favorite,
           title: l10n.favorites,
-          subtitle: '8 ${l10n.movies}',
+          subtitle: listProvider.isLoading ? '...' : '${listProvider.favoritesCount} ${_getMovieCountText(listProvider.favoritesCount, l10n)}',
           colorScheme: colorScheme,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MovieListScreen(
+                  listType: 'favorites',
+                  title: l10n.favorites,
+                ),
+              ),
+            ).then((_) => _loadListCounts());
+          },
         ),
       ],
     );
@@ -151,62 +264,67 @@ class ProfileScreen extends StatelessWidget {
     required String title,
     required String subtitle,
     required ColorScheme colorScheme,
+    VoidCallback? onTap,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: colorScheme.outline.withOpacity(0.2),
-          width: 1,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: colorScheme.outline.withOpacity(0.2),
+            width: 1,
+          ),
         ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: colorScheme.surfaceVariant,
-              borderRadius: BorderRadius.circular(8),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceVariant,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                icon,
+                color: colorScheme.onSurfaceVariant,
+                size: 20,
+              ),
             ),
-            child: Icon(
-              icon,
-              color: colorScheme.onSurfaceVariant,
-              size: 20,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: colorScheme.onSurface,
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: colorScheme.onSurface,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: colorScheme.onSurface.withOpacity(0.7),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: colorScheme.onSurface.withOpacity(0.7),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Icon(
-            Icons.arrow_forward_ios,
-            color: colorScheme.onSurface.withOpacity(0.5),
-            size: 16,
-          ),
-        ],
+            Icon(
+              Icons.arrow_forward_ios,
+              color: colorScheme.onSurface.withOpacity(0.5),
+              size: 16,
+            ),
+          ],
+        ),
       ),
     );
   }

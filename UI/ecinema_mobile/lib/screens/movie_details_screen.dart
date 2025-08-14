@@ -31,9 +31,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   bool isLoadingFavoritesStatus = false;
   bool isInWatchlist = false;
   bool isInFavorites = false;
-  String selectedDate = '';
+    String selectedDate = '';
   String selectedTime = '';
-  String selectedLocation = 'Sarajevo';
+  String selectedLocation = '';
   Set<int> revealedSpoilers = <int>{};
 
   bool get isComingSoon => widget.movie.isComingSoon == true;
@@ -54,7 +54,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         isLoadingFavoritesStatus = true;
       });
 
-      final userMovieListProvider = context.read<UserMovieListProvider>();
+      final userMovieListProvider = UserMovieListProvider();
       
       final watchlistStatus = await userMovieListProvider.isMovieInList(widget.movie.id!, 'watchlist');
       final favoritesStatus = await userMovieListProvider.isMovieInList(widget.movie.id!, 'favorites');
@@ -74,13 +74,13 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     }
   }
 
-  Future<void> _toggleWatchlist() async {
+  Future<void> _toggleWatchlist(AppLocalizations l10n) async {
     try {
       setState(() {
         isLoadingWatchlistStatus = true;
       });
 
-      final userMovieListProvider = context.read<UserMovieListProvider>();
+      final userMovieListProvider = UserMovieListProvider();
       
       if (isInWatchlist) {
         await userMovieListProvider.removeMovieFromList(widget.movie.id!, 'watchlist');
@@ -97,8 +97,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         SnackBar(
           content: Text(
             isInWatchlist 
-                ? 'Added to watchlist' 
-                : 'Removed from watchlist',
+                ? l10n.addedToWatchlist 
+                : l10n.removedFromWatchlist,
           ),
         ),
       );
@@ -109,20 +109,20 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error updating watchlist'),
+          content: Text(l10n.errorUpdatingWatchlist),
           backgroundColor: Colors.red,
         ),
       );
     }
   }
 
-  Future<void> _toggleFavorites() async {
+  Future<void> _toggleFavorites(AppLocalizations l10n) async {
     try {
       setState(() {
         isLoadingFavoritesStatus = true;
       });
 
-      final userMovieListProvider = context.read<UserMovieListProvider>();
+      final userMovieListProvider = UserMovieListProvider();
       
       if (isInFavorites) {
         await userMovieListProvider.removeMovieFromList(widget.movie.id!, 'favorites');
@@ -139,8 +139,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         SnackBar(
           content: Text(
             isInFavorites 
-                ? 'Added to favorites' 
-                : 'Removed from favorites',
+                ? l10n.addedToFavorites 
+                : l10n.removedFromFavorites,
           ),
         ),
       );
@@ -151,7 +151,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Error updating favorites'),
+          content: Text(l10n.errorUpdatingFavorites),
           backgroundColor: Colors.red,
         ),
       );
@@ -356,7 +356,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
           children: [
             Expanded(
               child: ElevatedButton.icon(
-                onPressed: isLoadingWatchlistStatus ? null : _toggleWatchlist,
+                onPressed: isLoadingWatchlistStatus ? null : () => _toggleWatchlist(l10n),
                 icon: isLoadingWatchlistStatus 
                     ? SizedBox(
                         width: 24,
@@ -372,7 +372,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                         size: 24,
                       ),
                 label: Text(
-                  isInWatchlist ? 'Remove from Watchlist' : l10n.addToWatchlist,
+                  isInWatchlist ? l10n.removeFromWatchlist : l10n.addToWatchlist,
                   style: const TextStyle(color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
@@ -438,9 +438,10 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   }
 
   String _formatReleaseDate(DateTime? releaseDate) {
-    if (releaseDate == null) return 'TBA';
-    
     final l10n = AppLocalizations.of(context)!;
+    
+    if (releaseDate == null) return l10n.tba;
+    
     final months = [
       l10n.january, l10n.february, l10n.march, l10n.april, l10n.may, l10n.june,
       l10n.july, l10n.august, l10n.september, l10n.october, l10n.november, l10n.december
@@ -460,7 +461,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.movie.title ?? 'Unknown Title',
+                    widget.movie.title ?? l10n.unknownTitle,
                     style: TextStyle(
                       color: colorScheme.onSurface,
                       fontSize: 24,
@@ -488,8 +489,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       const SizedBox(width: 16),
                       Text(
                         widget.movie.genres?.isNotEmpty == true 
-                            ? widget.movie.genres!.first.name ?? 'Unknown'
-                            : 'Unknown',
+                                            ? widget.movie.genres!.first.name ?? l10n.unknown
+                : l10n.unknown,
                         style: TextStyle(
                           color: colorScheme.onSurface.withOpacity(0.7),
                           fontSize: 16,
@@ -549,7 +550,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
             const SizedBox(width: 12),
             Expanded(
               child: ElevatedButton.icon(
-                onPressed: isLoadingFavoritesStatus ? null : _toggleFavorites,
+                onPressed: isLoadingFavoritesStatus ? null : () => _toggleFavorites(l10n),
                 icon: isLoadingFavoritesStatus 
                     ? SizedBox(
                         width: 24,
@@ -565,7 +566,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                         size: 24,
                       ),
                 label: Text(
-                  isInFavorites ? 'Remove from Favorites' : l10n.addToFavorites,
+                  isInFavorites ? l10n.removeFromFavorites : l10n.addToFavorites,
                   style: const TextStyle(color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
@@ -586,7 +587,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
           children: [
             Expanded(
               child: ElevatedButton.icon(
-                onPressed: isLoadingWatchlistStatus ? null : _toggleWatchlist,
+                onPressed: isLoadingWatchlistStatus ? null : () => _toggleWatchlist(l10n),
                 icon: isLoadingWatchlistStatus 
                     ? SizedBox(
                         width: 20,
@@ -602,7 +603,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                         size: 20,
                       ),
                 label: Text(
-                  isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist',
+                  isInWatchlist ? l10n.removeFromWatchlist : l10n.addToWatchlist,
                   style: const TextStyle(color: Colors.white, fontSize: 12),
                 ),
                 style: ElevatedButton.styleFrom(

@@ -21,7 +21,7 @@ Movie _$MovieFromJson(Map<String, dynamic> json) => Movie(
       (json['genres'] as List<dynamic>?)
           ?.map((e) => Genre.fromJson(e as Map<String, dynamic>))
           .toList(),
-  image: json['image'] as String?,
+  image: const ByteArrayConverter().fromJson(json['image']),
   trailerUrl: json['trailerUrl'] as String?,
   grade: (json['grade'] as num?)?.toDouble(),
   isComingSoon: json['isComingSoon'] as bool?,
@@ -41,7 +41,7 @@ Map<String, dynamic> _$MovieToJson(Movie instance) => <String, dynamic>{
   'releaseDate': instance.releaseDate?.toIso8601String(),
   'releaseYear': instance.releaseYear,
   'genres': instance.genres,
-  'image': instance.image,
+  'image': const ByteArrayConverter().toJson(instance.image),
   'trailerUrl': instance.trailerUrl,
   'grade': instance.grade,
   'isComingSoon': instance.isComingSoon,
