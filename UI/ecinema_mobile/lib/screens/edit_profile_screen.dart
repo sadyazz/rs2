@@ -26,7 +26,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   
   final ImagePicker _picker = ImagePicker();
   File? _imageFile;
-  String? _imageBase64;
+  String? _imageBase64 = null; 
 
   @override
   void initState() {
@@ -70,7 +70,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         username: _usernameController.text.trim(),
         email: _emailController.text.trim(),
         phoneNumber: _phoneNumberController.text.trim(),
-        image: _imageBase64,
+        image: _imageBase64 ?? AuthProvider.image, 
       );
       
       if (success && mounted) {
@@ -80,8 +80,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         AuthProvider.fullName = '${_firstNameController.text.trim()} ${_lastNameController.text.trim()}';
         AuthProvider.email = _emailController.text.trim();
         AuthProvider.phoneNumber = _phoneNumberController.text.trim();
-        // Update image in AuthProvider (null for empty string, otherwise use the base64)
-        AuthProvider.image = _imageBase64 == "" ? null : _imageBase64;
+        
+        if (_imageBase64 == "") {
+          AuthProvider.image = null;
+        } else if (_imageBase64 != null) {
+          AuthProvider.image = _imageBase64;
+        }
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -241,7 +245,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       Navigator.pop(context);
                       setState(() {
                         _imageFile = null;
-                        _imageBase64 = ""; // Send empty string to remove image
+                        _imageBase64 = ""; 
                       });
                     },
                   ),

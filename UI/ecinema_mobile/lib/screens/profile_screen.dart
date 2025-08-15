@@ -353,7 +353,12 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
               MaterialPageRoute(
                 builder: (context) => const EditProfileScreen(),
               ),
-            ).then((_) => _loadListCounts());
+            ).then((updated) {
+              if (updated == true) {
+                setState(() {}); 
+              }
+              _loadListCounts();
+            });
           },
         ),
         const SizedBox(height: 12),
