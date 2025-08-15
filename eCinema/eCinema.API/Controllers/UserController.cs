@@ -19,6 +19,14 @@ namespace eCinema.API.Controllers
         {
             _userService = service;
         }
+
+        [HttpGet]
+        public override async Task<PagedResult<UserResponse>> Get([FromQuery] UserSearchObject? search = null)
+        {
+            var result = await _userService.GetAsync(search ?? new UserSearchObject());
+            return result;
+        }
+
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<UserResponse>> Login(UserLoginRequest request)

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'edit_user_screen.dart';
+import '../providers/utils.dart';
 
 class UsersListScreen extends StatefulWidget {
   const UsersListScreen({super.key});
@@ -52,6 +53,7 @@ class _UsersListScreenState extends State<UsersListScreen> {
         'includeDeleted': includeDeleted,
       };
       result = await provider.get(filter: filter);
+      print('DEBUG: API result items: ${result?.items?.map((u) => '${u.fullName}: role=${u.role?.name}')}');
       setState(() {
         result = result;
         isLoading = false;
@@ -477,6 +479,7 @@ class _UsersListScreenState extends State<UsersListScreen> {
 
   Widget _buildUserCard(User user) {
     final l10n = AppLocalizations.of(context)!;
+    print('DEBUG: User ${user.fullName} has role: ${user.role?.name}');
     return InkWell(
       onTap: () async {
         try {
@@ -526,22 +529,31 @@ class _UsersListScreenState extends State<UsersListScreen> {
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                          Theme.of(context).colorScheme.primary.withOpacity(0.05),
-                        ],
-                      ),
                       borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                     ),
-                    child: Center(
-                      child: Icon(
-                        Icons.person,
-                        size: 48,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                      child: user.image != null && user.image!.isNotEmpty
+                          ? imageFromString(user.image!)
+                          : Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                                    Theme.of(context).colorScheme.primary.withOpacity(0.05),
+                                  ],
+                                ),
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.person,
+                                  size: 48,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ),
                     ),
                   ),
                   if (user.isDeleted == true)
@@ -612,6 +624,45 @@ class _UsersListScreenState extends State<UsersListScreen> {
                             const SizedBox(width: 4),
                             Text(
                               l10n.admin,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  if (user.role?.name?.toLowerCase() == 'staff')
+                    Positioned(
+                      top: 10,
+                      left: 10,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.orange[700],
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              spreadRadius: 0,
+                              blurRadius: 3,
+                              offset: const Offset(0, 1),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.work,
+                              size: 12,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              'Staff',
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 10,

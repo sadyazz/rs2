@@ -14,6 +14,7 @@ class User {
   final bool isDeleted;
   final Role? role;
   final DateTime? createdAt;
+  final String? image;
 
   const User({
     this.id,
@@ -25,6 +26,7 @@ class User {
     this.isDeleted = false,
     this.role,
     this.createdAt,
+    this.image,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
@@ -41,6 +43,7 @@ class User {
     bool? isDeleted,
     Role? role,
     DateTime? createdAt,
+    String? image,
   }) {
     return User(
       id: id ?? this.id,
@@ -52,6 +55,7 @@ class User {
       isDeleted: isDeleted ?? this.isDeleted,
       role: role ?? this.role,
       createdAt: createdAt ?? this.createdAt,
+      image: image ?? this.image,
     );
   }
 

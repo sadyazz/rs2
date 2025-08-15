@@ -9,6 +9,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../providers/utils.dart';
 
 class EditUserScreen extends StatefulWidget {
   final User? user;
@@ -218,23 +219,17 @@ class _EditUserScreenState extends State<EditUserScreen> {
                         ),
                       ),
                       Expanded(
-                        child: Container(
-                          margin: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surface,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
-                              width: 1,
-                            ),
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Icons.person,
-                              size: 48,
-                              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-                            ),
-                          ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: widget.user?.image != null && widget.user!.image!.isNotEmpty
+                              ? imageFromString(widget.user!.image!)
+                              : Center(
+                                  child: Icon(
+                                    Icons.person,
+                                    size: 48,
+                                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                                  ),
+                                ),
                         ),
                       ),
                     ],

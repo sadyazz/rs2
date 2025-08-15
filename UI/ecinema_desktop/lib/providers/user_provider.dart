@@ -22,7 +22,18 @@ class UserProvider extends BaseProvider<User> {
         }),
       );
 
-      return response.statusCode == 200;
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final user = User.fromJson(data);
+        
+        AuthProvider.username = username;
+        AuthProvider.password = password;
+        AuthProvider.setUser(user);
+        
+        return true;
+      }
+
+        return response.statusCode == 200;
     } catch (e) {
       print('Login error: $e');
       return false;
@@ -31,13 +42,10 @@ class UserProvider extends BaseProvider<User> {
 
   @override
   User fromJson(data) {
-    if (data is Map<String, dynamic>) {
-      if (data['role'] != null) {
-        print('DEBUG: Role data type: ${data['role'].runtimeType}');
-        print('DEBUG: Role data content: ${data['role']}');
-      }
-    }
-    return User.fromJson(data);
+    print('DEBUG: UserProvider.fromJson - raw data: $data');
+    final user = User.fromJson(data);
+    print('DEBUG: UserProvider.fromJson - parsed user: ${user.fullName}, role: ${user.role?.name}');
+    return user;
   }
 
   static User? getCurrentUser() {
@@ -52,6 +60,7 @@ class UserProvider extends BaseProvider<User> {
       phoneNumber: AuthProvider.phoneNumber,
       createdAt: AuthProvider.createdAt,
       role: AuthProvider.role,
+      image: AuthProvider.image,
     );
   }
 
@@ -87,19 +96,12 @@ class UserProvider extends BaseProvider<User> {
   Future<void> updateUserRole(int userId, Map<String, dynamic> request) async {
     try {
       final headers = createHeaders();
-      print('DEBUG: Sending request to update user role');
-      print('DEBUG: URL: http://localhost:5190/User/$userId/role');
-      print('DEBUG: Headers: $headers');
-      print('DEBUG: Request body: $request');
       
       final response = await http.put(
         Uri.parse('http://localhost:5190/User/$userId/role'),
         headers: headers,
         body: jsonEncode(request),
       );
-      
-      print('DEBUG: Response status: ${response.statusCode}');
-      print('DEBUG: Response body: ${response.body}');
       
       if (response.statusCode == 200) {
         return;

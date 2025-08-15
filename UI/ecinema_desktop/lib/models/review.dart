@@ -45,6 +45,9 @@ class Review {
   @JsonKey(name: 'movieTitle')
   final String movieTitle;
 
+  @JsonKey(name: 'userImage')
+final String? userImage;
+
   Review({
     this.id,
     required this.rating,
@@ -59,6 +62,7 @@ class Review {
     required this.userEmail,
     required this.movieId,
     required this.movieTitle,
+    this.userImage,
   });
 
   factory Review.fromJson(Map<String, dynamic> json) => _$ReviewFromJson(json);
@@ -79,6 +83,7 @@ class Review {
     String? userEmail,
     int? movieId,
     String? movieTitle,
+    String? userImage,
   }) {
     return Review(
       id: id ?? this.id,
@@ -94,12 +99,13 @@ class Review {
       userEmail: userEmail ?? this.userEmail,
       movieId: movieId ?? this.movieId,
       movieTitle: movieTitle ?? this.movieTitle,
+      userImage: userImage ?? this.userImage,
     );
   }
 
   @override
   String toString() {
-    return 'Review(id: $id, rating: $rating, comment: $comment, createdAt: $createdAt, isDeleted: $isDeleted, isSpoiler: $isSpoiler, userName: $userName, movieTitle: $movieTitle)';
+    return 'Review(id: $id, rating: $rating, comment: $comment, createdAt: $createdAt, isDeleted: $isDeleted, isSpoiler: $isSpoiler, userName: $userName, movieTitle: $movieTitle, userImage: $userImage)';
   }
 
   @override

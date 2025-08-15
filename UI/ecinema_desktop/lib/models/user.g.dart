@@ -20,6 +20,7 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
+      image: json['image'] as String?,
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -32,4 +33,5 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'isDeleted': instance.isDeleted,
       'role': instance.role,
       'createdAt': instance.createdAt?.toIso8601String(),
+      'image': instance.image,
     };

@@ -10,7 +10,7 @@ namespace eCinema.Services
 {
 public interface IUserService : ICRUDService<UserResponse, UserSearchObject, UserUpsertRequest, UserUpdateRequest>
 {
-    Task<List<UserResponse>> GetAsync(UserSearchObject search);
+    Task<PagedResult<UserResponse>> GetAsync(UserSearchObject search);
     Task<UserResponse?> GetByIdAsync(int id);
     Task<UserResponse> CreateAsync(UserUpsertRequest request);
     Task<UserResponse?> UpdateAsync(int id, UserUpdateRequest request);

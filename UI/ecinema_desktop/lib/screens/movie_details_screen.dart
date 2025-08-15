@@ -566,78 +566,85 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   }
 
   Widget _buildReviewPreview(Review review) {
-    final l10n = AppLocalizations.of(context)!;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            radius: 16,
-            child: Text(
-              review.userName.isNotEmpty ? review.userName[0].toUpperCase() : 'U',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-              ),
-            ),
+  final l10n = AppLocalizations.of(context)!;
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 12),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+       CircleAvatar(
+  radius: 16,
+  backgroundColor: review.userImage != null
+      ? Colors.transparent
+      : Theme.of(context).colorScheme.primary,
+  backgroundImage: review.userImage != null
+      ? imageProviderFromString(review.userImage!)
+      : null,
+  child: review.userImage == null
+      ? Text(
+          review.userName.isNotEmpty ? review.userName[0].toUpperCase() : 'U',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      review.userName.isNotEmpty ? review.userName : l10n.unknown,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Row(
-                      children: List.generate(5, (index) {
-                        return Icon(
-                          index < review.rating
-                              ? Icons.star
-                              : Icons.star_border,
-                          color: Colors.amber,
-                          size: 14,
-                        );
-                      }),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      review.rating.toString(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                if (review.comment != null && review.comment!.isNotEmpty)
+        )
+      : null,
+),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
                   Text(
-                    review.comment!,
+                    review.userName.isNotEmpty ? review.userName : l10n.unknown,
                     style: const TextStyle(
-                      fontSize: 13,
-                      height: 1.3,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
-              ],
-            ),
+                  const SizedBox(width: 8),
+                  Row(
+                    children: List.generate(5, (index) {
+                      return Icon(
+                        index < review.rating
+                            ? Icons.star
+                            : Icons.star_border,
+                        color: Colors.amber,
+                        size: 14,
+                      );
+                    }),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    review.rating.toString(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              if (review.comment != null && review.comment!.isNotEmpty)
+                Text(
+                  review.comment!,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    height: 1.3,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+            ],
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
 
   void _showDeleteConfirmationDialog(Movie movie) {
     final l10n = AppLocalizations.of(context)!;

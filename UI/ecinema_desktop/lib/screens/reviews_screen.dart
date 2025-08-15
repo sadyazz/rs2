@@ -6,6 +6,7 @@ import 'package:ecinema_desktop/providers/review_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../providers/utils.dart';
 
 class ReviewsScreen extends StatefulWidget {
   final Movie movie;
@@ -39,7 +40,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
 
   Future<void> _loadReviews() async {
     if (widget.movie.id == null) return;
-    
+
     setState(() {
       isLoading = true;
     });
@@ -52,7 +53,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
         'pageSize': pageSize,
         'includeTotalCount': true,
       };
-      
+
       result = await provider.get(filter: filter);
       setState(() {
         result = result;
@@ -69,7 +70,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return MasterScreen(
       "${l10n.movieReviews} - ${widget.movie.title}",
       Padding(
@@ -78,11 +79,8 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 8),
-            
             _buildStatisticsCards(),
-            
             const SizedBox(height: 32),
-            
             Expanded(
               child: isLoading
                   ? Center(
@@ -92,13 +90,17 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                           Container(
                             padding: const EdgeInsets.all(20),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primaryContainer,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
                               Icons.rate_review,
                               size: 40,
-                              color: Theme.of(context).colorScheme.onPrimaryContainer,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
                             ),
                           ),
                           const SizedBox(height: 24),
@@ -106,7 +108,10 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                             l10n.loadingReviews,
                             style: TextStyle(
                               fontSize: 18,
-                              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(0.7),
                             ),
                           ),
                         ],
@@ -131,11 +136,13 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
   Widget _buildStatisticsCards() {
     final l10n = AppLocalizations.of(context)!;
     final reviews = result?.items ?? [];
-    final averageRating = reviews.isNotEmpty 
-        ? reviews.fold(0.0, (sum, review) => sum + review.rating) / reviews.length
+    final averageRating = reviews.isNotEmpty
+        ? reviews.fold(0.0, (sum, review) => sum + review.rating) /
+            reviews.length
         : 0.0;
-    final positiveReviews = reviews.where((review) => review.rating >= 4).length;
-    
+    final positiveReviews =
+        reviews.where((review) => review.rating >= 4).length;
+
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Row(
@@ -147,7 +154,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
             value: averageRating.toStringAsFixed(1),
             subtitle: l10n.outOf5,
             color: Colors.amber,
-            gradient: isDark 
+            gradient: isDark
                 ? [Colors.amber.shade700, Colors.amber.shade900]
                 : [Colors.amber.shade400, Colors.amber.shade600],
           ),
@@ -161,8 +168,14 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
             subtitle: l10n.reviews,
             color: Theme.of(context).colorScheme.primary,
             gradient: isDark
-                ? [Theme.of(context).colorScheme.primary.withOpacity(0.8), Theme.of(context).colorScheme.primary.withOpacity(0.6)]
-                : [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.primary.withOpacity(0.8)],
+                ? [
+                    Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                    Theme.of(context).colorScheme.primary.withOpacity(0.6)
+                  ]
+                : [
+                    Theme.of(context).colorScheme.primary,
+                    Theme.of(context).colorScheme.primary.withOpacity(0.8)
+                  ],
           ),
         ),
         const SizedBox(width: 20),
@@ -256,7 +269,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
 
   Widget _buildEmptyState() {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -309,7 +322,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
 
   Widget _buildReviewCard(Review review) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
@@ -319,18 +332,25 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  radius: 20,
-                  child: Text(
-                    review.userName.isNotEmpty ? review.userName[0].toUpperCase() : 'U',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
+             CircleAvatar(
+  radius: 20,
+  backgroundColor: review.userImage != null
+      ? Colors.transparent
+      : Theme.of(context).colorScheme.primary,
+  backgroundImage: review.userImage != null
+      ? imageProviderFromString(review.userImage!)
+      : null,
+  child: review.userImage == null
+      ? Text(
+          review.userName.isNotEmpty ? review.userName[0].toUpperCase() : 'U',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          ),
+        )
+      : null,
+),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -339,7 +359,9 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                       Row(
                         children: [
                           Text(
-                            review.userName.isNotEmpty ? review.userName : l10n.unknownUser,
+                            review.userName.isNotEmpty
+                                ? review.userName
+                                : l10n.unknownUser,
                             style: const TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 14,
@@ -348,7 +370,8 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                           const SizedBox(width: 8),
                           if (review.isSpoiler)
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
                                 color: Colors.red[600],
                                 borderRadius: BorderRadius.circular(8),
@@ -365,9 +388,15 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                         ],
                       ),
                       Text(
-                        _formatDate(review.createdAt) + ((review.isEdited ?? false) ? ' ${l10n.edited}' : ''),
+                        _formatDate(review.createdAt) +
+                            ((review.isEdited ?? false)
+                                ? ' ${l10n.edited}'
+                                : ''),
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.6),
                           fontSize: 12,
                         ),
                       ),
@@ -378,9 +407,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                   children: [
                     ...List.generate(5, (index) {
                       return Icon(
-                        index < review.rating
-                            ? Icons.star
-                            : Icons.star_border,
+                        index < review.rating ? Icons.star : Icons.star_border,
                         color: Colors.amber,
                         size: 16,
                       );
@@ -397,7 +424,6 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                 ),
               ],
             ),
-            
             if (review.comment != null && review.comment!.isNotEmpty) ...[
               const SizedBox(height: 12),
               Row(
@@ -519,13 +545,15 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     if (review.id == null) return;
     try {
       final success = await provider.toggleSpoilerStatus(review.id!);
-      
+
       if (success) {
         await _loadReviews();
         final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(review.isSpoiler ? l10n.reviewUnmarkedAsSpoiler : l10n.reviewMarkedAsSpoiler),
+            content: Text(review.isSpoiler
+                ? l10n.reviewUnmarkedAsSpoiler
+                : l10n.reviewMarkedAsSpoiler),
             backgroundColor: Colors.green,
           ),
         );
@@ -560,7 +588,7 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
 
   void _deleteReview(Review review) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -583,7 +611,8 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                       content: Text(l10n.reviewDeletedSuccessfully),
                       backgroundColor: Colors.green[700],
                       behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                     ),
                   );
                 } catch (e) {
@@ -592,7 +621,8 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                       content: Text(l10n.errorDeletingReview(e.toString())),
                       backgroundColor: Theme.of(context).colorScheme.error,
                       behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
                     ),
                   );
                 }
@@ -600,7 +630,8 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red.shade700,
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
               ),
               child: Text(l10n.delete),
             ),
@@ -637,15 +668,15 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
 
   Widget _buildPaginationControls() {
     final l10n = AppLocalizations.of(context)!;
-    
+
     if (result == null) return const SizedBox.shrink();
-    
+
     final totalCount = result!.totalCount ?? 0;
     final currentItems = result!.items!.length;
     final hasNextPage = currentItems == pageSize;
     final hasPreviousPage = currentPage > 0;
     final totalPages = (totalCount / pageSize).ceil();
-    
+
     return Container(
       margin: const EdgeInsets.only(top: 4, bottom: 2),
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
@@ -671,9 +702,9 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
-              color: hasPreviousPage 
-                ? Theme.of(context).colorScheme.primaryContainer
-                : Theme.of(context).colorScheme.surfaceVariant,
+              color: hasPreviousPage
+                  ? Theme.of(context).colorScheme.primaryContainer
+                  : Theme.of(context).colorScheme.surfaceVariant,
             ),
             child: Material(
               color: Colors.transparent,
@@ -681,16 +712,17 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                 onTap: hasPreviousPage ? _goToPreviousPage : null,
                 borderRadius: BorderRadius.circular(6),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
                         Icons.chevron_left,
                         size: 14,
-                        color: hasPreviousPage 
-                          ? Theme.of(context).colorScheme.onPrimaryContainer
-                          : Theme.of(context).colorScheme.onSurfaceVariant,
+                        color: hasPreviousPage
+                            ? Theme.of(context).colorScheme.onPrimaryContainer
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                       const SizedBox(width: 2),
                       Text(
@@ -698,9 +730,9 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w500,
-                          color: hasPreviousPage 
-                            ? Theme.of(context).colorScheme.onPrimaryContainer
-                            : Theme.of(context).colorScheme.onSurfaceVariant,
+                          color: hasPreviousPage
+                              ? Theme.of(context).colorScheme.onPrimaryContainer
+                              : Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],
@@ -709,7 +741,6 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
               ),
             ),
           ),
-          
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -726,18 +757,18 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                 '$currentItems ${l10n.ofText} $totalCount',
                 style: TextStyle(
                   fontSize: 10,
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                  color:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                 ),
               ),
             ],
           ),
-          
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
-              color: hasNextPage 
-                ? Theme.of(context).colorScheme.primaryContainer
-                : Theme.of(context).colorScheme.surfaceVariant,
+              color: hasNextPage
+                  ? Theme.of(context).colorScheme.primaryContainer
+                  : Theme.of(context).colorScheme.surfaceVariant,
             ),
             child: Material(
               color: Colors.transparent,
@@ -745,7 +776,8 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                 onTap: hasNextPage ? _goToNextPage : null,
                 borderRadius: BorderRadius.circular(6),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -754,18 +786,18 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w500,
-                          color: hasNextPage 
-                            ? Theme.of(context).colorScheme.onPrimaryContainer
-                            : Theme.of(context).colorScheme.onSurfaceVariant,
+                          color: hasNextPage
+                              ? Theme.of(context).colorScheme.onPrimaryContainer
+                              : Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
                       const SizedBox(width: 2),
                       Icon(
                         Icons.chevron_right,
                         size: 14,
-                        color: hasNextPage 
-                          ? Theme.of(context).colorScheme.onPrimaryContainer
-                          : Theme.of(context).colorScheme.onSurfaceVariant,
+                        color: hasNextPage
+                            ? Theme.of(context).colorScheme.onPrimaryContainer
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ],
                   ),
@@ -781,8 +813,6 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
 
 class _ReviewDialog extends StatefulWidget {
   final String title;
-
-
 
   final Function(String, double, String) onSave;
 
@@ -858,8 +888,10 @@ class _ReviewDialogState extends State<_ReviewDialog> {
         ),
         ElevatedButton(
           onPressed: () {
-            if (userNameController.text.isNotEmpty && commentController.text.isNotEmpty) {
-              widget.onSave(userNameController.text, rating, commentController.text);
+            if (userNameController.text.isNotEmpty &&
+                commentController.text.isNotEmpty) {
+              widget.onSave(
+                  userNameController.text, rating, commentController.text);
             }
           },
           child: const Text('Save'),
@@ -874,4 +906,4 @@ class _ReviewDialogState extends State<_ReviewDialog> {
     commentController.dispose();
     super.dispose();
   }
-} 
+}

@@ -371,10 +371,9 @@ class _LoginPageState extends State<LoginPage> {
       final username = _usernameController.text.trim();
       final password = _passwordController.text;
       final success = await UserProvider.login(username, password);
-      
       if (success) {
         final user = await UserProvider.getCurrentUser();
-        if (user?.role?.id != null && user?.role?.id == 1) {
+       if (user?.role?.name?.toLowerCase() == 'admin') {
           Navigator.of(context).pushReplacementNamed('/dashboard');
         } else {
           setState(() {

@@ -12,6 +12,7 @@ class AuthProvider{
   static String? phoneNumber;
   static DateTime? createdAt;
   static Role? role;
+  static String? image;
 
   static void setUser(User user) {
     userId = user.id;
@@ -23,6 +24,7 @@ class AuthProvider{
     phoneNumber = user.phoneNumber;
     createdAt = user.createdAt;
     role = user.role;
+    image = user.image;
   }
 
   static void logout() {
@@ -36,5 +38,6 @@ class AuthProvider{
     phoneNumber = null;
     createdAt = null;
     role = null;
+    image = null;
   }
 }

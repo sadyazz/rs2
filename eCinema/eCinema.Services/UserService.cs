@@ -22,13 +22,19 @@ namespace eCinema.Services
             _context = context;
         }
 
-        public async Task<List<UserResponse>> GetAsync(UserSearchObject search)
+        public async Task<PagedResult<UserResponse>> GetAsync(UserSearchObject search)
         {
             var query = _context.Users.AsQueryable();
             query = ApplyFilter(query, search);
             
             var users = await query.Include(u => u.Role).ToListAsync();
-            return users.Select(MapToResponse).ToList();
+            var userResponses = users.Select(MapToResponse).ToList();
+            
+            return new PagedResult<UserResponse>
+            {
+                Items = userResponses,
+                TotalCount = userResponses.Count
+            };
         }
 
         public async Task<UserResponse?> GetByIdAsync(int id)
@@ -108,6 +114,10 @@ namespace eCinema.Services
             user.Username = request.Username;
             user.Email = request.Email;
             user.PhoneNumber = request.PhoneNumber;
+            if (request.RoleId.HasValue)
+            {
+                user.RoleId = request.RoleId.Value;
+            }
 
             if (request.Image != null)
             {

@@ -16,7 +16,7 @@ class Review {
   DateTime? modifiedAt;
   bool? isEdited;
   String? userName;
-  String? userImage;  // Will be base64 string after conversion from byte array
+  String? userImage; 
 
   Review({
     this.id,
