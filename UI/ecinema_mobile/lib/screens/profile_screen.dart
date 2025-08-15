@@ -2,6 +2,7 @@ import 'package:ecinema_mobile/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import '../providers/utils.dart';
 import '../providers/auth_provider.dart';
 import '../providers/language_provider.dart';
 import '../providers/theme_provider.dart';
@@ -130,32 +131,20 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
       children: [
         Stack(
           children: [
-            CircleAvatar(
-              radius: 40,
-              backgroundColor: colorScheme.surfaceVariant,
-              child: Icon(
-                Icons.person,
-                size: 40,
-                color: colorScheme.onSurfaceVariant,
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  color: colorScheme.primary,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.camera_alt,
-                  size: 14,
-                  color: colorScheme.onPrimary,
-                ),
-              ),
-            ),
+              CircleAvatar(
+  radius: 40,
+  backgroundColor: colorScheme.surfaceVariant,
+  backgroundImage: AuthProvider.image != null
+      ? imageFromString(AuthProvider.image!).image
+      : null,
+  child: AuthProvider.image == null
+      ? Icon(
+          Icons.person,
+          size: 40,
+          color: colorScheme.onSurfaceVariant,
+        )
+      : null,
+),
           ],
         ),
         const SizedBox(width: 16),

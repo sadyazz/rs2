@@ -1094,5 +1094,9 @@
   "pleaseEnterUsername": "Molimo unesite korisničko ime",
   "@pleaseEnterUsername": {
     "description": "Username validation message"
+  },
+  "removePhoto": "Ukloni fotografiju",
+  "@removePhoto": {
+    "description": "Remove photo option"
   }
 } 

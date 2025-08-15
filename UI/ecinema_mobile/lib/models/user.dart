@@ -8,6 +8,7 @@ class User {
   final String? phoneNumber;
   final bool? isDeleted;
   final DateTime? createdAt;
+  final String? image;
 
   const User({
     this.id,
@@ -19,6 +20,7 @@ class User {
     this.phoneNumber,
     this.isDeleted,
     this.createdAt,
+    this.image,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class User {
       phoneNumber: json['phoneNumber'],
       isDeleted: json['isDeleted'] ?? false,
       createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+      image: json['image'],
     );
   }
 
@@ -46,6 +49,7 @@ class User {
       'phoneNumber': phoneNumber,
       'isDeleted': isDeleted,
       'createdAt': createdAt?.toIso8601String(),
+      'image': image,
     };
   }
 } 

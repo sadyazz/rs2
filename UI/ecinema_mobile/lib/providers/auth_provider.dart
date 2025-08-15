@@ -10,7 +10,7 @@ class AuthProvider {
   static String? email;
   static String? phoneNumber;
   static DateTime? createdAt;
-  
+  static String? image;
 
 
   static void setUser(User user) {
@@ -22,7 +22,7 @@ class AuthProvider {
     email = user.email;
     phoneNumber = user.phoneNumber;
     createdAt = user.createdAt;
-    
+    image = user.image;
   }
 
   static void logout() {
@@ -35,6 +35,7 @@ class AuthProvider {
     email = null;
     phoneNumber = null;
     createdAt = null;
+    image = null;
   }
 
 

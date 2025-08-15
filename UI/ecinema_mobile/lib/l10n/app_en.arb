@@ -1094,5 +1094,9 @@
   "pleaseEnterUsername": "Please enter username",
   "@pleaseEnterUsername": {
     "description": "Username validation message"
+  },
+  "removePhoto": "Remove Photo",
+  "@removePhoto": {
+    "description": "Remove photo option"
   }
 } 

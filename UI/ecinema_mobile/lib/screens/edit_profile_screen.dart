@@ -1,8 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:image_picker/image_picker.dart';
 import '../providers/auth_provider.dart';
 import '../providers/user_provider.dart';
 import '../layouts/master_screen.dart';
+import '../providers/utils.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -19,6 +23,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _emailController = TextEditingController();
   final _phoneNumberController = TextEditingController();
   bool _isLoading = false;
+  
+  final ImagePicker _picker = ImagePicker();
+  File? _imageFile;
+  String? _imageBase64;
 
   @override
   void initState() {
@@ -62,6 +70,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         username: _usernameController.text.trim(),
         email: _emailController.text.trim(),
         phoneNumber: _phoneNumberController.text.trim(),
+        image: _imageBase64,
       );
       
       if (success && mounted) {
@@ -71,6 +80,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         AuthProvider.fullName = '${_firstNameController.text.trim()} ${_lastNameController.text.trim()}';
         AuthProvider.email = _emailController.text.trim();
         AuthProvider.phoneNumber = _phoneNumberController.text.trim();
+        // Update image in AuthProvider (null for empty string, otherwise use the base64)
+        AuthProvider.image = _imageBase64 == "" ? null : _imageBase64;
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -105,31 +116,137 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final XFile? pickedFile = await _picker.pickImage(
+        source: source,
+        maxWidth: 800,
+        maxHeight: 800,
+        imageQuality: 85,
+      );
+
+      if (pickedFile != null) {
+        setState(() {
+          _imageFile = File(pickedFile.path);
+        });
+        
+        final bytes = await _imageFile!.readAsBytes();
+        setState(() {
+          _imageBase64 = base64Encode(bytes);
+        });
+      }
+    } catch (e) {
+      print('Error picking image: $e');
+    }
+  }
+
   void _showImagePickerDialog(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    showDialog(
+    final colorScheme = Theme.of(context).colorScheme;
+
+    showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(l10n.changeProfilePhoto),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: Text(l10n.takePhoto),
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: Text(l10n.chooseFromGallery),
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: colorScheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 20),
+                  decoration: BoxDecoration(
+                    color: colorScheme.onSurface.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                ListTile(
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      Icons.camera_alt,
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                  title: Text(
+                    l10n.takePhoto,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _pickImage(ImageSource.camera);
+                  },
+                ),
+                const SizedBox(height: 8),
+                ListTile(
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      Icons.photo_library,
+                      color: colorScheme.primary,
+                    ),
+                  ),
+                  title: Text(
+                    l10n.chooseFromGallery,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _pickImage(ImageSource.gallery);
+                  },
+                ),
+                const SizedBox(height: 8),
+                if (_imageFile != null || AuthProvider.image != null)
+                  ListTile(
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                    ),
+                    title: Text(
+                      l10n.removePhoto,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.red,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      setState(() {
+                        _imageFile = null;
+                        _imageBase64 = ""; // Send empty string to remove image
+                      });
+                    },
+                  ),
+              ],
+            ),
           ),
         );
       },
@@ -204,12 +321,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 CircleAvatar(
                   radius: 50,
                   backgroundColor: colorScheme.surfaceVariant,
-                  child: Icon(
-                    Icons.person,
-                    size: 50,
-                    color: colorScheme.onSurfaceVariant,
-                  ),
+                  backgroundImage: (_imageBase64 != null && _imageBase64!.isNotEmpty)
+                      ? imageFromString(_imageBase64!).image
+                      : (AuthProvider.image != null)
+                          ? imageFromString(AuthProvider.image!).image
+                          : null,
+                  child: (_imageBase64 == null || _imageBase64!.isEmpty) && AuthProvider.image == null
+                      ? Icon(
+                          Icons.person,
+                          size: 50,
+                          color: colorScheme.onSurfaceVariant,
+                        )
+                      : null,
                 ),
+                
                 Positioned(
                   bottom: 0,
                   right: 0,

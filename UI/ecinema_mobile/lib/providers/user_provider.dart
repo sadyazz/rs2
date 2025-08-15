@@ -126,6 +126,7 @@ class UserProvider extends BaseProvider<User> {
     required String username,
     required String email,
     String? phoneNumber,
+    String? image,
   }) async {
     print('DEBUG: updateUser called with: firstName=$firstName, lastName=$lastName, email=$email, phoneNumber=$phoneNumber');
     print('DEBUG: Base URL: $_baseUrl');
@@ -153,6 +154,7 @@ class UserProvider extends BaseProvider<User> {
           'username': username,
           'email': email,
           'phoneNumber': phoneNumber,
+          'image': image,
         }),
       );
 
