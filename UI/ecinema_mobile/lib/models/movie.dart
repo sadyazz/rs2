@@ -11,19 +11,14 @@ class ByteArrayConverter implements JsonConverter<String?, dynamic> {
 
   @override
   String? fromJson(dynamic json) {
-    print('ByteArrayConverter.fromJson called with: $json (type: ${json.runtimeType})');
     if (json == null) return null;
     if (json is String) {
-      print('Image is already a string, length: ${json.length}');
       return json;
     }
     if (json is List<int>) {
-      print('Image is a List<int>, length: ${json.length}');
       final result = base64Encode(Uint8List.fromList(json));
-      print('Converted to base64 string, length: ${result.length}');
       return result;
     }
-    print('Unknown image type: ${json.runtimeType}');
     return null;
   }
 

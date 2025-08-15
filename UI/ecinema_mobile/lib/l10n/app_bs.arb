@@ -567,7 +567,7 @@
   "@enterCurrentPasswordAndChooseNew": {
     "description": "Password update screen subtitle"
   },
-  "passwordInformation": "Informacije o lozinki",
+  "passwordInformation": "Informacije o lozinci",
   "@passwordInformation": {
     "description": "Password information section title"
   },
@@ -1063,8 +1063,32 @@
   "@tba": {
     "description": "To be announced abbreviation"
   },
-  "sarajevo": "Sarajevo",
-  "@sarajevo": {
-    "description": "Sarajevo city name"
+  "unauthorizedPleaseLoginAgain": "Neautorizovano - molimo prijavite se ponovo",
+  "@unauthorizedPleaseLoginAgain": {
+    "description": "Unauthorized error message"
+  },
+  "emailAlreadyExists": "Email već postoji",
+  "@emailAlreadyExists": {
+    "description": "Email already exists error message"
+  },
+  "changeProfilePhoto": "Promijeni sliku profila",
+  "@changeProfilePhoto": {
+    "description": "Change profile photo dialog title"
+  },
+  "takePhoto": "Uslikaj",
+  "@takePhoto": {
+    "description": "Take photo option"
+  },
+  "chooseFromGallery": "Izaberi iz galerije",
+  "@chooseFromGallery": {
+    "description": "Choose from gallery option"
+  },
+  "username": "Korisničko ime",
+  "@username": {
+    "description": "Username field label"
+  },
+  "phoneNumber": "Broj telefona",
+  "@phoneNumber": {
+    "description": "Phone number field label"
   }
 } 

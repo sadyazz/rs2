@@ -10,7 +10,7 @@ using System.Security.Cryptography;
 
 namespace eCinema.Services
 {
-    public class UserService : BaseCRUDService<UserResponse, UserSearchObject, User, UserUpsertRequest, UserUpsertRequest>, IUserService
+    public class UserService : BaseCRUDService<UserResponse, UserSearchObject, User, UserUpsertRequest, UserUpdateRequest>, IUserService
     {
         private readonly eCinemaDBContext _context;
         private const int SaltSize = 16;
@@ -87,13 +87,13 @@ namespace eCinema.Services
             return await GetUserResponseWithRoleAsync(user.Id);
         }
 
-        public async Task<UserResponse?> UpdateAsync(int id, UserUpsertRequest request)
+        public async Task<UserResponse?> UpdateAsync(int id, UserUpdateRequest request)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
                 return null;
 
-            if (await _context.Users.AnyAsync(u => u.Email == request.Email && u.Id != id))
+                        if (await _context.Users.AnyAsync(u => u.Email == request.Email && u.Id != id))
             {
                 throw new InvalidOperationException("A user with this email already exists.");
             }
@@ -105,16 +105,13 @@ namespace eCinema.Services
 
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
-            user.Email = request.Email;
             user.Username = request.Username;
+            user.Email = request.Email;
             user.PhoneNumber = request.PhoneNumber;
-            user.RoleId = request.RoleId;
 
-            if (!string.IsNullOrEmpty(request.Password))
+            if (request.Image != null)
             {
-                byte[] salt;
-                user.PasswordHash = HashPassword(request.Password, out salt);
-                user.PasswordSalt = Convert.ToBase64String(salt);
+                user.Image = request.Image;
             }
             
             await _context.SaveChangesAsync();
@@ -260,11 +257,9 @@ namespace eCinema.Services
     if (user == null)
         throw new InvalidOperationException("User not found");
 
-    // Provjera trenutne lozinke
     if (!VerifyPassword(currentPassword, user.PasswordHash, user.PasswordSalt))
         return false;
 
-    // Generisanje nove lozinke
     byte[] salt;
     user.PasswordHash = HashPassword(newPassword, out salt);
     user.PasswordSalt = Convert.ToBase64String(salt);
@@ -272,5 +267,17 @@ namespace eCinema.Services
     await _context.SaveChangesAsync();
     return true;
 }
+
+    public async Task<UserResponse?> UpdateUserRoleAsync(int id, int roleId)
+    {
+        var user = await _context.Users.FindAsync(id);
+        if (user == null)
+            return null;
+
+        user.RoleId = roleId;
+        await _context.SaveChangesAsync();
+
+        return await GetUserResponseWithRoleAsync(user.Id);
+    }
     }
 } 

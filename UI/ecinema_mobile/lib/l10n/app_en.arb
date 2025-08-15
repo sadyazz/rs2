@@ -1063,8 +1063,32 @@
   "@tba": {
     "description": "To be announced abbreviation"
   },
-  "sarajevo": "Sarajevo",
-  "@sarajevo": {
-    "description": "Sarajevo city name"
+  "unauthorizedPleaseLoginAgain": "Unauthorized - please login again",
+  "@unauthorizedPleaseLoginAgain": {
+    "description": "Unauthorized error message"
+  },
+  "emailAlreadyExists": "Email already exists",
+  "@emailAlreadyExists": {
+    "description": "Email already exists error message"
+  },
+  "changeProfilePhoto": "Change Profile Photo",
+  "@changeProfilePhoto": {
+    "description": "Change profile photo dialog title"
+  },
+  "takePhoto": "Take Photo",
+  "@takePhoto": {
+    "description": "Take photo option"
+  },
+  "chooseFromGallery": "Choose from Gallery",
+  "@chooseFromGallery": {
+    "description": "Choose from gallery option"
+  },
+  "username": "Username",
+  "@username": {
+    "description": "Username field label"
+  },
+  "phoneNumber": "Phone Number",
+  "@phoneNumber": {
+    "description": "Phone number field label"
   }
 } 
