@@ -1090,5 +1090,9 @@
   "phoneNumber": "Phone Number",
   "@phoneNumber": {
     "description": "Phone number field label"
+  },
+  "pleaseEnterUsername": "Please enter username",
+  "@pleaseEnterUsername": {
+    "description": "Username validation message"
   }
 } 

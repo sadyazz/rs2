@@ -1090,5 +1090,9 @@
   "phoneNumber": "Broj telefona",
   "@phoneNumber": {
     "description": "Phone number field label"
+  },
+  "pleaseEnterUsername": "Molimo unesite korisničko ime",
+  "@pleaseEnterUsername": {
+    "description": "Username validation message"
   }
 } 

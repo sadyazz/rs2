@@ -250,7 +250,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         _buildTextField(
           controller: _usernameController,
           label: l10n.username,
-          enabled: false,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return l10n.pleaseEnterUsername;
+            }
+            return null;
+          },
           colorScheme: colorScheme,
         ),
         const SizedBox(height: 20),
