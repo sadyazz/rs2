@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'movie.dart';
 
 part 'review.g.dart';
 
@@ -15,6 +16,7 @@ class Review {
   DateTime? modifiedAt;
   bool? isEdited;
   String? userName;
+  String? userImage;  // Will be base64 string after conversion from byte array
 
   Review({
     this.id,
@@ -28,6 +30,7 @@ class Review {
     this.modifiedAt,
     this.isEdited,
     this.userName,
+    this.userImage,
   });
 
   factory Review.fromJson(Map<String, dynamic> json) => _$ReviewFromJson(json);

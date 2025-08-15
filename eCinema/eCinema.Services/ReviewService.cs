@@ -364,6 +364,7 @@ namespace eCinema.Services
             
             response.UserName = entity.User?.Username ?? string.Empty;
             response.UserEmail = entity.User?.Email ?? string.Empty;
+            response.UserImage = entity.User?.Image;
             response.MovieTitle = entity.Movie?.Title ?? string.Empty;
             
             return response;

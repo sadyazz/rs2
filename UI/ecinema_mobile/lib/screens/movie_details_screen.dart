@@ -1153,14 +1153,19 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
               CircleAvatar(
                 backgroundColor: colorScheme.primary,
                 radius: 16,
-                child: Text(
-                  (review.userName?.isNotEmpty == true) ? review.userName![0].toUpperCase() : 'U',
-                  style: TextStyle(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
-                ),
+                backgroundImage: review.userImage != null
+                    ? imageFromString(review.userImage!).image
+                    : null,
+                child: review.userImage == null
+                    ? Text(
+                        (review.userName?.isNotEmpty == true) ? review.userName![0].toUpperCase() : 'U',
+                        style: TextStyle(
+                          color: colorScheme.onPrimary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      )
+                    : null,
               ),
               const SizedBox(width: 12),
               Expanded(

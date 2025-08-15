@@ -15,6 +15,7 @@ namespace eCinema.Model.Responses
         public int UserId { get; set; }
         public string UserName { get; set; } = string.Empty;
         public string UserEmail { get; set; } = string.Empty;
+        public byte[]? UserImage { get; set; }
         
         public int MovieId { get; set; }
         public string MovieTitle { get; set; } = string.Empty;

@@ -5,6 +5,7 @@ import '../models/movie.dart';
 import '../models/review.dart';
 import '../models/search_result.dart';
 import '../providers/review_provider.dart';
+import '../providers/utils.dart';
 
 class ReviewsScreen extends StatefulWidget {
   final Movie movie;
@@ -184,16 +185,21 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
           Row(
             children: [
               CircleAvatar(
-                backgroundColor: colorScheme.primary,
                 radius: 20,
-                child: Text(
-                  (review.userName?.isNotEmpty == true) ? review.userName![0].toUpperCase() : 'U',
-                  style: TextStyle(
-                    color: colorScheme.onPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
+                backgroundColor: colorScheme.primary,
+                backgroundImage: review.userImage != null
+                    ? imageFromString(review.userImage!).image
+                    : null,
+                child: review.userImage == null
+                    ? Text(
+                        (review.userName?.isNotEmpty == true) ? review.userName![0].toUpperCase() : 'U',
+                        style: TextStyle(
+                          color: colorScheme.onPrimary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      )
+                    : null,
               ),
               const SizedBox(width: 12),
               Expanded(

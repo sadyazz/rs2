@@ -24,6 +24,7 @@ Review _$ReviewFromJson(Map<String, dynamic> json) => Review(
           : DateTime.parse(json['modifiedAt'] as String),
   isEdited: json['isEdited'] as bool?,
   userName: json['userName'] as String?,
+  userImage: const ByteArrayConverter().fromJson(json['userImage']),
 );
 
 Map<String, dynamic> _$ReviewToJson(Review instance) => <String, dynamic>{
@@ -38,4 +39,5 @@ Map<String, dynamic> _$ReviewToJson(Review instance) => <String, dynamic>{
   'modifiedAt': instance.modifiedAt?.toIso8601String(),
   'isEdited': instance.isEdited,
   'userName': instance.userName,
+  'userImage': const ByteArrayConverter().toJson(instance.userImage),
 };
