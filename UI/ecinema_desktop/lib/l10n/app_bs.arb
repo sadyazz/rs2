@@ -1784,5 +1784,23 @@
   "tryAdjustingSearchCriteria": "Pokušajte prilagoditi kriterije pretrage",
   "@tryAdjustingSearchCriteria": {
     "description": "Try adjusting search criteria message"
+  },
+  "readyToRelease": "Spremni za premijeru",
+  "@readyToRelease": {
+    "description": "Section title for movies ready to release"
+  },
+  "releasesToday": "Premijera danas",
+  "@releasesToday": {
+    "description": "Tag for movies releasing today"
+  },
+  "releasesInDays": "Premijera za {days} dana",
+  "@releasesInDays": {
+    "description": "Tag for movies releasing in X days",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "3"
+      }
+    }
   }
 }

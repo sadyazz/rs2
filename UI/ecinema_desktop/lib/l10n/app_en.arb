@@ -71,6 +71,24 @@
   "@noMoviesMatchSearch": {
     "description": "Message when search returns no results"
   },
+  "readyToRelease": "Ready to Release",
+  "@readyToRelease": {
+    "description": "Section title for movies ready to release"
+  },
+  "releasesToday": "Releases Today",
+  "@releasesToday": {
+    "description": "Tag for movies releasing today"
+  },
+  "releasesInDays": "Releases in {days} days",
+  "@releasesInDays": {
+    "description": "Tag for movies releasing in X days",
+    "placeholders": {
+      "days": {
+        "type": "int",
+        "example": "3"
+      }
+    }
+  },
   "clearSearch": "Clear search",
   "@clearSearch": {
     "description": "Clear search button text"
@@ -645,7 +663,7 @@
   },
   "releaseYear": "Release Year",
   "@releaseYear": {
-    "description": "Release year field label"
+    "description": "Release year label"
   },
   "trailerUrl": "Trailer URL",
   "@trailerUrl": {

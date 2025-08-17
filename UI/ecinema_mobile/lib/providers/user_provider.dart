@@ -128,11 +128,6 @@ class UserProvider extends BaseProvider<User> {
     String? phoneNumber,
     String? image,
   }) async {
-    print('DEBUG: updateUser called with: firstName=$firstName, lastName=$lastName, email=$email, phoneNumber=$phoneNumber');
-    print('DEBUG: Base URL: $_baseUrl');
-    print('DEBUG: Username: ${AuthProvider.username}');
-    print('DEBUG: Password: ${AuthProvider.password?.substring(0, 3)}...');
-    
     try {
       final userId = AuthProvider.userId;
       if (userId == null) {
@@ -140,7 +135,6 @@ class UserProvider extends BaseProvider<User> {
       }
       
       final url = Uri.parse('${_baseUrl}User/$userId');
-      print('DEBUG: Making PUT request to: $url with userId: $userId');
       
       final response = await http.put(
         url,
@@ -158,18 +152,12 @@ class UserProvider extends BaseProvider<User> {
         }),
       );
 
-      print('DEBUG: Response status code: ${response.statusCode}');
-      print('DEBUG: Response body: ${response.body}');
-
       if (response.statusCode == 200) {
-        print('DEBUG: Success - returning true');
         return true;
       } else if (response.statusCode == 400) {
         final errorMessage = jsonDecode(response.body);
-        print('DEBUG: Bad request error: $errorMessage');
         throw Exception(errorMessage);
       }
-      print('DEBUG: Unexpected status code - returning false');
       return false;
     } catch (e) {
       print('DEBUG: Exception in updateUser: $e');

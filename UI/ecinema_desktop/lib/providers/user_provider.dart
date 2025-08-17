@@ -42,9 +42,7 @@ class UserProvider extends BaseProvider<User> {
 
   @override
   User fromJson(data) {
-    print('DEBUG: UserProvider.fromJson - raw data: $data');
     final user = User.fromJson(data);
-    print('DEBUG: UserProvider.fromJson - parsed user: ${user.fullName}, role: ${user.role?.name}');
     return user;
   }
 

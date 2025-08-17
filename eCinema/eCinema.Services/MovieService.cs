@@ -303,5 +303,24 @@ namespace eCinema.Services
 
             return MapToResponse(randomMovie);
         }
+
+        public async Task<List<ReadyToReleaseMovieDto>> GetReadyToReleaseMoviesAsync()
+        {
+            var today = DateTime.Today;
+            var nextWeek = today.AddDays(7);
+
+            var movies = await _context.Movies
+                .Where(m => m.IsComingSoon && m.ReleaseDate >= today && m.ReleaseDate <= nextWeek)
+                .Select(m => new ReadyToReleaseMovieDto
+                {
+                    Id = m.Id,
+                    Title = m.Title,
+                    ReleaseDate = m.ReleaseDate,
+                })
+                .OrderBy(m => m.ReleaseDate)
+                .ToListAsync();
+
+            return movies;
+        }
     }
 }

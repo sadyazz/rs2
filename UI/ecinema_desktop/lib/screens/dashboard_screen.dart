@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../providers/dashboard_provider.dart';
+import '../providers/movie_provider.dart';
 import '../models/dashboard_stats.dart';
+import '../models/ready_to_release_movie.dart';
+import '../screens/movie_details_screen.dart';
+import '../models/movie.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -13,6 +17,15 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  List<ReadyToReleaseMovie> readyToReleaseMovies = [];
+  bool isLoadingReadyToRelease = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadReadyToReleaseMovies();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -20,6 +33,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
       context.read<DashboardProvider>().loadDashboardStats();
       context.read<DashboardProvider>().loadTodayScreenings();
     });
+  }
+
+  Future<void> _loadReadyToReleaseMovies() async {
+    setState(() {
+      isLoadingReadyToRelease = true;
+    });
+
+    try {
+      final movies = await context.read<MovieProvider>().getReadyToReleaseMovies();
+      
+      setState(() {
+        readyToReleaseMovies = movies;
+        isLoadingReadyToRelease = false;
+      });
+    } catch (e) {
+      print('DEBUG: Error loading ready to release movies: $e');
+      setState(() {
+        isLoadingReadyToRelease = false;
+      });
+    }
+  }
+
+  Future<void> _refreshDashboard() async {
+    await Future.wait([
+      context.read<DashboardProvider>().loadDashboardStats(),
+      context.read<DashboardProvider>().loadTodayScreenings(),
+      _loadReadyToReleaseMovies(),
+    ]);
   }
 
   @override
@@ -44,22 +85,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
           );
         }
 
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildStatsGrid(stats),
-              const SizedBox(height: 32),
-              _buildTodayScreeningsSection(),
-              const SizedBox(height: 32),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(width: 24),
-                ],
-              ),
-            ],
+        return RefreshIndicator(
+          onRefresh: _refreshDashboard,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildStatsGrid(stats),
+                const SizedBox(height: 32),
+                _buildTodayScreeningsSection(),
+                const SizedBox(height: 32),
+                _buildReadyToReleaseSection(),
+                const SizedBox(height: 32),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(width: 24),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -298,6 +344,149 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         );
       },
+    );
+  }
+
+  void _navigateToMovieDetails(ReadyToReleaseMovie movie) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MovieDetailsScreen(
+          movie: Movie(
+            id: movie.id,
+            title: movie.title,
+            releaseDate: movie.releaseDate,
+            isDeleted: false,
+            isComingSoon: true,
+          ),
+        ),
+      ),
+    ).then((_) {
+      _loadReadyToReleaseMovies();
+    });
+  }
+
+  Widget _buildReadyToReleaseSection() {
+    final l10n = AppLocalizations.of(context)!;
+    return Consumer<DashboardProvider>(
+      builder: (context, dashboardProvider, child) {
+        if (isLoadingReadyToRelease) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (readyToReleaseMovies.isEmpty) {
+          return const SizedBox.shrink();
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.readyToRelease,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: readyToReleaseMovies.length,
+              itemBuilder: (context, index) {
+                final movie = readyToReleaseMovies[index];
+                return InkWell(
+                  onTap: () => _navigateToMovieDetails(movie),
+                  borderRadius: BorderRadius.circular(12),
+                  child: _buildReadyToReleaseItem(movie),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildReadyToReleaseItem(ReadyToReleaseMovie movie) {
+    final l10n = AppLocalizations.of(context)!;
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
+    final releaseDate = DateTime(movie.releaseDate.year, movie.releaseDate.month, movie.releaseDate.day);
+    final daysUntilRelease = releaseDate.difference(todayDate).inDays;
+    
+    final isReleasingToday = daysUntilRelease == 0;
+    final color = isReleasingToday ? Colors.red : Colors.grey;
+    final badge = isReleasingToday ? l10n.releasesToday : l10n.releasesInDays(daysUntilRelease);
+    
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: color,
+                width: isReleasingToday ? 2 : 1,
+              ),
+            ),
+            child: Icon(
+              Icons.movie_outlined,
+              color: color,
+              size: 24,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        movie.title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: color.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        badge,
+                        style: TextStyle(
+                          color: color,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${movie.releaseDate.year}-${movie.releaseDate.month.toString().padLeft(2, '0')}-${movie.releaseDate.day.toString().padLeft(2, '0')}',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 

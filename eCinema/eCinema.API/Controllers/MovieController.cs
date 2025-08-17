@@ -33,6 +33,14 @@ namespace eCinema.API.Controllers
             return Ok(recommendation);
         }
 
+        [HttpGet("ready-to-release")]
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult<List<ReadyToReleaseMovieDto>>> GetReadyToReleaseMovies()
+        {
+            var movies = await _movieService.GetReadyToReleaseMoviesAsync();
+            return Ok(movies);
+        }
+
         [HttpPost]
         [Authorize(Roles = "admin")]
         public override async Task<MovieResponse> Create([FromBody] MovieUpsertRequest request)

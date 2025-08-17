@@ -53,7 +53,6 @@ class _UsersListScreenState extends State<UsersListScreen> {
         'includeDeleted': includeDeleted,
       };
       result = await provider.get(filter: filter);
-      print('DEBUG: API result items: ${result?.items?.map((u) => '${u.fullName}: role=${u.role?.name}')}');
       setState(() {
         result = result;
         isLoading = false;
@@ -479,7 +478,6 @@ class _UsersListScreenState extends State<UsersListScreen> {
 
   Widget _buildUserCard(User user) {
     final l10n = AppLocalizations.of(context)!;
-    print('DEBUG: User ${user.fullName} has role: ${user.role?.name}');
     return InkWell(
       onTap: () async {
         try {
