@@ -91,6 +91,77 @@ class UserProvider extends BaseProvider<User> {
     }
   }
 
+  static Future<bool> updateUser({
+    required String firstName,
+    required String lastName,
+    required String username,
+    required String email,
+    String? phoneNumber,
+  }) async {
+    try {
+      final userId = AuthProvider.userId;
+      if (userId == null) {
+        throw Exception('User ID not found');
+      }
+      
+      final url = Uri.parse('${_baseUrl}User/$userId');
+      
+      final response = await http.put(
+        url,
+        headers: {
+          'Authorization': 'Basic ${base64Encode(utf8.encode('${AuthProvider.username}:${AuthProvider.password}'))}',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'firstName': firstName,
+          'lastName': lastName,
+          'username': username,
+          'email': email,
+          'phoneNumber': phoneNumber,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else if (response.statusCode == 400) {
+        final errorMessage = jsonDecode(response.body);
+        throw Exception(errorMessage);
+      }
+      return false;
+    } catch (e) {
+      print('DEBUG: Exception in updateUser: $e');
+      rethrow;
+    }
+  }
+
+  static Future<User?> getCurrentUserProfile() async {
+    try {
+      final userId = AuthProvider.userId;
+      if (userId == null) {
+        throw Exception('User ID not found');
+      }
+      
+      final url = Uri.parse('${_baseUrl}User/$userId');
+      
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Basic ${base64Encode(utf8.encode('${AuthProvider.username}:${AuthProvider.password}'))}',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return User.fromJson(data);
+      }
+      return null;
+    } catch (e) {
+      print('DEBUG: Exception in getCurrentUserProfile: $e');
+      return null;
+    }
+  }
+
   Future<void> updateUserRole(int userId, Map<String, dynamic> request) async {
     try {
       final headers = createHeaders();

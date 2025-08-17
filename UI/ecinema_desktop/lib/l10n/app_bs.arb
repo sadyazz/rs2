@@ -1802,5 +1802,35 @@
         "example": "3"
       }
     }
+  },
+  "editProfile": "Uredi profil",
+  "@editProfile": {
+    "description": "Edit profile button text"
+  },
+  "saveChanges": "Sačuvaj izmjene",
+  "@saveChanges": {
+    "description": "Save changes button text"
+  },
+  "cancel": "Otkaži",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "profileInformation": "Informacije o profilu",
+  "@profileInformation": {
+    "description": "Profile information section title"
+  },
+  "profileUpdatedSuccessfully": "Profil uspješno ažuriran",
+  "@profileUpdatedSuccessfully": {
+    "description": "Profile updated success message"
+  },
+  "failedToUpdateProfile": "Greška pri ažuriranju profila: {error}",
+  "@failedToUpdateProfile": {
+    "description": "Failed to update profile error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
   }
 }

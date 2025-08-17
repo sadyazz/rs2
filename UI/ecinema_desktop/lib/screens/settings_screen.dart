@@ -9,6 +9,8 @@ import 'package:ecinema_desktop/screens/promotions_list_screen.dart';
 import 'package:ecinema_desktop/screens/roles_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ecinema_desktop/providers/user_provider.dart';
+import 'package:ecinema_desktop/models/user.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -18,186 +20,291 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  bool _isEditing = false;
+  late TextEditingController _firstNameController;
+  late TextEditingController _lastNameController;
+  late TextEditingController _usernameController;
+  late TextEditingController _emailController;
+  late TextEditingController _phoneController;
+  User? _currentUser;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _firstNameController = TextEditingController();
+    _lastNameController = TextEditingController();
+    _usernameController = TextEditingController();
+    _emailController = TextEditingController();
+    _phoneController = TextEditingController();
+    _loadUserProfile();
+  }
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _usernameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadUserProfile() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      
+      final user = await UserProvider.getCurrentUserProfile();
+      if (user != null) {
+        setState(() {
+          _currentUser = user;
+          _firstNameController.text = user.firstName;
+          _lastNameController.text = user.lastName;
+          _usernameController.text = user.username;
+          _emailController.text = user.email;
+          _phoneController.text = user.phoneNumber ?? '';
+        });
+      }
+    } catch (e) {
+      print('Error loading user profile: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _toggleEditMode() {
+    setState(() {
+      _isEditing = !_isEditing;
+    });
+  }
+
+  Future<void> _saveProfile() async {
+    try {
+      final l10n = AppLocalizations.of(context)!;
+      final success = await UserProvider.updateUser(
+        firstName: _firstNameController.text,
+        lastName: _lastNameController.text,
+        username: _usernameController.text,
+        email: _emailController.text,
+        phoneNumber: _phoneController.text,
+      );
+
+      if (success) {
+        setState(() {
+          _isEditing = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.profileUpdatedSuccessfully),
+            backgroundColor: Colors.green,
+          ),
+        );
+        await _loadUserProfile();
+      }
+    } catch (e) {
+      final l10n = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.failedToUpdateProfile(e.toString()))),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return MasterScreen(
-        l10n.settings,
-        SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 8),
-              Text(
-                l10n.manageYourApplicationPreferences,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Colors.grey[600],
-                    ),
-              ),
-              const SizedBox(height: 32),
+      l10n.settings,
+      SingleChildScrollView(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 8),
+            Text(
+              l10n.manageYourApplicationPreferences,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Colors.grey[600],
+                  ),
+            ),
+            const SizedBox(height: 32),
 
-              // Settings Categories
-              _buildSettingsSection(
-                title: l10n.adminProfile,
-                icon: Icons.person,
-                children: [
-                  _buildInfoTile(
-                    title: l10n.username,
-                    subtitle: 'admin',
-                    trailing: IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () =>
-                          _showEditDialog(context, l10n.username, 'admin'),
-                    ),
-                  ),
-                  _buildInfoTile(
-                    title: l10n.fullName,
-                    subtitle: 'Administrator',
-                    trailing: IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () => _showEditDialog(
-                          context, l10n.fullName, 'Administrator'),
-                    ),
-                  ),
-                  _buildInfoTile(
-                    title: l10n.email,
-                    subtitle: 'admin@ecinema.com',
-                    trailing: IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () => _showEditDialog(
-                          context, l10n.email, 'admin@ecinema.com'),
-                    ),
-                  ),
-                  _buildInfoTile(
-                    title: l10n.phone,
-                    subtitle: '+387 33 123 456',
-                    trailing: IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () => _showEditDialog(
-                          context, l10n.phone, '+387 33 123 456'),
-                    ),
-                  ),
-                  _buildInfoTile(
-                    title: l10n.role,
-                    subtitle: 'System Administrator',
-                    trailing: const Icon(Icons.admin_panel_settings,
-                        color: Colors.grey),
-                  ),
-                  _buildInfoTile(
-                    title: l10n.lastLogin,
-                    subtitle: '2024-01-15 14:30',
-                    trailing: const Icon(Icons.access_time, color: Colors.grey),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 24),
-
-              _buildSettingsSection(
-                title: l10n.contentManagement,
-                icon: Icons.category,
-                children: [
-                  _buildManagementTile(
-                    title: l10n.genres,
-                    subtitle: l10n.manageMovieGenres,
-                    icon: Icons.theater_comedy,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => GenresListScreen(),
+            _buildSettingsSection(
+              title: l10n.adminProfile,
+              icon: Icons.person,
+              children: [
+                if (_isLoading)
+                  const Center(child: CircularProgressIndicator())
+                else ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        l10n.profileInformation,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
-                      );
-                    },
-                  ),
-                  _buildManagementTile(
-                    title: l10n.actors,
-                    subtitle: l10n.manageActors,
-                    icon: Icons.person,
-                    onTap: () => _navigateToActors(),
-                  ),
-                  _buildManagementTile(
-                    title: l10n.screeningFormats,
-                    subtitle: l10n.manageScreeningFormats,
-                    icon: Icons.aspect_ratio,
-                    onTap: () => _navigateToScreeningFormats(),
-                  ),
-                  _buildManagementTile(
-                    title: l10n.hallsAndSeats,
-                    subtitle: l10n.manageHalls,
-                    icon: Icons.event_seat,
-                    onTap: () => _navigateToHalls(),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 24),
-
-              _buildSettingsSection(
-                title: l10n.systemManagement,
-                icon: Icons.admin_panel_settings,
-                children: [
-                  _buildManagementTile(
-                    title: l10n.users,
-                    subtitle: l10n.manageUsers,
-                    icon: Icons.people,
-                    onTap: () => _navigateToUsers(),
-                  ),
-                  _buildManagementTile(
-                    title: l10n.newsArticles,
-                    subtitle: l10n.manageNewsArticles,
-                    icon: Icons.article,
-                    onTap: () => _navigateToNews(),
-                  ),
-                  _buildManagementTile(
-                    title: l10n.promotions,
-                    subtitle: l10n.managePromotions,
-                    icon: Icons.local_offer,
-                    onTap: () => _navigateToPromotions(),
-                  ),
-                  _buildManagementTile(
-                    title: l10n.roles,
-                    subtitle: l10n.manageRoles,
-                    icon: Icons.admin_panel_settings,
-                    onTap: () => _navigateToRoles(),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 32),
-
-              // Action Buttons
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: _saveSettings,
-                      icon: const Icon(Icons.save),
-                      label: Text(l10n.saveSettings),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor: Colors.white,
                       ),
+                      if (!_isEditing)
+                        ElevatedButton.icon(
+                          onPressed: _toggleEditMode,
+                          icon: const Icon(Icons.edit),
+                          label: Text(l10n.editProfile),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _firstNameController,
+                    enabled: _isEditing,
+                    decoration: InputDecoration(
+                      labelText: l10n.firstName,
+                      border: OutlineInputBorder(),
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: _resetSettings,
-                      icon: const Icon(Icons.refresh),
-                      label: Text(l10n.resetToDefault),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _lastNameController,
+                    enabled: _isEditing,
+                    decoration: InputDecoration(
+                      labelText: l10n.lastName,
+                      border: OutlineInputBorder(),
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _usernameController,
+                    enabled: _isEditing,
+                    decoration: InputDecoration(
+                      labelText: l10n.username,
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _emailController,
+                    enabled: _isEditing,
+                    decoration: InputDecoration(
+                      labelText: l10n.email,
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _phoneController,
+                    enabled: _isEditing,
+                    decoration: InputDecoration(
+                      labelText: l10n.phone,
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  if (_isEditing) ...[
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: _saveProfile,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(context).colorScheme.primary,
+                              foregroundColor: Colors.white,
+                            ),
+                            child: Text(l10n.saveChanges),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: _toggleEditMode,
+                            child: Text(l10n.cancel),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
-              ),
-            ],
-          ),
-        ));
+              ],
+            ),
+
+            const SizedBox(height: 24),
+
+            _buildSettingsSection(
+              title: l10n.contentManagement,
+              icon: Icons.category,
+              children: [
+                _buildManagementTile(
+                  title: l10n.genres,
+                  subtitle: l10n.manageMovieGenres,
+                  icon: Icons.theater_comedy,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GenresListScreen(),
+                      ),
+                    );
+                  },
+                ),
+                _buildManagementTile(
+                  title: l10n.actors,
+                  subtitle: l10n.manageActors,
+                  icon: Icons.person,
+                  onTap: () => _navigateToActors(),
+                ),
+                _buildManagementTile(
+                  title: l10n.screeningFormats,
+                  subtitle: l10n.manageScreeningFormats,
+                  icon: Icons.aspect_ratio,
+                  onTap: () => _navigateToScreeningFormats(),
+                ),
+                _buildManagementTile(
+                  title: l10n.hallsAndSeats,
+                  subtitle: l10n.manageHalls,
+                  icon: Icons.event_seat,
+                  onTap: () => _navigateToHalls(),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 24),
+
+            _buildSettingsSection(
+              title: l10n.systemManagement,
+              icon: Icons.admin_panel_settings,
+              children: [
+                _buildManagementTile(
+                  title: l10n.users,
+                  subtitle: l10n.manageUsers,
+                  icon: Icons.people,
+                  onTap: () => _navigateToUsers(),
+                ),
+                _buildManagementTile(
+                  title: l10n.newsArticles,
+                  subtitle: l10n.manageNewsArticles,
+                  icon: Icons.article,
+                  onTap: () => _navigateToNews(),
+                ),
+                _buildManagementTile(
+                  title: l10n.promotions,
+                  subtitle: l10n.managePromotions,
+                  icon: Icons.local_offer,
+                  onTap: () => _navigateToPromotions(),
+                ),
+                _buildManagementTile(
+                  title: l10n.roles,
+                  subtitle: l10n.manageRoles,
+                  icon: Icons.admin_panel_settings,
+                  onTap: () => _navigateToRoles(),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildSettingsSection({
@@ -235,18 +342,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _buildInfoTile({
-    required String title,
-    required String subtitle,
-    required Widget trailing,
-  }) {
-    return ListTile(
-      title: Text(title),
-      subtitle: Text(subtitle),
-      trailing: trailing,
-    );
-  }
-
   Widget _buildManagementTile({
     required String title,
     required String subtitle,
@@ -270,89 +365,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  void _showEditDialog(
-      BuildContext context, String title, String currentValue) {
-    final TextEditingController controller =
-        TextEditingController(text: currentValue);
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Edit $title'),
-          content: TextField(
-            controller: controller,
-            decoration: InputDecoration(
-              labelText: title,
-              border: const OutlineInputBorder(),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Here you would typically save the new value
-                Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('$title updated successfully')),
-                );
-              },
-              child: const Text('Save'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _saveSettings() {
-    // Here you would typically save all settings to persistent storage
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Settings saved successfully'),
-        backgroundColor: Colors.green,
-      ),
-    );
-  }
-
-  void _resetSettings() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Reset Settings'),
-          content: const Text(
-              'Are you sure you want to reset all settings to their default values?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Reset admin profile to default values
-                setState(() {
-                  // Reset admin profile fields if needed
-                });
-                Navigator.of(context).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Settings reset to default'),
-                    backgroundColor: Colors.orange,
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-              child: const Text('Reset'),
-            ),
-          ],
-        );
-      },
-    );
-  }
   void _navigateToActors() {
     Navigator.push(
       context,

@@ -68,7 +68,6 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
         filter['isComingSoon'] = false;
       }
       
-      print("DEBUG: Loading movies with filter: $filter");
       result = await provider.get(filter: filter);
       setState(() {
         result = result;
