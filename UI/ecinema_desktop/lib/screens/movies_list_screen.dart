@@ -61,6 +61,14 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
         'includeTotalCount': true,
         'includeDeleted': includeDeleted,
       };
+      
+      if (isComingSoon) {
+        filter['isComingSoon'] = true;
+      } else {
+        filter['isComingSoon'] = false;
+      }
+      
+      print("DEBUG: Loading movies with filter: $filter");
       result = await provider.get(filter: filter);
       setState(() {
         result = result;
@@ -113,7 +121,8 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
       }
       if (isComingSoon) {
         filter["isComingSoon"] = true;
-        print("Adding isComingSoon filter: $filter");
+      } else {
+        filter["isComingSoon"] = false;
       }
       
       result = await provider.get(filter: filter);
@@ -404,6 +413,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                               includeDeleted = false;
                               isComingSoon = false;
                             });
+                            _resetPagination();
                           },
                           child: Text(l10n.reset),
                         ),
