@@ -28,6 +28,8 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
   @override
   void initState() {
     super.initState();
+    final now = DateTime.now();
+    _fromStartTimeController.text = now.toIso8601String();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadScreenings();
     });
@@ -62,6 +64,9 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
         'pageSize': pageSize,
         'includeTotalCount': true,
         'includeDeleted': includeDeleted,
+        'fromStartTime': _fromStartTimeController.text.isNotEmpty 
+            ? _fromStartTimeController.text 
+            : DateTime.now().toIso8601String(),
       };
       result = await provider.get(filter: filter);
       setState(() {
@@ -146,7 +151,8 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
   }
 
   void _goToNextPage() {
-    if (result != null && result!.items != null && result!.items!.length == pageSize) {
+    if (result != null && result!.items != null && result!.totalCount != null && 
+        result!.totalCount! > (currentPage + 1) * pageSize) {
       setState(() {
         currentPage++;
       });
@@ -263,7 +269,9 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
         SizedBox(
           height: 36,
           child: ElevatedButton.icon(
-            onPressed: () {
+            onPressed: () async {
+              final now = DateTime.now();
+              _fromStartTimeController.text = now.toIso8601String();
               showDialog(
                 context: context,
                 builder: (context) {
@@ -373,7 +381,8 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                                     lastDate: DateTime(2030),
                                   );
                                   if (picked != null) {
-                                    _fromStartTimeController.text = picked.toIso8601String().split('T')[0];
+                                    final dateTime = DateTime(picked.year, picked.month, picked.day, 0, 0, 0);
+                                    _fromStartTimeController.text = dateTime.toIso8601String();
                                   }
                                 },
                                 decoration: InputDecoration(
@@ -411,7 +420,8 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                                     lastDate: DateTime(2030),
                                   );
                                   if (picked != null) {
-                                    _toStartTimeController.text = picked.toIso8601String().split('T')[0];
+                                    final dateTime = DateTime(picked.year, picked.month, picked.day, 23, 59, 59);
+                                    _toStartTimeController.text = dateTime.toIso8601String();
                                   }
                                 },
                                 decoration: InputDecoration(
@@ -424,7 +434,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                                   suffixIcon: _toStartTimeController.text.isNotEmpty
                                       ? IconButton(
                                           onPressed: () {
-                                            _toStartTimeController.clear();
+                                            _fromStartTimeController.clear();
                                           },
                                           icon: Icon(
                                             Icons.clear,
@@ -497,7 +507,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                       ),
                       actions: [
                         TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             _searchController.clear();
                             _movieTitleController.clear();
                             _hallNameController.clear();
@@ -515,7 +525,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                               hasAvailableSeats = false;
                               includeDeleted = false;
                             });
-                            _searchScreenings();
+                            await _searchScreenings(resetPage: true);
                           },
                           child: Text(l10n.reset),
                         ),
@@ -528,7 +538,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                            hasSubtitles = localHasSubtitles;
                            hasAvailableSeats = localHasAvailableSeats;
                            includeDeleted = localIncludeDeleted;
-                            await _searchScreenings();
+                            await _searchScreenings(resetPage: true);
                             Navigator.pop(context);
                           },
                           child: Text(l10n.apply),
@@ -690,14 +700,14 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
     );
   }
 
-  Widget _buildPaginationControls() {
+   Widget _buildPaginationControls() {
     final l10n = AppLocalizations.of(context)!;
     
     if (result == null) return const SizedBox.shrink();
     
     final totalCount = result!.totalCount ?? 0;
     final currentItems = result!.items != null ? result!.items!.length : 0;
-    final hasNextPage = currentItems == pageSize;
+    final hasNextPage = totalCount > (currentPage + 1) * pageSize; // Updated logic
     final hasPreviousPage = currentPage > 0;
     final totalPages = (totalCount / pageSize).ceil();
     
@@ -1113,6 +1123,32 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                         const SizedBox(width: 6),
                         Text(
                           screening.language ?? l10n.unknown,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.teal.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Icon(
+                            Icons.movie,
+                            size: 14,
+                            color: Colors.teal[600],
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          screening.screeningFormatName ?? l10n.unknown,
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
