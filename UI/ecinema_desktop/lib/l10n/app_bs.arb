@@ -1832,5 +1832,65 @@
         "example": "Network error"
       }
     }
+  },
+  "roleName": "Naziv Role",
+  "@roleName": {
+    "description": "Role name field label"
+  },
+  "capacityMismatch": "Neusklađenost Kapaciteta",
+  "@capacityMismatch": {
+    "description": "Capacity mismatch dialog title"
+  },
+  "seatCountMismatch": "Trenutni broj sedišta ({current}) ne odgovara novom kapacitetu ({capacity}). Molimo prilagodite sedišta u skladu s tim.",
+  "@seatCountMismatch": {
+    "description": "Seat count mismatch message",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "example": "50"
+      },
+      "capacity": {
+        "type": "int",
+        "example": "100"
+      }
+    }
+  },
+  "autoGenerateSeats": "Automatsko Generisanje Sedišta",
+  "@autoGenerateSeats": {
+    "description": "Auto-generate seats dialog title"
+  },
+  "autoGenerateSeatsMessage": "Ovo će kreirati {capacity} sedišta za salu. Postojeća sedišta će biti zamenjena. Nastaviti?",
+  "@autoGenerateSeatsMessage": {
+    "description": "Auto-generate seats confirmation message",
+    "placeholders": {
+      "capacity": {
+        "type": "int",
+        "example": "100"
+      }
+    }
+  },
+  "generate": "Generisi",
+  "@generate": {
+    "description": "Generate button text"
+  },
+  "seatsGeneratedSuccessfully": "Uspešno generisano {count} sedišta",
+  "@seatsGeneratedSuccessfully": {
+    "description": "Seats generated success message",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "100"
+      }
+    }
+  },
+  "failedToGenerateSeats": "Greška pri generisanju sedišta: {error}",
+  "@failedToGenerateSeats": {
+    "description": "Failed to generate seats error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
   }
 }

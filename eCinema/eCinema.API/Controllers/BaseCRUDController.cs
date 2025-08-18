@@ -10,7 +10,7 @@ namespace eCinema.API.Controllers
     [Route("[controller]")]
     public class BaseCRUDController<T, TSearch, TInsert, TUpdate> : BaseController<T, TSearch> where T : class where TSearch : BaseSearchObject, new() where TInsert : class where TUpdate : class
     {
-        private readonly ICRUDService<T, TSearch, TInsert, TUpdate> _crudService;
+        protected readonly ICRUDService<T, TSearch, TInsert, TUpdate> _crudService;
 
         public BaseCRUDController(ICRUDService<T, TSearch, TInsert, TUpdate> service) : base(service)
         {

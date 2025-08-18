@@ -1870,5 +1870,65 @@
         "example": "Network error"
       }
     }
+  },
+  "roleName": "Role Name",
+  "@roleName": {
+    "description": "Role name field label"
+  },
+  "capacityMismatch": "Capacity Mismatch",
+  "@capacityMismatch": {
+    "description": "Capacity mismatch dialog title"
+  },
+  "seatCountMismatch": "Current seat count ({current}) does not match new capacity ({capacity}). Please adjust the seats accordingly.",
+  "@seatCountMismatch": {
+    "description": "Seat count mismatch message",
+    "placeholders": {
+      "current": {
+        "type": "int",
+        "example": "50"
+      },
+      "capacity": {
+        "type": "int",
+        "example": "100"
+      }
+    }
+  },
+  "autoGenerateSeats": "Auto-generate Seats",
+  "@autoGenerateSeats": {
+    "description": "Auto-generate seats dialog title"
+  },
+  "autoGenerateSeatsMessage": "This will create {capacity} seats for the hall. Existing seats will be replaced. Continue?",
+  "@autoGenerateSeatsMessage": {
+    "description": "Auto-generate seats confirmation message",
+    "placeholders": {
+      "capacity": {
+        "type": "int",
+        "example": "100"
+      }
+    }
+  },
+  "generate": "Generate",
+  "@generate": {
+    "description": "Generate button text"
+  },
+  "seatsGeneratedSuccessfully": "Generated {count} seats successfully",
+  "@seatsGeneratedSuccessfully": {
+    "description": "Seats generated success message",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "100"
+      }
+    }
+  },
+  "failedToGenerateSeats": "Failed to generate seats: {error}",
+  "@failedToGenerateSeats": {
+    "description": "Failed to generate seats error message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
   }
 }

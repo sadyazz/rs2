@@ -167,7 +167,8 @@ namespace eCinema.Services
             if (search.RoleId.HasValue)
                 query = query.Where(x => x.RoleId == search.RoleId.Value);
 
-
+            if (!string.IsNullOrWhiteSpace(search.RoleName))
+                query = query.Where(x => x.Role.Name.Contains(search.RoleName));
 
             return query;
         }

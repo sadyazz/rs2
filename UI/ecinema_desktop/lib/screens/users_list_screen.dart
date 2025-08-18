@@ -25,6 +25,12 @@ class _UsersListScreenState extends State<UsersListScreen> {
   }
 
   @override
+  void dispose() {
+    _roleNameController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -38,6 +44,7 @@ class _UsersListScreenState extends State<UsersListScreen> {
   bool isLoading = false;
 
   final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _roleNameController = TextEditingController();
   bool includeDeleted = false;
 
   Future<void> _loadUsers() async {
@@ -52,6 +59,11 @@ class _UsersListScreenState extends State<UsersListScreen> {
         'includeTotalCount': true,
         'includeDeleted': includeDeleted,
       };
+      
+      if (_roleNameController.text.isNotEmpty) {
+        filter["roleName"] = _roleNameController.text;
+      }
+      
       result = await provider.get(filter: filter);
       setState(() {
         result = result;
@@ -80,6 +92,10 @@ class _UsersListScreenState extends State<UsersListScreen> {
       
       if (_searchController.text.isNotEmpty) {
         filter["fts"] = _searchController.text;
+      }
+      
+      if (_roleNameController.text.isNotEmpty) {
+        filter["roleName"] = _roleNameController.text;
       }
       
       result = await provider.get(filter: filter);
@@ -118,6 +134,8 @@ class _UsersListScreenState extends State<UsersListScreen> {
     setState(() {
       currentPage = 0;
     });
+    _searchController.clear();
+    _roleNameController.clear();
     _loadUsers();
   }
 
@@ -317,6 +335,19 @@ class _UsersListScreenState extends State<UsersListScreen> {
                                 ),
                               ],
                             ),
+                            const SizedBox(height: 16),
+                            TextField(
+                              controller: _roleNameController,
+                              decoration: InputDecoration(
+                                labelText: l10n.roleName,
+                                // hintText: 'e.g., admin, user, staff',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                prefixIcon: Icon(Icons.work, size: 20),
+                                isDense: true,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -327,6 +358,7 @@ class _UsersListScreenState extends State<UsersListScreen> {
                               localIncludeDeleted = false;
                               includeDeleted = false;
                             });
+                            _roleNameController.clear();
                           },
                           child: Text(l10n.reset),
                         ),
