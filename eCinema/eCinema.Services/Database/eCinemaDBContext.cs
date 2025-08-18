@@ -114,7 +114,8 @@ namespace eCinema.Services.Database
 
             modelBuilder.Entity<Review>()
                 .HasIndex(r => new { r.UserId, r.MovieId })
-                .IsUnique();
+                .IsUnique()
+                .HasFilter("IsDeleted = 0");
 
             modelBuilder.Entity<Promotion>()
                 .HasIndex(p => p.Code)
