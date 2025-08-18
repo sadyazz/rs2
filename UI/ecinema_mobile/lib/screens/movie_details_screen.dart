@@ -35,6 +35,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   String selectedTime = '';
   String selectedLocation = '';
   Set<int> revealedSpoilers = <int>{};
+  bool _isDescriptionExpanded = false;
 
   bool get isComingSoon => widget.movie.isComingSoon == true;
 
@@ -212,6 +213,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         'includeTotalCount': true,
         'movieId': widget.movie.id,
         'includeDeleted': false,
+        'fromStartTime': DateTime.now().toIso8601String(),
       };
       
       
@@ -244,6 +246,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         'includeTotalCount': true,
         'movieId': widget.movie.id,
         'includeDeleted': false,
+        'fromStartTime': DateTime.now().toIso8601String(),
       };
       
       if (widget.movie.title != null && widget.movie.title!.isNotEmpty) {
@@ -472,7 +475,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                   Row(
                     children: [
                       Text(
-                        '${widget.movie.releaseYear ?? 2024}',
+                        widget.movie.releaseYear?.toString() ?? l10n.unknown,
                         style: TextStyle(
                           color: colorScheme.onSurface.withOpacity(0.7),
                           fontSize: 16,
@@ -480,7 +483,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       ),
                       const SizedBox(width: 16),
                       Text(
-                        '${widget.movie.durationMinutes ?? 120} min',
+                        widget.movie.durationMinutes != null ? '${widget.movie.durationMinutes} min' : l10n.unknown,
                         style: TextStyle(
                           color: colorScheme.onSurface.withOpacity(0.7),
                           fontSize: 16,
@@ -957,27 +960,47 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   }
 
   Widget _buildMovieDescription(AppLocalizations l10n, ColorScheme colorScheme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          l10n.description,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: colorScheme.onSurface,
-          ),
-        ),
-        const SizedBox(height: 12),
-        Text(
-          widget.movie.description ?? 'Priča o američkom naučniku J. Robert Oppenheimeru i njegovoj ulozi u razvoju atomske bombe. Film prati dramatične događaje koji su doveli do uspješnog testiranja prve nuklearne bombe u povijesti.',
-          style: TextStyle(
-            fontSize: 16,
-            color: colorScheme.onSurface.withOpacity(0.8),
-            height: 1.5,
-          ),
-        ),
-      ],
+    final description = widget.movie.description ?? l10n.noDescriptionAvailable;
+    final isLongDescription = description.length > 150;
+    
+    return StatefulBuilder(
+      builder: (context, setLocalState) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.description,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: colorScheme.onSurface,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              description,
+              style: TextStyle(
+                fontSize: 16,
+                color: colorScheme.onSurface.withOpacity(0.8),
+                height: 1.5,
+              ),
+              maxLines: _isDescriptionExpanded ? null : (isLongDescription ? 3 : null),
+              overflow: _isDescriptionExpanded ? null : (isLongDescription ? TextOverflow.ellipsis : null),
+            ),
+            if (isLongDescription && !_isDescriptionExpanded) ...[
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () {
+                  setLocalState(() {
+                    _isDescriptionExpanded = true;
+                  });
+                },
+                child: Text(l10n.showMore),
+              ),
+            ],
+          ],
+        );
+      },
     );
   }
 
@@ -1046,7 +1069,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       const SizedBox(height: 8),
                       Text(
                         '${actor.firstName ?? ''} ${actor.lastName ?? ''}'.trim().isEmpty 
-                            ? 'Unknown' 
+                            ? l10n.unknown 
                             : '${actor.firstName ?? ''} ${actor.lastName ?? ''}'.trim(),
                         style: TextStyle(
                           fontSize: 12,
