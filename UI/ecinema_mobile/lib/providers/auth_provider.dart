@@ -1,4 +1,5 @@
 import '../models/user.dart';
+import '../models/role.dart';
 
 class AuthProvider {
   static String? username;
@@ -11,6 +12,7 @@ class AuthProvider {
   static String? phoneNumber;
   static DateTime? createdAt;
   static String? image;
+  static Role? role;
 
 
   static void setUser(User user) {
@@ -23,6 +25,7 @@ class AuthProvider {
     phoneNumber = user.phoneNumber;
     createdAt = user.createdAt;
     image = user.image;
+    role = user.role;
   }
 
   static void logout() {
@@ -36,6 +39,7 @@ class AuthProvider {
     phoneNumber = null;
     createdAt = null;
     image = null;
+    role = null;
   }
 
 

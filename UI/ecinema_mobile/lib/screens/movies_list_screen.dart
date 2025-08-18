@@ -453,7 +453,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
-                    movie.title ?? 'Unknown Title',
+                    movie.title ?? l10n.unknownTitle,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -484,7 +484,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                         Icon(Icons.category, size: 16, color: colorScheme.primary),
                         const SizedBox(width: 8),
                         Text(
-                          movie.genres!.first.name ?? 'Unknown',
+                          movie.genres!.first.name ?? l10n.unknown,
                           style: TextStyle(
                             fontSize: 14,
                             color: colorScheme.onSurface.withOpacity(0.7),

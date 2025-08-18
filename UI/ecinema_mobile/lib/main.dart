@@ -95,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -187,9 +188,16 @@ class _LoginPageState extends State<LoginPage> {
                         return null;
                       },
                       textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) {
-                        FocusScope.of(context).nextFocus();
-                      },
+                                                  onFieldSubmitted: (_) {
+                              FocusScope.of(context).nextFocus();
+                            },
+                            onChanged: (_) {
+                              if (_errorMessage != null) {
+                                setState(() {
+                                  _errorMessage = null;
+                                });
+                              }
+                            },
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
@@ -235,9 +243,16 @@ class _LoginPageState extends State<LoginPage> {
                         return null;
                       },
                       textInputAction: TextInputAction.done,
-                      onFieldSubmitted: (_) {
-                        _handleLogin();
-                      },
+                                                  onFieldSubmitted: (_) {
+                              _handleLogin();
+                            },
+                            onChanged: (_) {
+                              if (_errorMessage != null) {
+                                setState(() {
+                                  _errorMessage = null;
+                                });
+                              }
+                            },
                     ),
                     const SizedBox(height: 8),
                     Align(
@@ -254,6 +269,29 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
+                    if (_errorMessage != null) ...[
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Icon( 
+                            Icons.error_outline,
+                            color: Colors.red.shade600,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              _errorMessage!,
+                              style: TextStyle(
+                                color: Colors.red.shade700,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                    ],
                     const SizedBox(height: 24),
                     ElevatedButton(
                       onPressed: _isLoading ? null : _handleLogin,
@@ -323,6 +361,7 @@ class _LoginPageState extends State<LoginPage> {
 
     setState(() {
       _isLoading = true;
+      _errorMessage = null;
     });
 
     try {
@@ -332,36 +371,23 @@ class _LoginPageState extends State<LoginPage> {
       final success = await UserProvider.login(username, password);
       
       if (success) {
-        Navigator.of(context).pushReplacementNamed('/home');
+        final user = UserProvider.getCurrentUser();
+        if (user?.role?.name?.toLowerCase() == 'user' || user?.role?.name?.toLowerCase() == 'staff') {
+          Navigator.of(context).pushReplacementNamed('/home');
+        } else {
+          setState(() {
+            _errorMessage = l10n.mobileAccessRestricted;
+          });
+        }
       } else {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(l10n.error),
-            content: Text(l10n.invalidCredentials),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-        );
+        setState(() {
+          _errorMessage = l10n.invalidCredentials;
+        });
       }
     } on Exception catch (e) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(l10n.error),
-          content: Text(e.toString()),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
+      setState(() {
+        _errorMessage = e.toString();
+      });
     } finally {
       setState(() {
         _isLoading = false;

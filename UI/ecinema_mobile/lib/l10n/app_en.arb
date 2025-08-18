@@ -331,6 +331,10 @@
   "@description": {
     "description": "Description section title"
   },
+  "noDescriptionAvailable": "No description available",
+  "@noDescriptionAvailable": {
+    "description": "No description available text"
+  },
   "actors": "Actors",
   "@actors": {
     "description": "Actors section title"
@@ -707,7 +711,7 @@
   "@filmMarathon": {
     "description": "Film marathon event title"
   },
-  "filmMarathonDescription": "Join us for an exclusive film marathon dedicated to director Christopher Nolan. Watch Inception, Interstellar and Oppenheimer in one night with special benefits for visitors.",
+  "filmMarathonDescription": "Join us for an exclusive film marathon dedicated to director Christopher Nolan. Watch his most acclaimed films in one night with special benefits for visitors.",
   "@filmMarathonDescription": {
     "description": "Film marathon event description"
   },
@@ -1059,6 +1063,14 @@
   "@unknown": {
     "description": "Unknown placeholder"
   },
+  "unknownDirector": "Unknown Director",
+  "@unknownDirector": {
+    "description": "Unknown director placeholder"
+  },
+  "unknownError": "Unknown error",
+  "@unknownError": {
+    "description": "Unknown error message"
+  },
   "tba": "TBA",
   "@tba": {
     "description": "To be announced abbreviation"
@@ -1098,5 +1110,17 @@
   "removePhoto": "Remove Photo",
   "@removePhoto": {
     "description": "Remove photo option"
+  },
+  "showMore": "Show More",
+  "@showMore": {
+    "description": "Show more button text"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close button text"
+  },
+  "mobileAccessRestricted": "Only users with user or staff role can access the mobile application.",
+  "@mobileAccessRestricted": {
+    "description": "Mobile access restriction message"
   }
 } 

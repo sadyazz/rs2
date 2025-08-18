@@ -582,7 +582,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                      movie.title ?? 'Unknown Title',
+                      movie.title ?? l10n.unknownTitle,
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -592,7 +592,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      movie.director ?? 'Unknown Director',
+                      movie.director ?? l10n.unknownDirector,
                       style: TextStyle(
                         fontSize: 12,
                         color: colorScheme.onSurface.withOpacity(0.7),
@@ -610,7 +610,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           border: Border.all(color: colorScheme.primary.withOpacity(0.3), width: 0.5),
                         ),
                         child: Text(
-                          movie.genres!.first.name ?? 'Unknown',
+                          movie.genres!.first.name ?? l10n.unknown,
                           style: TextStyle(
                             fontSize: 10,
                             color: colorScheme.onPrimaryContainer,

@@ -1,3 +1,5 @@
+import 'role.dart';
+
 class User {
   final int? id;
   final String? firstName;
@@ -9,6 +11,7 @@ class User {
   final bool? isDeleted;
   final DateTime? createdAt;
   final String? image;
+  final Role? role;
 
   const User({
     this.id,
@@ -21,6 +24,7 @@ class User {
     this.isDeleted,
     this.createdAt,
     this.image,
+    this.role,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -35,6 +39,7 @@ class User {
       isDeleted: json['isDeleted'] ?? false,
       createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
       image: json['image'],
+      role: json['role'] != null ? Role.fromJson(json['role']) : null,
     );
   }
 
@@ -50,6 +55,7 @@ class User {
       'isDeleted': isDeleted,
       'createdAt': createdAt?.toIso8601String(),
       'image': image,
+      'role': role?.toJson(),
     };
   }
 } 

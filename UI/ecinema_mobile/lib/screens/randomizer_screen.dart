@@ -548,8 +548,8 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
                     const SizedBox(width: 8),
                     Text(
                       _selectedMovieData!.genres?.isNotEmpty == true
-                          ? _selectedMovieData!.genres!.first.name ?? 'Unknown'
-                          : 'Unknown',
+                                                  ? _selectedMovieData!.genres!.first.name ?? l10n.unknown
+                        : l10n.unknown,
                       style: TextStyle(
                         fontSize: 14,
                         color: colorScheme.onSurface.withOpacity(0.7),
@@ -656,7 +656,7 @@ class _RandomizerScreenState extends State<RandomizerScreen> {
           _selectedMovieData = null;
         } else {
           _selectedMovieData = recommendation;
-          _selectedMovie = recommendation.title ?? 'Unknown Movie';
+                                  _selectedMovie = recommendation.title ?? l10n.unknownTitle;
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (_scrollController.hasClients) {
               _scrollController.animateTo(

@@ -331,6 +331,10 @@
   "@description": {
     "description": "Description section title"
   },
+  "noDescriptionAvailable": "Opis nije dostupan",
+  "@noDescriptionAvailable": {
+    "description": "No description available text"
+  },
   "actors": "Glumci",
   "@actors": {
     "description": "Actors section title"
@@ -707,7 +711,7 @@
   "@filmMarathon": {
     "description": "Film marathon event title"
   },
-  "filmMarathonDescription": "Pridružite nam se na ekskluzivnom filmskom maratonu posvećenom reditelju Christopheru Nolanu. Pogledajte Inception, Interstellar i Oppenheimer u jednoj noći uz posebne pogodnosti za posjetioce.",
+  "filmMarathonDescription": "Pridružite nam se na ekskluzivnom filmskom maratonu posvećenom reditelju Christopheru Nolanu. Pogledajte njegove najcjenjenije filmove u jednoj noći uz posebne pogodnosti za posjetioce.",
   "@filmMarathonDescription": {
     "description": "Film marathon event description"
   },
@@ -1059,6 +1063,14 @@
   "@unknown": {
     "description": "Unknown placeholder"
   },
+  "unknownDirector": "Nepoznat režiser",
+  "@unknownDirector": {
+    "description": "Unknown director placeholder"
+  },
+  "unknownError": "Nepoznata greška",
+  "@unknownError": {
+    "description": "Unknown error message"
+  },
   "tba": "TBA",
   "@tba": {
     "description": "To be announced abbreviation"
@@ -1098,5 +1110,17 @@
   "removePhoto": "Ukloni fotografiju",
   "@removePhoto": {
     "description": "Remove photo option"
+  },
+  "showMore": "Prikaži više",
+  "@showMore": {
+    "description": "Show more button text"
+  },
+  "close": "Zatvori",
+  "@close": {
+    "description": "Close button text"
+  },
+  "mobileAccessRestricted": "Samo korisnici sa user ili staff rolom mogu pristupiti mobilnoj aplikaciji.",
+  "@mobileAccessRestricted": {
+    "description": "Mobile access restriction message"
   }
 } 

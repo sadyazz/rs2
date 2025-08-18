@@ -8,6 +8,22 @@ class UserProvider extends BaseProvider<User> {
   UserProvider() : super("User");
   static const String _baseUrl = "http://10.0.2.2:5190/";
 
+  static User? getCurrentUser() {
+    if (AuthProvider.userId == null) return null;
+    
+    return User(
+      id: AuthProvider.userId,
+      firstName: AuthProvider.firstName ?? '',
+      lastName: AuthProvider.lastName ?? '',
+      username: AuthProvider.username ?? '',
+      email: AuthProvider.email ?? '',
+      phoneNumber: AuthProvider.phoneNumber,
+      createdAt: AuthProvider.createdAt,
+      role: AuthProvider.role,
+      image: AuthProvider.image,
+    );
+  }
+
   static Future<bool> login(String username, String password) async {
     try {
       final response = await http.post(
@@ -164,6 +180,7 @@ class UserProvider extends BaseProvider<User> {
       rethrow;
     }
   }
+  
 
   @override
   User fromJson(data) {
