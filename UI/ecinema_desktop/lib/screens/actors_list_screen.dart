@@ -79,7 +79,7 @@ class _ActorsListScreenState extends State<ActorsListScreen> {
       };
       
       if (_searchController.text.isNotEmpty) {
-        filter["firstName"] = _searchController.text;
+        filter["fts"] = _searchController.text;
       }
       
       result = await provider.get(filter: filter);
