@@ -158,19 +158,20 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(24.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                  _buildSearchBar(l10n, colorScheme),
-                  const SizedBox(height: 16),
-                  _buildGenresSection(l10n, colorScheme),
-                  const SizedBox(height: 16),
-                  _buildMoviesList(l10n, colorScheme),
-                  if (result != null && result!.items!.isNotEmpty)
-                    _buildPaginationControls(l10n, colorScheme),
-                ],
-            ),
+          child: Column(
+            children: [
+              _buildSearchBar(l10n, colorScheme),
+              const SizedBox(height: 16),
+              _buildGenresSection(l10n, colorScheme),
+              const SizedBox(height: 16),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: _buildMoviesList(l10n, colorScheme),
+                ),
+              ),
+              if (result != null && result!.items!.isNotEmpty)
+                _buildPaginationControls(l10n, colorScheme),
+            ],
           ),
         ),
       ),
@@ -363,7 +364,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.only(top: 16),
+      padding: EdgeInsets.zero,
       itemCount: result!.items!.length,
       itemBuilder: (context, index) {
         final movie = result!.items![index];
@@ -545,7 +546,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
 
     
     return Container(
-      margin: const EdgeInsets.only(top: 16),
+      // margin: const EdgeInsets.only(top: 16),
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       decoration: BoxDecoration(
         color: colorScheme.surface,

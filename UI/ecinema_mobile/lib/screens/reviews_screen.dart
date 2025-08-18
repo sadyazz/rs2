@@ -41,6 +41,9 @@ class _ReviewsScreenState extends State<ReviewsScreen> {
     try {
       final reviewProvider = context.read<ReviewProvider>();
       var filter = <String, dynamic>{
+        'page': currentPage,
+        'pageSize': pageSize,
+        'includeTotalCount': true,
         'movieId': widget.movie.id,
         'includeDeleted': false,
       };
