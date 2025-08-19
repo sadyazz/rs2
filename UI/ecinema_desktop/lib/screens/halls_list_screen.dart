@@ -457,8 +457,8 @@ class _HallsListScreenState extends State<HallsListScreen> {
               padding: const EdgeInsets.only(top: 16, bottom: 5),
               child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 6,
-                  childAspectRatio: 1.1,
+                  crossAxisCount: 5,
+                  childAspectRatio: 1.2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                 ),
@@ -577,9 +577,10 @@ class _HallsListScreenState extends State<HallsListScreen> {
             Expanded(
               flex: 2,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 8.0),
+                padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 4.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       hall.name ?? l10n.unnamedHall,
@@ -589,6 +590,26 @@ class _HallsListScreenState extends State<HallsListScreen> {
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.event_seat,
+                          size: 14,
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                        ),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            '${l10n.capacity}: ${hall.capacity ?? 0}',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -628,23 +649,23 @@ class _HallsListScreenState extends State<HallsListScreen> {
                                 }
                               },
                               borderRadius: BorderRadius.circular(8),
-                              child: Container(
-                                padding: const EdgeInsets.all(6),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                                                                child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(6),
+                                      border: Border.all(
+                                        color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                                      ),
+                                    ),
+                                    child: Icon(
+                                      Icons.edit_outlined,
+                                      size: 14,
+                                      color: Theme.of(context).colorScheme.primary,
+                                    ),
                                   ),
-                                ),
-                                child: Icon(
-                                  Icons.edit_outlined,
-                                  size: 16,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
                             ),
-                            const SizedBox(width: 6),
+                                                          const SizedBox(width: 4),
                             if (hall.isDeleted == true)
                               InkWell(
                                 onTap: () {
@@ -652,17 +673,17 @@ class _HallsListScreenState extends State<HallsListScreen> {
                                 },
                                 borderRadius: BorderRadius.circular(8),
                                 child: Container(
-                                  padding: const EdgeInsets.all(6),
+                                  padding: const EdgeInsets.all(4),
                                   decoration: BoxDecoration(
                                     color: Colors.green.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(6),
                                     border: Border.all(
                                       color: Colors.green.withOpacity(0.2),
                                     ),
                                   ),
                                   child: Icon(
                                     Icons.restore,
-                                    size: 16,
+                                    size: 14,
                                     color: Colors.green[600],
                                   ),
                                 ),

@@ -423,6 +423,10 @@
   "@unknown": {
     "description": "Unknown placeholder text"
   },
+  "unknownError": "Unknown error",
+  "@unknownError": {
+    "description": "Unknown error message"
+  },
   "noGenresAssigned": "No genres assigned",
   "@noGenresAssigned": {
     "description": "No genres assigned text"
@@ -1930,5 +1934,141 @@
         "example": "Network error"
       }
     }
+  },
+  "seatsManagement": "Seats Management",
+  "@seatsManagement": {
+    "description": "Seats management section title"
+  },
+  "addSeat": "Add Seat",
+  "@addSeat": {
+    "description": "Add seat button text"
+  },
+  "noSeatsFound": "No seats found for this hall",
+  "@noSeatsFound": {
+    "description": "Message when no seats are found for a hall"
+  },
+  "editSeat": "Edit Seat",
+  "@editSeat": {
+    "description": "Edit seat dialog title"
+  },
+  "seatNumber": "Seat Number",
+  "@seatNumber": {
+    "description": "Seat number field label"
+  },
+  "rowNumber": "Row Number",
+  "@rowNumber": {
+    "description": "Row number field label"
+  },
+  "pleaseEnterSeatNumber": "Please enter seat number",
+  "@pleaseEnterSeatNumber": {
+    "description": "Validation message for seat number"
+  },
+  "pleaseEnterRowNumber": "Please enter row number",
+  "@pleaseEnterRowNumber": {
+    "description": "Validation message for row number"
+  },
+  "update": "Update",
+  "@update": {
+    "description": "Update button text"
+  },
+  "confirmDeleteSeat": "Confirm Delete Seat",
+  "@confirmDeleteSeat": {
+    "description": "Confirm delete seat dialog title"
+  },
+  "areYouSureDeleteSeat": "Are you sure you want to delete this seat?",
+  "@areYouSureDeleteSeat": {
+    "description": "Confirm delete seat message"
+  },
+  "seatUpdatedSuccessfully": "Seat updated successfully",
+  "@seatUpdatedSuccessfully": {
+    "description": "Success message when seat is updated"
+  },
+  "failedToUpdateSeat": "Failed to update seat",
+  "@failedToUpdateSeat": {
+    "description": "Error message when seat update fails"
+  },
+  "seatDeletedSuccessfully": "Seat deleted successfully",
+  "@seatDeletedSuccessfully": {
+    "description": "Success message when seat is deleted"
+  },
+  "failedToDeleteSeat": "Failed to delete seat",
+  "@failedToUpdateSeat": {
+    "description": "Error message when seat deletion fails"
+  },
+  "addNewSeat": "Add New Seat",
+  "@addNewSeat": {
+    "description": "Add new seat dialog title"
+  },
+  "seatSavedSuccessfully": "Seat saved successfully",
+  "@seatSavedSuccessfully": {
+    "description": "Success message when seat is saved"
+  },
+  "failedToSaveSeat": "Failed to save seat",
+  "@failedToSaveSeat": {
+    "description": "Error message when seat save fails"
+  },
+  "create": "Create",
+  "@create": {
+    "description": "Create button text"
+  },
+  "seatCountMatchesCapacity": "Seat count matches capacity: {seats} / {capacity}",
+  "@seatCountMatchesCapacity": {
+    "description": "Message when seat count matches hall capacity",
+    "placeholders": {
+      "seats": {
+        "type": "int",
+        "example": "50"
+      },
+      "capacity": {
+        "type": "int",
+        "example": "50"
+      }
+    }
+  },
+  "seatCountMismatch": "Seat count mismatch: {seats} / {capacity}",
+  "@seatCountMismatch": {
+    "description": "Message when seat count doesn't match hall capacity",
+    "placeholders": {
+      "seats": {
+        "type": "int",
+        "example": "25"
+      },
+      "capacity": {
+        "type": "int",
+        "example": "50"
+      }
+    }
+  },
+  "cannotAddMoreSeats": "Cannot add more seats. Hall capacity is {capacity} and current seat count is {seats}.",
+  "@cannotAddMoreSeats": {
+    "description": "Error message when trying to add more seats than hall capacity",
+    "placeholders": {
+      "capacity": {
+        "type": "int",
+        "example": "50"
+      },
+      "seats": {
+        "type": "int",
+        "example": "50"
+      }
+    }
+  },
+  "cannotMoveSeatToHall": "Cannot move seat to this hall. Hall capacity is {capacity} and current seat count is {seats}.",
+  "@cannotMoveSeatToHall": {
+    "description": "Error message when trying to move seat to hall that's at capacity",
+    "placeholders": {
+      "capacity": {
+        "type": "int",
+        "example": "50"
+      },
+      "seats": {
+        "type": "int",
+        "example": "50"
+      }
+    }
+  },
+  "autoGenerateSeatsTooltip": "Auto-generate seats for this capacity",
+  "@autoGenerateSeatsTooltip": {
+    "description": "Tooltip for auto-generate seats button"
   }
 }

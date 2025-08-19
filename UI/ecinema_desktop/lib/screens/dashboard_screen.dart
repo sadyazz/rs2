@@ -334,8 +334,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 final screening = todayScreenings[index];
                 return _buildActivityItem(
                   icon: Icons.movie_outlined,
-                  title: screening.movieTitle ?? 'Unknown Movie',
-                  subtitle: '${screening.startTime?.hour.toString().padLeft(2, '0')}:${screening.startTime?.minute.toString().padLeft(2, '0')} - ${screening.hallName ?? 'Unknown Hall'}',
+                  title: screening.movieTitle ?? l10n.unknownMovie,
+                  subtitle: '${screening.startTime?.hour.toString().padLeft(2, '0')}:${screening.startTime?.minute.toString().padLeft(2, '0')} - ${screening.hallName ?? l10n.unknownHall}',
                   color: Colors.purple.shade200,
                   badge: '${screening.availableSeats ?? 0} seats',
                 );

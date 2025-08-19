@@ -29,6 +29,8 @@ class _EditHallScreenState extends State<EditHallScreen> {
     super.initState();
     if (widget.hall?.id != null) {
       _loadSeats();
+    } else {
+      print('No hall ID, skipping seat loading');
     }
   }
 
@@ -128,12 +130,20 @@ class _EditHallScreenState extends State<EditHallScreen> {
               decoration: InputDecoration(
                 labelText: l10n.hallCapacity,
                 border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.auto_fix_high),
+                  tooltip: l10n.autoGenerateSeatsTooltip,
+                  onPressed: () => _showAutoGenerateSeatsDialog(l10n),
+                ),
               ),
               keyboardType: TextInputType.number,
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(errorText: l10n.pleaseEnterHallCapacity),
                 FormBuilderValidators.min(1, errorText: l10n.capacityMustBeAtLeastOne),
               ]),
+              onChanged: (value) {
+                setState(() {});
+              },
             ),
             
             const SizedBox(height: 16),
@@ -222,8 +232,9 @@ class _EditHallScreenState extends State<EditHallScreen> {
         );
 
         if (widget.hall == null) {
-          await hallProvider.insert(hall);
-        } else {
+          final savedHall = await hallProvider.insert(hall);
+          await _autoGenerateSeatsForNewHall(savedHall.id!, hall.capacity ?? 1);
+                } else {
           await hallProvider.update(widget.hall!.id!, hall);
         }
 
@@ -255,6 +266,187 @@ class _EditHallScreenState extends State<EditHallScreen> {
     }
   }
 
+  void _showAutoGenerateSeatsDialog(AppLocalizations l10n) {
+    final actualCapacity = widget.hall?.capacity ?? 1;
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.autoGenerateSeats),
+        content: Text(
+          l10n.autoGenerateSeatsMessage(actualCapacity),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.cancel),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await _autoGenerateSeats(actualCapacity);
+            },
+            child: Text(l10n.generate),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _autoGenerateSeatsForNewHall(int hallId, int capacity) async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      final seatProvider = Provider.of<SeatProvider>(context, listen: false);
+      
+      final newSeats = <Seat>[];
+      int seatNumber = 1;
+      int rowNumber = 1;
+      int seatsPerRow = 10;
+      
+      for (int i = 0; i < capacity; i++) {
+        if (seatNumber > seatsPerRow) {
+          seatNumber = 1;
+          rowNumber++;
+        }
+        
+        final seat = Seat(
+          id: null,
+          hallId: hallId,
+          seatNumber: seatNumber,
+          rowNumber: rowNumber,
+        );
+        
+        await seatProvider.insert(seat);
+        newSeats.add(seat);
+        seatNumber++;
+      }
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.seatsGeneratedSuccessfully(capacity)),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.failedToGenerateSeats(e.toString())),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _autoGenerateSeats(int? capacity) async {
+    final targetCapacity = capacity ?? widget.hall?.capacity ?? 1;
+    
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      final seatProvider = Provider.of<SeatProvider>(context, listen: false);
+      
+      for (final seat in _seats) {
+        await seatProvider.delete(seat.id!);
+      }
+      
+      final newSeats = <Seat>[];
+      int seatNumber = 1;
+      int rowNumber = 1;
+      int seatsPerRow = 10;
+      
+      for (int i = 0; i < targetCapacity; i++) {
+        if (seatNumber > seatsPerRow) {
+          seatNumber = 1;
+          rowNumber++;
+        }
+        
+        final seat = Seat(
+          id: null,
+          hallId: widget.hall!.id!,
+          seatNumber: seatNumber,
+          rowNumber: rowNumber,
+        );
+        
+        await seatProvider.insert(seat);
+        newSeats.add(seat);
+        seatNumber++;
+      }
+      
+      setState(() {
+        _seats = newSeats;
+      });
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.seatsGeneratedSuccessfully(targetCapacity)),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.failedToGenerateSeats(e.toString())),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Widget _buildCapacityValidation(AppLocalizations l10n) {
+    int currentCapacity = widget.hall?.capacity ?? 0;
+    final formState = _formKey.currentState;
+    if (formState != null) {
+      final dynamic raw = formState.value['capacity'];
+      if (raw is String && raw.trim().isNotEmpty) {
+        currentCapacity = int.tryParse(raw) ?? currentCapacity;
+      } else if (raw is int) {
+        currentCapacity = raw;
+      }
+    }
+    final currentSeatCount = _seats.length;
+    final isValid = currentSeatCount == currentCapacity;
+    
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: isValid ? Colors.green[50] : Colors.orange[50],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: isValid ? Colors.green[200]! : Colors.orange[200]!,
+          width: 1,
+        ),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            isValid ? Icons.check_circle : Icons.warning,
+            color: isValid ? Colors.green[600] : Colors.orange[600],
+            size: 20,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              isValid 
+                ? l10n.seatCountMatchesCapacity(currentSeatCount, currentCapacity)
+                : l10n.seatCountMismatch(currentSeatCount, currentCapacity),
+              style: TextStyle(
+                color: isValid ? Colors.green[700] : Colors.orange[700],
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildSeatsSection(AppLocalizations l10n) {
     final seatsByRow = <int, List<Seat>>{};
     for (final seat in _seats) {
@@ -273,7 +465,7 @@ class _EditHallScreenState extends State<EditHallScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Seats Management',
+                    l10n.seatsManagement,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   ElevatedButton.icon(
@@ -281,17 +473,19 @@ class _EditHallScreenState extends State<EditHallScreen> {
                       _showAddSeatDialog(l10n);
                     },
                     icon: const Icon(Icons.add),
-                    label: const Text('Add Seat'),
+                    label: Text(l10n.addSeat),
                   ),
                 ],
               ),
+              const SizedBox(height: 8),
+              _buildCapacityValidation(l10n),
               const SizedBox(height: 16),
               if (_isLoadingSeats)
                 const Center(child: CircularProgressIndicator())
               else if (_seats.isEmpty)
                 Center(
                   child: Text(
-                    'No seats found for this hall',
+                    l10n.noSeatsFound,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       color: Colors.grey,
                     ),
@@ -383,7 +577,7 @@ class _EditHallScreenState extends State<EditHallScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Edit Seat'),
+          title: Text(l10n.editSeat),
           content: FormBuilder(
             key: formKey,
             initialValue: {
@@ -417,10 +611,11 @@ class _EditHallScreenState extends State<EditHallScreen> {
               onPressed: () => Navigator.of(context).pop(),
               child: Text(l10n.cancel),
             ),
-            ElevatedButton(
+                        ElevatedButton(
               onPressed: () {
                 if (formKey.currentState?.saveAndValidate() ?? false) {
                   final seatData = formKey.currentState!.value;
+                  
                   final updatedSeat = Seat(
                     id: seat.id,
                     hallId: widget.hall!.id!,
@@ -434,18 +629,18 @@ class _EditHallScreenState extends State<EditHallScreen> {
                       Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Seat updated successfully'),
+                          content: Text(l10n.seatUpdatedSuccessfully),
                           backgroundColor: Colors.green,
                         ),
                       );
-                      _loadSeats(); // Reload seats to update the grid
+                      _loadSeats();
                     }
                   }).catchError((e) {
                     if (mounted) {
                       Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Failed to update seat'),
+                          content: Text(l10n.failedToUpdateSeat),
                           backgroundColor: Colors.red,
                         ),
                       );
@@ -453,7 +648,7 @@ class _EditHallScreenState extends State<EditHallScreen> {
                   });
                 }
               },
-              child: Text('Update'),
+              child: Text(l10n.update),
             ),
             ElevatedButton(
               onPressed: () {
@@ -461,8 +656,8 @@ class _EditHallScreenState extends State<EditHallScreen> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Confirm Delete Seat'),
-                      content: Text('Are you sure you want to delete this seat?'),
+                      title: Text(l10n.confirmDeleteSeat),
+                      content: Text(l10n.areYouSureDeleteSeat),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(),
@@ -473,22 +668,22 @@ class _EditHallScreenState extends State<EditHallScreen> {
                             final seatProvider = Provider.of<SeatProvider>(context, listen: false);
                             seatProvider.delete(seat.id!).then((_) {
                               if (mounted) {
-                                Navigator.of(context).pop(); // Close confirmation dialog
-                                Navigator.of(context).pop(); // Close edit dialog
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text('Seat deleted successfully'),
+                                    content: Text(l10n.seatDeletedSuccessfully),
                                     backgroundColor: Colors.green,
                                   ),
                                 );
-                                _loadSeats(); // Reload seats to update the grid
+                                _loadSeats();
                               }
                             }).catchError((e) {
                               if (mounted) {
-                                Navigator.of(context).pop(); // Close confirmation dialog
+                                Navigator.of(context).pop();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text('Failed to delete seat'),
+                                    content: Text(l10n.failedToDeleteSeat),
                                     backgroundColor: Colors.red,
                                   ),
                                 );
@@ -520,13 +715,12 @@ class _EditHallScreenState extends State<EditHallScreen> {
 
   void _showAddSeatDialog(AppLocalizations l10n) {
     final formKey = GlobalKey<FormBuilderState>();
-    final isEditing = widget.hall != null;
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add New Seat'),
+          title: Text(l10n.addNewSeat),
           content: FormBuilder(
             key: formKey,
             initialValue: {
@@ -564,6 +758,20 @@ class _EditHallScreenState extends State<EditHallScreen> {
               onPressed: () {
                 if (formKey.currentState?.saveAndValidate() ?? false) {
                   final seatData = formKey.currentState!.value;
+                  
+                  final currentSeatCount = _seats.length;
+                  final hallCapacity = widget.hall?.capacity ?? 0;
+                  
+                  if (currentSeatCount >= hallCapacity) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(l10n.cannotAddMoreSeats(hallCapacity, currentSeatCount)),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return;
+                  }
+                  
                   final seat = Seat(
                     id: null,
                     hallId: widget.hall!.id!,
@@ -577,18 +785,18 @@ class _EditHallScreenState extends State<EditHallScreen> {
                       Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Seat saved successfully'),
+                          content: Text(l10n.seatSavedSuccessfully),
                           backgroundColor: Colors.green,
                         ),
                       );
-                      _loadSeats(); // Reload seats to update the grid
+                      _loadSeats();
                     }
                   }).catchError((e) {
                     if (mounted) {
                       Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Failed to save seat'),
+                          content: Text(l10n.failedToSaveSeat),
                           backgroundColor: Colors.red,
                         ),
                       );
@@ -596,7 +804,7 @@ class _EditHallScreenState extends State<EditHallScreen> {
                   });
                 }
               },
-              child: Text('Create'),
+              child: Text(l10n.create),
             ),
           ],
         );

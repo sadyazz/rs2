@@ -70,6 +70,11 @@ namespace eCinema.Services
             {
                 throw new InvalidOperationException("A hall with this name already exists.");
             }
+
+            if (request.Capacity <= 0)
+            {
+                throw new InvalidOperationException("Hall capacity must be greater than 0.");
+            }
         }
 
         protected override async Task BeforeUpdate(Hall entity, HallUpsertRequest request)
@@ -78,6 +83,53 @@ namespace eCinema.Services
             {
                 throw new InvalidOperationException("A hall with this name already exists.");
             }
+
+            var currentSeatCount = await _context.Seats.CountAsync(s => s.HallId == entity.Id);
+            if (currentSeatCount != request.Capacity)
+            {
+                throw new InvalidOperationException(
+                    $"Cannot update hall capacity to {request.Capacity}. Current seat count is {currentSeatCount}. " +
+                    "Please adjust the seats first or use the auto-generate feature.");
+            }
+        }
+
+        public async Task GenerateSeatsForHall(int hallId, int capacity)
+        {
+            var hall = await _context.Halls.FindAsync(hallId);
+            if (hall == null)
+            {
+                throw new InvalidOperationException("Hall not found.");
+            }
+
+            var existingSeats = await _context.Seats.Where(s => s.HallId == hallId).ToListAsync();
+            _context.Seats.RemoveRange(existingSeats);
+
+            var newSeats = new List<Seat>();
+            int seatNumber = 1;
+            int rowNumber = 1;
+            int seatsPerRow = 10;
+
+            for (int i = 0; i < capacity; i++)
+            {
+                if (seatNumber > seatsPerRow)
+                {
+                    seatNumber = 1;
+                    rowNumber++;
+                }
+
+                var seat = new Seat
+                {
+                    HallId = hallId,
+                    Row = rowNumber.ToString(),
+                    Number = seatNumber
+                };
+
+                newSeats.Add(seat);
+                seatNumber++;
+            }
+
+            _context.Seats.AddRange(newSeats);
+            await _context.SaveChangesAsync();
         }
     }
 } 

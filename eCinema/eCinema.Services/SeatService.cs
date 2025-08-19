@@ -79,6 +79,24 @@ namespace eCinema.Services
             entity.Number = request.SeatNumber;
         }
 
+        protected override async Task BeforeInsert(Database.Entities.Seat entity, SeatInsertRequest request)
+        {
+            await base.BeforeInsert(entity, request);
+            
+            var currentSeatCount = await _context.Set<Database.Entities.Seat>()
+                .Where(s => s.HallId == request.HallId)
+                .CountAsync();
+                
+            var hall = await _context.Set<Database.Entities.Hall>()
+                .Where(h => h.Id == request.HallId && !h.IsDeleted)
+                .FirstOrDefaultAsync();
+                
+            if (hall != null && currentSeatCount >= hall.Capacity)
+            {
+                throw new Exception($"Cannot add more seats. Hall capacity is {hall.Capacity} and current seat count is {currentSeatCount}.");
+            }
+        }
+
         public override async Task<SeatResponse> CreateAsync(SeatInsertRequest request)
         {
             var entity = new Database.Entities.Seat();
@@ -89,6 +107,27 @@ namespace eCinema.Services
 
             await _context.SaveChangesAsync();
             return MapToResponse(entity);
+        }
+
+        protected override async Task BeforeUpdate(Database.Entities.Seat entity, SeatUpdateRequest request)
+        {
+            await base.BeforeUpdate(entity, request);
+            
+            if (request.HallId != entity.HallId)
+            {
+                var currentSeatCount = await _context.Set<Database.Entities.Seat>()
+                    .Where(s => s.HallId == request.HallId)
+                    .CountAsync();
+                    
+                var hall = await _context.Set<Database.Entities.Hall>()
+                    .Where(h => h.Id == request.HallId && !h.IsDeleted)
+                    .FirstOrDefaultAsync();
+                    
+                if (hall != null && currentSeatCount >= hall.Capacity)
+                {
+                    throw new Exception($"Cannot move seat to this hall. Hall capacity is {hall.Capacity} and current seat count is {currentSeatCount}.");
+                }
+            }
         }
 
         public override async Task<SeatResponse> UpdateAsync(int id, SeatUpdateRequest request)

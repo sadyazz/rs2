@@ -393,6 +393,10 @@
   "@unknown": {
     "description": "Unknown placeholder text"
   },
+  "unknownError": "Nepoznata greška",
+  "@unknownError": {
+    "description": "Unknown error message"
+  },
   "noGenresAssigned": "Nema dodijeljenih žanrova",
   "@noGenresAssigned": {
     "description": "No genres assigned text"
@@ -1892,5 +1896,141 @@
         "example": "Network error"
       }
     }
+  },
+  "seatsManagement": "Upravljanje Sedištima",
+  "@seatsManagement": {
+    "description": "Seats management section title"
+  },
+  "addSeat": "Dodaj Sedište",
+  "@addSeat": {
+    "description": "Add seat button text"
+  },
+  "noSeatsFound": "Nema pronađenih sedišta za ovu salu",
+  "@noSeatsFound": {
+    "description": "Message when no seats are found for a hall"
+  },
+  "editSeat": "Uredi Sedište",
+  "@editSeat": {
+    "description": "Edit seat dialog title"
+  },
+  "seatNumber": "Broj Sedišta",
+  "@seatNumber": {
+    "description": "Seat number field label"
+  },
+  "rowNumber": "Broj Reda",
+  "@rowNumber": {
+    "description": "Row number field label"
+  },
+  "pleaseEnterSeatNumber": "Molimo unesite broj sedišta",
+  "@pleaseEnterSeatNumber": {
+    "description": "Validation message for seat number"
+  },
+  "pleaseEnterRowNumber": "Molimo unesite broj reda",
+  "@pleaseEnterRowNumber": {
+    "description": "Validation message for row number"
+  },
+  "update": "Ažuriraj",
+  "@update": {
+    "description": "Update button text"
+  },
+  "confirmDeleteSeat": "Potvrdi Brisanje Sedišta",
+  "@confirmDeleteSeat": {
+    "description": "Confirm delete seat dialog title"
+  },
+  "areYouSureDeleteSeat": "Da li ste sigurni da želite obrisati ovo sedište?",
+  "@areYouSureDeleteSeat": {
+    "description": "Confirm delete seat message"
+  },
+  "seatUpdatedSuccessfully": "Sedište uspješno ažurirano",
+  "@seatUpdatedSuccessfully": {
+    "description": "Success message when seat is updated"
+  },
+  "failedToUpdateSeat": "Greška pri ažuriranju sedišta",
+  "@failedToUpdateSeat": {
+    "description": "Error message when seat update fails"
+  },
+  "seatDeletedSuccessfully": "Sedište uspješno obrisano",
+  "@seatDeletedSuccessfully": {
+    "description": "Success message when seat is deleted"
+  },
+  "failedToDeleteSeat": "Greška pri brisanju sedišta",
+  "@failedToDeleteSeat": {
+    "description": "Error message when seat deletion fails"
+  },
+  "addNewSeat": "Dodaj Novo Sedište",
+  "@addNewSeat": {
+    "description": "Add new seat dialog title"
+  },
+  "seatSavedSuccessfully": "Sedište uspješno sačuvano",
+  "@seatSavedSuccessfully": {
+    "description": "Success message when seat is saved"
+  },
+  "failedToSaveSeat": "Greška pri čuvanju sedišta",
+  "@failedToSaveSeat": {
+    "description": "Error message when seat save fails"
+  },
+  "create": "Kreiraj",
+  "@create": {
+    "description": "Create button text"
+  },
+  "seatCountMatchesCapacity": "Broj sedišta odgovara kapacitetu: {seats} / {capacity}",
+  "@seatCountMatchesCapacity": {
+    "description": "Message when seat count matches hall capacity",
+    "placeholders": {
+      "seats": {
+        "type": "int",
+        "example": "50"
+      },
+      "capacity": {
+        "type": "int",
+        "example": "50"
+      }
+    }
+  },
+  "seatCountMismatch": "Broj sedišta ne odgovara kapacitetu: {seats} / {capacity}",
+  "@seatCountMismatch": {
+    "description": "Message when seat count doesn't match hall capacity",
+    "placeholders": {
+      "seats": {
+        "type": "int",
+        "example": "25"
+      },
+      "capacity": {
+        "type": "int",
+        "example": "50"
+      }
+    }
+  },
+  "cannotAddMoreSeats": "Ne možete dodati više sedišta. Kapacitet sale je {capacity}, a trenutni broj sedišta je {seats}.",
+  "@cannotAddMoreSeats": {
+    "description": "Error message when trying to add more seats than hall capacity",
+    "placeholders": {
+      "capacity": {
+        "type": "int",
+        "example": "50"
+      },
+      "seats": {
+        "type": "int",
+        "example": "50"
+      }
+    }
+  },
+  "cannotMoveSeatToHall": "Ne možete premjestiti sedište u ovu salu. Kapacitet sale je {capacity}, a trenutni broj sedišta je {seats}.",
+  "@cannotMoveSeatToHall": {
+    "description": "Error message when trying to move seat to hall that's at capacity",
+    "placeholders": {
+      "capacity": {
+        "type": "int",
+        "example": "50"
+      },
+      "seats": {
+        "type": "int",
+        "example": "50"
+      }
+    }
+  },
+  "autoGenerateSeatsTooltip": "Automatski generiši sedišta za ovaj kapacitet",
+  "@autoGenerateSeatsTooltip": {
+    "description": "Tooltip for auto-generate seats button"
   }
 }
