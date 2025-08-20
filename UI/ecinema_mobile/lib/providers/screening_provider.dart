@@ -1,5 +1,8 @@
 import '../models/screening.dart';
+import '../models/seat_dto.dart';
 import 'base_provider.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class ScreeningProvider extends BaseProvider<Screening> {
   ScreeningProvider() : super("Screening");
@@ -7,5 +10,40 @@ class ScreeningProvider extends BaseProvider<Screening> {
   @override
   Screening fromJson(data) {
     return Screening.fromJson(data);
+  }
+
+  Future<List<SeatDto>> getSeatsForScreening(int screeningId) async {
+    try {
+      final url = 'http://10.0.2.2:5190/Screening/$screeningId/seats';
+      final uri = Uri.parse(url);
+      final headers = createHeaders();
+
+      print('🔍 Fetching seats for screening $screeningId from: $url');
+
+      final response = await http.get(uri, headers: headers);
+
+      if (isValidResponse(response)) {
+        final data = jsonDecode(response.body) as List;
+        final seats = data
+            .map((item) {
+              try {
+                return SeatDto.fromJson(item);
+              } catch (e) {
+                print('❌ Error parsing seat: $e');
+                return null;
+              }
+            })
+            .whereType<SeatDto>()
+            .toList();
+
+        print('✅ Loaded ${seats.length} seats for screening $screeningId');
+        return seats;
+      } else {
+        throw Exception('Failed to get seats for screening: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('❌ Error getting seats for screening: $e');
+      throw Exception('Failed to get seats for screening: $e');
+    }
   }
 } 

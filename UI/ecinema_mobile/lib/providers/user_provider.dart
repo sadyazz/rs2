@@ -11,7 +11,7 @@ class UserProvider extends BaseProvider<User> {
   static User? getCurrentUser() {
     if (AuthProvider.userId == null) return null;
     
-    return User(
+    final user = User(
       id: AuthProvider.userId,
       firstName: AuthProvider.firstName ?? '',
       lastName: AuthProvider.lastName ?? '',
@@ -22,6 +22,8 @@ class UserProvider extends BaseProvider<User> {
       role: AuthProvider.role,
       image: AuthProvider.image,
     );
+    
+    return user;
   }
 
   static Future<bool> login(String username, String password) async {
@@ -39,11 +41,17 @@ class UserProvider extends BaseProvider<User> {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        print('🔍 Login response data: $data');
+        
         final user = User.fromJson(data);
+        print('🔍 Parsed user: ${user.toJson()}');
+        print('🔍 User ID: ${user.id}');
         
         AuthProvider.username = username;
         AuthProvider.password = password;
         AuthProvider.setUser(user);
+        
+        print('🔍 AuthProvider.userId after setUser: ${AuthProvider.userId}');
         
         return true;
       }

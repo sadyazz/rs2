@@ -99,6 +99,74 @@
   "@profile": {
     "description": "Profile navigation item"
   },
+  "checkout": "Plaćanje",
+  "@checkout": {
+    "description": "Checkout screen title"
+  },
+  "screeningDetails": "Detalji Projekcije",
+  "@screeningDetails": {
+    "description": "Screening details section title"
+  },
+  "selectedSeats": "Odabrana Sjedala",
+  "@selectedSeats": {
+    "description": "Selected seats section title"
+  },
+  "priceDetails": "Detalji Cijene",
+  "@priceDetails": {
+    "description": "Price details section title"
+  },
+  "pricePerSeat": "Cijena po sjedalu",
+  "@pricePerSeat": {
+    "description": "Price per seat label"
+  },
+  "numberOfSeats": "Broj sjedala",
+  "@numberOfSeats": {
+    "description": "Number of seats label"
+  },
+  "paymentMethod": "Metoda Plaćanja",
+  "@paymentMethod": {
+    "description": "Payment method section title"
+  },
+  "cash": "Gotovina",
+  "@cash": {
+    "description": "Cash payment option"
+  },
+  "stripe": "Stripe",
+  "@stripe": {
+    "description": "Stripe payment option"
+  },
+  "payWithCash": "Plati Gotovinom",
+  "@payWithCash": {
+    "description": "Pay with cash button text"
+  },
+  "payWithStripe": "Plati sa Stripe",
+  "@payWithStripe": {
+    "description": "Pay with Stripe button text"
+  },
+  "reservationSuccessful": "Rezervacija Uspješna!",
+  "@reservationSuccessful": {
+    "description": "Reservation successful title"
+  },
+  "reservationSuccessfulMessage": "Vaša rezervacija je potvrđena. Pokažite ovaj QR kod na ulazu u kino.",
+  "@reservationSuccessfulMessage": {
+    "description": "Reservation successful message"
+  },
+  "reservationDetails": "Detalji Rezervacije",
+  "@reservationDetails": {
+    "description": "Reservation details section title"
+  },
+  "seats": "Sjedala",
+  "@seats": {
+    "description": "Seats label"
+  },
+  "goToHome": "Idi na Početnu",
+  "@goToHome": {
+    "description": "Go to home button text"
+  },
+  "viewMyReservations": "Pogledaj Moje Rezervacije",
+  "@viewMyReservations": {
+    "description": "View my reservations button text"
+  },
   "welcomeBack": "Dobrodošli nazad!",
   "@welcomeBack": {
     "description": "Welcome back message"
@@ -1122,5 +1190,143 @@
   "mobileAccessRestricted": "Samo korisnici sa user ili staff rolom mogu pristupiti mobilnoj aplikaciji.",
   "@mobileAccessRestricted": {
     "description": "Mobile access restriction message"
+  },
+  "reserveTicket": "Rezerviši Kartu",
+  "@reserveTicket": {
+    "description": "Reserve ticket button text"
+  },
+  "screeningDetails": "Detalji Projekcije",
+  "@screeningDetails": {
+    "description": "Screening details section title"
+  },
+  "selectSeat": "Izaberi Sjediste",
+  "@selectSeat": {
+    "description": "Select seat section title"
+  },
+  "confirmReservation": "Potvrdi Rezervaciju",
+  "@confirmReservation": {
+    "description": "Confirm reservation button text"
+  },
+  "noAvailableSeats": "Nema dostupnih sjedista",
+  "@noAvailableSeats": {
+    "description": "No available seats message"
+  },
+  "pleaseSelectScreening": "Molimo izaberite vrijeme projekcije prvo",
+  "@pleaseSelectScreening": {
+    "description": "Please select screening time message"
+  },
+  "currency": "KM",
+  "upcoming": "Predstojeće",
+  "@upcoming": {
+    "description": "Upcoming tab text"
+  },
+  "past": "Prošle",
+  "@past": {
+    "description": "Past tab text"
+  },
+  "noUpcomingReservations": "Nema predstojećih rezervacija",
+  "@noUpcomingReservations": {
+    "description": "No upcoming reservations message"
+  },
+  "noPastReservations": "Nema prošlih rezervacija",
+  "@noPastReservations": {
+    "description": "No past reservations message"
+  },
+  "date": "Datum",
+  "@date": {
+    "description": "Date label"
+  },
+  "time": "Vrijeme",
+  "@time": {
+    "description": "Time label"
+  },
+  "hall": "Sala",
+  "@hall": {
+    "description": "Hall label"
+  },
+  "seats": "Sjedista",
+  "@seats": {
+    "description": "Seats label"
+  },
+  "seat": "Sjediste",
+  "@seat": {
+    "description": "Seat label"
+  },
+  "total": "Ukupno",
+  "@total": {
+    "description": "Total label"
+  },
+  "tickets": "Karte",
+  "@tickets": {
+    "description": "Tickets label"
+  },
+  "totalPrice": "Ukupna Cijena",
+  "@totalPrice": {
+    "description": "Total price label"
+  },
+  "promotion": "Promocija",
+  "@promotion": {
+    "description": "Promotion label"
+  },
+  "payment": "Plaćanje",
+  "@payment": {
+    "description": "Payment label"
+  },
+  "paymentStatus": "Status Plaćanja",
+  "@paymentStatus": {
+    "description": "Payment status label"
+  },
+  "status": "Status",
+  "@status": {
+    "description": "Status label"
+  },
+  "reservationId": "ID Rezervacije",
+  "@reservationId": {
+    "description": "Reservation ID label"
+  },
+  "no": "Ne",
+  "@no": {
+    "description": "No button text"
+  },
+  "yesCancel": "Da, Otkaži",
+  "@yesCancel": {
+    "description": "Yes, Cancel button text"
+  },
+  "notAvailable": "N/A",
+  "@notAvailable": {
+    "description": "Not available text"
+  },
+  "currency": "KM",
+  "@currency": {
+    "description": "Currency symbol"
+  },
+  "reservationId": "ID Rezervacije",
+  "@reservationId": {
+    "description": "Reservation ID label"
+  },
+  "details": "Detalji",
+  "@details": {
+    "description": "Details button text"
+  },
+  "cancelReservation": "Otkaži Rezervaciju",
+  "@cancelReservation": {
+    "description": "Cancel reservation dialog title"
+  },
+  "cancelReservationConfirmation": "Da li ste sigurni da želite otkazati rezervaciju za {movieTitle}?",
+  "@cancelReservationConfirmation": {
+    "description": "Cancel reservation confirmation message",
+    "placeholders": {
+      "movieTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "reservationCancelledSuccessfully": "Rezervacija uspješno otkazana",
+  "@reservationCancelledSuccessfully": {
+    "description": "Reservation cancelled success message"
+  },
+  "errorLoadingReservations": "Greška pri učitavanju rezervacija",
+  "@errorLoadingReservations": {
+    "description": "Error loading reservations message"
   }
 } 

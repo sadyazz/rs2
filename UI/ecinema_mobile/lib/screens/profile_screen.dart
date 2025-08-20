@@ -10,6 +10,7 @@ import '../providers/user_movie_list_provider.dart';
 import 'movie_list_screen.dart';
 import 'edit_profile_screen.dart';
 import 'change_password_screen.dart';
+import 'user_reservations_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -338,7 +339,12 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
           subtitle: l10n.reservationsDescription,
           colorScheme: colorScheme,
           onTap: () {
-            // TODO: Navigate to reservations
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const UserReservationsScreen(),
+              ),
+            ).then((_) => _loadListCounts());
           },
         ),
         const SizedBox(height: 12),

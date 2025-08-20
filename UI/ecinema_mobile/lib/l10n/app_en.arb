@@ -99,6 +99,74 @@
   "@profile": {
     "description": "Profile navigation item"
   },
+  "checkout": "Checkout",
+  "@checkout": {
+    "description": "Checkout screen title"
+  },
+  "screeningDetails": "Screening Details",
+  "@screeningDetails": {
+    "description": "Screening details section title"
+  },
+  "selectedSeats": "Selected Seats",
+  "@selectedSeats": {
+    "description": "Selected seats section title"
+  },
+  "priceDetails": "Price Details",
+  "@priceDetails": {
+    "description": "Price details section title"
+  },
+  "pricePerSeat": "Price per seat",
+  "@pricePerSeat": {
+    "description": "Price per seat label"
+  },
+  "numberOfSeats": "Number of seats",
+  "@numberOfSeats": {
+    "description": "Number of seats label"
+  },
+  "paymentMethod": "Payment Method",
+  "@paymentMethod": {
+    "description": "Payment method section title"
+  },
+  "cash": "Cash",
+  "@cash": {
+    "description": "Cash payment option"
+  },
+  "stripe": "Stripe",
+  "@stripe": {
+    "description": "Stripe payment option"
+  },
+  "payWithCash": "Pay with Cash",
+  "@payWithCash": {
+    "description": "Pay with cash button text"
+  },
+  "payWithStripe": "Pay with Stripe",
+  "@payWithStripe": {
+    "description": "Pay with Stripe button text"
+  },
+  "reservationSuccessful": "Reservation Successful!",
+  "@reservationSuccessful": {
+    "description": "Reservation successful title"
+  },
+  "reservationSuccessfulMessage": "Your reservation has been confirmed. Show this QR code at the cinema entrance.",
+  "@reservationSuccessfulMessage": {
+    "description": "Reservation successful message"
+  },
+  "reservationDetails": "Reservation Details",
+  "@reservationDetails": {
+    "description": "Reservation details section title"
+  },
+  "seats": "Seats",
+  "@seats": {
+    "description": "Seats label"
+  },
+  "goToHome": "Go to Home",
+  "@goToHome": {
+    "description": "Go to home button text"
+  },
+  "viewMyReservations": "View My Reservations",
+  "@viewMyReservations": {
+    "description": "View my reservations button text"
+  },
   "welcomeBack": "Welcome back!",
   "@welcomeBack": {
     "description": "Welcome back message"
@@ -1122,5 +1190,143 @@
   "mobileAccessRestricted": "Only users with user or staff role can access the mobile application.",
   "@mobileAccessRestricted": {
     "description": "Mobile access restriction message"
+  },
+  "reserveTicket": "Reserve Ticket",
+  "@reserveTicket": {
+    "description": "Reserve ticket button text"
+  },
+  "screeningDetails": "Screening Details",
+  "@screeningDetails": {
+    "description": "Screening details section title"
+  },
+  "selectSeat": "Select Seat",
+  "@selectSeat": {
+    "description": "Select seat section title"
+  },
+  "confirmReservation": "Confirm Reservation",
+  "@confirmReservation": {
+    "description": "Confirm reservation button text"
+  },
+  "noAvailableSeats": "No available seats",
+  "@noAvailableSeats": {
+    "description": "No available seats message"
+  },
+  "pleaseSelectScreening": "Please select a screening time first",
+  "@pleaseSelectScreening": {
+    "description": "Please select screening time message"
+  },
+  "currency": "KM",
+  "upcoming": "Upcoming",
+  "@upcoming": {
+    "description": "Upcoming tab text"
+  },
+  "past": "Past",
+  "@past": {
+    "description": "Past tab text"
+  },
+  "noUpcomingReservations": "No upcoming reservations",
+  "@noUpcomingReservations": {
+    "description": "No upcoming reservations message"
+  },
+  "noPastReservations": "No past reservations",
+  "@noPastReservations": {
+    "description": "No past reservations message"
+  },
+  "date": "Date",
+  "@date": {
+    "description": "Date label"
+  },
+  "time": "Time",
+  "@time": {
+    "description": "Time label"
+  },
+  "hall": "Hall",
+  "@hall": {
+    "description": "Hall label"
+  },
+  "seats": "Seats",
+  "@seats": {
+    "description": "Seats label"
+  },
+  "seat": "Seat",
+  "@seat": {
+    "description": "Seat label"
+  },
+  "total": "Total",
+  "@total": {
+    "description": "Total label"
+  },
+  "tickets": "Tickets",
+  "@tickets": {
+    "description": "Tickets label"
+  },
+  "totalPrice": "Total Price",
+  "@totalPrice": {
+    "description": "Total price label"
+  },
+  "promotion": "Promotion",
+  "@promotion": {
+    "description": "Promotion label"
+  },
+  "payment": "Payment",
+  "@payment": {
+    "description": "Payment label"
+  },
+  "paymentStatus": "Payment Status",
+  "@paymentStatus": {
+    "description": "Payment status label"
+  },
+  "status": "Status",
+  "@status": {
+    "description": "Status label"
+  },
+  "reservationId": "Reservation ID",
+  "@reservationId": {
+    "description": "Reservation ID label"
+  },
+  "no": "No",
+  "@no": {
+    "description": "No button text"
+  },
+  "yesCancel": "Yes, Cancel",
+  "@yesCancel": {
+    "description": "Yes, Cancel button text"
+  },
+  "notAvailable": "N/A",
+  "@notAvailable": {
+    "description": "Not available text"
+  },
+  "currency": "KM",
+  "@currency": {
+    "description": "Currency symbol"
+  },
+  "reservationId": "Reservation ID",
+  "@reservationId": {
+    "description": "Reservation ID label"
+  },
+  "details": "Details",
+  "@details": {
+    "description": "Details button text"
+  },
+  "cancelReservation": "Cancel Reservation",
+  "@cancelReservation": {
+    "description": "Cancel reservation dialog title"
+  },
+  "cancelReservationConfirmation": "Are you sure you want to cancel your reservation for {movieTitle}?",
+  "@cancelReservationConfirmation": {
+    "description": "Cancel reservation confirmation message",
+    "placeholders": {
+      "movieTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "reservationCancelledSuccessfully": "Reservation cancelled successfully",
+  "@reservationCancelledSuccessfully": {
+    "description": "Reservation cancelled success message"
+  },
+  "errorLoadingReservations": "Error loading reservations",
+  "@errorLoadingReservations": {
+    "description": "Error loading reservations message"
   }
 } 

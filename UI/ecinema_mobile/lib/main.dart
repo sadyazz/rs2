@@ -13,6 +13,7 @@ import 'providers/screening_provider.dart';
 import 'providers/actor_provider.dart';
 import 'providers/review_provider.dart';
 import 'providers/user_provider.dart';
+import 'providers/reservation_provider.dart';
 import 'layouts/master_screen.dart';
 import 'screens/register_screen.dart';
 
@@ -36,8 +37,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ActorProvider()),
         ChangeNotifierProvider(create: (_) => ReviewProvider()),
         ChangeNotifierProvider(create: (_) => NewsProvider()),
-        ChangeNotifierProvider(create: (_) => PromotionProvider()),
-        ChangeNotifierProvider(create: (_) => UserMovieListProvider()),
+                  ChangeNotifierProvider(create: (_) => PromotionProvider()),
+          ChangeNotifierProvider(create: (_) => UserMovieListProvider()),
+          ChangeNotifierProvider(create: (_) => ReservationProvider()),
       ],
       child: Consumer2<LanguageProvider, ThemeProvider>(
         builder: (context, languageProvider, themeProvider, child) {
@@ -369,12 +371,18 @@ class _LoginPageState extends State<LoginPage> {
       final password = _passwordController.text;
       
       final success = await UserProvider.login(username, password);
+      print('🔍 Login success: $success');
       
       if (success) {
         final user = UserProvider.getCurrentUser();
+        print('🔍 Current user after login: ${user?.toJson()}');
+        print('🔍 User role: ${user?.role?.name}');
+        
         if (user?.role?.name?.toLowerCase() == 'user' || user?.role?.name?.toLowerCase() == 'staff') {
+          print('🔍 User has valid role, navigating to home');
           Navigator.of(context).pushReplacementNamed('/home');
         } else {
+          print('🔍 User has invalid role: ${user?.role?.name}');
           setState(() {
             _errorMessage = l10n.mobileAccessRestricted;
           });
