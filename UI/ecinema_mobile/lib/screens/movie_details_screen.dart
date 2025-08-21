@@ -10,6 +10,7 @@ import '../providers/user_movie_list_provider.dart';
 import '../providers/utils.dart';
 import '../models/review.dart';
 import 'reviews_screen.dart';
+import 'reservation_screen.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
   final Movie movie;
@@ -533,9 +534,29 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
           children: [
             Expanded(
               child: ElevatedButton.icon(
-                onPressed: () {
-                  // TODO: Implement ticket reservation
-                },
+                              onPressed: () {
+                if (selectedTime.isNotEmpty && selectedDate.isNotEmpty) {
+                  final screening = _getScreeningForTime(selectedTime);
+                  if (screening != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ReservationScreen(
+                          movie: widget.movie,
+                          screening: screening,
+                        ),
+                      ),
+                    );
+                  }
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Please select a screening time first"),//todo prevod
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
                 icon: const Icon(Icons.movie_filter_rounded, color: Colors.white, size: 24),
                 label: Text(
                   l10n.reserveTicket,

@@ -1,9 +1,10 @@
 using eCinema.Model.Requests;
-using eCinema.Model.Responses;
 using eCinema.Model.SearchObjects;
+using eCinema.Model.Responses;
 using eCinema.Services;
-using Microsoft.AspNetCore.Authorization;
+using eCinema.Services.Database.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eCinema.API.Controllers
 {
@@ -12,28 +13,39 @@ namespace eCinema.API.Controllers
     [Route("[controller]")]
     public class ReservationController : BaseCRUDController<ReservationResponse, ReservationSearchObject, ReservationUpsertRequest, ReservationUpsertRequest>
     {
-        private readonly IReservationService _service;
+        private readonly IReservationService _reservationService;
+
         public ReservationController(IReservationService service) : base(service)
         {
-            _service = service;
+            _reservationService = service;
         }
 
-        [HttpPost("approve/{id}")]
-        public virtual async Task<ReservationResponse?> ApproveAsync(int id)
+        [HttpGet("available-seats/{screeningId}")]
+        public async Task<ActionResult<List<Seat>>> GetAvailableSeats(int screeningId)
         {
-            return await _service.ApproveAsync(id);
-        }       
-
-        [HttpPost("reject/{id}")]
-        public virtual async Task<ReservationResponse?> RejectAsync(int id)
-        {
-            return await _service.RejectAsync(id);
+            try
+            {
+                var availableSeats = await _reservationService.GetAvailableSeatsForScreening(screeningId);
+                return Ok(availableSeats);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error getting available seats: {ex.Message}");
+            }
         }
 
-        [HttpPost("expire/{id}")]
-        public virtual async Task<ReservationResponse?> ExpireAsync(int id)
+        [HttpGet("user/{userId}")]
+        public ActionResult<List<ReservationResponse>> GetUserReservations(int userId, [FromQuery] bool? isFuture)
         {
-            return await _service.ExpireAsync(id);
+            try
+            {
+                var reservations = _reservationService.GetReservationsByUserId(userId, isFuture);
+                return Ok(reservations);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error getting user reservations: {ex.Message}");
+            }
         }
     }
 } 

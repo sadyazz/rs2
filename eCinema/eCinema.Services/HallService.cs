@@ -94,7 +94,7 @@ namespace eCinema.Services
         }
 
         public async Task GenerateSeatsForHall(int hallId, int capacity)
-        {
+        {   
             var hall = await _context.Halls.FindAsync(hallId);
             if (hall == null)
             {
@@ -105,27 +105,26 @@ namespace eCinema.Services
             _context.Seats.RemoveRange(existingSeats);
 
             var newSeats = new List<Seat>();
-            int seatNumber = 1;
-            int rowNumber = 1;
-            int seatsPerRow = 10;
+            var rows = new[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O" };
+            var seatsPerRow = 12;
 
-            for (int i = 0; i < capacity; i++)
+            
+            for (int rowIndex = 0; rowIndex < rows.Length && newSeats.Count < capacity; rowIndex++)
             {
-                if (seatNumber > seatsPerRow)
+                var currentRow = rows[rowIndex];
+                
+                for (int seatNumber = 1; seatNumber <= seatsPerRow && newSeats.Count < capacity; seatNumber++)
                 {
-                    seatNumber = 1;
-                    rowNumber++;
+                    var seatName = $"{currentRow}{seatNumber}";
+                    
+                    var seat = new Seat
+                    {
+                        HallId = hallId,
+                        Name = seatName
+                    };
+
+                    newSeats.Add(seat);
                 }
-
-                var seat = new Seat
-                {
-                    HallId = hallId,
-                    Row = rowNumber.ToString(),
-                    Number = seatNumber
-                };
-
-                newSeats.Add(seat);
-                seatNumber++;
             }
 
             _context.Seats.AddRange(newSeats);

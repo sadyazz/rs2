@@ -1,13 +1,14 @@
-using eCinema.Model;
 using eCinema.Model.Requests;
-using eCinema.Model.Responses;
 using eCinema.Model.SearchObjects;
+using eCinema.Model.Responses;
+using eCinema.Services.Database.Entities;
 
-namespace eCinema.Services;
-
-public interface IReservationService : ICRUDService<ReservationResponse, ReservationSearchObject, ReservationUpsertRequest, ReservationUpsertRequest>
+namespace eCinema.Services
 {
-    Task<ReservationResponse?> ApproveAsync(int id);
-    Task<ReservationResponse?> RejectAsync(int id);
-    Task<ReservationResponse?> ExpireAsync(int id);
+    public interface IReservationService : ICRUDService<ReservationResponse, ReservationSearchObject, ReservationUpsertRequest, ReservationUpsertRequest>
+    {
+        Task<List<Seat>> GetAvailableSeatsForScreening(int screeningId);
+        List<ReservationResponse> GetReservationsByUserId(int userId, bool? isFuture = null);
+        Task<string> GenerateQRCode(int reservationId);
+    }
 } 

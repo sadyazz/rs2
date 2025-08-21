@@ -563,6 +563,10 @@
   "@movies": {
     "description": "Movies text"
   },
+  "movieUppercase":"Film",
+  "@movieUppercase":{
+    "description":"movie uppercase"
+  },
   "settings": "Postavke",
   "@settings": {
     "description": "Settings section title"
@@ -1216,7 +1220,7 @@
     "description": "Please select screening time message"
   },
   "currency": "KM",
-  "upcoming": "Predstojeće",
+  "upcoming": "Nadolazeće",
   "@upcoming": {
     "description": "Upcoming tab text"
   },
@@ -1328,5 +1332,93 @@
   "errorLoadingReservations": "Greška pri učitavanju rezervacija",
   "@errorLoadingReservations": {
     "description": "Error loading reservations message"
+  },
+  "errorLoadingScreening": "Greška pri učitavanju projekcije",
+  "@errorLoadingScreening": {
+    "description": "Greška pri učitavanju projekcije poruka"
+  },
+  "errorLoadingSeats": "Greška pri učitavanju sjedista",
+  "@errorLoadingSeats": {
+    "description": "Greška pri učitavanju sjedista poruka"
+  },
+  "seatsGeneratedSuccessfully": "Sjedista uspješno generisana!",
+  "@seatsGeneratedSuccessfully": {
+    "description": "Sjedista uspješno generisana poruka"
+  },
+  "errorGeneratingSeats": "Greška pri generisanju sjedista",
+  "@errorGeneratingSeats": {
+    "description": "Greška pri generisanju sjedista poruka"
+  },
+  "pleaseSelectAtLeastOneSeat": "Molimo odaberite barem jedno sjediste",
+  "@pleaseSelectAtLeastOneSeat": {
+    "description": "Molimo odaberite barem jedno sjediste poruka"
+  },
+  "priceSummary": "Pregled cijene",
+  "@priceSummary": {
+    "description": "Pregled cijene naslov sekcije"
+  },
+  "pricePerSeat": "Cijena po sjedistu:",
+  "@pricePerSeat": {
+    "description": "Cijena po sjedistu oznaka"
+  },
+  "numberOfSeats": "Broj sjedista:",
+  "@numberOfSeats": {
+    "description": "Broj sjedista oznaka"
+  },
+  "total": "Ukupno:",
+  "@total": {
+    "description": "Ukupno oznaka"
+  },
+  "available": "Dostupno",
+  "@available": {
+    "description": "Dostupna sjedista oznaka"
+  },
+  "selected": "Odabrano",
+  "@selected": {
+    "description": "Odabrana sjedista oznaka"
+  },
+  "reserved": "Rezervisano",
+  "@reserved": {
+    "description": "Rezervisana sjedista oznaka"
+  },
+  "reserveTicket": "Rezerviši kartu",
+  "@reserved": {
+    "description": "Rezerviši kartu dugme tekst"
+  },
+  "screeningDetails": "Detalji projekcije",
+  "@screeningDetails": {
+    "description": "Detalji projekcije naslov sekcije"
+  },
+  "selectSeat": "Odaberi sjediste",
+  "@selectSeat": {
+    "description": "Odaberi sjediste naslov sekcije"
+  },
+  "confirmReservation": "Potvrdi rezervaciju",
+  "@confirmReservation": {
+    "description": "Potvrdi rezervaciju dugme tekst"
+  },
+  "noAvailableSeats": "Nema dostupnih sjedista",
+  "@noAvailableSeats": {
+    "description": "Nema dostupnih sjedista poruka"
+  },
+  "unknownTitle": "Nepoznat naslov",
+  "@unknownTitle": {
+    "description": "Nepoznat naslov placeholder"
+  },
+  "minutes": "min",
+  "@minutes": {
+    "description": "Minute skraćenica"
+  },
+  "generateSeatsForHall": "Generiši sjedista za salu",
+  "@generateSeatsForHall": {
+    "description": "Generiši sjedista za salu dugme tekst"
+  },
+  "seat": "sjediste",
+  "@seat": {
+    "description": "Sjediste jednina"
+  },
+  "seats": "sjedista",
+  "@seats": {
+    "description": "Sjedista množina"
   }
 } 

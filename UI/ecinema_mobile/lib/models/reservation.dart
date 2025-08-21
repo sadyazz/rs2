@@ -84,6 +84,8 @@ class Reservation {
   @ByteArrayConverter()
   final String? movieImage;
   final String hallName;
+  @JsonKey(name: 'qrcodeBase64')
+  final String? qrcodeBase64;
 
   Reservation({
     required this.id,
@@ -107,6 +109,7 @@ class Reservation {
     required this.reservationState,
     this.movieImage,
     required this.hallName,
+    this.qrcodeBase64,
   });
 
   factory Reservation.fromJson(Map<String, dynamic> json) => _$ReservationFromJson(json);

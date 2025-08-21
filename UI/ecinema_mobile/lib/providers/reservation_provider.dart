@@ -87,10 +87,11 @@ class ReservationProvider extends BaseProvider<dynamic> {
     }
   }
 
-  Future<void> createReservation({
+  Future<Reservation> createReservation({
     required int screeningId,
-    required int seatId,
+    required List<int> seatIds,
     required double totalPrice,
+    required String paymentType,
   }) async {
     try {
       final userId = AuthProvider.userId;
@@ -111,11 +112,11 @@ class ReservationProvider extends BaseProvider<dynamic> {
         'screeningId': screeningId,
         'paymentId': null,
         'promotionId': null,
-        'numberOfTickets': 1,
-        'paymentType': null,
+        'numberOfTickets': seatIds.length,
+        'paymentType': paymentType,
         'state': 'InitialReservationState',
         'isDeleted': false,
-        'seatIds': [seatId],
+        'seatIds': seatIds,
       };
 
       final response = await http.post(
@@ -127,6 +128,10 @@ class ReservationProvider extends BaseProvider<dynamic> {
       if (!isValidResponse(response)) {
         throw Exception('Failed to create reservation: ${response.statusCode}');
       }
+
+      // Parsiranje kreirane rezervacije iz response body
+      final responseData = jsonDecode(response.body);
+      return Reservation.fromJson(responseData);
     } catch (e) {
       rethrow;
     }
@@ -162,5 +167,23 @@ class ReservationProvider extends BaseProvider<dynamic> {
     }
   }
 
+  Future<String> getQRCode(int reservationId) async {
+    try {
+      final baseUrl = const String.fromEnvironment("baseUrl", defaultValue: "http://10.0.2.2:5190");
+      final url = '$baseUrl/reservation/$reservationId/qrcode';
+      
+      final response = await http.get(
+        Uri.parse(url),
+        headers: createHeaders(),
+      );
 
+      if (!isValidResponse(response)) {
+        throw Exception('Failed to load QR code');
+      }
+
+      return response.body;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

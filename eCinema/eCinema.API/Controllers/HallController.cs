@@ -42,12 +42,16 @@ namespace eCinema.API.Controllers
         }
 
         [HttpPost("{id}/generate-seats")]
-        [Authorize(Roles = "admin")]
-        public async Task<IActionResult> GenerateSeats(int id, [FromBody] GenerateSeatsRequest request)
+        public async Task<IActionResult> GenerateSeats(int id)
         {
             try
             {
-                await _hallService.GenerateSeatsForHall(id, request.Capacity);
+                var hall = await _hallService.GetByIdAsync(id);
+                if (hall == null)
+                {
+                    return NotFound("Hall not found");
+                }
+                await _hallService.GenerateSeatsForHall(id, hall.Capacity);
                 return Ok("Seats generated successfully");
             }
             catch (Exception ex)

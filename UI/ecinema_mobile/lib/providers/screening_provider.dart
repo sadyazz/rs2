@@ -46,4 +46,25 @@ class ScreeningProvider extends BaseProvider<Screening> {
       throw Exception('Failed to get seats for screening: $e');
     }
   }
+
+  Future<void> generateSeatsForHall(int hallId) async {
+    try {
+      final url = 'http://10.0.2.2:5190/Hall/$hallId/generate-seats';
+      final uri = Uri.parse(url);
+      final headers = createHeaders();
+
+      print('🔍 Generating seats for hall $hallId from: $url');
+
+      final response = await http.post(uri, headers: headers);
+
+      if (!isValidResponse(response)) {
+        throw Exception('Failed to generate seats for hall: ${response.statusCode}');
+      }
+
+      print('✅ Seats generated successfully for hall $hallId');
+    } catch (e) {
+      print('❌ Error generating seats for hall: $e');
+      throw Exception('Failed to generate seats for hall: $e');
+    }
+  }
 } 

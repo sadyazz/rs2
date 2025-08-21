@@ -1,10 +1,10 @@
- namespace eCinema.Model.Responses
+namespace eCinema.Model.Responses
 {
     public class SeatResponse
     {
         public int Id { get; set; }
         public int HallId { get; set; }
-        public int RowNumber { get; set; }
-        public int SeatNumber { get; set; }
+        public string? Name { get; set; }
+        public bool? IsReserved { get; set; }
     }
 }
