@@ -1,43 +1,35 @@
-using eCinema.Model;
-using eCinema.Model.Requests;
 using eCinema.Model.Responses;
+using eCinema.Model.Requests;
 using eCinema.Model.SearchObjects;
 using eCinema.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace eCinema.API.Controllers
 {
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class SeatController : BaseCRUDController<SeatResponse, SeatSearchObject, SeatInsertRequest, SeatUpdateRequest>
+    public class SeatController : BaseCRUDController<SeatResponse, BaseSearchObject, SeatUpsertRequest, SeatUpsertRequest>
     {
+        private readonly ISeatService _seatService;
+
         public SeatController(ISeatService service) : base(service)
         {
+            _seatService = service;
         }
 
-        [HttpPost]
-        [Authorize(Roles = "admin")]
-        public override async Task<SeatResponse> Create([FromBody] SeatInsertRequest request)
+        [HttpGet("screening/{screeningId}")]
+        public async Task<List<SeatResponse>> GetSeatsForScreening(int screeningId)
         {
-            return await base.Create(request);
+            return await _seatService.GetSeatsForScreening(screeningId);
         }
 
-        [HttpPut("{id}")]
-        [Authorize(Roles = "admin")]
-        public override async Task<SeatResponse> Update(int id, [FromBody] SeatUpdateRequest request)
+        [HttpPost("hall/{hallId}/generate")]
+        public async Task<IActionResult> GenerateSeats(int hallId, [FromQuery] int capacity)
         {
-            return await base.Update(id, request);
-        }
-
-        [HttpDelete("{id}")]
-        [Authorize(Roles = "admin")]
-        public override async Task<bool> Delete(int id)
-        {
-            return await base.Delete(id);
+            await _seatService.GenerateSeatsForHall(hallId, capacity);
+            return Ok();
         }
     }
-} 
+}

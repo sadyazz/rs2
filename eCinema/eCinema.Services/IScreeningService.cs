@@ -7,4 +7,5 @@ namespace eCinema.Services;
 
 public interface IScreeningService : ICRUDService<ScreeningResponse, ScreeningSearchObject, ScreeningUpsertRequest, ScreeningUpsertRequest>
 {
+    Task<List<SeatResponse>> GetSeatsForScreeningAsync(int screeningId);
 } 

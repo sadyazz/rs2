@@ -9,16 +9,14 @@ namespace eCinema.Services.Database.Entities
         public int Id { get; set; }
         
         [Required]
-        public string Row { get; set; } = string.Empty;
-        
-        [Required]
-        public int Number { get; set; }
+        [MaxLength(50)]
+        public string Name { get; set; } = string.Empty;
         
         public int HallId { get; set; }
         
         [ForeignKey(nameof(HallId))]
         public virtual Hall Hall { get; set; } = null!;
         
-        public virtual ICollection<Reservation> Reservations { get; set; } = new HashSet<Reservation>();
+        public virtual ICollection<ReservationSeat> ReservationSeats { get; set; } = new List<ReservationSeat>();
     }
 } 

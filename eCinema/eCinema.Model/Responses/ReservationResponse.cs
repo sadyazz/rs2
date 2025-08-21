@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace eCinema.Model.Responses
 {
@@ -16,12 +17,15 @@ namespace eCinema.Model.Responses
         public int ScreeningId { get; set; }
         public string MovieTitle { get; set; } = string.Empty;
         public DateTime ScreeningStartTime { get; set; }
-        public int SeatId { get; set; }
-        public string SeatInfo { get; set; } = string.Empty;
+        public List<int> SeatIds { get; set; } = new List<int>();
+        public int NumberOfTickets { get; set; }
         public int? PromotionId { get; set; }
         public string? PromotionName { get; set; }
         public int? PaymentId { get; set; }
         public string? PaymentStatus { get; set; }
         public string ReservationState { get; set; } = string.Empty;
+        public byte[]? MovieImage { get; set; }
+        public string HallName { get; set; } = string.Empty;
+        public string? QrcodeBase64 { get; set; }
     }
 } 

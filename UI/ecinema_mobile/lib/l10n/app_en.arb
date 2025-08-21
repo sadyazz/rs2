@@ -563,6 +563,10 @@
   "@movies": {
     "description": "Movies text"
   },
+    "movieUppercase":"Movie",
+  "@movieUppercase":{
+    "description":"movie uppercase"
+  },
   "settings": "Settings",
   "@settings": {
     "description": "Settings section title"
@@ -1328,5 +1332,169 @@
   "errorLoadingReservations": "Error loading reservations",
   "@errorLoadingReservations": {
     "description": "Error loading reservations message"
+  },
+  "errorLoadingQRCode": "Error loading QR code",
+  "@errorLoadingQRCode": {
+    "description": "Error loading QR code message"
+  },
+  "noQRCodeAvailable": "No QR code available",
+  "@noQRCodeAvailable": {
+    "description": "No QR code available message"
+  },
+  "errorDecodingQRCode": "Error decoding QR code",
+  "@errorDecodingQRCode": {
+    "description": "Error decoding QR code message"
+  },
+  "seatsGeneratedSuccessfully": "Seats generated successfully!",
+  "@seatsGeneratedSuccessfully": {
+    "description": "Seats generated successfully message"
+  },
+  "errorGeneratingSeats": "Error generating seats",
+  "@errorGeneratingSeats": {
+    "description": "Error generating seats message"
+  },
+  "pleaseSelectAtLeastOneSeat": "Please select at least one seat",
+  "@pleaseSelectAtLeastOneSeat": {
+    "description": "Please select at least one seat message"
+  },
+  "priceSummary": "Price Summary",
+  "@priceSummary": {
+    "description": "Price summary section title"
+  },
+  "pricePerSeat": "Price per seat:",
+  "@pricePerSeat": {
+    "description": "Price per seat label"
+  },
+  "numberOfSeats": "Number of seats:",
+  "@numberOfSeats": {
+    "description": "Number of seats label"
+  },
+  "total": "Total:",
+  "@total": {
+    "description": "Total label"
+  },
+  "available": "Available",
+  "@available": {
+    "description": "Available seats label"
+  },
+  "selected": "Selected",
+  "@selected": {
+    "description": "Selected seats label"
+  },
+  "reserved": "Reserved",
+  "@reserved": {
+    "description": "Reserved seats label"
+  },
+  "errorCreatingReservation": "Error creating reservation",
+  "@errorCreatingReservation": {
+    "description": "Error creating reservation message"
+  },
+  "stripeIntegrationComingSoon": "Stripe integration coming soon!",
+  "@stripeIntegrationComingSoon": {
+    "description": "Stripe integration coming soon message"
+  },
+  "reserveTicket": "Reserve Ticket",
+  "@reserveTicket": {
+    "description": "Reserve ticket button text"
+  },
+  "screeningDetails": "Screening Details",
+  "@screeningDetails": {
+    "description": "Screening details section title"
+  },
+  "selectSeat": "Select Seat",
+  "@selectSeat": {
+    "description": "Select seat section title"
+  },
+  "confirmReservation": "Confirm Reservation",
+  "@confirmReservation": {
+    "description": "Confirm reservation button text"
+  },
+  "generateSeatsForHall": "Generate Seats for Hall",
+  "@generateSeatsForHall": {
+    "description": "Generate seats for hall button text"
+  },
+  "errorLoadingScreening": "Error loading screening",
+  "@errorLoadingScreening": {
+    "description": "Error loading screening message"
+  },
+  "errorLoadingSeats": "Error loading seats",
+  "@errorLoadingSeats": {
+    "description": "Error loading seats message"
+  },
+  "seatsGeneratedSuccessfully": "Seats generated successfully!",
+  "@seatsGeneratedSuccessfully": {
+    "description": "Seats generated successfully message"
+  },
+  "errorGeneratingSeats": "Error generating seats",
+  "@errorGeneratingSeats": {
+    "description": "Error generating seats message"
+  },
+  "pleaseSelectAtLeastOneSeat": "Please select at least one seat",
+  "@pleaseSelectAtLeastOneSeat": {
+    "description": "Please select at least one seat message"
+  },
+  "priceSummary": "Price Summary",
+  "@priceSummary": {
+    "description": "Price summary section title"
+  },
+  "pricePerSeat": "Price per seat:",
+  "@pricePerSeat": {
+    "description": "Price per seat label"
+  },
+  "numberOfSeats": "Number of seats:",
+  "@numberOfSeats": {
+    "description": "Number of seats label"
+  },
+  "total": "Total:",
+  "@total": {
+    "description": "Total label"
+  },
+  "available": "Available",
+  "@available": {
+    "description": "Available seats label"
+  },
+  "selected": "Selected",
+  "@selected": {
+    "description": "Selected seats label"
+  },
+  "reserved": "Reserved",
+  "@reserved": {
+    "description": "Reserved seats label"
+  },
+  "reserveTicket": "Reserve Ticket",
+  "@reserveTicket": {
+    "description": "Reserve ticket button text"
+  },
+  "screeningDetails": "Screening Details",
+  "@screeningDetails": {
+    "description": "Screening details section title"
+  },
+  "selectSeat": "Select Seat",
+  "@selectSeat": {
+    "description": "Select seat section title"
+  },
+  "confirmReservation": "Confirm Reservation",
+  "@confirmReservation": {
+    "description": "Confirm reservation button text"
+  },
+  "noAvailableSeats": "No available seats",
+  "@noAvailableSeats": {
+    "description": "No available seats message"
+  },
+  "unknownTitle": "Unknown Title",
+  "@unknownTitle": {
+    "description": "Unknown title placeholder"
+  },
+  "minutes": "min",
+  "@minutes": {
+    "description": "Minutes abbreviation"
+  },
+  "seat": "seat",
+  "@seat": {
+    "description": "Seat singular form"
+  },
+  "seats": "seats",
+  "@seats": {
+    "description": "Seats plural form"
   }
 } 

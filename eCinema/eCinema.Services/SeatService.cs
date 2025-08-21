@@ -1,148 +1,115 @@
-using eCinema.Model;
-using eCinema.Model.Requests;
 using eCinema.Model.Responses;
+using eCinema.Model.Requests;
 using eCinema.Model.SearchObjects;
 using eCinema.Services.Database;
-using eCinema.Services;
 using eCinema.Services.Database.Entities;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MapsterMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace eCinema.Services
 {
-    public class SeatService : BaseCRUDService<SeatResponse, SeatSearchObject, Database.Entities.Seat, SeatInsertRequest, SeatUpdateRequest>, ISeatService
+    public class SeatService : BaseCRUDService<SeatResponse, BaseSearchObject, Seat, SeatUpsertRequest, SeatUpsertRequest>, ISeatService
     {
+        private readonly eCinemaDBContext _context;
+        
         public SeatService(eCinemaDBContext context, IMapper mapper) : base(context, mapper)
         {
+            _context = context;
         }
 
-        protected override SeatResponse MapToResponse(Database.Entities.Seat entity)
+        public async Task<List<SeatResponse>> GetSeatsForScreening(int screeningId)
         {
-            int rowNumber = 0;
-            if (!string.IsNullOrEmpty(entity.Row))
+            var screening = await _context.Screenings
+                .Include(x => x.Hall)
+                .FirstOrDefaultAsync(x => x.Id == screeningId && !x.IsDeleted);
+
+            if (screening == null)
             {
-                if (int.TryParse(entity.Row, out var parsedRow))
+                throw new InvalidOperationException($"Screening with ID {screeningId} not found.");
+            }
+            
+            var allSeats = await _context.Seats
+                .Where(s => s.HallId == screening.HallId)
+                .ToListAsync();
+            
+            if (allSeats.Count == 0 || allSeats.Count < screening.Hall.Capacity)
+            {
+                await GenerateSeatsForHall(screening.HallId, screening.Hall.Capacity);
+                
+                allSeats = await _context.Seats
+                    .Where(s => s.HallId == screening.HallId)
+                    .ToListAsync();
+            }
+
+            var reservedSeats = await _context.ScreeningSeats
+                .Where(ss => ss.ScreeningId == screeningId && ss.IsReserved == true)
+                .Select(ss => ss.SeatId)
+                .ToListAsync();
+
+            return allSeats.Select(seat => new SeatResponse
+            {
+                Id = seat.Id,
+                HallId = seat.HallId,
+                Name = seat.Name,
+                IsReserved = reservedSeats.Contains(seat.Id)
+            }).ToList();
+        }
+
+        public async Task GenerateSeatsForHall(int hallId, int capacity)
+        {
+            
+            var hall = await _context.Halls.FindAsync(hallId);
+            if (hall == null)
+            {
+                throw new InvalidOperationException("Hall not found.");
+            }
+
+            var existingSeats = await _context.Seats
+                .Include(s => s.ReservationSeats)
+                .Where(s => s.HallId == hallId)
+                .ToListAsync();
+
+            foreach (var seat in existingSeats)
+            {
+                var reservationSeats = await _context.ReservationSeats
+                    .Where(rs => rs.SeatId == seat.Id)
+                    .ToListAsync();
+                _context.ReservationSeats.RemoveRange(reservationSeats);
+
+                var screeningSeats = await _context.ScreeningSeats
+                    .Where(ss => ss.SeatId == seat.Id)
+                    .ToListAsync();
+                _context.ScreeningSeats.RemoveRange(screeningSeats);
+            }
+            await _context.SaveChangesAsync();
+
+            _context.Seats.RemoveRange(existingSeats);
+            await _context.SaveChangesAsync();
+
+            var newSeats = new List<Seat>();
+            var rows = new[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O" };
+            var seatsPerRow = 12;
+
+            for (int rowIndex = 0; rowIndex < rows.Length && newSeats.Count < capacity; rowIndex++)
+            {
+                var currentRow = rows[rowIndex];
+                
+                for (int seatNumber = 1; seatNumber <= seatsPerRow && newSeats.Count < capacity; seatNumber++)
                 {
-                    rowNumber = parsedRow;
+                    var seatName = $"{currentRow}{seatNumber}";
+                    
+                    var seat = new Seat
+                    {
+                        HallId = hallId,
+                        Name = seatName
+                    };
+
+                    newSeats.Add(seat);
                 }
             }
-            
-            var response = new SeatResponse
-            {
-                Id = entity.Id,
-                HallId = entity.HallId,
-                RowNumber = rowNumber,
-                SeatNumber = entity.Number
-            };
-            
-            return response;
-        }
 
-        protected override IQueryable<Database.Entities.Seat> ApplyFilter(IQueryable<Database.Entities.Seat> query, SeatSearchObject search)
-        {
-            query = base.ApplyFilter(query, search);
-            
-            if (search.HallId.HasValue)
-            {
-                query = query.Where(s => s.HallId == search.HallId.Value);
-            }
-
-            if (search.RowNumber.HasValue)
-            {
-                query = query.Where(s => s.Row == search.RowNumber.Value.ToString());
-            }
-
-            if (search.SeatNumber.HasValue)
-            {
-                query = query.Where(s => s.Number == search.SeatNumber.Value);
-            }
-
-            return query;
-        }
-
-        protected override Database.Entities.Seat MapInsertToEntity(Database.Entities.Seat entity, SeatInsertRequest request)
-        {
-            entity.HallId = request.HallId;
-            entity.Row = request.RowNumber.ToString();
-            entity.Number = request.SeatNumber;
-            return entity;
-        }
-
-        protected override void MapUpdateToEntity(Database.Entities.Seat entity, SeatUpdateRequest request)
-        {
-            entity.HallId = request.HallId;
-            entity.Row = request.RowNumber.ToString();
-            entity.Number = request.SeatNumber;
-        }
-
-        protected override async Task BeforeInsert(Database.Entities.Seat entity, SeatInsertRequest request)
-        {
-            await base.BeforeInsert(entity, request);
-            
-            var currentSeatCount = await _context.Set<Database.Entities.Seat>()
-                .Where(s => s.HallId == request.HallId)
-                .CountAsync();
-                
-            var hall = await _context.Set<Database.Entities.Hall>()
-                .Where(h => h.Id == request.HallId && !h.IsDeleted)
-                .FirstOrDefaultAsync();
-                
-            if (hall != null && currentSeatCount >= hall.Capacity)
-            {
-                throw new Exception($"Cannot add more seats. Hall capacity is {hall.Capacity} and current seat count is {currentSeatCount}.");
-            }
-        }
-
-        public override async Task<SeatResponse> CreateAsync(SeatInsertRequest request)
-        {
-            var entity = new Database.Entities.Seat();
-            MapInsertToEntity(entity, request);
-            _context.Set<Database.Entities.Seat>().Add(entity);
-
-            await BeforeInsert(entity, request);
-
+            _context.Seats.AddRange(newSeats);
             await _context.SaveChangesAsync();
-            return MapToResponse(entity);
-        }
-
-        protected override async Task BeforeUpdate(Database.Entities.Seat entity, SeatUpdateRequest request)
-        {
-            await base.BeforeUpdate(entity, request);
-            
-            if (request.HallId != entity.HallId)
-            {
-                var currentSeatCount = await _context.Set<Database.Entities.Seat>()
-                    .Where(s => s.HallId == request.HallId)
-                    .CountAsync();
-                    
-                var hall = await _context.Set<Database.Entities.Hall>()
-                    .Where(h => h.Id == request.HallId && !h.IsDeleted)
-                    .FirstOrDefaultAsync();
-                    
-                if (hall != null && currentSeatCount >= hall.Capacity)
-                {
-                    throw new Exception($"Cannot move seat to this hall. Hall capacity is {hall.Capacity} and current seat count is {currentSeatCount}.");
-                }
-            }
-        }
-
-        public override async Task<SeatResponse> UpdateAsync(int id, SeatUpdateRequest request)
-        {
-            var entity = await _context.Set<Database.Entities.Seat>().FindAsync(id);
-            if (entity == null)
-            {
-                throw new Exception("Entity not found");
-            }
-
-            await BeforeUpdate(entity, request);
-            MapUpdateToEntity(entity, request);
-
-            await _context.SaveChangesAsync();
-            return MapToResponse(entity);
         }
     }
-} 
+}

@@ -12,9 +12,12 @@ namespace eCinema.Services
     public class ScreeningService : BaseCRUDService<ScreeningResponse, ScreeningSearchObject, Screening, ScreeningUpsertRequest, ScreeningUpsertRequest>, IScreeningService
     {
         private readonly eCinemaDBContext _context;
-        public ScreeningService(eCinemaDBContext context, IMapper mapper) : base(context, mapper)
+        private readonly ISeatService _seatService;
+        
+        public ScreeningService(eCinemaDBContext context, IMapper mapper, ISeatService seatService) : base(context, mapper)
         {
             _context = context;
+            _seatService = seatService;
         }
 
         protected override IQueryable<Screening> ApplyFilter(IQueryable<Screening> query, ScreeningSearchObject search)
@@ -232,6 +235,18 @@ namespace eCinema.Services
             }
 
             return MapToResponse(entity);
+        }
+
+        public async Task<List<SeatResponse>> GetSeatsForScreeningAsync(int screeningId)
+        {
+            try
+            {
+                return await _seatService.GetSeatsForScreening(screeningId);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error getting seats for screening {screeningId}: {ex.Message}");
+            }
         }
     }
 } 

@@ -21,6 +21,8 @@ namespace eCinema.Services.Database
         public DbSet<Screening> Screenings { get; set; } = null!;
         public DbSet<ScreeningFormat> ScreeningFormats { get; set; } = null!;
         public DbSet<Reservation> Reservations { get; set; } = null!;
+        public DbSet<ReservationSeat> ReservationSeats { get; set; } = null!;
+        public DbSet<ScreeningSeat> ScreeningSeats { get; set; } = null!;
         public DbSet<Payment> Payments { get; set; } = null!;
         public DbSet<Review> Reviews { get; set; } = null!;
         public DbSet<Promotion> Promotions { get; set; } = null!;
@@ -82,10 +84,34 @@ namespace eCinema.Services.Database
                 .HasForeignKey(r => r.ScreeningId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Reservation>()
-                .HasOne(r => r.Seat)
-                .WithMany(s => s.Reservations)
-                .HasForeignKey(r => r.SeatId)
+            modelBuilder.Entity<ReservationSeat>()
+                .HasKey(rs => new { rs.ReservationId, rs.SeatId });
+
+            modelBuilder.Entity<ReservationSeat>()
+                .HasOne(rs => rs.Reservation)
+                .WithMany(r => r.ReservationSeats)
+                .HasForeignKey(rs => rs.ReservationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ReservationSeat>()
+                .HasOne(rs => rs.Seat)
+                .WithMany(s => s.ReservationSeats)
+                .HasForeignKey(rs => rs.SeatId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ScreeningSeat>()
+                .HasKey(ss => new { ss.ScreeningId, ss.SeatId });
+
+            modelBuilder.Entity<ScreeningSeat>()
+                .HasOne(ss => ss.Screening)
+                .WithMany()
+                .HasForeignKey(ss => ss.ScreeningId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ScreeningSeat>()
+                .HasOne(ss => ss.Seat)
+                .WithMany()
+                .HasForeignKey(ss => ss.SeatId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Reservation>()

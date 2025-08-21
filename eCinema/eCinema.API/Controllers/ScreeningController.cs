@@ -36,5 +36,20 @@ namespace eCinema.API.Controllers
         {
             return await base.Delete(id);
         }
+
+        [HttpGet("{id}/seats")]
+        public async Task<IActionResult> GetSeatsForScreening(int id)
+        {
+            try
+            {
+                var service = (IScreeningService)_crudService;
+                var seats = await service.GetSeatsForScreeningAsync(id);
+                return Ok(seats);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 } 
