@@ -4,18 +4,16 @@ part 'seat.g.dart';
 
 @JsonSerializable()
 class Seat {
-  final int? id;
-  final String? name;
+  final int id;
   final int hallId;
-  final String row;
-  final int number;
+  final String? name;
+  final bool? isReserved;
 
   const Seat({
-    this.id,
-    this.name,
+    required this.id,
     required this.hallId,
-    required this.row,
-    required this.number,
+    this.name,
+    this.isReserved,
   });
 
   factory Seat.fromJson(Map<String, dynamic> json) => _$SeatFromJson(json);
@@ -24,17 +22,15 @@ class Seat {
 
   Seat copyWith({
     int? id,
-    String? name,
     int? hallId,
-    String? row,
-    int? number,
+    String? name,
+    bool? isReserved,
   }) {
     return Seat(
       id: id ?? this.id,
-      name: name ?? this.name,
       hallId: hallId ?? this.hallId,
-      row: row ?? this.row,
-      number: number ?? this.number,
+      name: name ?? this.name,
+      isReserved: isReserved ?? this.isReserved,
     );
   }
 }
