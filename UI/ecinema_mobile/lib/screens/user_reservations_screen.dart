@@ -241,7 +241,7 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
               ],
             ),
             const SizedBox(height: 16),
-            _buildInfoRow(l10n.seats, _formatSeatsWithNames(reservation)),
+            _buildInfoRow(l10n.seatsUppercase, _formatSeatsWithNames(reservation)),
             _buildInfoRow(l10n.total, '${reservation.totalPrice.toStringAsFixed(2)} ${l10n.currency}'),
             if (reservation.promotionName != null)
               _buildInfoRow(l10n.promotion, reservation.promotionName!),
@@ -283,20 +283,26 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
     );
   }
 
-  Widget _buildInfoRow(String label, String value) {
+  Widget _buildInfoRow(String label, String value, {IconData? icon}) {
     final colorScheme = Theme.of(context).colorScheme;
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         children: [
-          SizedBox(
-            width: 80,
-            child: Text(
-              '$label:',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                color: colorScheme.onSurfaceVariant,
-              ),
+          if (icon != null) ...[
+            Icon(
+              icon,
+              color: colorScheme.primary,
+              size: 20,
+            ),
+            const SizedBox(width: 16),
+          ],
+          Text(
+            '$label: ',
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: colorScheme.onSurfaceVariant,
+              fontSize: 14,
             ),
           ),
           Expanded(
@@ -305,7 +311,9 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
               style: TextStyle(
                 fontWeight: FontWeight.w400,
                 color: colorScheme.onSurface,
+                fontSize: 14,
               ),
+              textAlign: TextAlign.right,
             ),
           ),
         ],
@@ -339,23 +347,13 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
     return formatted;
   }
 
-  String _formatSeats(List<int> seatIds, AppLocalizations l10n) {
-    if (seatIds.isEmpty) return l10n.notAvailable;
-    
-    // Ako imamo seat names u reservation, koristi ih
-    // Inače koristi IDs
-    return seatIds.map((id) => 'Seat $id').join(', ');
-  }
-
   String _formatSeatsWithNames(Reservation reservation) {
     if (reservation.seatIds.isEmpty) return 'N/A';
     
-    // Ako imamo seat names, koristi ih
     if (reservation.seatNames != null && reservation.seatNames!.isNotEmpty) {
       return reservation.seatNames!.join(', ');
     }
     
-    // Fallback na IDs
     return reservation.seatIds.map((id) => 'Seat $id').join(', ');
   }
 
@@ -377,34 +375,77 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
   }
 
   void _showReservationDetails(Reservation reservation, AppLocalizations l10n) {
-    showDialog(
+    final colorScheme = Theme.of(context).colorScheme;
+    showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(reservation.movieTitle),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildInfoRow(l10n.date, _formatDateTime(reservation.screeningStartTime)),
-              _buildInfoRow(l10n.time, _formatTime(reservation.screeningStartTime)),
-              _buildInfoRow(l10n.hall, reservation.hallName),
-              _buildInfoRow(l10n.seats, _formatSeatsWithNames(reservation)),
-              _buildInfoRow(l10n.tickets, '${reservation.numberOfTickets}'),
-              _buildInfoRow(l10n.totalPrice, '${reservation.totalPrice.toStringAsFixed(2)} ${l10n.currency}'),
-              _buildInfoRow(l10n.status, _getStatusText(reservation.status, l10n)),
-              if (reservation.promotionName != null)
-                _buildInfoRow('Promotion', reservation.promotionName!),
-              if (reservation.paymentStatus != null)
-                _buildInfoRow(l10n.paymentStatus, reservation.paymentStatus!),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(l10n.close),
+        return Container(
+          padding: const EdgeInsets.all(28),
+          decoration: BoxDecoration(
+            color: colorScheme.surface,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
             ),
-          ],
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  reservation.movieTitle,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.onSurface,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                if (reservation.qrcodeBase64 != null && reservation.qrcodeBase64!.isNotEmpty)
+                  Container(
+                    width: 210,
+                    height: 210,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey[300]!),
+                    ),
+                    child: Center(
+                      child: Image.memory(
+                        base64Decode(reservation.qrcodeBase64!),
+                        width: 200,
+                        height: 200,
+                      ),
+                    ),
+                  ),
+                if (reservation.qrcodeBase64 != null && reservation.qrcodeBase64!.isNotEmpty)
+                  const SizedBox(height: 20),
+                _buildInfoRow(l10n.date, _formatDateTime(reservation.screeningStartTime), icon: Icons.calendar_today),
+                _buildInfoRow(l10n.time, _formatTime(reservation.screeningStartTime), icon: Icons.access_time),
+                _buildInfoRow(l10n.hall, reservation.hallName, icon: Icons.room),
+                _buildInfoRow(l10n.seatsUppercase, _formatSeatsWithNames(reservation), icon: Icons.chair),
+                _buildInfoRow(l10n.totalPrice, '${reservation.totalPrice.toStringAsFixed(2)} ${l10n.currency}', icon: Icons.attach_money),
+                _buildInfoRow(l10n.status, _getStatusText(reservation.status, l10n), icon: Icons.info_outline),
+                if (reservation.promotionName != null)
+                  _buildInfoRow('Promotion', reservation.promotionName!, icon: Icons.local_offer),
+                if (reservation.paymentStatus != null)
+                  _buildInfoRow(l10n.paymentStatus, reservation.paymentStatus!, icon: Icons.payment),
+                const SizedBox(height: 20),
+              ],
+            ),
+          ),
         );
       },
     );

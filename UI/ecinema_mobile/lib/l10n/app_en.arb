@@ -1369,7 +1369,7 @@
   "@numberOfSeats": {
     "description": "Number of seats label"
   },
-  "total": "Total:",
+  "total": "Total",
   "@total": {
     "description": "Total label"
   },
