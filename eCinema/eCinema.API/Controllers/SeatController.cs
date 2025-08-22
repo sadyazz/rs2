@@ -25,11 +25,32 @@ namespace eCinema.API.Controllers
             return await _seatService.GetSeatsForScreening(screeningId);
         }
 
-        [HttpPost("hall/{hallId}/generate")]
-        public async Task<IActionResult> GenerateSeats(int hallId, [FromQuery] int capacity)
+        [HttpGet("count")]
+        public async Task<IActionResult> GetSeatsCount()
         {
-            await _seatService.GenerateSeatsForHall(hallId, capacity);
-            return Ok();
+            try
+            {
+                var count = await _seatService.GetSeatsCount();
+                return Ok(new { totalSeats = count });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("generate-all")]
+        public async Task<IActionResult> GenerateAllSeats()
+        {
+            try
+            {
+                var count = await _seatService.GenerateAllSeats();
+                return Ok(new { message = $"Generated {count} new seats", totalSeats = count });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

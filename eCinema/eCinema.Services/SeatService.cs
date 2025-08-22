@@ -19,97 +19,76 @@ namespace eCinema.Services
 
         public async Task<List<SeatResponse>> GetSeatsForScreening(int screeningId)
         {
-            var screening = await _context.Screenings
-                .Include(x => x.Hall)
-                .FirstOrDefaultAsync(x => x.Id == screeningId && !x.IsDeleted);
-
-            if (screening == null)
-            {
-                throw new InvalidOperationException($"Screening with ID {screeningId} not found.");
-            }
-            
-            var allSeats = await _context.Seats
-                .Where(s => s.HallId == screening.HallId)
-                .ToListAsync();
-            
-            if (allSeats.Count == 0 || allSeats.Count < screening.Hall.Capacity)
-            {
-                await GenerateSeatsForHall(screening.HallId, screening.Hall.Capacity);
-                
-                allSeats = await _context.Seats
-                    .Where(s => s.HallId == screening.HallId)
-                    .ToListAsync();
-            }
-
-            var reservedSeats = await _context.ScreeningSeats
-                .Where(ss => ss.ScreeningId == screeningId && ss.IsReserved == true)
-                .Select(ss => ss.SeatId)
+            var screeningSeats = await _context.ScreeningSeats
+                .Where(ss => ss.ScreeningId == screeningId)
+                .Include(ss => ss.Seat)
                 .ToListAsync();
 
-            return allSeats.Select(seat => new SeatResponse
+            Console.WriteLine($"🔍 GetSeatsForScreening: Found {screeningSeats?.Count ?? 0} seats for screening {screeningId}");
+
+            if (screeningSeats == null || !screeningSeats.Any())
             {
-                Id = seat.Id,
-                HallId = seat.HallId,
-                Name = seat.Name,
-                IsReserved = reservedSeats.Contains(seat.Id)
+                Console.WriteLine($"⚠️ No seats found for screening {screeningId}");
+                return new List<SeatResponse>();
+            }
+
+            var result = screeningSeats.Select(ss => new SeatResponse
+            {
+                Id = ss.SeatId,
+                Name = ss.Seat.Name,
+                IsReserved = ss.IsReserved
             }).ToList();
+
+            Console.WriteLine($"✅ Returning {result.Count} seats for screening {screeningId}");
+            Console.WriteLine($"📊 Reserved seats: {result.Count(s => s.IsReserved == true)}");
+            Console.WriteLine($"📊 Available seats: {result.Count(s => s.IsReserved != true)}");
+
+            return result;
         }
 
-        public async Task GenerateSeatsForHall(int hallId, int capacity)
+        public async Task<int> GetSeatsCount()
         {
-            
-            var hall = await _context.Halls.FindAsync(hallId);
-            if (hall == null)
+            var count = await _context.Seats.CountAsync();
+            Console.WriteLine($"🔍 GetSeatsCount: Found {count} seats in database");
+            return count;
+        }
+
+        public async Task<int> GenerateAllSeats()
+        {
+            var existingSeats = await _context.Seats.CountAsync();
+            Console.WriteLine($"🔍 GenerateAllSeats: Found {existingSeats} existing seats");
+
+            if (existingSeats >= 48)
             {
-                throw new InvalidOperationException("Hall not found.");
+                Console.WriteLine($"✅ Already have {existingSeats} seats, no need to generate more");
+                return existingSeats;
             }
 
-            var existingSeats = await _context.Seats
-                .Include(s => s.ReservationSeats)
-                .Where(s => s.HallId == hallId)
-                .ToListAsync();
+            var rows = new[] { "A", "B", "C", "D", "E", "F", "G", "H" };
+            var seatsPerRow = 6;
+            var totalSeats = 48;
 
-            foreach (var seat in existingSeats)
+            Console.WriteLine($"⚠️ Generating {totalSeats} new seats...");
+
+            for (int i = 0; i < totalSeats; i++)
             {
-                var reservationSeats = await _context.ReservationSeats
-                    .Where(rs => rs.SeatId == seat.Id)
-                    .ToListAsync();
-                _context.ReservationSeats.RemoveRange(reservationSeats);
-
-                var screeningSeats = await _context.ScreeningSeats
-                    .Where(ss => ss.SeatId == seat.Id)
-                    .ToListAsync();
-                _context.ScreeningSeats.RemoveRange(screeningSeats);
-            }
-            await _context.SaveChangesAsync();
-
-            _context.Seats.RemoveRange(existingSeats);
-            await _context.SaveChangesAsync();
-
-            var newSeats = new List<Seat>();
-            var rows = new[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O" };
-            var seatsPerRow = 12;
-
-            for (int rowIndex = 0; rowIndex < rows.Length && newSeats.Count < capacity; rowIndex++)
-            {
-                var currentRow = rows[rowIndex];
+                var rowIndex = i / seatsPerRow;
+                var seatNumber = (i % seatsPerRow) + 1;
                 
-                for (int seatNumber = 1; seatNumber <= seatsPerRow && newSeats.Count < capacity; seatNumber++)
+                if (rowIndex < rows.Length)
                 {
-                    var seatName = $"{currentRow}{seatNumber}";
-                    
-                    var seat = new Seat
-                    {
-                        HallId = hallId,
-                        Name = seatName
-                    };
-
-                    newSeats.Add(seat);
+                    var seatName = $"{rows[rowIndex]}{seatNumber}";
+                    var seat = new Seat { Name = seatName };
+                    _context.Seats.Add(seat);
                 }
             }
 
-            _context.Seats.AddRange(newSeats);
             await _context.SaveChangesAsync();
+            
+            var newCount = await _context.Seats.CountAsync();
+            Console.WriteLine($"✅ Generated {newCount - existingSeats} new seats. Total: {newCount}");
+            
+            return newCount;
         }
     }
 }

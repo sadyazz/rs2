@@ -551,7 +551,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text("Please select a screening time first"),//todo prevod
+                      content: Text(l10n.pleaseSelectScreening),
                       backgroundColor: Colors.red,
                     ),
                   );

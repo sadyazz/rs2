@@ -274,7 +274,7 @@ class _ReservationQrCodeScreenState extends State<ReservationQrCodeScreen> {
               _buildDetailRow(l10n.date, _formatDate(widget.reservation.screeningStartTime)),
               _buildDetailRow(l10n.time, _formatTime(widget.reservation.screeningStartTime)),
               _buildDetailRow(l10n.hall, widget.reservation.hallName),
-              _buildDetailRow(l10n.seats, _formatSeats()),
+              _buildDetailRow(l10n.seatsUppercase, _formatSeats()),
               _buildDetailRow(l10n.totalPrice, '${widget.reservation.totalPrice.toStringAsFixed(2)} €'),
               _buildDetailRow(l10n.paymentMethod, _getPaymentMethodText(l10n)),
             ],
@@ -370,6 +370,11 @@ class _ReservationQrCodeScreenState extends State<ReservationQrCodeScreen> {
   }
 
   String _formatSeats() {
+    // Koristi seat names umjesto IDs ako su dostupni
+    if (widget.reservation.seatNames != null && widget.reservation.seatNames!.isNotEmpty) {
+      return widget.reservation.seatNames!.join(', ');
+    }
+    // Fallback na IDs ako nema imena
     return widget.reservation.seatIds.map((id) => 'Seat $id').join(', ');
   }
 

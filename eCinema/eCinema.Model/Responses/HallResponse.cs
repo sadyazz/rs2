@@ -6,10 +6,7 @@ namespace eCinema.Model.Responses
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public int Capacity { get; set; }
-        public string? ScreenType { get; set; }
-        public string? SoundSystem { get; set; }
-        public string Location { get; set; } = string.Empty;
+        public int Capacity { get; set; } = 48;
         public bool IsDeleted { get; set; }
     }
 } 

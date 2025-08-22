@@ -29,6 +29,8 @@ Reservation _$ReservationFromJson(Map<String, dynamic> json) => Reservation(
   movieImage: const ByteArrayConverter().fromJson(json['movieImage']),
   hallName: json['hallName'] as String,
   qrcodeBase64: json['qrcodeBase64'] as String?,
+  seatNames:
+      (json['seatNames'] as List<dynamic>?)?.map((e) => e as String).toList(),
 );
 
 Map<String, dynamic> _$ReservationToJson(Reservation instance) =>
@@ -55,4 +57,5 @@ Map<String, dynamic> _$ReservationToJson(Reservation instance) =>
       'movieImage': const ByteArrayConverter().toJson(instance.movieImage),
       'hallName': instance.hallName,
       'qrcodeBase64': instance.qrcodeBase64,
+      'seatNames': instance.seatNames,
     };

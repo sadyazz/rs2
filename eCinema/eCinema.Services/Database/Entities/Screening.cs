@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace eCinema.Services.Database.Entities
 {
@@ -13,7 +12,6 @@ namespace eCinema.Services.Database.Entities
         
         public DateTime EndTime { get; set; }
         
-        [Column(TypeName = "decimal(10, 2)")]
         public decimal BasePrice { get; set; }
         
         [MaxLength(50)]
@@ -27,15 +25,13 @@ namespace eCinema.Services.Database.Entities
         public int HallId { get; set; }
         public int? ScreeningFormatId { get; set; }
         
-        [ForeignKey(nameof(MovieId))]
         public virtual Movie Movie { get; set; } = null!;
         
-        [ForeignKey(nameof(HallId))]
         public virtual Hall Hall { get; set; } = null!;
         
-        [ForeignKey(nameof(ScreeningFormatId))]
         public virtual ScreeningFormat? Format { get; set; }
         
         public virtual ICollection<Reservation> Reservations { get; set; } = new HashSet<Reservation>();
+        public virtual ICollection<ScreeningSeat> ScreeningSeats { get; set; } = new HashSet<ScreeningSeat>();
     }
 } 

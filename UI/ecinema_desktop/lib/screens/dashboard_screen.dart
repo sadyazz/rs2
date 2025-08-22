@@ -70,6 +70,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildDashboardContent() {
+    final l10n = AppLocalizations.of(context)!;
     return Consumer<DashboardProvider>(
       builder: (context, dashboardProvider, child) {
         if (dashboardProvider.isLoading) {
@@ -80,8 +81,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
         final stats = dashboardProvider.stats;
         if (stats == null) {
-          return const Center(
-            child: Text('No data available'),
+          return Center(
+            child: Text(l10n.noDataAvailable),
           );
         }
 

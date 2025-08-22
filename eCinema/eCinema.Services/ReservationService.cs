@@ -181,7 +181,35 @@ namespace eCinema.Services
                 .Include(r => r.Promotion)
                 .FirstOrDefaultAsync(r => r.Id == id);
                 
-            return MapToResponse(reservation);
+            if (reservation == null)
+                return null;
+
+            return new ReservationResponse
+            {
+                Id = reservation.Id,
+                ReservationTime = reservation.ReservationTime,
+                TotalPrice = reservation.TotalPrice,
+                OriginalPrice = reservation.OriginalPrice ?? reservation.TotalPrice,
+                DiscountPercentage = reservation.DiscountPercentage,
+                Status = reservation.Status,
+                IsDeleted = reservation.IsDeleted,
+                UserId = reservation.UserId,
+                UserName = reservation.User.Username,
+                ScreeningId = reservation.ScreeningId,
+                MovieTitle = reservation.Screening.Movie.Title,
+                ScreeningStartTime = reservation.Screening.StartTime,
+                SeatIds = reservation.ReservationSeats.Select(rs => rs.SeatId).ToList(),
+                SeatNames = reservation.ReservationSeats.Select(rs => rs.Seat.Name ?? $"Seat {rs.SeatId}").ToList(),
+                NumberOfTickets = reservation.NumberOfTickets ?? 0,
+                PromotionId = reservation.PromotionId,
+                PromotionName = reservation.Promotion != null ? reservation.Promotion.Code : null,
+                PaymentId = reservation.PaymentId,
+                PaymentStatus = reservation.Payment != null ? reservation.Payment.Status : null,
+                ReservationState = reservation.State,
+                MovieImage = reservation.Screening.Movie.Image,
+                HallName = reservation.Screening.Hall.Name,
+                QrcodeBase64 = reservation.QrcodeBase64,
+            };
         }
 
         public async Task<List<Seat>> GetAvailableSeatsForScreening(int screeningId)
@@ -238,6 +266,7 @@ namespace eCinema.Services
                     MovieTitle = r.Screening.Movie.Title,
                     ScreeningStartTime = r.Screening.StartTime,
                     SeatIds = r.ReservationSeats.Select(rs => rs.SeatId).ToList(),
+                    SeatNames = r.ReservationSeats.Select(rs => rs.Seat.Name ?? $"Seat {rs.SeatId}").ToList(),
                     NumberOfTickets = r.NumberOfTickets ?? 0,
                     PromotionId = r.PromotionId,
                     PromotionName = r.Promotion != null ? r.Promotion.Code : null,
@@ -265,6 +294,8 @@ namespace eCinema.Services
                 throw new InvalidOperationException($"The following seats are already reserved: {string.Join(", ", unavailableSeats)}");
             }
         }
+
+
 
         public async Task<string> GenerateQRCode(int reservationId)
         {

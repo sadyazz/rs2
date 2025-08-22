@@ -86,6 +86,7 @@ class Reservation {
   final String hallName;
   @JsonKey(name: 'qrcodeBase64')
   final String? qrcodeBase64;
+  final List<String>? seatNames;
 
   Reservation({
     required this.id,
@@ -110,6 +111,7 @@ class Reservation {
     this.movieImage,
     required this.hallName,
     this.qrcodeBase64,
+    this.seatNames,
   });
 
   factory Reservation.fromJson(Map<String, dynamic> json) => _$ReservationFromJson(json);

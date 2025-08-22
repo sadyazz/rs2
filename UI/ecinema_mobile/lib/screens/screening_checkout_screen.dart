@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import '../models/screening.dart';
-import '../models/seat_dto.dart';
+import '../models/seat.dart';
 import '../screens/reservation_qr_code_screen.dart';
 import '../providers/reservation_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ScreeningCheckoutScreen extends StatefulWidget {
   final Screening screening;
-  final List<SeatDto> selectedSeats;
+  final List<Seat> selectedSeats;
   final double totalPrice;
 
   const ScreeningCheckoutScreen({

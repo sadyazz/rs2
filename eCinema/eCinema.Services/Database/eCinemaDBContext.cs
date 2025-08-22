@@ -48,11 +48,7 @@ namespace eCinema.Services.Database
                 .HasIndex(a => new { a.FirstName, a.LastName })
                 .IsUnique();
 
-            modelBuilder.Entity<Seat>()
-                .HasOne(s => s.Hall)
-                .WithMany(h => h.Seats)
-                .HasForeignKey(s => s.HallId)
-                .OnDelete(DeleteBehavior.Cascade);
+
 
             modelBuilder.Entity<Screening>()
                 .HasOne(s => s.Movie)
@@ -104,13 +100,13 @@ namespace eCinema.Services.Database
 
             modelBuilder.Entity<ScreeningSeat>()
                 .HasOne(ss => ss.Screening)
-                .WithMany()
+                .WithMany(s => s.ScreeningSeats)
                 .HasForeignKey(ss => ss.ScreeningId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ScreeningSeat>()
                 .HasOne(ss => ss.Seat)
-                .WithMany()
+                .WithMany(s => s.ScreeningSeats)
                 .HasForeignKey(ss => ss.SeatId)
                 .OnDelete(DeleteBehavior.Restrict);
 

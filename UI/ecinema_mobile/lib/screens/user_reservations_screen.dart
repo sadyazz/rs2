@@ -241,7 +241,7 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
               ],
             ),
             const SizedBox(height: 16),
-            _buildInfoRow(l10n.seats, _formatSeats(reservation.seatIds, l10n)),
+            _buildInfoRow(l10n.seats, _formatSeatsWithNames(reservation)),
             _buildInfoRow(l10n.total, '${reservation.totalPrice.toStringAsFixed(2)} ${l10n.currency}'),
             if (reservation.promotionName != null)
               _buildInfoRow(l10n.promotion, reservation.promotionName!),
@@ -341,7 +341,22 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
 
   String _formatSeats(List<int> seatIds, AppLocalizations l10n) {
     if (seatIds.isEmpty) return l10n.notAvailable;
-    return seatIds.map((id) => '${l10n.seat} $id').join(', ');
+    
+    // Ako imamo seat names u reservation, koristi ih
+    // Inače koristi IDs
+    return seatIds.map((id) => 'Seat $id').join(', ');
+  }
+
+  String _formatSeatsWithNames(Reservation reservation) {
+    if (reservation.seatIds.isEmpty) return 'N/A';
+    
+    // Ako imamo seat names, koristi ih
+    if (reservation.seatNames != null && reservation.seatNames!.isNotEmpty) {
+      return reservation.seatNames!.join(', ');
+    }
+    
+    // Fallback na IDs
+    return reservation.seatIds.map((id) => 'Seat $id').join(', ');
   }
 
   String _getStatusText(String status, AppLocalizations l10n) {
@@ -374,7 +389,7 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
               _buildInfoRow(l10n.date, _formatDateTime(reservation.screeningStartTime)),
               _buildInfoRow(l10n.time, _formatTime(reservation.screeningStartTime)),
               _buildInfoRow(l10n.hall, reservation.hallName),
-              _buildInfoRow(l10n.seats, _formatSeats(reservation.seatIds, l10n)),
+              _buildInfoRow(l10n.seats, _formatSeatsWithNames(reservation)),
               _buildInfoRow(l10n.tickets, '${reservation.numberOfTickets}'),
               _buildInfoRow(l10n.totalPrice, '${reservation.totalPrice.toStringAsFixed(2)} ${l10n.currency}'),
               _buildInfoRow(l10n.status, _getStatusText(reservation.status, l10n)),

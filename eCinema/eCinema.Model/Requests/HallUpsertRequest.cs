@@ -11,17 +11,6 @@ namespace eCinema.Model.Requests
         
         [Required]
         [Range(1, int.MaxValue)]
-        public int Capacity { get; set; }
-        
-        [MaxLength(100)]
-        public string? ScreenType { get; set; }
-        
-        [MaxLength(100)]
-        public string? SoundSystem { get; set; }
-        
-        [Required]
-        [MaxLength(200)]
-        public string Location { get; set; } = string.Empty;
-        
+        public int Capacity { get; set; } = 48;
     }
 } 

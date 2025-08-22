@@ -7,5 +7,4 @@ namespace eCinema.Services;
 
 public interface IHallService : ICRUDService<HallResponse, HallSearchObject, HallUpsertRequest, HallUpsertRequest>
 {
-    Task GenerateSeatsForHall(int hallId, int capacity);
 } 

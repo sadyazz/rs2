@@ -1248,7 +1248,7 @@
   "@hall": {
     "description": "Hall label"
   },
-  "seats": "Sjedista",
+  "seatsUppercase": "Sjedista",
   "@seats": {
     "description": "Seats label"
   },
@@ -1420,5 +1420,73 @@
   "seats": "sjedista",
   "@seats": {
     "description": "Sjedista množina"
+  },
+  "errorLoadingScreening": "Greška pri učitavanju projekcije",
+  "@errorLoadingScreening": {
+    "description": "Greška pri učitavanju projekcije poruka"
+  },
+  "errorLoadingSeats": "Greška pri učitavanju sjedista",
+  "@errorLoadingSeats": {
+    "description": "Greška pri učitavanju sjedista poruka"
+  },
+  "seatsGeneratedSuccessfully": "Sjedista uspješno generisana!",
+  "@seatsGeneratedSuccessfully": {
+    "description": "Sjedista uspješno generisana poruka"
+  },
+  "errorGeneratingSeats": "Greška pri generisanju sjedista",
+  "@errorGeneratingSeats": {
+    "description": "Greška pri generisanju sjedista poruka"
+  },
+  "pleaseSelectAtLeastOneSeat": "Molimo odaberite barem jedno sjediste",
+  "@pleaseSelectAtLeastOneSeat": {
+    "description": "Molimo odaberite barem jedno sjediste poruka"
+  },
+  "priceSummary": "Pregled cijene",
+  "@priceSummary": {
+    "description": "Pregled cijene naslov sekcije"
+  },
+  "available": "Dostupno",
+  "@available": {
+    "description": "Dostupna sjedista oznaka"
+  },
+  "selected": "Odabrano",
+  "@selected": {
+    "description": "Odabrana sjedista oznaka"
+  },
+  "reserved": "Rezervisano",
+  "@reserved": {
+    "description": "Rezervisana sjedista oznaka"
+  },
+  "generateSeatsForHall": "Generiši sjedista za salu",
+  "@generateSeatsForHall": {
+    "description": "Generiši sjedista za salu dugme tekst"
+  },
+  "managementSystem": "Sistem za upravljanje",
+  "@managementSystem": {
+    "description": "Management system title"
+  },
+  "dashboard": "Kontrolna tabla",
+  "@dashboard": {
+    "description": "Dashboard title"
+  },
+  "reports": "Izvještaji",
+  "@reports": {
+    "description": "Reports title"
+  },
+  "adminRegistration": "Admin registracija",
+  "@adminRegistration": {
+    "description": "Admin registration title"
+  },
+  "createNewAdminAccount": "Kreiraj novi admin račun",
+  "@createNewAdminAccount": {
+    "description": "Create new admin account title"
+  },
+  "adminAccessRequired": "Admin pristup je potreban",
+  "@adminAccessRequired": {
+    "description": "Admin access required message"
+  },
+  "dontHaveAdminAccount": "Nemate admin račun?",
+  "@dontHaveAdminAccount": {
+    "description": "Don't have admin account text"
   }
 } 

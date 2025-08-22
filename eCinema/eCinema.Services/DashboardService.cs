@@ -133,7 +133,7 @@ namespace eCinema.Services
                     ScreeningFormatName = s.Format != null ? s.Format.Name : null,
                     ScreeningFormatPriceMultiplier = s.Format != null ? s.Format.PriceMultiplier : null,
                     ReservationsCount = s.Reservations.Count(r => !r.IsDeleted),
-                    AvailableSeats = s.Hall.Capacity - s.Reservations.Count(r => !r.IsDeleted)
+                    AvailableSeats = s.ScreeningSeats.Count(ss => ss.IsReserved != true)
                 })
                 .ToListAsync();
         }

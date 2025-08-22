@@ -8,24 +8,13 @@ namespace eCinema.Services.Database.Entities
     {
         public int Id { get; set; }
         
-        [Required]
         [MaxLength(50)]
-        public string Name { get; set; } = string.Empty;
+        public string? Name { get; set; }
         
-        public int Capacity { get; set; }
-        
-        [MaxLength(100)]
-        public string? ScreenType { get; set; } // Regular, IMAX, 3D, etc.
-        
-        [MaxLength(100)]
-        public string? SoundSystem { get; set; } // Dolby, SDDS, etc.
-        
-        [MaxLength(200)]
-        public string Location { get; set; } = string.Empty;
+        public int Capacity { get; set; } = 48;
         
         public bool IsDeleted { get; set; } = false;
         
         public virtual ICollection<Screening> Screenings { get; set; } = new HashSet<Screening>();
-        public virtual ICollection<Seat> Seats { get; set; } = new HashSet<Seat>();
     }
 } 

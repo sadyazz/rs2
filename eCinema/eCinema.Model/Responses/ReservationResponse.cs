@@ -18,6 +18,7 @@ namespace eCinema.Model.Responses
         public string MovieTitle { get; set; } = string.Empty;
         public DateTime ScreeningStartTime { get; set; }
         public List<int> SeatIds { get; set; } = new List<int>();
+        public List<string> SeatNames { get; set; } = new List<string>();
         public int NumberOfTickets { get; set; }
         public int? PromotionId { get; set; }
         public string? PromotionName { get; set; }

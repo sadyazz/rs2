@@ -51,5 +51,20 @@ namespace eCinema.API.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [HttpPost("{id}/generate-seats")]
+        public async Task<IActionResult> GenerateSeatsForScreening(int id)
+        {
+            try
+            {
+                var service = (IScreeningService)_crudService;
+                var count = await service.GenerateSeatsForScreeningAsync(id);
+                return Ok(new { message = $"Generated {count} screening seats for screening {id}" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 } 

@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../models/movie.dart';
 import '../models/screening.dart';
-import '../models/seat_dto.dart';
+import '../models/seat.dart';
 import '../providers/screening_provider.dart';
 import '../providers/utils.dart';
 import '../screens/screening_checkout_screen.dart';
@@ -24,9 +24,9 @@ class ReservationScreen extends StatefulWidget {
 
 class _ReservationScreenState extends State<ReservationScreen> {
   bool isLoading = false;
-  List<SeatDto> selectedSeats = [];
-  List<SeatDto> availableSeats = [];
-  List<SeatDto> reservedSeats = [];
+  List<Seat> selectedSeats = [];
+  List<Seat> availableSeats = [];
+  List<Seat> reservedSeats = [];
   Screening? screeningDetails;
   int? totalColumns;
   int? totalRows;
@@ -90,12 +90,11 @@ class _ReservationScreenState extends State<ReservationScreen> {
           isLoading = false;
           
           if (seats.isEmpty) {
-            print('⚠️ No seats found for screening. Automatically generating seats.');
-            _generateSeatsForHall();
+            print('⚠️ No seats found for screening. Please contact administrator.');
           } else {
             print('✅ Loaded ${seats.length} seats for screening $screeningId');
-            totalColumns = 15;
-            totalRows = (seats.length / totalColumns!).ceil();
+            totalColumns = 8;
+            totalRows = 6;
           }
         });
       }
@@ -115,38 +114,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
     }
   }
 
-  Future<void> _generateSeatsForHall() async {
-    if (screeningDetails?.hallId == null) return;
-    
-    setState(() {
-      isLoading = true;
-    });
-    
-    try {
-      final screeningProvider = context.read<ScreeningProvider>();
-      await screeningProvider.generateSeatsForHall(screeningDetails!.hallId!);
-      
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.seatsGeneratedSuccessfully),
-          backgroundColor: Colors.green,
-        ),
-      );
-      
-      await _loadSeatsForScreening(widget.screening.id!);
-    } catch (e) {
-      print('❌ Error generating seats: $e');
-      setState(() {
-        isLoading = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('${AppLocalizations.of(context)!.errorGeneratingSeats}: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
+
 
 
 
@@ -418,21 +386,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                       color: colorScheme.onSurface.withOpacity(0.6),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: isLoading ? null : _generateSeatsForHall,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorScheme.primary,
-                      foregroundColor: colorScheme.onPrimary,
-                    ),
-                    child: Text(
-                      l10n.generateSeatsForHall,
-                      style: TextStyle(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+
                 ],
               ),
             ),
@@ -451,7 +405,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: totalColumns ?? 10,
+                crossAxisCount: 8,
                 childAspectRatio: 1,
                 crossAxisSpacing: 4,
                 mainAxisSpacing: 4,

@@ -27,7 +27,9 @@ namespace eCinema.Services
             query = query
                 .Include(x => x.Movie)
                 .Include(x => x.Hall)
-                .Include(x => x.Format);
+                .Include(x => x.Format)
+                .Include(x => x.ScreeningSeats)
+                .Include(x => x.Reservations);
 
             if (!string.IsNullOrWhiteSpace(search.FTS))
             {
@@ -102,11 +104,11 @@ namespace eCinema.Services
             {
                 if (search.HasAvailableSeats.Value)
                 {
-                    query = query.Where(x => x.Hall.Capacity > x.Reservations.Count);
+                    query = query.Where(x => x.ScreeningSeats.Any(ss => ss.IsReserved != true));
                 }
                 else
                 {
-                    query = query.Where(x => x.Hall.Capacity <= x.Reservations.Count);
+                    query = query.Where(x => !x.ScreeningSeats.Any(ss => ss.IsReserved != true));
                 }
             }
 
@@ -209,7 +211,7 @@ namespace eCinema.Services
             response.ScreeningFormatName = entity.Format?.Name;
             response.ScreeningFormatPriceMultiplier = entity.Format?.PriceMultiplier;
             
-            response.AvailableSeats = entity.Hall?.Capacity - entity.Reservations?.Count ?? 0;
+            response.AvailableSeats = entity.ScreeningSeats?.Where(ss => ss.IsReserved != true).Count() ?? 0;
             response.ReservationsCount = entity.Reservations?.Count ?? 0;
             
             return response;
@@ -221,6 +223,8 @@ namespace eCinema.Services
                 .Include(x => x.Movie)
                 .Include(x => x.Hall)
                 .Include(x => x.Format)
+                .Include(x => x.ScreeningSeats)
+                .Include(x => x.Reservations)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (entity == null)
@@ -237,16 +241,140 @@ namespace eCinema.Services
             return MapToResponse(entity);
         }
 
+        public override async Task<ScreeningResponse> CreateAsync(ScreeningUpsertRequest request)
+        {
+            try
+            {
+                var entity = new Screening
+                {
+                    MovieId = request.MovieId,
+                    HallId = request.HallId,
+                    StartTime = request.StartTime,
+                    EndTime = request.EndTime,
+                    BasePrice = request.BasePrice,
+                    Language = request.Language,
+                    HasSubtitles = request.HasSubtitles,
+                    ScreeningFormatId = request.ScreeningFormatId,
+                    IsDeleted = false
+                };
+
+                _context.Screenings.Add(entity);
+                await _context.SaveChangesAsync();
+
+                var hall = await _context.Halls.FindAsync(request.HallId);
+                var seats = await _context.Seats.ToListAsync();
+
+                if (!seats.Any())
+                {
+                    var rows = new[] { "A", "B", "C", "D", "E", "F", "G", "H" };
+                    var seatsPerRow = 6;
+                    var totalSeats = hall?.Capacity ?? 48;
+
+                    for (int i = 0; i < totalSeats; i++)
+                    {
+                        var rowIndex = i / seatsPerRow;
+                        var seatNumber = (i % seatsPerRow) + 1;
+                        
+                        if (rowIndex < rows.Length)
+                        {
+                            var seatName = $"{rows[rowIndex]}{seatNumber}";
+                            var seat = new Seat { Name = seatName };
+                            _context.Seats.Add(seat);
+                        }
+                    }
+                    await _context.SaveChangesAsync();
+                    seats = await _context.Seats.ToListAsync();
+                }
+                foreach (var seat in seats)
+                {
+                    var screeningSeat = new ScreeningSeat
+                    {
+                        ScreeningId = entity.Id,
+                        SeatId = seat.Id,
+                        IsReserved = false
+                    };
+                    _context.ScreeningSeats.Add(screeningSeat);
+                }
+
+                await _context.SaveChangesAsync();
+
+                var entityWithSeats = await _context.Screenings
+                    .Include(x => x.Movie)
+                    .Include(x => x.Hall)
+                    .Include(x => x.Format)
+                    .Include(x => x.ScreeningSeats)
+                    .Include(x => x.Reservations)
+                    .FirstOrDefaultAsync(x => x.Id == entity.Id);
+
+                return MapToResponse(entityWithSeats!);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error creating screening: {ex.Message}");
+            }
+        }
+
         public async Task<List<SeatResponse>> GetSeatsForScreeningAsync(int screeningId)
         {
             try
             {
-                return await _seatService.GetSeatsForScreening(screeningId);
+                var screeningSeats = await _context.ScreeningSeats
+                    .Where(ss => ss.ScreeningId == screeningId)
+                    .Include(ss => ss.Seat)
+                    .ToListAsync();
+
+                if (screeningSeats == null || !screeningSeats.Any())
+                {
+                    return new List<SeatResponse>();
+                }
+
+                return screeningSeats.Select(ss => new SeatResponse
+                {
+                    Id = ss.SeatId,
+                    Name = ss.Seat.Name,
+                    IsReserved = ss.IsReserved
+                }).ToList();
             }
             catch (Exception ex)
             {
                 throw new InvalidOperationException($"Error getting seats for screening {screeningId}: {ex.Message}");
             }
+        }
+
+        public async Task<int> GenerateSeatsForScreeningAsync(int screeningId)
+        {
+            var screening = await _context.Screenings.FindAsync(screeningId);
+            if (screening == null)
+            {
+                throw new InvalidOperationException($"Screening with ID {screeningId} not found.");
+            }
+
+            var allSeats = await _context.Seats.ToListAsync();
+
+            var existingScreeningSeats = await _context.ScreeningSeats
+                .Where(ss => ss.ScreeningId == screeningId)
+                .ToListAsync();
+
+            var existingSeatIds = existingScreeningSeats.Select(ss => ss.SeatId).ToHashSet();
+            var seatsToAdd = allSeats.Where(s => !existingSeatIds.Contains(s.Id)).ToList();
+            
+            foreach (var seat in seatsToAdd)
+            {
+                var screeningSeat = new ScreeningSeat
+                {
+                    ScreeningId = screeningId,
+                    SeatId = seat.Id,
+                    IsReserved = false
+                };
+                _context.ScreeningSeats.Add(screeningSeat);
+            }
+
+            await _context.SaveChangesAsync();
+            
+            var totalScreeningSeats = await _context.ScreeningSeats
+                .CountAsync(ss => ss.ScreeningId == screeningId);
+            
+            return totalScreeningSeats;
         }
     }
 } 

@@ -41,23 +41,6 @@ namespace eCinema.API.Controllers
             return await base.Delete(id);
         }
 
-        [HttpPost("{id}/generate-seats")]
-        public async Task<IActionResult> GenerateSeats(int id)
-        {
-            try
-            {
-                var hall = await _hallService.GetByIdAsync(id);
-                if (hall == null)
-                {
-                    return NotFound("Hall not found");
-                }
-                await _hallService.GenerateSeatsForHall(id, hall.Capacity);
-                return Ok("Seats generated successfully");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+
     }
 } 
