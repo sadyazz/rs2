@@ -151,9 +151,16 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       setState(() {
         isLoadingFavoritesStatus = false;
       });
+      String errorMessage = l10n.errorUpdatingFavorites;
+      if (e.toString().contains("Coming soon movies can only be added to watchlist")) {
+        errorMessage = l10n.comingSoonWatchlistOnly;
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(l10n.errorUpdatingFavorites),
+          content: Text(
+            errorMessage,
+            style: const TextStyle(color: Colors.white),
+          ),
           backgroundColor: Colors.red,
         ),
       );

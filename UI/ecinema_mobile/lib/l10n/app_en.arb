@@ -1496,5 +1496,9 @@
   "seats": "seats",
   "@seats": {
     "description": "Seats plural form"
+  },
+  "comingSoonWatchlistOnly":"Coming soon movies can only be added to watchlist",
+  "@comingSoonWatchlistOnly":{
+    "description":"Coming soon movies can only be added to watchlist"
   }
 } 

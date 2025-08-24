@@ -101,6 +101,13 @@ namespace eCinema.Services
                 throw new UnauthorizedAccessException("You can only add movies to your own lists.");
             }
 
+            var movie = await _context.Movies.FindAsync(movieId);
+            if (movie == null)
+                throw new Exception("Movie not found");
+
+            if (movie.IsComingSoon && listType.ToLower() != MovieListType.Watchlist.ToString().ToLower())
+                throw new Exception("Coming soon movies can only be added to watchlist");
+
             var existingEntry = await _context.UserMovieLists
                 .FirstOrDefaultAsync(uml => uml.UserId == userId && 
                                            uml.MovieId == movieId && 

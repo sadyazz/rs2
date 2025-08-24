@@ -1488,5 +1488,9 @@
   "dontHaveAdminAccount": "Nemate admin račun?",
   "@dontHaveAdminAccount": {
     "description": "Don't have admin account text"
+  },
+   "comingSoonWatchlistOnly":"Filmovi koji uskoro izlaze mogu se dodati samo na listu za gledanje",
+  "@comingSoonWatchlistOnly":{
+    "description":"Coming soon movies can only be added to watchlist"
   }
 } 
