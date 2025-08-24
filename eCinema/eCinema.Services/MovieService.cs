@@ -150,6 +150,19 @@ namespace eCinema.Services
                 query = query.Where(x => x.IsComingSoon == search.IsComingSoon.Value);
             }
 
+            if (search.HasActiveScreenings.HasValue)
+            {
+                var now = DateTime.Now;
+                if (search.HasActiveScreenings.Value)
+                {
+                    query = query.Where(x => x.Screenings.Any(s => !s.IsDeleted && s.StartTime > now));
+                }
+                else
+                {
+                    query = query.Where(x => !x.Screenings.Any(s => !s.IsDeleted && s.StartTime > now));
+                }
+            }
+
             return query;
         }
 
@@ -262,14 +275,17 @@ namespace eCinema.Services
 
         public async Task<MovieResponse?> GetRandomMovieRecommendationAsync(string? genreName, int? maxDuration, float? minRating)
         {
+            var now = DateTime.Now;
             var query = _context.Movies
                 .Include(m => m.Genres)
                 .ThenInclude(mg => mg.Genre)
                 .Include(m => m.Actors)
                 .ThenInclude(ca => ca.Actor)
                 .Include(m => m.Reviews.Where(r => !r.IsDeleted))
+                .Include(m => m.Screenings)
                 .Where(m => !m.IsDeleted)
                 .Where(m => !m.IsComingSoon)
+                .Where(m => m.Screenings.Any(s => !s.IsDeleted && s.StartTime > now))
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(genreName) && genreName.ToLower() != "all")

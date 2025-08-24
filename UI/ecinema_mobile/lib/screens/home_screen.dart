@@ -61,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
         'pageSize': 4,
         'includeTotalCount': true,
         'includeDeleted': false,
+        'hasActiveScreenings': true,
       };
       
       result = await movieProvider.get(filter: filter);

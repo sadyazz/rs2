@@ -59,6 +59,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
         'includeTotalCount': true,
         'includeDeleted': false,
         'isComingSoon': false,
+        'hasActiveScreenings': true,
       };
       
       if (_searchController.text.trim().isNotEmpty) {
@@ -96,6 +97,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
         'includeTotalCount': true,
         'includeDeleted': false,
         'isComingSoon': false,
+        'hasActiveScreenings': true,
       };
       
       result = await movieProvider.get(filter: filter);
