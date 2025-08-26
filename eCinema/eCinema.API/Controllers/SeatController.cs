@@ -52,5 +52,19 @@ namespace eCinema.API.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [HttpDelete("clear-all")]
+        public async Task<IActionResult> ClearAllSeats()
+        {
+            try
+            {
+                var count = await _seatService.ClearAllSeats();
+                return Ok(new { message = $"Cleared {count} seats", clearedSeats = count });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

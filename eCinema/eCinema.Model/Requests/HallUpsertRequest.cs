@@ -8,9 +8,5 @@ namespace eCinema.Model.Requests
         [Required]
         [MaxLength(50)]
         public string Name { get; set; } = string.Empty;
-        
-        [Required]
-        [Range(1, int.MaxValue)]
-        public int Capacity { get; set; } = 48;
     }
 } 

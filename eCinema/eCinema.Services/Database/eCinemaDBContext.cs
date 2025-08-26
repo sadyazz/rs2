@@ -58,7 +58,7 @@ namespace eCinema.Services.Database
 
             modelBuilder.Entity<Screening>()
                 .HasOne(s => s.Hall)
-                .WithMany(h => h.Screenings)
+                .WithMany()
                 .HasForeignKey(s => s.HallId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -91,9 +91,8 @@ namespace eCinema.Services.Database
 
             modelBuilder.Entity<ReservationSeat>()
                 .HasOne(rs => rs.Seat)
-                .WithMany(s => s.ReservationSeats)
-                .HasForeignKey(rs => rs.SeatId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .WithMany()
+                .HasForeignKey(rs => rs.SeatId);
 
             modelBuilder.Entity<ScreeningSeat>()
                 .HasKey(ss => new { ss.ScreeningId, ss.SeatId });
@@ -106,9 +105,8 @@ namespace eCinema.Services.Database
 
             modelBuilder.Entity<ScreeningSeat>()
                 .HasOne(ss => ss.Seat)
-                .WithMany(s => s.ScreeningSeats)
-                .HasForeignKey(ss => ss.SeatId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .WithMany()
+                .HasForeignKey(ss => ss.SeatId);
 
             modelBuilder.Entity<Reservation>()
                 .HasOne(r => r.Promotion)

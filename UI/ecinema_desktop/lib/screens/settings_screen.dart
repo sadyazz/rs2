@@ -7,6 +7,7 @@ import 'package:ecinema_desktop/screens/users_list_screen.dart';
 import 'package:ecinema_desktop/screens/news_list_screen.dart';
 import 'package:ecinema_desktop/screens/promotions_list_screen.dart';
 import 'package:ecinema_desktop/screens/roles_list_screen.dart';
+import 'package:ecinema_desktop/screens/seats_management_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ecinema_desktop/providers/user_provider.dart';
@@ -266,6 +267,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   icon: Icons.event_seat,
                   onTap: () => _navigateToHalls(),
                 ),
+                _buildManagementTile(
+                  title: l10n.seats,
+                  subtitle: l10n.manageSeats,
+                  icon: Icons.chair,
+                  onTap: () => _navigateToSeats(),
+                ),
               ],
             ),
 
@@ -424,6 +431,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => const RolesListScreen(),
+      ),
+    );
+  }
+
+  void _navigateToSeats() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SeatsManagementScreen(),
       ),
     );
   }

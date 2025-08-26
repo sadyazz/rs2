@@ -12,6 +12,10 @@
     "description": "Screenings navigation item"
   },
   "seatsHalls": "Sjedala i sale",
+  "seats": "Sjedala",
+  "@seats": {
+    "description": "Seats navigation item"
+  },
   "@seatsHalls": {
     "description": "Seats and halls navigation item"
   },
@@ -961,7 +965,15 @@
   "@manageActors": {"description": "Manage actors tile subtitle"},
   "manageScreeningFormats": "Upravljajte 3D, IMAX i drugim formatima",
   "@manageScreeningFormats": {"description": "Manage screening formats tile subtitle"},
-  "manageHalls": "Upravljajte salama i sjedištima",
+  "manageHalls": "Upravljajte salama",
+  "manageSeats": "Upravljajte šablonima i rasporedom sjedišta",
+  "maxSeatsReached": "Dostignut je maksimalan broj sjedišta (48)",
+  "@maxSeatsReached": {
+    "description": "Message shown when trying to add more than maximum allowed seats"
+  },
+  "@manageSeats": {
+    "description": "Manage seats tile subtitle"
+  },
   "@manageHalls": {"description": "Manage halls tile subtitle"},
   "manageUsers": "Upravljajte korisnicima i dozvolama sistema",
   "@manageUsers": {"description": "Manage users tile subtitle"},
@@ -1173,7 +1185,7 @@
   "@pleaseEnterPriceMultiplier": {"description": "Price multiplier validation message"},
   "halls": "Sale",
   "@halls": {"description": "Halls page title"},
-  "hallsAndSeats": "Sale i Sjedala",
+  "hallsAndSeats": "Sale",
   "@hallsAndSeats": {"description": "Halls and Seats page title"},
   "managementSystem": "Sistem za upravljanje",
   "@managementSystem": {"description": "Management System subtitle"},
@@ -2030,7 +2042,161 @@
     }
   },
   "autoGenerateSeatsTooltip": "Automatski generiši sedišta za ovaj kapacitet",
+  "seatName": "Naziv sjedišta",
+  "seatNameFormat": "Format: Slovo (A-F) + Broj (1-8)",
+  "pleaseEnterSeatName": "Unesite naziv sjedišta",
+  "invalidSeatFormat": "Neispravan format. Koristite A1-F8 format (npr. A1, B5, F8)",
+  "seatAlreadyExists": "Sjedište {name} već postoji",
+  "seatAddedSuccessfully": "Sjedište uspješno dodano",
+  "failedToAddSeat": "Greška pri dodavanju sjedišta",
+  "add": "Dodaj",
+  "regenerateAll": "Regeneriši sve",
+  "editSeat": "Uredi sjedište",
+  "update": "Ažuriraj",
+  "confirmDeleteSeat": "Obriši sjedište",
+  "areYouSureDeleteSeat": "Da li ste sigurni da želite obrisati ovo sjedište?",
+  "seatUpdatedSuccessfully": "Sjedište uspješno ažurirano",
+  "failedToUpdateSeat": "Greška pri ažuriranju sjedišta",
+  "seatDeletedSuccessfully": "Sjedište uspješno obrisano",
+  "failedToDeleteSeat": "Greška pri brisanju sjedišta",
+  "delete": "Obriši",
+  "seatsGeneratedSuccessfully": "Uspješno generisano {count} sjedišta",
+  "failedToGenerateSeats": "Greška pri generisanju sjedišta: {error}",
+  "autoGenerateSeats": "Automatski generiši sjedišta",
+  "autoGenerateSeatsMessage": "Ovo će kreirati {capacity} sjedišta za salu. Postojeća sjedišta će biti zamijenjena. Nastaviti?",
+  "@regenerateAll": {
+    "description": "Regenerate all button text"
+  },
+  "@seatName": {
+    "description": "Seat name field label"
+  },
+  "@seatNameFormat": {
+    "description": "Seat name format helper text"
+  },
+  "@pleaseEnterSeatName": {
+    "description": "Seat name validation message"
+  },
+  "@invalidSeatFormat": {
+    "description": "Invalid seat format validation message"
+  },
+  "@seatAlreadyExists": {
+    "description": "Seat already exists validation message",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "A1"
+      }
+    }
+  },
+  "@seatAddedSuccessfully": {
+    "description": "Seat added success message"
+  },
+  "@failedToAddSeat": {
+    "description": "Failed to add seat message"
+  },
+  "@add": {
+    "description": "Add button text"
+  },
+  "@editSeat": {
+    "description": "Edit seat dialog title"
+  },
+  "@update": {
+    "description": "Update button text"
+  },
+  "@confirmDeleteSeat": {
+    "description": "Delete seat dialog title"
+  },
+  "@areYouSureDeleteSeat": {
+    "description": "Delete seat confirmation message"
+  },
+  "@seatUpdatedSuccessfully": {
+    "description": "Seat updated success message"
+  },
+  "@failedToUpdateSeat": {
+    "description": "Failed to update seat message"
+  },
+  "@seatDeletedSuccessfully": {
+    "description": "Seat deleted success message"
+  },
+  "@failedToDeleteSeat": {
+    "description": "Failed to delete seat message"
+  },
+  "@delete": {
+    "description": "Delete button text"
+  },
+  "@seatsGeneratedSuccessfully": {
+    "description": "Seats generated success message",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "48"
+      }
+    }
+  },
+  "@failedToGenerateSeats": {
+    "description": "Failed to generate seats message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "@autoGenerateSeats": {
+    "description": "Auto-generate seats dialog title"
+  },
+  "@autoGenerateSeatsMessage": {
+    "description": "Auto-generate seats confirmation message",
+    "placeholders": {
+      "capacity": {
+        "type": "int",
+        "example": "48"
+      }
+    }
+  },
   "@autoGenerateSeatsTooltip": {
     "description": "Tooltip for auto-generate seats button"
+  },
+  "seatName": "Naziv sjedišta",
+  "@seatName": {
+    "description": "Seat name field label"
+  },
+  "seatNameFormat": "Format: Slovo (A-F) + Broj (1-8)",
+  "@seatNameFormat": {
+    "description": "Seat name format helper text"
+  },
+  "pleaseEnterSeatName": "Unesite naziv sjedišta",
+  "@pleaseEnterSeatName": {
+    "description": "Seat name validation message"
+  },
+  "invalidSeatFormat": "Neispravan format. Koristite A1-F8 format (npr. A1, B5, F8)",
+  "@invalidSeatFormat": {
+    "description": "Invalid seat format validation message"
+  },
+  "seatAlreadyExists": "Sjedište {name} već postoji",
+  "@seatAlreadyExists": {
+    "description": "Seat already exists validation message",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "A1"
+      }
+    }
+  },
+  "seatAddedSuccessfully": "Sjedište uspješno dodano",
+  "@seatAddedSuccessfully": {
+    "description": "Seat added success message"
+  },
+  "failedToAddSeat": "Greška pri dodavanju sjedišta",
+  "@failedToAddSeat": {
+    "description": "Failed to add seat message"
+  },
+  "add": "Dodaj",
+  "@add": {
+    "description": "Add button text"
+  },
+  "allSeatsAlreadyExist": "Sva sjedišta već postoje",
+  "@allSeatsAlreadyExist": {
+    "description": "Message shown when all seats already exist"
   }
 }

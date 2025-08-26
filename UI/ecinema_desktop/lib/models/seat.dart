@@ -5,15 +5,13 @@ part 'seat.g.dart';
 @JsonSerializable()
 class Seat {
   final int? id;
-  final int hallId;
-  final int rowNumber;
-  final int seatNumber;
+  final String? name;
+  final bool? isReserved;
 
   const Seat({
     this.id,
-    required this.hallId,
-    required this.rowNumber,
-    required this.seatNumber,
+    this.name,
+    this.isReserved,
   });
 
   factory Seat.fromJson(Map<String, dynamic> json) => _$SeatFromJson(json);
@@ -22,15 +20,26 @@ class Seat {
 
   Seat copyWith({
     int? id,
-    int? hallId,
-    int? rowNumber,
-    int? seatNumber,
+    String? name,
+    bool? isReserved,
   }) {
     return Seat(
       id: id ?? this.id,
-      hallId: hallId ?? this.hallId,
-      rowNumber: rowNumber ?? this.rowNumber,
-      seatNumber: seatNumber ?? this.seatNumber,
+      name: name ?? this.name,
+      isReserved: isReserved ?? this.isReserved,
     );
   }
+}
+
+@JsonSerializable()
+class SeatUpsertRequest {
+  final String? name;
+
+  const SeatUpsertRequest({
+    this.name,
+  });
+
+  factory SeatUpsertRequest.fromJson(Map<String, dynamic> json) => _$SeatUpsertRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SeatUpsertRequestToJson(this);
 }

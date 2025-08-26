@@ -34,15 +34,7 @@ namespace eCinema.Services
                 query = query.Where(x => x.Name.Contains(search.Name));
             }
 
-            if (search.MinCapacity.HasValue)
-            {
-                query = query.Where(x => x.Capacity >= search.MinCapacity.Value);
-            }
 
-            if (search.MaxCapacity.HasValue)
-            {
-                query = query.Where(x => x.Capacity <= search.MaxCapacity.Value);
-            }
 
             return query;
         }
@@ -54,10 +46,7 @@ namespace eCinema.Services
                 throw new InvalidOperationException("A hall with this name already exists.");
             }
 
-            if (request.Capacity <= 0)
-            {
-                throw new InvalidOperationException("Hall capacity must be greater than 0.");
-            }
+
         }
 
         protected override async Task BeforeUpdate(Hall entity, HallUpsertRequest request)

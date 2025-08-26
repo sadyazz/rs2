@@ -8,14 +8,22 @@ part of 'seat.dart';
 
 Seat _$SeatFromJson(Map<String, dynamic> json) => Seat(
       id: (json['id'] as num?)?.toInt(),
-      hallId: (json['hallId'] as num).toInt(),
-      rowNumber: (json['rowNumber'] as num).toInt(),
-      seatNumber: (json['seatNumber'] as num).toInt(),
+      name: json['name'] as String?,
+      isReserved: json['isReserved'] as bool?,
     );
 
 Map<String, dynamic> _$SeatToJson(Seat instance) => <String, dynamic>{
       'id': instance.id,
-      'hallId': instance.hallId,
-      'rowNumber': instance.rowNumber,
-      'seatNumber': instance.seatNumber,
+      'name': instance.name,
+      'isReserved': instance.isReserved,
+    };
+
+SeatUpsertRequest _$SeatUpsertRequestFromJson(Map<String, dynamic> json) =>
+    SeatUpsertRequest(
+      name: json['name'] as String?,
+    );
+
+Map<String, dynamic> _$SeatUpsertRequestToJson(SeatUpsertRequest instance) =>
+    <String, dynamic>{
+      'name': instance.name,
     };

@@ -261,21 +261,15 @@ namespace eCinema.Services
                 _context.Screenings.Add(entity);
                 await _context.SaveChangesAsync();
 
-                var hall = await _context.Halls.FindAsync(request.HallId);
                 var seats = await _context.Seats.ToListAsync();
-
                 if (!seats.Any())
                 {
-                    var rows = new[] { "A", "B", "C", "D", "E", "F", "G", "H" };
-                    var seatsPerRow = 6;
-                    var totalSeats = hall?.Capacity ?? 48;
+                    var rows = new[] { "A", "B", "C", "D", "E", "F" };
+                    var seatsPerRow = 8;
 
-                    for (int i = 0; i < totalSeats; i++)
+                    for (int rowIndex = 0; rowIndex < rows.Length; rowIndex++)
                     {
-                        var rowIndex = i / seatsPerRow;
-                        var seatNumber = (i % seatsPerRow) + 1;
-                        
-                        if (rowIndex < rows.Length)
+                        for (int seatNumber = 1; seatNumber <= seatsPerRow; seatNumber++)
                         {
                             var seatName = $"{rows[rowIndex]}{seatNumber}";
                             var seat = new Seat { Name = seatName };
@@ -285,6 +279,7 @@ namespace eCinema.Services
                     await _context.SaveChangesAsync();
                     seats = await _context.Seats.ToListAsync();
                 }
+
                 foreach (var seat in seats)
                 {
                     var screeningSeat = new ScreeningSeat
@@ -349,16 +344,31 @@ namespace eCinema.Services
                 throw new InvalidOperationException($"Screening with ID {screeningId} not found.");
             }
 
-            var allSeats = await _context.Seats.ToListAsync();
+            var seats = await _context.Seats.ToListAsync();
+            if (!seats.Any())
+            {
+                var rows = new[] { "A", "B", "C", "D", "E", "F" };
+                var seatsPerRow = 8;
+
+                for (int rowIndex = 0; rowIndex < rows.Length; rowIndex++)
+                {
+                    for (int seatNumber = 1; seatNumber <= seatsPerRow; seatNumber++)
+                    {
+                        var seatName = $"{rows[rowIndex]}{seatNumber}";
+                        var seat = new Seat { Name = seatName };
+                        _context.Seats.Add(seat);
+                    }
+                }
+                await _context.SaveChangesAsync();
+                seats = await _context.Seats.ToListAsync();
+            }
 
             var existingScreeningSeats = await _context.ScreeningSeats
                 .Where(ss => ss.ScreeningId == screeningId)
                 .ToListAsync();
+            _context.ScreeningSeats.RemoveRange(existingScreeningSeats);
 
-            var existingSeatIds = existingScreeningSeats.Select(ss => ss.SeatId).ToHashSet();
-            var seatsToAdd = allSeats.Where(s => !existingSeatIds.Contains(s.Id)).ToList();
-            
-            foreach (var seat in seatsToAdd)
+            foreach (var seat in seats)
             {
                 var screeningSeat = new ScreeningSeat
                 {
@@ -371,10 +381,7 @@ namespace eCinema.Services
 
             await _context.SaveChangesAsync();
             
-            var totalScreeningSeats = await _context.ScreeningSeats
-                .CountAsync(ss => ss.ScreeningId == screeningId);
-            
-            return totalScreeningSeats;
+            return seats.Count;
         }
     }
 } 

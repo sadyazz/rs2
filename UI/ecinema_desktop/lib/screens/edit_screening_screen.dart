@@ -4,6 +4,7 @@ import 'package:ecinema_desktop/models/movie.dart';
 import 'package:ecinema_desktop/models/hall.dart';
 import 'package:ecinema_desktop/models/screening_format.dart';
 import 'package:ecinema_desktop/models/search_result.dart';
+import 'package:ecinema_desktop/models/seat.dart';
 import 'package:ecinema_desktop/providers/screening_provider.dart';
 import 'package:ecinema_desktop/providers/movie_provider.dart';
 import 'package:ecinema_desktop/providers/hall_provider.dart';
@@ -13,6 +14,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class EditScreeningScreen extends StatefulWidget {
   final Screening? screening;
@@ -34,12 +37,13 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
   Map<String, dynamic> _initialValue = {};
   bool isLoading = false;
   bool isLoadingData = true;
-
+  bool isLoadingSeats = false;
+  
   SearchResult<Movie>? moviesResult;
   SearchResult<Hall>? hallsResult;
   SearchResult<ScreeningFormat>? formatsResult;
   
-
+  List<Seat> seats = [];
 
   @override
   void initState() {
@@ -100,6 +104,8 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
 
             };
           }
+          
+          await _loadSeats();
         } catch (e) {
           print('Error loading full screening data: $e');
         }
@@ -112,6 +118,36 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
       print('Error loading data: $e');
       setState(() {
         isLoadingData = false;
+      });
+    }
+  }
+
+  Future<void> _loadSeats() async {
+    if (widget.screening?.id == null) {
+      return;
+    }
+    
+    setState(() {
+      isLoadingSeats = true;
+    });
+
+    try {
+      final seatsList = await provider.getSeatsForScreening(widget.screening!.id!);
+      
+      setState(() {
+        seats = seatsList;
+      });
+      
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error loading seats: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      setState(() {
+        isLoadingSeats = false;
       });
     }
   }
@@ -160,7 +196,8 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
       if (widget.screening?.id != null) {
         await provider.update(widget.screening!.id!, formData);
       } else {
-        await provider.insert(formData);
+        final screening = await provider.insert(formData);
+        await provider.generateSeatsForScreening(screening.id!);
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -191,15 +228,22 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    
     return MasterScreen(
       widget.screening?.id != null 
         ? '${l10n.editScreening} - ${widget.screening!.movieTitle}' 
         : l10n.addScreening,
-      Column(
-        children: [
-          isLoadingData ? const Center(child: CircularProgressIndicator()) : _buildForm(),
-          _save(),
-        ],
+      SingleChildScrollView(
+        child: Column(
+          children: [
+            isLoadingData ? const Center(child: CircularProgressIndicator()) : _buildForm(),
+            if (widget.screening?.id != null) ...[
+              const SizedBox(height: 24),
+              _buildSeatsOverview(),
+            ],
+            _save(),
+          ],
+        ),
       ),
       showDrawer: false,
     );
@@ -375,6 +419,353 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSeatsOverview() {
+    final l10n = AppLocalizations.of(context)!;
+    
+    if (isLoadingSeats) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final reservedSeats = seats.where((seat) => seat.isReserved == true).length;
+    final totalSeats = seats.length;
+    final availableSeats = totalSeats - reservedSeats;
+    
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.event_seat,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Seats Overview',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    onPressed: _loadSeats,
+                    icon: const Icon(Icons.refresh),
+                    tooltip: 'Refresh seats',
+                  ),
+                  if (seats.isEmpty) ...[
+                    const SizedBox(width: 8),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        try {
+                          await provider.generateSeatsForScreening(widget.screening!.id!);
+                          await _loadSeats();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Seats generated successfully'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Failed to generate seats: $e'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      },
+                      icon: const Icon(Icons.add),
+                      label: const Text('Generate Seats'),
+                    ),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 12),
+              
+              Row(
+                children: [
+                  _buildSeatStatCard(
+                    'Total Seats',
+                    totalSeats.toString(),
+                    Icons.event_seat,
+                    Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(width: 12),
+                  _buildSeatStatCard(
+                    'Available',
+                    availableSeats.toString(),
+                    Icons.check_circle,
+                    Colors.green,
+                  ),
+                  const SizedBox(width: 12),
+                  _buildSeatStatCard(
+                    'Reserved',
+                    reservedSeats.toString(),
+                    Icons.block,
+                    Colors.red,
+                  ),
+                ],
+              ),
+              
+              const SizedBox(height: 16),
+              
+              Text(
+                'Seat Layout',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 12),
+              
+              _buildSeatsGrid(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSeatStatCard(String title, String value, IconData icon, Color color) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: color.withOpacity(0.3),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: color, size: 20),
+            const SizedBox(height: 6),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            ),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 11,
+                color: color.withOpacity(0.8),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSeatsGrid() {
+    if (seats.isEmpty) {
+      return const Center(
+        child: Text('No seats available'),
+      );
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+        ),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              'SCREEN',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: 11,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          
+          Container(
+            height: 300,
+            child: SingleChildScrollView(
+              child: _buildSeatsGridContent(),
+            ),
+          ),
+          
+          const SizedBox(height: 16),
+          
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildSeatLegend('Available', Colors.green),
+              const SizedBox(width: 24),
+              _buildSeatLegend('Reserved', Colors.red),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSeatsGridContent() {
+    if (seats.isEmpty) {
+      return const Center(
+        child: Text('No seats available'),
+      );
+    }
+
+    return _buildRowLayout();
+  }
+
+  Widget _buildRowLayout() {
+    if (seats.isEmpty) {
+      return const Center(child: Text('No seats available'));
+    }
+
+    final Map<String, List<Seat>> rows = {};
+    
+    for (final seat in seats) {
+      final seatName = seat.name ?? '';
+      if (seatName.isNotEmpty) {
+        final row = seatName[0];
+        if (!rows.containsKey(row)) {
+          rows[row] = [];
+        }
+        rows[row]!.add(seat);
+      }
+    }
+
+    final sortedRows = rows.keys.toList()..sort();
+
+    return Column(
+      children: sortedRows.map((row) => _buildSeatRow(row, rows[row]!)).toList(),
+    );
+  }
+
+  Widget _buildSeatRow(String rowName, List<Seat> rowSeats) {
+    final sortedSeats = rowSeats.toList()
+      ..sort((a, b) {
+        final aName = a.name ?? '';
+        final bName = b.name ?? '';
+        if (aName.length > 1 && bName.length > 1) {
+          return int.parse(aName.substring(1)).compareTo(int.parse(bName.substring(1)));
+        }
+        return aName.compareTo(bName);
+      });
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 25,
+            child: Text(
+              rowName,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: 12,
+              ),
+            ),
+          ),
+          const SizedBox(width: 6),
+          ...sortedSeats.map((seat) => _buildSeatItem(seat)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSeatItem(Seat seat) {
+    final isReserved = seat.isReserved ?? false;
+    final seatName = seat.name ?? 'Unknown';
+    
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 1),
+      child: Tooltip(
+        message: '$seatName - ${isReserved ? "Reserved" : "Available"}',
+        child: Container(
+          width: 32,
+          height: 32,
+          decoration: BoxDecoration(
+            color: isReserved ? Colors.red : Colors.green,
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(
+              color: isReserved ? Colors.red.shade700 : Colors.green.shade700,
+              width: 1,
+            ),
+          ),
+          child: Center(
+            child: Text(
+              seatName,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSeatLegend(String label, Color color, {bool isLayout = false}) {
+    return Row(
+      children: [
+        Container(
+          width: 16,
+          height: 16,
+          decoration: BoxDecoration(
+            color: isLayout ? Colors.transparent : color,
+            borderRadius: BorderRadius.circular(2),
+            border: Border.all(
+              color: color,
+              width: isLayout ? 2 : 1,
+            ),
+          ),
+          child: isLayout ? Center(
+            child: Icon(
+              Icons.grid_on,
+              size: 12,
+              color: color,
+            ),
+          ) : null,
+        ),
+        const SizedBox(width: 8),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
+      ],
     );
   }
 

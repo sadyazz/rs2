@@ -12,6 +12,10 @@
     "description": "Screenings navigation item"
   },
   "seatsHalls": "Seats & Halls",
+  "seats": "Seats",
+  "@seats": {
+    "description": "Seats navigation item"
+  },
   "@seatsHalls": {
     "description": "Seats and halls navigation item"
   },
@@ -1015,7 +1019,15 @@
   "@manageActors": {"description": "Manage actors tile subtitle"},
   "manageScreeningFormats": "Manage 3D, IMAX, and other formats",
   "@manageScreeningFormats": {"description": "Manage screening formats tile subtitle"},
-  "manageHalls": "Manage cinema halls and seating",
+  "manageHalls": "Manage cinema halls",
+  "manageSeats": "Manage seat templates and layouts",
+  "maxSeatsReached": "Maximum number of seats (48) has been reached",
+  "@maxSeatsReached": {
+    "description": "Message shown when trying to add more than maximum allowed seats"
+  },
+  "@manageSeats": {
+    "description": "Manage seats tile subtitle"
+  },
   "@manageHalls": {"description": "Manage halls tile subtitle"},
   "manageUsers": "Manage system users and permissions",
   "@manageUsers": {"description": "Manage users tile subtitle"},
@@ -1227,7 +1239,7 @@
   "@pleaseEnterPriceMultiplier": {"description": "Price multiplier validation message"},
   "halls": "Halls",
   "@halls": {"description": "Halls page title"},
-  "hallsAndSeats": "Halls and Seats",
+  "hallsAndSeats": "Halls",
   "@hallsAndSeats": {"description": "Halls and Seats page title"},
   "managementSystem": "Management System",
   "@managementSystem": {"description": "Management System subtitle"},
@@ -2068,7 +2080,161 @@
     }
   },
   "autoGenerateSeatsTooltip": "Auto-generate seats for this capacity",
+  "seatName": "Seat Name",
+  "seatNameFormat": "Format: Letter (A-F) + Number (1-8)",
+  "pleaseEnterSeatName": "Please enter seat name",
+  "invalidSeatFormat": "Invalid format. Use A1-F8 format (e.g., A1, B5, F8)",
+  "seatAlreadyExists": "Seat {name} already exists",
+  "seatAddedSuccessfully": "Seat added successfully",
+  "failedToAddSeat": "Failed to add seat",
+  "add": "Add",
+  "regenerateAll": "Regenerate All",
+  "editSeat": "Edit Seat",
+  "update": "Update",
+  "confirmDeleteSeat": "Delete Seat",
+  "areYouSureDeleteSeat": "Are you sure you want to delete this seat?",
+  "seatUpdatedSuccessfully": "Seat updated successfully",
+  "failedToUpdateSeat": "Failed to update seat",
+  "seatDeletedSuccessfully": "Seat deleted successfully",
+  "failedToDeleteSeat": "Failed to delete seat",
+  "delete": "Delete",
+  "seatsGeneratedSuccessfully": "Generated {count} seats successfully",
+  "failedToGenerateSeats": "Failed to generate seats: {error}",
+  "autoGenerateSeats": "Auto-generate Seats",
+  "autoGenerateSeatsMessage": "This will create {capacity} seats for the hall. Existing seats will be replaced. Continue?",
+  "@regenerateAll": {
+    "description": "Regenerate all button text"
+  },
+  "@seatName": {
+    "description": "Seat name field label"
+  },
+  "@seatNameFormat": {
+    "description": "Seat name format helper text"
+  },
+  "@pleaseEnterSeatName": {
+    "description": "Seat name validation message"
+  },
+  "@invalidSeatFormat": {
+    "description": "Invalid seat format validation message"
+  },
+  "@seatAlreadyExists": {
+    "description": "Seat already exists validation message",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "A1"
+      }
+    }
+  },
+  "@seatAddedSuccessfully": {
+    "description": "Seat added success message"
+  },
+  "@failedToAddSeat": {
+    "description": "Failed to add seat message"
+  },
+  "@add": {
+    "description": "Add button text"
+  },
+  "@editSeat": {
+    "description": "Edit seat dialog title"
+  },
+  "@update": {
+    "description": "Update button text"
+  },
+  "@confirmDeleteSeat": {
+    "description": "Delete seat dialog title"
+  },
+  "@areYouSureDeleteSeat": {
+    "description": "Delete seat confirmation message"
+  },
+  "@seatUpdatedSuccessfully": {
+    "description": "Seat updated success message"
+  },
+  "@failedToUpdateSeat": {
+    "description": "Failed to update seat message"
+  },
+  "@seatDeletedSuccessfully": {
+    "description": "Seat deleted success message"
+  },
+  "@failedToDeleteSeat": {
+    "description": "Failed to delete seat message"
+  },
+  "@delete": {
+    "description": "Delete button text"
+  },
+  "@seatsGeneratedSuccessfully": {
+    "description": "Seats generated success message",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "48"
+      }
+    }
+  },
+  "@failedToGenerateSeats": {
+    "description": "Failed to generate seats message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "@autoGenerateSeats": {
+    "description": "Auto-generate seats dialog title"
+  },
+  "@autoGenerateSeatsMessage": {
+    "description": "Auto-generate seats confirmation message",
+    "placeholders": {
+      "capacity": {
+        "type": "int",
+        "example": "48"
+      }
+    }
+  },
   "@autoGenerateSeatsTooltip": {
     "description": "Tooltip for auto-generate seats button"
+  },
+  "seatName": "Seat Name",
+  "@seatName": {
+    "description": "Seat name field label"
+  },
+  "seatNameFormat": "Format: Letter (A-F) + Number (1-8)",
+  "@seatNameFormat": {
+    "description": "Seat name format helper text"
+  },
+  "pleaseEnterSeatName": "Please enter seat name",
+  "@pleaseEnterSeatName": {
+    "description": "Seat name validation message"
+  },
+  "invalidSeatFormat": "Invalid format. Use A1-F8 format (e.g., A1, B5, F8)",
+  "@invalidSeatFormat": {
+    "description": "Invalid seat format validation message"
+  },
+  "seatAlreadyExists": "Seat {name} already exists",
+  "@seatAlreadyExists": {
+    "description": "Seat already exists validation message",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "A1"
+      }
+    }
+  },
+  "seatAddedSuccessfully": "Seat added successfully",
+  "@seatAddedSuccessfully": {
+    "description": "Seat added success message"
+  },
+  "failedToAddSeat": "Failed to add seat",
+  "@failedToAddSeat": {
+    "description": "Failed to add seat message"
+  },
+  "add": "Add",
+  "@add": {
+    "description": "Add button text"
+  },
+  "allSeatsAlreadyExist": "All seats already exist",
+  "@allSeatsAlreadyExist": {
+    "description": "Message shown when all seats already exist"
   }
 }

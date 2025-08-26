@@ -9,5 +9,6 @@ namespace eCinema.Services
         Task<List<SeatResponse>> GetSeatsForScreening(int screeningId);
         Task<int> GetSeatsCount();
         Task<int> GenerateAllSeats();
+        Task<int> ClearAllSeats();
     }
 }
