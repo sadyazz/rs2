@@ -352,8 +352,8 @@ class _ReservationScreenState extends State<ReservationScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-                  Text(
-            l10n.selectSeat,
+        Text(
+          l10n.selectSeat,
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -377,17 +377,11 @@ class _ReservationScreenState extends State<ReservationScreen> {
                 color: colorScheme.surfaceVariant.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    l10n.noAvailableSeats,
-                    style: TextStyle(
-                      color: colorScheme.onSurface.withOpacity(0.6),
-                    ),
-                  ),
-
-                ],
+              child: Text(
+                l10n.noAvailableSeats,
+                style: TextStyle(
+                  color: colorScheme.onSurface.withOpacity(0.6),
+                ),
               ),
             ),
           )
@@ -401,69 +395,74 @@ class _ReservationScreenState extends State<ReservationScreen> {
                 color: colorScheme.outline.withOpacity(0.2),
               ),
             ),
-            child: GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 8,
-                childAspectRatio: 1,
-                crossAxisSpacing: 4,
-                mainAxisSpacing: 4,
-              ),
-              itemCount: availableSeats.length,
-              itemBuilder: (context, index) {
-                final seat = availableSeats[index];
-                final isSelected = selectedSeats.any((s) => s.id == seat.id);
-                final isReserved = seat.isReserved == true;
-                
-                return GestureDetector(
-                  onTap: isReserved ? null : () {
-                    print('🔍 Seat tapped: ${seat.name} (${seat.id})');
-                    print('🔍 Current selectedSeats: ${selectedSeats.map((s) => '${s.name} (${s.id})').join(', ')}');
-                    
-                    setState(() {
-                      if (isSelected) {
-                        selectedSeats.removeWhere((s) => s.id == seat.id);
-                        print('🔍 Removed seat: ${seat.name}');
-                      } else {
-                        selectedSeats.add(seat);
-                        print('🔍 Added seat: ${seat.name}');
-                      }
-                    });
-                    
-                    print('🔍 After setState - selectedSeats: ${selectedSeats.map((s) => '${s.name} (${s.id})').join(', ')}');
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: isReserved 
-                          ? Colors.red 
-                          : isSelected 
-                              ? colorScheme.primary 
-                              : colorScheme.surfaceVariant,
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(
-                        color: isReserved 
-                            ? Colors.red 
-                            : isSelected 
-                                ? colorScheme.primary 
-                                : colorScheme.outline.withOpacity(0.3),
-                      ),
-                    ),
-                    child: Center(
-                                              child: Text(
-                          seat.name ?? 'Seat ${seat.id}',
-                          style: TextStyle(
-                            color: isSelected 
-                                ? colorScheme.onPrimary 
-                                : colorScheme.onSurface,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+            child: Column(
+              children: [
+                for (final row in ['A', 'B', 'C', 'D', 'E', 'F'])
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+
+                        ...List.generate(8, (seatNum) {
+                          final seatName = '$row${seatNum + 1}';
+                          final seat = availableSeats.firstWhere(
+                            (s) => s.name == seatName,
+                            orElse: () => Seat(id: -1, name: seatName, isReserved: true),
+                          );
+                          final isSelected = selectedSeats.any((s) => s.id == seat.id);
+                          final isReserved = seat.isReserved == true;
+                  
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            child: GestureDetector(
+                              onTap: isReserved ? null : () {
+                                setState(() {
+                                  if (isSelected) {
+                                    selectedSeats.removeWhere((s) => s.id == seat.id);
+                                  } else {
+                                    selectedSeats.add(seat);
+                                  }
+                                });
+                              },
+                              child: Container(
+                                width: 32,
+                                height: 32,
+                                decoration: BoxDecoration(
+                                  color: isReserved 
+                                      ? Colors.red 
+                                      : isSelected 
+                                          ? colorScheme.primary 
+                                          : colorScheme.surfaceVariant,
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(
+                                    color: isReserved 
+                                        ? Colors.red 
+                                        : isSelected 
+                                            ? colorScheme.primary 
+                                            : colorScheme.outline.withOpacity(0.3),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    seatName,
+                                    style: TextStyle(
+                                      color: isSelected 
+                                          ? colorScheme.onPrimary 
+                                          : colorScheme.onSurface,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                      ],
                     ),
                   ),
-                );
-              },
+              ],
             ),
           ),
       ],
