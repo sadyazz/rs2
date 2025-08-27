@@ -51,14 +51,6 @@
   "@search": {
     "description": "Search button and placeholder text"
   },
-  "filters": "Filteri",
-  "@filters": {
-    "description": "Filters button text"
-  },
-  "addMovie": "Dodaj film",
-  "@addMovie": {
-    "description": "Add movie button text"
-  },
   "movieManagement": "Upravljanje filmovima",
   "@movieManagement": {
     "description": "Movie management page title"
@@ -325,15 +317,7 @@
       }
     }
   },
-  "previous": "Prethodna",
-  "@previous": {
-    "description": "Previous page button text"
-  },
-  "next": "Sljedeća",
-  "@next": {
-    "description": "Next page button text"
-  },
-  "ofText": "od",
+   "ofText": "od",
   "@ofText": {
     "description": "Of text used in pagination (e.g., 15 of 75)"
   },
@@ -361,14 +345,6 @@
   "@unknownTitle": {
     "description": "Unknown title placeholder"
   },
-  "active": "Aktivan",
-  "@active": {
-    "description": "Active status text"
-  },
-  "inactive": "Neaktivan",
-  "@inactive": {
-    "description": "Inactive status text"
-  },
   "minutes": "minuta",
   "@minutes": {
     "description": "Minutes text"
@@ -388,10 +364,6 @@
   "trailer": "Trejler",
   "@trailer": {
     "description": "Trailer label"
-  },
-  "description": "Opis",
-  "@description": {
-    "description": "Description label"
   },
   "unknown": "Nepoznato",
   "@unknown": {
@@ -479,25 +451,9 @@
   "@failedToDeleteMovie": {
     "description": "Failed to delete movie message"
   },
-  "movies": "Filmovi",
-  "@movies": {
-    "description": "Movies list page title"
-  },
-  "search": "Pretraga",
-  "@search": {
-    "description": "Search button and field label"
-  },
-  "filters": "Filteri",
-  "@filters": {
-    "description": "Filters button text"
-  },
   "addMovie": "Dodaj film",
   "@addMovie": {
     "description": "Add movie button text"
-  },
-  "director": "Režiser",
-  "@director": {
-    "description": "Director field label"
   },
   "genreIds": "ID žanrova (npr. 1,2,3)",
   "@genreIds": {
@@ -527,22 +483,6 @@
   "@releaseYear": {
     "description": "Release year field label"
   },
-  "isActive": "Je aktivan",
-  "@isActive": {
-    "description": "Is active field label"
-  },
-  "reset": "Resetuj",
-  "@reset": {
-    "description": "Reset button text"
-  },
-  "close": "Zatvori",
-  "@close": {
-    "description": "Close button text"
-  },
-  "apply": "Primijeni",
-  "@apply": {
-    "description": "Apply button text"
-  },
   "loadingMovies": "Učitavanje filmova...",
   "@loadingMovies": {
     "description": "Loading movies message"
@@ -571,30 +511,6 @@
   "@unknownDirector": {
     "description": "Unknown director placeholder"
   },
-  "unknown": "Nepoznato",
-  "@unknown": {
-    "description": "Unknown placeholder text"
-  },
-  "active": "Aktivan",
-  "@active": {
-    "description": "Active status text"
-  },
-  "inactive": "Neaktivan",
-  "@inactive": {
-    "description": "Inactive status text"
-  },
-  "previous": "Prethodna",
-  "@previous": {
-    "description": "Previous page button text"
-  },
-  "next": "Sljedeća",
-  "@next": {
-    "description": "Next page button text"
-  },
-  "ofText": "od",
-  "@ofText": {
-    "description": "Of text used in pagination (e.g., 15 of 75)"
-  },
   "editMovie": "Uredi film",
   "@editMovie": {
     "description": "Edit movie page title"
@@ -603,14 +519,7 @@
   "@title": {
     "description": "Title field label"
   },
-  "description": "Opis",
-  "@description": {
-    "description": "Description field label"
-  },
-  "director": "Režiser",
-  "@director": {
-    "description": "Director field label"
-  },
+
   "durationMinutes": "Trajanje (minuta)",
   "@durationMinutes": {
     "description": "Duration field label"
@@ -639,17 +548,9 @@
   "@imageUrl": {
     "description": "Image URL field label"
   },
-  "isActive": "Je aktivan",
-  "@isActive": {
-    "description": "Is active field label"
-  },
   "movieStatus": "Status filma",
   "@movieStatus": {
     "description": "Movie status field label"
-  },
-  "addMovie": "Dodaj film",
-  "@addMovie": {
-    "description": "Add movie button text"
   },
   "updateMovie": "Ažuriraj film",
   "@updateMovie": {
@@ -681,14 +582,7 @@
   "@noScreeningsFound": {
     "description": "No screenings found message"
   },
-  "previous": "Prethodna",
-  "@previous": {
-    "description": "Previous page button"
-  },
-  "next": "Sljedeća",
-  "@next": {
-    "description": "Next page button"
-  },
+
   "movieId": "ID filma",
   "@movieId": {
     "description": "Movie ID field label"
@@ -733,25 +627,9 @@
   "@hasAvailableSeats": {
     "description": "Has available seats checkbox label"
   },
-  "isActive": "Aktivno",
-  "@isActive": {
-    "description": "Is active checkbox label"
-  },
   "includeDeleted": "Uključi obrisane",
   "@includeDeleted": {
     "description": "Include deleted checkbox label"
-  },
-  "reset": "Resetuj",
-  "@reset": {
-    "description": "Reset button text"
-  },
-  "close": "Zatvori",
-  "@close": {
-    "description": "Close button text"
-  },
-  "apply": "Primijeni",
-  "@apply": {
-    "description": "Apply button text"
   },
   "confirmDeletion": "Potvrdi brisanje",
   "@confirmDeletion": {
@@ -813,17 +691,9 @@
   "@unknownHall": {
     "description": "Unknown hall fallback text"
   },
-  "unknown": "Nepoznato",
-  "@unknown": {
-    "description": "Unknown fallback text"
-  },
   "active": "Aktivno",
   "@active": {
     "description": "Active status text"
-  },
-  "inactive": "Neaktivno",
-  "@inactive": {
-    "description": "Inactive status text"
   },
   "deleted": "Obrisana",
   "@deleted": {
@@ -880,18 +750,6 @@
   "hasSubtitles": "Ima titlove",
   "@hasSubtitles": {
     "description": "Has subtitles switch label"
-  },
-  "isActive": "Je aktivan",
-  "@isActive": {
-    "description": "Is active switch label"
-  },
-  "update": "Ažuriraj",
-  "@update": {
-    "description": "Update button text"
-  },
-  "create": "Kreiraj",
-  "@create": {
-    "description": "Create button text"
   },
   "pleaseSelectMovie": "Molimo odaberite film",
   "@pleaseSelectMovie": {
@@ -1179,10 +1037,7 @@
   "@noScreeningFormatsFound": {"description": "No screening formats found message"},
   "editScreeningFormatScreenComingSoon": "Ekran za uređivanje formata projekcije - Dolazi uskoro",
   "@editScreeningFormatScreenComingSoon": {"description": "Edit screening format screen coming soon message"},
-  "priceMultiplier": "Multiplikator cijene",
-  "@priceMultiplier": {"description": "Price multiplier field label"},
-  "pleaseEnterPriceMultiplier": "Molimo unesite multiplikator cijene",
-  "@pleaseEnterPriceMultiplier": {"description": "Price multiplier validation message"},
+
   "halls": "Sale",
   "@halls": {"description": "Halls page title"},
   "hallsAndSeats": "Sale",
@@ -1335,8 +1190,6 @@
   "@toPublishDate": {"description": "To publish date filter label"},
   "selectDate": "Odaberi datum",
   "@selectDate": {"description": "Select date button text"},
-  "active": "Aktivan",
-  "@active": {"description": "Active status label"},
   "inactive": "Neaktivan",
   "@inactive": {"description": "Inactive status label"},
   "deleted": "Obrisan",
@@ -1697,14 +1550,7 @@
   "@cancel": {
     "description": "Cancel button text"
   },
-  "create": "Kreiraj",
-  "@create": {
-    "description": "Create button text"
-  },
-  "update": "Ažuriraj",
-  "@update": {
-    "description": "Update button text"
-  },
+
   "loadingRoles": "Učitavanje uloga...",
   "@loadingRoles": {
     "description": "Loading roles message"
@@ -1735,10 +1581,6 @@
       }
     }
   },
-  "active": "Aktivna",
-  "@active": {
-    "description": "Active status label"
-  },
   "unnamedRole": "Neimenovana Uloga",
   "@unnamedRole": {
     "description": "Default role name when name is missing"
@@ -1750,14 +1592,6 @@
   "addUser": "Dodaj Korisnika",
   "@addUser": {
     "description": "Add user screen title"
-  },
-  "firstName": "Ime",
-  "@firstName": {
-    "description": "First name field label"
-  },
-  "lastName": "Prezime",
-  "@lastName": {
-    "description": "Last name field label"
   },
   "phoneNumber": "Broj Telefona",
   "@phoneNumber": {
@@ -1789,18 +1623,8 @@
       }
     }
   },
-  "addUser": "Dodaj Korisnika",
-  "@addUser": {
-    "description": "Add user button text"
-  },
-  "filters": "Filteri",
-  "@filters": {
-    "description": "Filters button text"
-  },
-  "tryAdjustingSearchCriteria": "Pokušajte prilagoditi kriterije pretrage",
-  "@tryAdjustingSearchCriteria": {
-    "description": "Try adjusting search criteria message"
-  },
+
+
   "readyToRelease": "Spremni za premijeru",
   "@readyToRelease": {
     "description": "Section title for movies ready to release"
@@ -1827,10 +1651,6 @@
   "@saveChanges": {
     "description": "Save changes button text"
   },
-  "cancel": "Otkaži",
-  "@cancel": {
-    "description": "Cancel button text"
-  },
   "profileInformation": "Informacije o profilu",
   "@profileInformation": {
     "description": "Profile information section title"
@@ -1848,10 +1668,6 @@
         "example": "Network error"
       }
     }
-  },
-  "roleName": "Naziv Role",
-  "@roleName": {
-    "description": "Role name field label"
   },
   "capacityMismatch": "Neusklađenost Kapaciteta",
   "@capacityMismatch": {
@@ -2051,19 +1867,7 @@
   "failedToAddSeat": "Greška pri dodavanju sjedišta",
   "add": "Dodaj",
   "regenerateAll": "Regeneriši sve",
-  "editSeat": "Uredi sjedište",
-  "update": "Ažuriraj",
-  "confirmDeleteSeat": "Obriši sjedište",
-  "areYouSureDeleteSeat": "Da li ste sigurni da želite obrisati ovo sjedište?",
-  "seatUpdatedSuccessfully": "Sjedište uspješno ažurirano",
-  "failedToUpdateSeat": "Greška pri ažuriranju sjedišta",
-  "seatDeletedSuccessfully": "Sjedište uspješno obrisano",
-  "failedToDeleteSeat": "Greška pri brisanju sjedišta",
-  "delete": "Obriši",
-  "seatsGeneratedSuccessfully": "Uspješno generisano {count} sjedišta",
-  "failedToGenerateSeats": "Greška pri generisanju sjedišta: {error}",
-  "autoGenerateSeats": "Automatski generiši sjedišta",
-  "autoGenerateSeatsMessage": "Ovo će kreirati {capacity} sjedišta za salu. Postojeća sjedišta će biti zamijenjena. Nastaviti?",
+
   "@regenerateAll": {
     "description": "Regenerate all button text"
   },
@@ -2157,46 +1961,28 @@
   "@autoGenerateSeatsTooltip": {
     "description": "Tooltip for auto-generate seats button"
   },
-  "seatName": "Naziv sjedišta",
-  "@seatName": {
-    "description": "Seat name field label"
-  },
-  "seatNameFormat": "Format: Slovo (A-F) + Broj (1-8)",
-  "@seatNameFormat": {
-    "description": "Seat name format helper text"
-  },
-  "pleaseEnterSeatName": "Unesite naziv sjedišta",
-  "@pleaseEnterSeatName": {
-    "description": "Seat name validation message"
-  },
-  "invalidSeatFormat": "Neispravan format. Koristite A1-F8 format (npr. A1, B5, F8)",
-  "@invalidSeatFormat": {
-    "description": "Invalid seat format validation message"
-  },
-  "seatAlreadyExists": "Sjedište {name} već postoji",
-  "@seatAlreadyExists": {
-    "description": "Seat already exists validation message",
-    "placeholders": {
-      "name": {
-        "type": "String",
-        "example": "A1"
-      }
-    }
-  },
-  "seatAddedSuccessfully": "Sjedište uspješno dodano",
-  "@seatAddedSuccessfully": {
-    "description": "Seat added success message"
-  },
-  "failedToAddSeat": "Greška pri dodavanju sjedišta",
-  "@failedToAddSeat": {
-    "description": "Failed to add seat message"
-  },
-  "add": "Dodaj",
-  "@add": {
-    "description": "Add button text"
-  },
   "allSeatsAlreadyExist": "Sva sjedišta već postoje",
   "@allSeatsAlreadyExist": {
     "description": "Message shown when all seats already exist"
+  },
+  "totalSeats":"Ukupno sjedišta",
+  "@totalSeats":{
+    "description":"Total number of seats"
+  },
+  "availableSeats":"Dostupna sjedišta",
+  "@availableSeats":{
+    "description":"Number of available seats"
+  },
+   "reservedSeats":"Rezervisana sjedišta",
+  "@reservedSeats":{
+    "description":"Number of reserved seats"
+  },
+  "available": "Dostupno",
+  "@available": {
+    "description": "Available seats label"
+  },
+  "reserved": "Rezervisano",
+  "@reserved": {
+    "description": "Reserved seats label"
   }
 }

@@ -207,37 +207,12 @@ class _SeatsManagementScreenState extends State<SeatsManagementScreen> {
     final l10n = AppLocalizations.of(context)!;
     
     try {
-      final rows = ['A', 'B', 'C', 'D', 'E', 'F'];
-      final expectedSeats = <String>{};
-      
-      for (final row in rows) {
-        for (int i = 1; i <= 8; i++) {
-          expectedSeats.add('$row$i');
-        }
-      }
-      
-      final existingSeats = _seats.map((s) => s.name!).toSet();
-      final missingSeats = expectedSeats.difference(existingSeats);
-      
-      if (missingSeats.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.allSeatsAlreadyExist),
-            backgroundColor: Colors.blue,
-          ),
-        );
-        return;
-      }
-      
-      for (final seatName in missingSeats) {
-        await _seatProvider.insert(SeatUpsertRequest(name: seatName));
-      }
-      
+      await _seatProvider.generateAll();
       await _loadSeats();
       
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(l10n.seatsGeneratedSuccessfully(missingSeats.length)),
+          content: Text(l10n.seatsGeneratedSuccessfully(_seats.length)),
           backgroundColor: Colors.green,
         ),
       );

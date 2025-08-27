@@ -51,10 +51,6 @@
   "@search": {
     "description": "Search button and placeholder text"
   },
-  "filters": "Filters",
-  "@filters": {
-    "description": "Filters button text"
-  },
   "addMovie": "Add Movie",
   "@addMovie": {
     "description": "Add movie button text"
@@ -156,10 +152,6 @@
   "releaseYear": "Release Year",
   "@releaseYear": {
     "description": "Release year filter label"
-  },
-  "isActive": "Is Active",
-  "@isActive": {
-    "description": "Is active filter label"
   },
   "reset": "Reset",
   "@reset": {
@@ -387,10 +379,6 @@
   "@inactive": {
     "description": "Inactive status text"
   },
-  "director": "Director",
-  "@director": {
-    "description": "Director label"
-  },
   "duration": "Duration",
   "@duration": {
     "description": "Duration label"
@@ -521,26 +509,6 @@
   "@failedToDeleteMovie": {
     "description": "Failed to delete movie message"
   },
-  "movies": "Movies",
-  "@movies": {
-    "description": "Movies list page title"
-  },
-  "search": "Search",
-  "@search": {
-    "description": "Search button and field label"
-  },
-  "filters": "Filters",
-  "@filters": {
-    "description": "Filters button text"
-  },
-  "addMovie": "Add Movie",
-  "@addMovie": {
-    "description": "Add movie button text"
-  },
-  "director": "Director",
-  "@director": {
-    "description": "Director field label"
-  },
   "genreIds": "Genre IDs (e.g., 1,2,3)",
   "@genreIds": {
     "description": "Genre IDs field label"
@@ -617,10 +585,6 @@
   "@unknown": {
     "description": "Unknown placeholder text"
   },
-  "active": "Active",
-  "@active": {
-    "description": "Active status text"
-  },
   "inactive": "Inactive",
   "@inactive": {
     "description": "Inactive status text"
@@ -648,10 +612,6 @@
   "description": "Description",
   "@description": {
     "description": "Description field label"
-  },
-  "director": "Director",
-  "@director": {
-    "description": "Director field label"
   },
   "durationMinutes": "Duration (minutes)",
   "@durationMinutes": {
@@ -681,10 +641,6 @@
   "@imageUrl": {
     "description": "Image URL field label"
   },
-  "isActive": "Is Active",
-  "@isActive": {
-    "description": "Is active field label"
-  },
   "movieStatus": "Movie Status",
   "@movieStatus": {
     "description": "Movie status field label"
@@ -692,10 +648,6 @@
   "cancel": "Cancel",
   "@cancel": {
     "description": "Cancel button text"
-  },
-  "addMovie": "Add Movie",
-  "@addMovie": {
-    "description": "Add movie button text"
   },
   "updateMovie": "Update Movie",
   "@updateMovie": {
@@ -779,10 +731,6 @@
   "@hasAvailableSeats": {
     "description": "Has available seats checkbox label"
   },
-  "isActive": "Is Active",
-  "@isActive": {
-    "description": "Is active checkbox label"
-  },
   "includeDeleted": "Include Deleted",
   "@includeDeleted": {
     "description": "Include deleted checkbox label"
@@ -859,14 +807,6 @@
   "@unknownHall": {
     "description": "Unknown hall fallback text"
   },
-  "unknown": "Unknown",
-  "@unknown": {
-    "description": "Unknown fallback text"
-  },
-  "active": "Active",
-  "@active": {
-    "description": "Active status text"
-  },
   "inactive": "Inactive",
   "@inactive": {
     "description": "Inactive status text"
@@ -934,10 +874,6 @@
   "hasSubtitles": "Has Subtitles",
   "@hasSubtitles": {
     "description": "Has subtitles switch label"
-  },
-  "isActive": "Is Active",
-  "@isActive": {
-    "description": "Is active switch label"
   },
   "update": "Update",
   "@update": {
@@ -1389,8 +1325,6 @@
   "@toPublishDate": {"description": "To publish date filter label"},
   "selectDate": "Select Date",
   "@selectDate": {"description": "Select date button text"},
-  "active": "Active",
-  "@active": {"description": "Active status label"},
   "inactive": "Inactive",
   "@inactive": {"description": "Inactive status label"},
   "deleted": "Deleted",
@@ -1641,14 +1575,6 @@
   "@createNewAdminAccount": {
     "description": "Admin registration subtitle"
   },
-  "firstName": "First Name",
-  "@firstName": {
-    "description": "First name field label"
-  },
-  "lastName": "Last Name",
-  "@lastName": {
-    "description": "Last name field label"
-  },
   "phoneNumberOptional": "Phone Number (Optional)",
   "@phoneNumberOptional": {
     "description": "Phone number field label (optional)"
@@ -1791,10 +1717,6 @@
       }
     }
   },
-  "active": "Active",
-  "@active": {
-    "description": "Active status label"
-  },
   "unnamedRole": "Unnamed Role",
   "@unnamedRole": {
     "description": "Default role name when name is missing"
@@ -1849,10 +1771,6 @@
   "@addUser": {
     "description": "Add user button text"
   },
-  "filters": "Filters",
-  "@filters": {
-    "description": "Filters button text"
-  },
   "tryAdjustingSearchCriteria": "Try adjusting your search criteria",
   "@tryAdjustingSearchCriteria": {
     "description": "Try adjusting search criteria message"
@@ -1886,10 +1804,6 @@
         "example": "Network error"
       }
     }
-  },
-  "roleName": "Role Name",
-  "@roleName": {
-    "description": "Role name field label"
   },
   "capacityMismatch": "Capacity Mismatch",
   "@capacityMismatch": {
@@ -2236,5 +2150,25 @@
   "allSeatsAlreadyExist": "All seats already exist",
   "@allSeatsAlreadyExist": {
     "description": "Message shown when all seats already exist"
+  },
+  "totalSeats":"Total seats",
+  "@totalSeats":{
+    "description":"Total number of seats"
+  },
+    "availableSeats":"Available seats",
+  "@availableSeats":{
+    "description":"Number of available seats"
+  },
+   "reservedSeats":"Reserved seats",
+  "@reservedSeats":{
+    "description":"Number of reserved seats"
+  },
+  "available": "Available",
+  "@available": {
+    "description": "Available seats label"
+  },
+  "reserved": "Reserved",
+  "@reserved": {
+    "description": "Reserved seats label"
   }
 }

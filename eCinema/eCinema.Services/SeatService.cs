@@ -34,11 +34,8 @@ namespace eCinema.Services
                 .Include(ss => ss.Seat)
                 .ToListAsync();
 
-            Console.WriteLine($"🔍 GetSeatsForScreening: Found {screeningSeats?.Count ?? 0} seats for screening {screeningId}");
-
             if (screeningSeats == null || !screeningSeats.Any())
             {
-                Console.WriteLine($"⚠️ No seats found for screening {screeningId}");
                 return new List<SeatResponse>();
             }
 
@@ -48,10 +45,6 @@ namespace eCinema.Services
                 Name = ss.Seat.Name,
                 IsReserved = ss.IsReserved
             }).ToList();
-
-            Console.WriteLine($"✅ Returning {result.Count} seats for screening {screeningId}");
-            Console.WriteLine($"📊 Reserved seats: {result.Count(s => s.IsReserved == true)}");
-            Console.WriteLine($"📊 Available seats: {result.Count(s => s.IsReserved != true)}");
 
             return result;
         }
@@ -148,16 +141,79 @@ namespace eCinema.Services
                 if (rowIndex < rows.Length)
                 {
                     var seatName = $"{rows[rowIndex]}{seatNumber}";
-                    var seat = new Seat { Name = seatName };
-                    _context.Seats.Add(seat);
+                    if (!await _context.Seats.AnyAsync(s => s.Name == seatName))
+                    {
+                        var seat = new Seat { Name = seatName };
+                        _context.Seats.Add(seat);
+                    }
                 }
             }
 
             await _context.SaveChangesAsync();
             
             var newCount = await _context.Seats.CountAsync();
+
+            await AddMissingSeatsToAllScreenings();
             
             return newCount;
+        }
+
+        public async Task AddMissingSeatsToAllScreenings()
+        {
+            var allScreenings = await _context.Screenings
+                .Where(s => !s.IsDeleted)
+                .ToListAsync();
+
+            var allSeats = await _context.Seats.ToListAsync();
+
+            foreach (var screening in allScreenings)
+            {
+                var existingSeats = await _context.ScreeningSeats
+                    .Where(ss => ss.ScreeningId == screening.Id)
+                    .Select(ss => ss.SeatId)
+                    .ToListAsync();
+
+                foreach (var seat in allSeats)
+                {
+                    if (!existingSeats.Contains(seat.Id))
+                    {
+                        _context.ScreeningSeats.Add(new ScreeningSeat
+                        {
+                            ScreeningId = screening.Id,
+                            SeatId = seat.Id,
+                            IsReserved = false
+                        });
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<PagedResult<SeatResponse>> GetAsync(BaseSearchObject search)
+        {
+            var query = _context.Set<Seat>().AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search?.FTS))
+            {
+                query = query.Where(x => x.Name.Contains(search.FTS));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            if (search?.Page.HasValue == true && search?.PageSize.HasValue == true)
+            {
+                query = query.Skip(search.Page.Value * search.PageSize.Value).Take(search.PageSize.Value);
+            }
+
+            var list = await query.OrderBy(x => x.Name).ToListAsync();
+            var result = _mapper.Map<List<SeatResponse>>(list);
+
+            return new PagedResult<SeatResponse>
+            {
+                Items = result,
+                TotalCount = totalCount
+            };
         }
     }
 }

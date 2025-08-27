@@ -497,21 +497,21 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
               Row(
                 children: [
                   _buildSeatStatCard(
-                    'Total Seats',
+                    l10n.totalSeats,
                     totalSeats.toString(),
                     Icons.event_seat,
                     Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(width: 12),
                   _buildSeatStatCard(
-                    'Available',
+                    l10n.availableSeats,
                     availableSeats.toString(),
                     Icons.check_circle,
                     Colors.green,
                   ),
                   const SizedBox(width: 12),
                   _buildSeatStatCard(
-                    'Reserved',
+                    l10n.reservedSeats,
                     reservedSeats.toString(),
                     Icons.block,
                     Colors.red,
@@ -576,6 +576,8 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
   }
 
   Widget _buildSeatsGrid() {
+    final l10n = AppLocalizations.of(context)!;
+    
     if (seats.isEmpty) {
       return const Center(
         child: Text('No seats available'),
@@ -622,9 +624,9 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildSeatLegend('Available', Colors.green),
+              _buildSeatLegend(l10n.available, Colors.green),
               const SizedBox(width: 24),
-              _buildSeatLegend('Reserved', Colors.red),
+              _buildSeatLegend(l10n.reserved, Colors.red),
             ],
           ),
         ],
