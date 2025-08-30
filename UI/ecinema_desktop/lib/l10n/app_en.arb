@@ -1607,7 +1607,7 @@
   "@passwordsDoNotMatch": {
     "description": "Password mismatch validation message"
   },
-  "accountCreatedSuccessfully": "Admin account created successfully",
+  "accountCreatedSuccessfully": "Admin account created successfully! Redirecting to login...",
   "@accountCreatedSuccessfully": {
     "description": "Account created success message"
   },

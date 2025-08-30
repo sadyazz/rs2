@@ -38,13 +38,15 @@ abstract class BaseProvider<T> with ChangeNotifier {
       var result = SearchResult<T>();
 
       result.totalCount = data['totalCount'];
-      result.items = List<T>.from(data["items"].map((e) => fromJson(e)));
 
-
-
+      if (data["items"] != null) {
+        result.items = List<T>.from(data["items"].map((e) => fromJson(e)));
+      } else {
+        print('Items is null in response');
+      }
       return result;
     } else {
-      throw new Exception("Unknown error");
+      throw Exception("Unknown error");
     }
   }
 
@@ -75,7 +77,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
       var data = jsonDecode(response.body);
       return fromJson(data);
     } else {
-      throw new Exception("Unknown error");
+      throw Exception("Unknown error");
     }
   }
 
@@ -91,7 +93,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
       var data = jsonDecode(response.body);
       return fromJson(data);
     } else {
-      throw new Exception("Unknown error");
+      throw Exception("Unknown error");
     }
   }
 
@@ -105,7 +107,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     if (isValidResponse(response)) {
       return true;
     } else {
-      throw new Exception("Unknown error");
+      throw Exception("Unknown error");
     }
   }
 
@@ -119,7 +121,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     if (isValidResponse(response)) {
       return true;
     } else {
-      throw new Exception("Unknown error");
+      throw Exception("Unknown error");
     }
   }
 
@@ -133,7 +135,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     if (isValidResponse(response)) {
       return true;
     } else {
-      throw new Exception("Unknown error");
+      throw Exception("Unknown error");
     }
   }
 
@@ -145,10 +147,10 @@ abstract class BaseProvider<T> with ChangeNotifier {
     if (response.statusCode < 299) {
       return true;
     } else if (response.statusCode == 401) {
-      throw new Exception("Unauthorized");
+      throw Exception("Unauthorized");
     } else {
-      print(response.body);
-      throw new Exception("Something bad happened please try again");
+      print('Error response body: ${response.body}');
+      throw Exception("Something bad happened please try again");
     }
   }
 

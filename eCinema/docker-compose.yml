@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=Sifra123!
+      - SA_PASSWORD=${_saPassword}
       - MSSQL_PID=Developer
     ports:
       - "1433:1433"
@@ -15,24 +15,74 @@ services:
       - ecinema-2025
     volumes:
       - sqlserver_data:/var/opt/mssql
-volumes:
-  sqlserver_data: 
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    hostname: "rabbitmq"
+    labels:
+      NAME: "rabbitmq"
+    restart: unless-stopped
+    environment:
+      - RABBITMQ_DEFAULT_USER=${_rabbitMqUser}
+      - RABBITMQ_DEFAULT_PASS=${_rabbitMqPassword}
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    expose:
+      - 5672
+      - 15672
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+    networks:
+      - ecinema-2025
 
   ecinema-api:
     build:
       context: .
+    restart: unless-stopped
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=eCinemaDb;User=sa;Password=Sifra123!;ConnectRetryCount=0;TrustServerCertificate=True
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=eCinemaDb;User=sa;Password=${_saPassword};ConnectRetryCount=0;TrustServerCertificate=True
+      - _rabbitMqHost=${_rabbitMqHost}
+      - _rabbitMqUser=${_rabbitMqUser}
+      - _rabbitMqPassword=${_rabbitMqPassword}
+      - _rabbitMqPort=${_rabbitMqPort}
     ports:
       - "5190:5190"
     networks:
       - ecinema-2025
-    links:
-      - sqlserver
     depends_on:
       - sqlserver
+      - rabbitmq
 
+  subscriber:
+    build:
+      context: ./eCinema.Subscriber
+      dockerfile: Dockerfile
+    restart: on-failure
+    environment:
+      - _fromAddress=${_fromAddress}
+      - _password=${_password}
+      - _host=${_host}
+      - _enableSSL=${_enableSSL}
+      - _displayName=${_displayName}
+      - _timeout=${_timeout}
+      - _port=${_port}
+      - _rabbitMqHost=${_rabbitMqHost}
+      - _rabbitMqUser=${_rabbitMqUser}
+      - _rabbitMqPassword=${_rabbitMqPassword}
+      - _rabbitMqPort=${_rabbitMqPort}
+    networks:
+      - ecinema-2025
+    depends_on:
+      - rabbitmq
+
+volumes:
+  sqlserver_data:
 networks:
   ecinema-2025:
     driver: bridge

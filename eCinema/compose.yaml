@@ -1,6 +1,0 @@
-﻿services:
-  ecinema.api:
-    image: ecinema.api
-    build:
-      context: .
-      dockerfile: eCinema.API/Dockerfile

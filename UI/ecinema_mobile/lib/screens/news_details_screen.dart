@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../models/news.dart';
@@ -27,32 +26,6 @@ class NewsDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (news.image != null && news.image!.isNotEmpty)
-              Container(
-                width: double.infinity,
-                height: 250,
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceVariant,
-                ),
-                child: Image.memory(
-                  Uint8List.fromList(news.image!),
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      width: double.infinity,
-                      height: 250,
-                      decoration: BoxDecoration(
-                        color: colorScheme.surfaceVariant,
-                      ),
-                      child: Icon(
-                        Icons.image_not_supported,
-                        size: 64,
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                    );
-                  },
-                ),
-              ),
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(

@@ -332,7 +332,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
               Icon(Icons.attach_money, color: colorScheme.primary),
               const SizedBox(width: 8),
               Text(
-                '${widget.screening.basePrice?.toStringAsFixed(2) ?? "0.00"} KM',
+                '${widget.screening.basePrice?.toStringAsFixed(2) ?? "0.00"} ${l10n.currency}',
                 style: TextStyle(
                   color: colorScheme.primary,
                   fontWeight: FontWeight.bold,
@@ -501,7 +501,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               Text(
-                '${pricePerSeat.toStringAsFixed(2)} €',
+                '${pricePerSeat.toStringAsFixed(2)} ${l10n.currency}',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w500,
                 ),
@@ -535,7 +535,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
                 ),
               ),
               Text(
-                '${totalPrice.toStringAsFixed(2)} €',
+                '${totalPrice.toStringAsFixed(2)} ${l10n.currency}',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: colorScheme.primary,

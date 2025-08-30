@@ -28,25 +28,6 @@ class NewsItemCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-              child: Container(
-                height: 200,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceVariant,
-                ),
-                child: item['imageUrl'] != null && item['imageUrl'].toString().isNotEmpty
-                    ? Image.network(
-                        item['imageUrl'],
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return _buildPlaceholderImage(context);
-                        },
-                      )
-                    : _buildPlaceholderImage(context),
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -71,7 +52,7 @@ class NewsItemCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        _formatDate(item['date']),
+                        _formatDate(context, item['date']),
                         style: TextStyle(
                           color: colorScheme.onSurface.withOpacity(0.7),
                           fontSize: 12,
@@ -120,17 +101,6 @@ class NewsItemCard extends StatelessWidget {
     );
   }
 
-  Widget _buildPlaceholderImage(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      color: colorScheme.surfaceVariant,
-      child: Icon(
-        Icons.image,
-        size: 48,
-        color: colorScheme.onSurfaceVariant.withOpacity(0.5),
-      ),
-    );
-  }
 
   String _getTypeText(String type, AppLocalizations l10n) {
     switch (type.toLowerCase()) {
@@ -145,16 +115,17 @@ class NewsItemCard extends StatelessWidget {
     }
   }
 
-  String _formatDate(DateTime date) {
+  String _formatDate(BuildContext context, DateTime date) {
+    final l10n = AppLocalizations.of(context)!;
     final now = DateTime.now();
     final difference = now.difference(date).inDays;
     
     if (difference == 0) {
-      return 'Danas';
+      return l10n.today;
     } else if (difference == 1) {
-      return 'Jučer';
+      return l10n.yesterday;
     } else if (difference < 7) {
-      return 'prije $difference dana';
+      return l10n.daysAgo(difference);
     } else {
       return '${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}';
     }
