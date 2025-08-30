@@ -33,5 +33,29 @@ namespace eCinema.Services.ReservationStateMachine
             await _context.SaveChangesAsync();
             return _mapper.Map<ReservationResponse>(entity);
         }
+
+        public override async Task<ReservationResponse?> MarkAsUsedAsync(int id)
+        {
+            var entity = await _context.Reservations.FindAsync(id);
+            if (entity == null)
+                return null;
+
+            entity.State = nameof(UsedReservationState);
+
+            await _context.SaveChangesAsync();
+            return _mapper.Map<ReservationResponse>(entity);
+        }
+
+        public override async Task<ReservationResponse?> CancelAsync(int id)
+        {
+            var entity = await _context.Reservations.FindAsync(id);
+            if (entity == null)
+                return null;
+
+            entity.State = nameof(CancelledReservationState);
+
+            await _context.SaveChangesAsync();
+            return _mapper.Map<ReservationResponse>(entity);
+        }
     }
 }

@@ -3,6 +3,7 @@ using eCinema.Model.SearchObjects;
 using eCinema.Model.Responses;
 using eCinema.Services.Database;
 using eCinema.Services.Database.Entities;
+using eCinema.Services.ReservationStateMachine;
 using Microsoft.EntityFrameworkCore;
 using MapsterMapper;
 using System.Collections.Generic;
@@ -11,8 +12,17 @@ namespace eCinema.Services
 {
     public class ReservationService : BaseCRUDService<ReservationResponse, ReservationSearchObject, Reservation, ReservationUpsertRequest, ReservationUpsertRequest>, IReservationService
     {
-        public ReservationService(eCinemaDBContext context, IMapper mapper) : base(context, mapper)
+        private readonly IServiceProvider _serviceProvider;
+
+        public ReservationService(eCinemaDBContext context, IMapper mapper, IServiceProvider serviceProvider) : base(context, mapper)
         {
+            _serviceProvider = serviceProvider;
+        }
+
+        private BaseReservationState GetReservationState(string stateName)
+        {
+            var state = new BaseReservationState(_serviceProvider, _mapper, _context);
+            return state.GetReservationState(stateName);
         }
 
         public override async Task<ReservationResponse> CreateAsync(ReservationUpsertRequest request)
@@ -36,7 +46,7 @@ namespace eCinema.Services
                     PromotionId = request.PromotionId,
                     NumberOfTickets = request.SeatIds.Count,
                     PaymentType = request.PaymentType,
-                    State = request.State,
+                    State = nameof(ApprovedReservationState),
                     IsDeleted = request.IsDeleted
                 };
 
@@ -80,6 +90,9 @@ namespace eCinema.Services
                 var qrCodeBase64 = await GenerateQRCode(reservation.Id);
                 
                 reservation.QrcodeBase64 = qrCodeBase64;
+                
+                reservation.State = nameof(ApprovedReservationState);
+                
                 await _context.SaveChangesAsync();
 
                 transaction.Commit();
@@ -154,6 +167,7 @@ namespace eCinema.Services
                 MovieTitle = entity.Screening?.Movie?.Title ?? "",
                 ScreeningStartTime = entity.Screening?.StartTime ?? DateTime.MinValue,
                 SeatIds = entity.ReservationSeats?.Select(rs => rs.SeatId).ToList() ?? new List<int>(),
+                SeatNames = entity.ReservationSeats?.Select(rs => rs.Seat?.Name ?? $"Seat {rs.SeatId}").ToList() ?? new List<string>(),
                 NumberOfTickets = entity.NumberOfTickets ?? 0,
                 PromotionId = entity.PromotionId,
                 PromotionName = entity.Promotion?.Code,
@@ -230,6 +244,7 @@ namespace eCinema.Services
         {
             var query = _context.Reservations
                 .Include(r => r.ReservationSeats)
+                    .ThenInclude(rs => rs.Seat)
                 .Include(r => r.Screening)
                     .ThenInclude(s => s.Movie)
                 .Include(r => r.User)
@@ -242,11 +257,19 @@ namespace eCinema.Services
                 var now = DateTime.UtcNow;
                 if (isFuture.Value)
                 {
-                    query = query.Where(r => r.Screening.StartTime > now);
+                    query = query.Where(r => 
+                        r.Screening.StartTime > now && 
+                        r.State != nameof(UsedReservationState) &&
+                        r.State != nameof(ExpiredReservationState) &&
+                        r.State != nameof(RejectedReservationState));
                 }
                 else
                 {
-                    query = query.Where(r => r.Screening.StartTime <= now);
+                    query = query.Where(r => 
+                        r.Screening.StartTime <= now ||
+                        r.State == nameof(UsedReservationState) ||
+                        r.State == nameof(ExpiredReservationState) ||
+                        r.State == nameof(RejectedReservationState));
                 }
             }
 
@@ -296,6 +319,131 @@ namespace eCinema.Services
         }
 
 
+
+        public async Task<ReservationResponse> VerifyReservation(int reservationId)
+        {
+            var reservation = await _context.Reservations
+                .Include(r => r.User)
+                .Include(r => r.Screening)
+                    .ThenInclude(s => s.Movie)
+                .Include(r => r.Screening)
+                    .ThenInclude(s => s.Hall)
+                .Include(r => r.ReservationSeats)
+                    .ThenInclude(rs => rs.Seat)
+                .Include(r => r.Payment)
+                .Include(r => r.Promotion)
+                .FirstOrDefaultAsync(r => r.Id == reservationId);
+
+            if (reservation == null)
+                throw new Exception("This ticket does not exist in our system.");
+
+            if (reservation.State == nameof(UsedReservationState))
+                throw new Exception("This ticket has already been used for entry.");
+
+            if (reservation.State == nameof(CancelledReservationState))
+                throw new Exception("This ticket has been cancelled and cannot be used.");
+                
+            if (reservation.State != nameof(ApprovedReservationState))
+                throw new Exception("This ticket is not valid for entry.");
+
+            var screening = reservation.Screening;
+            if (screening == null)
+                throw new Exception("The screening associated with this ticket no longer exists.");
+
+            var now = DateTime.UtcNow;
+            var screeningTime = screening.StartTime;
+            
+            Console.WriteLine($"=== Time Debug Info ===");
+            Console.WriteLine($"Current time (UTC): {now}");
+            Console.WriteLine($"Screening time (UTC): {screeningTime}");
+            Console.WriteLine($"Time until screening: {screeningTime - now}");
+            Console.WriteLine($"Max allowed time (2h): {now.AddHours(2)}");
+            Console.WriteLine($"Min allowed time (-3h): {now.AddHours(-3)}");
+            Console.WriteLine($"Is too early? {screeningTime > now.AddHours(2)}");
+            Console.WriteLine($"Is too late? {screeningTime < now.AddHours(-3)}");
+            Console.WriteLine($"=====================");
+
+            if (screeningTime < now.AddHours(-3))
+            {
+                Console.WriteLine($"Screening ended more than 3 hours ago");
+                throw new Exception("This screening has already ended.");
+            }
+
+            if (screeningTime > now.AddHours(3))
+            {
+                Console.WriteLine($"Screening starts in more than 3 hours");
+                throw new Exception("It's too early for entry. Please come back closer to the screening time.");
+            }
+
+            var currentState = GetReservationState(reservation.State);
+            var response = await currentState.MarkAsUsedAsync(reservationId);
+            
+            if (response == null)
+                throw new Exception("Failed to process the ticket. Please try again.");
+                
+            await _context.SaveChangesAsync();
+                
+            return MapToResponse(reservation);
+        }
+
+        public async Task<ReservationResponse> CancelReservation(int reservationId)
+        {
+            var reservation = await _context.Reservations
+                .Include(r => r.User)
+                .Include(r => r.Screening)
+                    .ThenInclude(s => s.Movie)
+                .Include(r => r.Screening)
+                    .ThenInclude(s => s.Hall)
+                .Include(r => r.ReservationSeats)
+                    .ThenInclude(rs => rs.Seat)
+                .Include(r => r.Payment)
+                .Include(r => r.Promotion)
+                .FirstOrDefaultAsync(r => r.Id == reservationId);
+
+            if (reservation == null)
+                throw new Exception("Reservation not found");
+
+            if (reservation.State == nameof(UsedReservationState))
+                throw new Exception("Cannot cancel a used ticket");
+
+            if (reservation.State == nameof(CancelledReservationState))
+                throw new Exception("This reservation is already cancelled");
+
+            if (reservation.State != nameof(ApprovedReservationState))
+                throw new Exception("Only approved reservations can be cancelled");
+
+            var screening = reservation.Screening;
+            if (screening == null)
+                throw new Exception("Screening not found");
+
+            var now = DateTime.UtcNow;
+            var screeningTime = screening.StartTime;
+
+            if (screeningTime < now.AddHours(1))
+                throw new Exception("Cannot cancel reservation less than 1 hour before screening");
+
+            var currentState = GetReservationState(reservation.State);
+            var response = await currentState.CancelAsync(reservationId);
+            
+            if (response == null)
+                throw new Exception("Failed to cancel reservation");
+                
+            await _context.SaveChangesAsync();
+
+            var screeningSeats = await _context.ScreeningSeats
+                .Where(ss => ss.ScreeningId == reservation.ScreeningId && 
+                       reservation.ReservationSeats.Select(rs => rs.SeatId).Contains(ss.SeatId))
+                .ToListAsync();
+
+            foreach (var seat in screeningSeats)
+            {
+                seat.IsReserved = false;
+            }
+
+            await _context.SaveChangesAsync();
+                
+            return MapToResponse(reservation);
+        }
 
         public async Task<string> GenerateQRCode(int reservationId)
         {

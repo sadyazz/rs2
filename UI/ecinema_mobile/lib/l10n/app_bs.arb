@@ -1492,5 +1492,33 @@
    "comingSoonWatchlistOnly":"Filmovi koji uskoro izlaze mogu se dodati samo na listu za gledanje",
   "@comingSoonWatchlistOnly":{
     "description":"Coming soon movies can only be added to watchlist"
+  },
+  "reservationApproved": "Odobrena",
+  "@reservationApproved": {
+    "description": "Approved reservation status"
+  },
+  "reservationUsed": "Iskorištena",
+  "@reservationUsed": {
+    "description": "Used reservation status"
+  },
+  "reservationCancelled": "Otkazana",
+  "@reservationCancelled": {
+    "description": "Cancelled reservation status"
+  },
+  "reservationRejected": "Odbijena",
+  "@reservationRejected": {
+    "description": "Rejected reservation status"
+  },
+  "reservationExpired": "Istekla",
+  "@reservationExpired": {
+    "description": "Expired reservation status"
+  },
+  "reservationPending": "Na čekanju",
+  "@reservationPending": {
+    "description": "Pending reservation status"
+  },
+  "reservationInitial": "Inicijalna",
+  "@reservationInitial": {
+    "description": "Initial reservation status"
   }
 } 
