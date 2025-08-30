@@ -6,6 +6,11 @@ class NewsProvider extends BaseProvider<News> {
 
   @override
   News fromJson(data) {
-    return News.fromJson(data);
+    try {
+      return News.fromJson(data);
+    } catch (e) {
+      print('Error parsing news: $e');
+      rethrow;
+    }
   }
 } 

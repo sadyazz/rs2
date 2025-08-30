@@ -731,21 +731,21 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
       if (success) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                                title: Text(l10n.success),
-                    content: Text(l10n.accountCreatedSuccessfully),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pushReplacementNamed('/login');
-                },
-                child: Text('OK'),
-              ),
-            ],
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.accountCreatedSuccessfully),
+            duration: const Duration(seconds: 2),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.green,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
         );
+        
+        Future.delayed(const Duration(seconds: 3), () {
+          Navigator.of(context).pushReplacementNamed('/login');
+        });
       } else {
         showDialog(
           context: context,

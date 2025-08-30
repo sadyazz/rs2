@@ -181,6 +181,9 @@ namespace eCinema.Services.Database
             modelBuilder.Entity<UserMovieList>()
                 .HasIndex(uml => new { uml.UserId, uml.MovieId, uml.ListType })
                 .IsUnique();
+
+
+
         }
     }
 } 

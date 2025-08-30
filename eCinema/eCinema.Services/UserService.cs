@@ -1,28 +1,31 @@
 using eCinema.Model;
+using eCinema.Model.Messages;
 using eCinema.Model.Requests;
 using eCinema.Model.Responses;
 using eCinema.Model.SearchObjects;
 using eCinema.Services.Database;
 using eCinema.Services.Database.Entities;
+using eCinema.Services.RabbitMQ;
 using Microsoft.EntityFrameworkCore;
 using MapsterMapper;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 
 namespace eCinema.Services
 {
     public class UserService : BaseCRUDService<UserResponse, UserSearchObject, User, UserUpsertRequest, UserUpdateRequest>, IUserService
     {
-        private readonly eCinemaDBContext _context;
+        private readonly IRabbitMQService _rabbitMQService;
         private const int SaltSize = 16;
         private const int KeySize = 32;
         private const int Iterations = 10000;
         
-        public UserService(eCinemaDBContext context, IMapper mapper) : base(context, mapper)
+        public UserService(eCinemaDBContext context, IMapper mapper, IRabbitMQService rabbitMQService) : base(context, mapper)
         {
-            _context = context;
+            _rabbitMQService = rabbitMQService;
         }
 
-        public async Task<PagedResult<UserResponse>> GetAsync(UserSearchObject search)
+        public override async Task<PagedResult<UserResponse>> GetAsync(UserSearchObject search)
         {
             var query = _context.Users.AsQueryable();
             query = ApplyFilter(query, search);
@@ -37,7 +40,7 @@ namespace eCinema.Services
             };
         }
 
-        public async Task<UserResponse?> GetByIdAsync(int id)
+        public override async Task<UserResponse?> GetByIdAsync(int id)
         {
             var user = await _context.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Id == id);
             return user != null ? MapToResponse(user) : null;
@@ -46,18 +49,15 @@ namespace eCinema.Services
         private string HashPassword(string password, out byte[] salt)
         {
             salt = new byte[SaltSize];
-            using (var rng = new RNGCryptoServiceProvider())
-            {
-                rng.GetBytes(salt);
-            }
+            salt = RandomNumberGenerator.GetBytes(SaltSize);
 
-            using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, Iterations))
+            using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, Iterations, HashAlgorithmName.SHA256))
             {
                 return Convert.ToBase64String(pbkdf2.GetBytes(KeySize));
             }
         }
 
-        public async Task<UserResponse> CreateAsync(UserUpsertRequest request)
+        public override async Task<UserResponse> CreateAsync(UserUpsertRequest request)
         {
             if (await _context.Users.AnyAsync(u => u.Email == request.Email))
             {
@@ -90,10 +90,25 @@ namespace eCinema.Services
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
+            var userRole = await _context.Roles.FirstOrDefaultAsync(r => r.Id == user.RoleId);
+            if (userRole?.Name == "staff")
+            {
+                var email = new Email
+                {
+                    To = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Subject = "Your eCinema Staff Account Credentials",
+                    Body = $"Username: {user.Username}\nPassword: {request.Password}",
+                    Type = EmailType.StaffCredentials
+                };
+                await _rabbitMQService.SendEmail(email);
+            }
+
             return await GetUserResponseWithRoleAsync(user.Id);
         }
 
-        public async Task<UserResponse?> UpdateAsync(int id, UserUpdateRequest request)
+        public override async Task<UserResponse> UpdateAsync(int id, UserUpdateRequest request)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
@@ -128,7 +143,7 @@ namespace eCinema.Services
             return await GetUserResponseWithRoleAsync(user.Id);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public override async Task<bool> DeleteAsync(int id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
@@ -220,9 +235,11 @@ namespace eCinema.Services
 
         private bool VerifyPassword(string password, string passwordHash, string passwordSalt)
         {
+            if (string.IsNullOrEmpty(passwordSalt)) return false;
+            
             var salt = Convert.FromBase64String(passwordSalt);
             var hash = Convert.FromBase64String(passwordHash);
-            var hashBytes = new Rfc2898DeriveBytes(password, salt, Iterations).GetBytes(KeySize);
+            var hashBytes = new Rfc2898DeriveBytes(password, salt, Iterations, HashAlgorithmName.SHA256).GetBytes(KeySize);
             return hash.SequenceEqual(hashBytes);
         }
 
@@ -258,6 +275,23 @@ namespace eCinema.Services
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+
+            var userRole = await _context.Roles
+                .FirstOrDefaultAsync(r => r.Id == user.RoleId);
+
+            if (userRole?.Name == "user")
+            {
+                var email = new Email
+                {
+                    To = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Subject = "Welcome to eCinema!",
+                    Body = "",
+                    Type = EmailType.Welcome
+                };
+                await _rabbitMQService.SendEmail(email);
+            }
 
             return await GetUserResponseWithRoleAsync(user.Id);
         }

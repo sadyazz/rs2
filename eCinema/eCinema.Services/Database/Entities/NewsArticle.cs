@@ -15,8 +15,6 @@ namespace eCinema.Services.Database.Entities
         [Required]
         public string Content { get; set; } = string.Empty;
             
-        public byte[]? Image { get; set; }
-        
         public DateTime PublishDate { get; set; } = DateTime.UtcNow;
 
         public bool IsDeleted { get; set; } = false;

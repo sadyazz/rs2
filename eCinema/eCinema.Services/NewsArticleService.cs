@@ -21,6 +21,24 @@ namespace eCinema.Services
             _context = context;
         }
 
+        public override async Task<NewsArticleResponse> CreateAsync(NewsArticleUpsertRequest insert)
+        {
+            if (insert.PublishDate > DateTime.UtcNow)
+            {
+                throw new UserException("Publish date cannot be in the future.");
+            }
+            return await base.CreateAsync(insert);
+        }
+
+        public override async Task<NewsArticleResponse> UpdateAsync(int id, NewsArticleUpsertRequest update)
+        {
+            if (update.PublishDate > DateTime.UtcNow)
+            {
+                throw new UserException("Publish date cannot be in the future.");
+            }
+            return await base.UpdateAsync(id, update);
+        }
+
         protected override IQueryable<NewsArticle> ApplyFilter(IQueryable<NewsArticle> query, NewsArticleSearchObject search)
         {
             query = base.ApplyFilter(query, search);

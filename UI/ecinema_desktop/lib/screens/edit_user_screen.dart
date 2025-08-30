@@ -27,6 +27,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
   bool _isLoading = false;
   bool _isEditing = false;
   bool _mounted = true;
+  bool _isPasswordVisible = false;
   SearchResult<Role>? rolesResult;
   Map<String, dynamic> _initialValue = {};
 
@@ -314,8 +315,19 @@ class _EditUserScreenState extends State<EditUserScreen> {
                           decoration: InputDecoration(
                             labelText: l10n.password,
                             border: const OutlineInputBorder(),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _isPasswordVisible = !_isPasswordVisible;
+                                });
+                              },
+                            ),
                           ),
-                          obscureText: true,
+                          obscureText: !_isPasswordVisible,
                           validator: FormBuilderValidators.compose([
                             FormBuilderValidators.required(errorText: l10n.pleaseEnterPassword),
                             FormBuilderValidators.minLength(6, errorText: l10n.passwordMinLength),

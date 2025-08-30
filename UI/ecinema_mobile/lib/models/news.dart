@@ -3,7 +3,6 @@ class News {
   String? title;
   String? content;
   DateTime? publishDate;
-  List<int>? image;
   bool? isDeleted;
   int? authorId;
   String? authorName;
@@ -13,7 +12,6 @@ class News {
     this.title,
     this.content,
     this.publishDate,
-    this.image,
     this.isDeleted,
     this.authorId,
     this.authorName,
@@ -24,7 +22,7 @@ class News {
     title = json['title'];
     content = json['content'];
     publishDate = json['publishDate'] != null ? DateTime.parse(json['publishDate']) : null;
-    image = json['image'] != null && json['image'] is List ? List<int>.from(json['image']) : null;
+
     isDeleted = json['isDeleted'] ?? false;
     authorId = json['authorId'];
     authorName = json['authorName'];
@@ -36,7 +34,7 @@ class News {
     data['title'] = title;
     data['content'] = content;
     data['publishDate'] = publishDate?.toIso8601String();
-    data['image'] = image;
+
     data['isDeleted'] = isDeleted;
     data['authorId'] = authorId;
     data['authorName'] = authorName;

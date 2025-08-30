@@ -129,7 +129,6 @@ class ReservationProvider extends BaseProvider<dynamic> {
         throw Exception('Failed to create reservation: ${response.statusCode}');
       }
 
-      // Parsiranje kreirane rezervacije iz response body
       final responseData = jsonDecode(response.body);
       return Reservation.fromJson(responseData);
     } catch (e) {

@@ -1,6 +1,7 @@
 using eCinema.Services;
 using eCinema.Services.Database;
 using eCinema.Services.Auth;
+using eCinema.Services.RabbitMQ;
 using Microsoft.EntityFrameworkCore;
 using Mapster;
 using MapsterMapper;
@@ -72,6 +73,7 @@ builder.Services.AddTransient<IReservationService, ReservationService>();
 builder.Services.AddTransient<IReviewService, ReviewService>();
 builder.Services.AddTransient<IDashboardService, DashboardService>();
 builder.Services.AddTransient<IUserMovieListService, UserMovieListService>();
+builder.Services.AddScoped<IRabbitMQService, RabbitMQService>();
 
 builder.Services.AddTransient<BaseReservationState>();
 builder.Services.AddTransient<InitialReservationState>();

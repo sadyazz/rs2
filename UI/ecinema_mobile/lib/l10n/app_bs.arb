@@ -1219,7 +1219,7 @@
   "@pleaseSelectScreening": {
     "description": "Please select screening time message"
   },
-  "currency": "KM",
+  "currency": "$",
   "upcoming": "Nadolazeće",
   "@upcoming": {
     "description": "Upcoming tab text"
@@ -1300,7 +1300,7 @@
   "@notAvailable": {
     "description": "Not available text"
   },
-  "currency": "KM",
+  "currency": "$",
   "@currency": {
     "description": "Currency symbol"
   },

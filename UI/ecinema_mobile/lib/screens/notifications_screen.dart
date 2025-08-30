@@ -26,10 +26,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _loadData();
   }
 
   Future<void> _loadData() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _isLoading = true;
       _error = null;
@@ -42,7 +48,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       ]);
     } catch (e) {
       setState(() {
-        _error = 'Greška pri učitavanju podataka: $e';
+        _error = l10n.errorLoadingDataMessage(e.toString());
       });
     } finally {
       setState(() {
@@ -55,13 +61,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     try {
       final newsProvider = NewsProvider();
       final response = await newsProvider.get();
-      if (response.items != null && response.items!.isNotEmpty) {
+      
+      if (response.items != null) {
         setState(() {
           _news = response.items!;
         });
+      } else {
+        print('Response items is null');
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       print('Error loading news: $e');
+      setState(() {
+        _error = e.toString();
+      });
     }
   }
 
@@ -89,12 +101,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     List<Map<String, dynamic>> items = [];
 
     if (_selectedFilter == 'all' || _selectedFilter == 'news') {
-      items.addAll(_news.where((news) => news.isDeleted != true).map((news) => {
-        'id': news.id.toString(),
+      items.addAll(_news.where((news) => news.isDeleted != true && news.id != null).map((news) => {
+        'id': news.id!.toString(),
         'title': news.title,
         'description': news.content,
         'date': news.publishDate,
-        'imageUrl': news.image != null ? 'data:image/jpeg;base64,${news.image!.map((e) => e.toRadixString(16).padLeft(2, '0')).join()}' : null,
+        'imageUrl': null,
         'type': 'news',
         'isFeatured': false,
       }));
@@ -104,9 +116,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       items.addAll(_promotions.where((p) => 
         p.isDeleted != true && 
         p.endDate != null && 
+        p.id != null &&
         p.endDate!.isAfter(DateTime.now())
       ).map((promo) => {
-        'id': 'promo_${promo.id}',
+        'id': 'promo_${promo.id!}',
         'title': promo.name,
         'description': promo.description,
         'date': promo.startDate,

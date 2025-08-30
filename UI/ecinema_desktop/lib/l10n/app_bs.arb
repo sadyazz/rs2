@@ -1478,7 +1478,7 @@
   "@passwordsDoNotMatch": {
     "description": "Password mismatch validation message"
   },
-  "accountCreatedSuccessfully": "Admin račun uspješno kreiran",
+  "accountCreatedSuccessfully": "Admin račun uspješno kreiran! Preusmjeravanje na login...",
   "@accountCreatedSuccessfully": {
     "description": "Account created success message"
   },
