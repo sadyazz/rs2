@@ -1445,7 +1445,7 @@
   "@numberOfSeats": {
     "description": "Number of seats label"
   },
-  "total": "Total:",
+  "total": "Total",
   "@total": {
     "description": "Total label"
   },
@@ -1500,5 +1500,33 @@
   "comingSoonWatchlistOnly":"Coming soon movies can only be added to watchlist",
   "@comingSoonWatchlistOnly":{
     "description":"Coming soon movies can only be added to watchlist"
+  },
+  "reservationApproved": "Approved",
+  "@reservationApproved": {
+    "description": "Approved reservation status"
+  },
+  "reservationUsed": "Used",
+  "@reservationUsed": {
+    "description": "Used reservation status"
+  },
+  "reservationCancelled": "Cancelled",
+  "@reservationCancelled": {
+    "description": "Cancelled reservation status"
+  },
+  "reservationRejected": "Rejected",
+  "@reservationRejected": {
+    "description": "Rejected reservation status"
+  },
+  "reservationExpired": "Expired",
+  "@reservationExpired": {
+    "description": "Expired reservation status"
+  },
+  "reservationPending": "Pending",
+  "@reservationPending": {
+    "description": "Pending reservation status"
+  },
+  "reservationInitial": "Initial",
+  "@reservationInitial": {
+    "description": "Initial reservation status"
   }
 } 

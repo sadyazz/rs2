@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../models/reservation.dart';
 import '../providers/reservation_provider.dart';
 import '../providers/auth_provider.dart';
+import '../providers/user_provider.dart';
 import '../layouts/master_screen.dart';
 import 'dart:convert';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -225,11 +226,11 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: _getStatusColor(reservation.status),
+                      color: _getStatusColor(reservation.reservationState),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      _getStatusText(reservation.status, l10n),
+                      _getStatusText(reservation.reservationState, l10n),
                       style: TextStyle(
                         color: colorScheme.onPrimary,
                         fontSize: 12,
@@ -248,35 +249,36 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
             if (reservation.paymentStatus != null)
               _buildInfoRow(l10n.payment, reservation.paymentStatus!),
             const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () => _showReservationDetails(reservation, l10n),
-                    icon: const Icon(Icons.info_outline, size: 18),
-                    label: Text(l10n.details),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorScheme.primary,
-                      foregroundColor: colorScheme.onPrimary,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+            if (reservation.reservationState != 'CancelledReservationState')
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () => _showReservationDetails(reservation, l10n),
+                      icon: const Icon(Icons.info_outline, size: 18),
+                      label: Text(l10n.details),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colorScheme.primary,
+                        foregroundColor: colorScheme.onPrimary,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: () => _cancelReservation(reservation, l10n),
-                    icon: const Icon(Icons.cancel_outlined, size: 18),
-                    label: Text(l10n.cancel),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: colorScheme.error,
-                      foregroundColor: colorScheme.onError,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () => _cancelReservation(reservation, l10n),
+                      icon: const Icon(Icons.cancel_outlined, size: 18),
+                      label: Text(l10n.cancel),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: colorScheme.error,
+                        foregroundColor: colorScheme.onError,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
           ],
         ),
       ),
@@ -321,17 +323,23 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
     );
   }
 
-  Color _getStatusColor(String status) {
+  Color _getStatusColor(String state) {
     final colorScheme = Theme.of(context).colorScheme;
-    switch (status.toLowerCase()) {
-      case 'reserved':
+    switch (state) {
+      case 'ApprovedReservationState':
         return colorScheme.primary;
-      case 'paid':
+      case 'UsedReservationState':
         return Colors.green;
-      case 'cancelled':
+      case 'RejectedReservationState':
         return colorScheme.error;
-      case 'expired':
+      case 'ExpiredReservationState':
         return Colors.orange;
+      case 'PendingReservationState':
+        return Colors.blue;
+      case 'InitialReservationState':
+        return Colors.grey;
+      case 'CancelledReservationState':
+        return Colors.red;
       default:
         return colorScheme.surfaceContainerHighest;
     }
@@ -357,20 +365,24 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
     return reservation.seatIds.map((id) => 'Seat $id').join(', ');
   }
 
-  String _getStatusText(String status, AppLocalizations l10n) {
-    switch (status.toLowerCase()) {
-      case 'reserved':
-        return 'Reserved';
-      case 'paid':
-        return 'Confirmed';
-      case 'cancelled':
-        return 'Cancelled';
-      case 'expired':
-        return 'Expired';
-      case 'pending':
-        return 'On Hold';
+  String _getStatusText(String state, AppLocalizations l10n) {
+    switch (state) {
+      case 'ApprovedReservationState':
+        return l10n.reservationApproved;
+      case 'UsedReservationState':
+        return l10n.reservationUsed;
+      case 'RejectedReservationState':
+        return l10n.reservationRejected;
+      case 'ExpiredReservationState':
+        return l10n.reservationExpired;
+      case 'PendingReservationState':
+        return l10n.reservationPending;
+      case 'InitialReservationState':
+        return l10n.reservationInitial;
+      case 'CancelledReservationState':
+        return l10n.reservationCancelled;
       default:
-        return status;
+        return state;
     }
   }
 
@@ -464,15 +476,27 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
               child: Text(l10n.no),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
-                // TODO: Implement cancel reservation logic
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(l10n.reservationCancelledSuccessfully),
-                    backgroundColor: Colors.green,
-                  ),
-                );
+                try {
+                  await UserProvider.cancelReservation(reservation.id);
+                  
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(l10n.reservationCancelledSuccessfully),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                  
+                  _loadReservations();
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(e.toString().replaceFirst("Exception: ", "")),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,

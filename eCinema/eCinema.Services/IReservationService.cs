@@ -10,5 +10,7 @@ namespace eCinema.Services
         Task<List<Seat>> GetAvailableSeatsForScreening(int screeningId);
         List<ReservationResponse> GetReservationsByUserId(int userId, bool? isFuture = null);
         Task<string> GenerateQRCode(int reservationId);
+        Task<ReservationResponse> VerifyReservation(int reservationId);
+        Task<ReservationResponse> CancelReservation(int reservationId);
     }
 } 

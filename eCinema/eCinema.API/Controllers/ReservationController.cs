@@ -34,6 +34,35 @@ namespace eCinema.API.Controllers
             }
         }
 
+        [HttpPost("verify/{reservationId}")]
+        [Authorize]
+        public async Task<ActionResult<ReservationResponse>> VerifyReservation(int reservationId)
+        {
+            try
+            {
+                var result = await _reservationService.VerifyReservation(reservationId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("cancel/{reservationId}")]
+        public async Task<ActionResult<ReservationResponse>> CancelReservation(int reservationId)
+        {
+            try
+            {
+                var result = await _reservationService.CancelReservation(reservationId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("user/{userId}")]
         public ActionResult<List<ReservationResponse>> GetUserReservations(int userId, [FromQuery] bool? isFuture)
         {

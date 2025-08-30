@@ -1,6 +1,7 @@
 import 'package:ecinema_mobile/providers/news_provider.dart';
 import 'package:ecinema_mobile/providers/promotion_provider.dart';
 import 'package:ecinema_mobile/providers/user_movie_list_provider.dart';
+import 'package:ecinema_mobile/screens/staff_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -75,6 +76,7 @@ class MyApp extends StatelessWidget {
               '/login': (context) => const LoginPage(),
               '/register': (context) => const RegisterPage(),
               '/home': (context) => MasterScreen("", null, showAppBar: false),
+                '/staff': (context) => const StaffHomeScreen(),
             },
             navigatorObservers: [routeObserver]
           );
@@ -378,9 +380,13 @@ class _LoginPageState extends State<LoginPage> {
         print('🔍 Current user after login: ${user?.toJson()}');
         print('🔍 User role: ${user?.role?.name}');
         
-        if (user?.role?.name?.toLowerCase() == 'user' || user?.role?.name?.toLowerCase() == 'staff') {
-          print('🔍 User has valid role, navigating to home');
+        final roleName = user?.role?.name?.toLowerCase();
+        if (roleName == 'user') {
+          print('🔍 User has regular role, navigating to home');
           Navigator.of(context).pushReplacementNamed('/home');
+        } else if (roleName == 'staff') {
+          print('🔍 User has staff role, navigating to staff screen');
+          Navigator.of(context).pushReplacementNamed('/staff');
         } else {
           print('🔍 User has invalid role: ${user?.role?.name}');
           setState(() {

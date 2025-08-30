@@ -32,6 +32,14 @@ namespace eCinema.Services.ReservationStateMachine
         public virtual async Task<ReservationResponse?> ExpireAsync(int id){
             throw new UserException("Action not allowed");
         }   
+
+        public virtual async Task<ReservationResponse?> MarkAsUsedAsync(int id){
+            throw new UserException("Action not allowed");
+        }
+
+        public virtual async Task<ReservationResponse?> CancelAsync(int id){
+            throw new UserException("Action not allowed");
+        }
         public BaseReservationState GetReservationState(string stateName){
            switch(stateName){
             case nameof(InitialReservationState):
@@ -44,6 +52,10 @@ namespace eCinema.Services.ReservationStateMachine
                 return _serviceProvider.GetService<RejectedReservationState>();
             case nameof(ExpiredReservationState):
                 return _serviceProvider.GetService<ExpiredReservationState>();
+            case nameof(UsedReservationState):
+                return _serviceProvider.GetService<UsedReservationState>();
+            case nameof(CancelledReservationState):
+                return _serviceProvider.GetService<CancelledReservationState>();
             default:
                 throw new Exception($"State {stateName} not defined");
            }
