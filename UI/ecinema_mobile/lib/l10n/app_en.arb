@@ -1528,5 +1528,34 @@
   "reservationInitial": "Initial",
   "@reservationInitial": {
     "description": "Initial reservation status"
+  },
+  "cancellationDeadlineInfo": "You can cancel your reservation until {date} at 23:59h. After this deadline, cancellation is not possible and no refund will be provided.",
+  "@cancellationDeadlineInfo": {
+    "description": "Cancellation deadline info with date",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmCancellation": "Are you sure you want to cancel this reservation?",
+  "@confirmCancellation": {
+    "description": "Confirm cancellation message"
+  },
+  "confirmCancellationTitle": "Cancel Reservation",
+  "@confirmCancellationTitle": {
+    "description": "Confirm cancellation title"
+  },
+  "confirm": "Confirm",
+  "@confirm": {
+    "description": "Confirm button text"
+  },
+  "existingReservationError": "You already have a reservation for this screening",
+  "@existingReservationError": {
+    "description": "Error message when user tries to make duplicate reservation"
+  },
+  "cannotCancelUsedTicket": "Cannot cancel a used ticket",
+  "@cannotCancelUsedTicket": {
+    "description": "Error message when trying to cancel a used ticket"
   }
 } 

@@ -52,7 +52,7 @@ class ReservationProvider extends BaseProvider<dynamic> {
       final seatsData = jsonDecode(seatsResponse.body);
       final allSeats = seatsData['items'] as List;
       
-      final reservationsUrl = "$baseUrl/api/reservation?screeningId=$screeningId";
+      final reservationsUrl = "$baseUrl/Reservation?screeningId=$screeningId";
       
       final reservationsResponse = await http.get(
         Uri.parse(reservationsUrl),
@@ -107,7 +107,7 @@ class ReservationProvider extends BaseProvider<dynamic> {
         'totalPrice': totalPrice.toString(),
         'originalPrice': totalPrice.toString(),
         'discountPercentage': 0,
-        'status': 'Reserved',
+
         'userId': userId,
         'screeningId': screeningId,
         'paymentId': null,
@@ -120,11 +120,17 @@ class ReservationProvider extends BaseProvider<dynamic> {
       };
 
       final response = await http.post(
-        Uri.parse('$baseUrl/reservation'),
+        Uri.parse('$baseUrl/Reservation'),
         headers: createHeaders(),
         body: jsonEncode(data),
       );
 
+      if (response.statusCode == 400) {
+        final errorData = jsonDecode(response.body);
+        if (errorData['errors']?['userError'] != null) {
+          throw Exception(errorData['errors']['userError'][0]);
+        }
+      }
       if (!isValidResponse(response)) {
         throw Exception('Failed to create reservation: ${response.statusCode}');
       }
@@ -140,27 +146,62 @@ class ReservationProvider extends BaseProvider<dynamic> {
     try {
       final baseUrl = const String.fromEnvironment("baseUrl", defaultValue: "http://10.0.2.2:5190");
       
-      String url = '$baseUrl/reservation/user/$userId';
+      String url = '$baseUrl/Reservation/user/$userId';
       if (isFuture != null) {
         url += '?isFuture=$isFuture';
       }
 
       final headers = createHeaders();
+      print('🔍 Calling URL: $url');
       final response = await http.get(
         Uri.parse(url),
         headers: headers,
       );
+      print('🔍 Response status: ${response.statusCode}');
+      print('🔍 Response body: ${response.body}');
 
       if (!isValidResponse(response)) {
         throw Exception('Failed to load user reservations: ${response.statusCode} - ${response.body}');
       }
 
-      final List<dynamic> jsonList = jsonDecode(response.body);
-      final reservations = jsonList
-          .map((json) => Reservation.fromJson(json))
-          .toList();
+      print('🔍 Parsing response...');
+      final data = jsonDecode(response.body);
+      print('🔍 Decoded data: $data');
+      
+      if (data is List) {
+        print('🔍 Data is a List, mapping directly');
+        final reservations = data.map((json) => Reservation.fromJson(json)).toList();
+        print('🔍 Created ${reservations.length} reservations');
+        return reservations;
+      } else if (data is Map && data.containsKey('items')) {
+        print('🔍 Data is a Map with items');
+        final items = data['items'] as List<dynamic>;
+        final reservations = items.map((json) => Reservation.fromJson(json)).toList();
+        print('🔍 Created ${reservations.length} reservations from items');
+        return reservations;
+      } else {
+        print('🔍 Unexpected data format');
+        throw Exception('Unexpected response format');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 
-      return reservations;
+  Future<void> cancelReservation(int reservationId) async {
+    try {
+      final baseUrl = const String.fromEnvironment("baseUrl", defaultValue: "http://10.0.2.2:5190");
+      final url = '$baseUrl/Reservation/$reservationId/cancel';
+      
+      final response = await http.post(
+        Uri.parse(url),
+        headers: createHeaders(),
+      );
+
+      if (!isValidResponse(response)) {
+        final errorData = jsonDecode(response.body);
+        throw Exception(errorData['message'] ?? 'Failed to cancel reservation');
+      }
     } catch (e) {
       rethrow;
     }
@@ -169,7 +210,7 @@ class ReservationProvider extends BaseProvider<dynamic> {
   Future<String> getQRCode(int reservationId) async {
     try {
       final baseUrl = const String.fromEnvironment("baseUrl", defaultValue: "http://10.0.2.2:5190");
-      final url = '$baseUrl/reservation/$reservationId/qrcode';
+      final url = '$baseUrl/Reservation/$reservationId/qrcode';
       
       final response = await http.get(
         Uri.parse(url),

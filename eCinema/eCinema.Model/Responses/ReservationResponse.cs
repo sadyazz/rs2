@@ -10,7 +10,6 @@ namespace eCinema.Model.Responses
         public decimal TotalPrice { get; set; }
         public decimal OriginalPrice { get; set; }
         public decimal? DiscountPercentage { get; set; }
-        public string Status { get; set; } = string.Empty;
         public bool IsDeleted { get; set; }
         public int UserId { get; set; }
         public string UserName { get; set; } = string.Empty;
@@ -24,7 +23,7 @@ namespace eCinema.Model.Responses
         public string? PromotionName { get; set; }
         public int? PaymentId { get; set; }
         public string? PaymentStatus { get; set; }
-        public string ReservationState { get; set; } = string.Empty;
+        public string State { get; set; } = string.Empty;
         public byte[]? MovieImage { get; set; }
         public string HallName { get; set; } = string.Empty;
         public string? QrcodeBase64 { get; set; }

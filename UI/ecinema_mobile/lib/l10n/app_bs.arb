@@ -1228,7 +1228,7 @@
   "@past": {
     "description": "Past tab text"
   },
-  "noUpcomingReservations": "Nema predstojećih rezervacija",
+  "noUpcomingReservations": "Nema nadolazećih rezervacija",
   "@noUpcomingReservations": {
     "description": "No upcoming reservations message"
   },
@@ -1520,5 +1520,34 @@
   "reservationInitial": "Inicijalna",
   "@reservationInitial": {
     "description": "Initial reservation status"
+  },
+  "cancellationDeadlineInfo": "Možete otkazati rezervaciju najkasnije do {date} u 23:59h. Nakon tog roka otkazivanje nije moguće, niti je moguće dobiti refund.",
+  "@cancellationDeadlineInfo": {
+    "description": "Cancellation deadline info with date",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmCancellation": "Da li ste sigurni da želite otkazati rezervaciju?",
+  "@confirmCancellation": {
+    "description": "Confirm cancellation message"
+  },
+  "confirmCancellationTitle": "Otkaži rezervaciju",
+  "@confirmCancellationTitle": {
+    "description": "Confirm cancellation title"
+  },
+  "confirm": "Potvrdi",
+  "@confirm": {
+    "description": "Confirm button text"
+  },
+  "existingReservationError": "Već imate rezervaciju za ovu projekciju",
+  "@existingReservationError": {
+    "description": "Error message when user tries to make duplicate reservation"
+  },
+  "cannotCancelUsedTicket": "Ne možete otkazati iskorištenu kartu",
+  "@cannotCancelUsedTicket": {
+    "description": "Error message when trying to cancel a used ticket"
   }
 } 

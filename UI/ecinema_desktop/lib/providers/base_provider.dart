@@ -40,7 +40,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
       return result;
     } else {
-      throw new Exception("Unknown error");
+      throw Exception("Unknown error");
     }
     // print("response: ${response.request} ${response.statusCode}, ${response.body}");
   }

@@ -19,10 +19,6 @@ namespace eCinema.Model.Requests
         public decimal? DiscountPercentage { get; set; }
         
         [Required]
-        [StringLength(50)]
-        public string Status { get; set; } = "Reserved";
-        
-        [Required]
         public int UserId { get; set; }
         
         [Required]
@@ -37,6 +33,7 @@ namespace eCinema.Model.Requests
         [StringLength(50)]
         public string? PaymentType { get; set; }
         
+        [Required]
         [StringLength(50)]
         public string State { get; set; } = "InitialReservationState";
         

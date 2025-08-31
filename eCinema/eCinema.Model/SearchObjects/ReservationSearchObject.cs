@@ -8,7 +8,7 @@ namespace eCinema.Model.SearchObjects
         public int? ScreeningId { get; set; }
         public int? SeatId { get; set; }
         public int? PromotionId { get; set; }
-        public string? Status { get; set; }
+        public string? State { get; set; }
         public DateTime? FromReservationTime { get; set; }
         public DateTime? ToReservationTime { get; set; }
         public decimal? MinTotalPrice { get; set; }

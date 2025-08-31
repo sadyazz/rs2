@@ -30,13 +30,13 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
     _focusNode.addListener(_onFocusChange);
     _listProvider = context.read<UserMovieListProvider>();
     WidgetsBinding.instance.addObserver(this);
-    _loadListCounts();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context)!);
+    _loadListCounts();
   }
 
   @override

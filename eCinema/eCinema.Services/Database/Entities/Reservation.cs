@@ -20,9 +20,6 @@ namespace eCinema.Services.Database.Entities
         [Column(TypeName = "decimal(5, 2)")]
         public decimal? DiscountPercentage { get; set; }
         
-        [MaxLength(50)]
-        public string Status { get; set; } = "Reserved";
-        
         public int UserId { get; set; }
         public int ScreeningId { get; set; }
         public int? PaymentId { get; set; }

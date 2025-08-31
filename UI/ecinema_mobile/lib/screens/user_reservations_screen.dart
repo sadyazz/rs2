@@ -7,6 +7,7 @@ import '../providers/user_provider.dart';
 import '../layouts/master_screen.dart';
 import 'dart:convert';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../widgets/info_row.dart';
 
 class UserReservationsScreen extends StatefulWidget {
   const UserReservationsScreen({super.key});
@@ -36,8 +37,12 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
   }
 
   Future<void> _loadReservations() async {
+    if (!mounted) return;
+    
     setState(() {
       _isLoading = true;
+      _futureReservations = [];
+      _pastReservations = [];
     });
 
     try {
@@ -47,16 +52,16 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
 
       if (userId != null) {
         final futureReservations = await reservationProvider.getUserReservations(userId, true);
-        
         final pastReservations = await reservationProvider.getUserReservations(userId, false);
         
+        if (!mounted) return;
+        
         setState(() {
-          _futureReservations = futureReservations;
-          _pastReservations = pastReservations;
+          _futureReservations = List.from(futureReservations);
+          _pastReservations = List.from(pastReservations);
+          _isLoading = false;
         });
         
-      } else {
-        print('❌ User ID is null!');
       }
     } catch (e) {
       if (mounted) {
@@ -83,34 +88,32 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
     
     return MasterScreen(
       l10n.myReservations,
-      _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
+      Column(
+        children: [
+          Container(
+            color: colorScheme.surface,
+            child: TabBar(
+              controller: _tabController,
+              tabs: [
+                Tab(text: l10n.upcoming),
+                Tab(text: l10n.past),
+              ],
+              labelColor: colorScheme.primary,
+              unselectedLabelColor: colorScheme.onSurfaceVariant,
+              indicatorColor: colorScheme.primary,
+            ),
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
               children: [
-                Container(
-                  color: colorScheme.surface,
-                  child: TabBar(
-                    controller: _tabController,
-                    tabs: [
-                      Tab(text: l10n.upcoming),
-                      Tab(text: l10n.past),
-                    ],
-                    labelColor: colorScheme.primary,
-                    unselectedLabelColor: colorScheme.onSurfaceVariant,
-                    indicatorColor: colorScheme.primary,
-                  ),
-                ),
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      _buildReservationsList(_futureReservations, true, l10n),
-                      _buildReservationsList(_pastReservations, false, l10n),
-                    ],
-                  ),
-                ),
+                _buildReservationsList(_futureReservations, true, l10n),
+                _buildReservationsList(_pastReservations, false, l10n),
               ],
             ),
+          ),
+        ],
+      ),
       showAppBar: true,
       showBackButton: true,
       showBottomNav: false,
@@ -119,6 +122,10 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
 
   Widget _buildReservationsList(List<Reservation> reservations, bool isUpcoming, AppLocalizations l10n) {
     final colorScheme = Theme.of(context).colorScheme;
+    
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
     
     if (reservations.isEmpty) {
       return Center(
@@ -212,9 +219,9 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
                             ),
                           ),
                           const SizedBox(height: 8),
-                          _buildInfoRow(l10n.date, _formatDateTime(reservation.screeningStartTime)),
-                          _buildInfoRow(l10n.time, _formatTime(reservation.screeningStartTime)),
-                          _buildInfoRow(l10n.hall, reservation.hallName),
+                          InfoRow(label: l10n.date, value: _formatDateTime(reservation.screeningStartTime)),
+                          InfoRow(label: l10n.time, value: _formatTime(reservation.screeningStartTime)),
+                          InfoRow(label: l10n.hall, value: reservation.hallName ?? 'N/A'),
                         ],
                       ),
                     ),
@@ -231,8 +238,8 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
                     ),
                     child: Text(
                       _getStatusText(reservation.reservationState, l10n),
-                      style: TextStyle(
-                        color: colorScheme.onPrimary,
+                      style: const TextStyle(
+                        color: Colors.white,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
@@ -242,14 +249,15 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
               ],
             ),
             const SizedBox(height: 16),
-            _buildInfoRow(l10n.seatsUppercase, _formatSeatsWithNames(reservation)),
-            _buildInfoRow(l10n.total, '${reservation.totalPrice.toStringAsFixed(2)} ${l10n.currency}'),
+            InfoRow(label: l10n.seatsUppercase, value: _formatSeatsWithNames(reservation)),
+            InfoRow(label: l10n.total, value: '${reservation.totalPrice.toStringAsFixed(2)} ${l10n.currency}'),
             if (reservation.promotionName != null)
-              _buildInfoRow(l10n.promotion, reservation.promotionName!),
+              InfoRow(label: l10n.promotion, value: reservation.promotionName!),
             if (reservation.paymentStatus != null)
-              _buildInfoRow(l10n.payment, reservation.paymentStatus!),
+              InfoRow(label: l10n.payment, value: reservation.paymentStatus!),
             const SizedBox(height: 16),
-            if (reservation.reservationState != 'CancelledReservationState')
+            if (reservation.reservationState != 'CancelledReservationState' && 
+                reservation.reservationState != 'UsedReservationState')
               Row(
                 children: [
                   Expanded(
@@ -285,51 +293,15 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
     );
   }
 
-  Widget _buildInfoRow(String label, String value, {IconData? icon}) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        children: [
-          if (icon != null) ...[
-            Icon(
-              icon,
-              color: colorScheme.primary,
-              size: 20,
-            ),
-            const SizedBox(width: 16),
-          ],
-          Text(
-            '$label: ',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: colorScheme.onSurfaceVariant,
-              fontSize: 14,
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                color: colorScheme.onSurface,
-                fontSize: 14,
-              ),
-              textAlign: TextAlign.right,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+
 
   Color _getStatusColor(String state) {
     final colorScheme = Theme.of(context).colorScheme;
     switch (state) {
       case 'ApprovedReservationState':
-        return colorScheme.primary;
-      case 'UsedReservationState':
         return Colors.green;
+      case 'UsedReservationState':
+        return const Color(0xFF4F8593);
       case 'RejectedReservationState':
         return colorScheme.error;
       case 'ExpiredReservationState':
@@ -444,16 +416,16 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
                   ),
                 if (reservation.qrcodeBase64 != null && reservation.qrcodeBase64!.isNotEmpty)
                   const SizedBox(height: 20),
-                _buildInfoRow(l10n.date, _formatDateTime(reservation.screeningStartTime), icon: Icons.calendar_today),
-                _buildInfoRow(l10n.time, _formatTime(reservation.screeningStartTime), icon: Icons.access_time),
-                _buildInfoRow(l10n.hall, reservation.hallName, icon: Icons.room),
-                _buildInfoRow(l10n.seatsUppercase, _formatSeatsWithNames(reservation), icon: Icons.chair),
-                _buildInfoRow(l10n.totalPrice, '${reservation.totalPrice.toStringAsFixed(2)} ${l10n.currency}', icon: Icons.attach_money),
-                _buildInfoRow(l10n.status, _getStatusText(reservation.status, l10n), icon: Icons.info_outline),
+                InfoRow(label: l10n.date, value: _formatDateTime(reservation.screeningStartTime), icon: Icons.calendar_today),
+                InfoRow(label: l10n.time, value: _formatTime(reservation.screeningStartTime), icon: Icons.access_time),
+                InfoRow(label: l10n.hall, value: reservation.hallName ?? 'N/A', icon: Icons.room),
+                InfoRow(label: l10n.seatsUppercase, value: _formatSeatsWithNames(reservation), icon: Icons.chair),
+                InfoRow(label: l10n.totalPrice, value: '${reservation.totalPrice.toStringAsFixed(2)} ${l10n.currency}', icon: Icons.attach_money),
+                InfoRow(label: l10n.status, value: _getStatusText(reservation.reservationState, l10n), icon: Icons.info_outline),
                 if (reservation.promotionName != null)
-                  _buildInfoRow('Promotion', reservation.promotionName!, icon: Icons.local_offer),
+                  InfoRow(label: 'Promotion', value: reservation.promotionName!, icon: Icons.local_offer),
                 if (reservation.paymentStatus != null)
-                  _buildInfoRow(l10n.paymentStatus, reservation.paymentStatus!, icon: Icons.payment),
+                  InfoRow(label: l10n.paymentStatus, value: reservation.paymentStatus!, icon: Icons.payment),
                 const SizedBox(height: 20),
               ],
             ),
@@ -464,12 +436,28 @@ class _UserReservationsScreenState extends State<UserReservationsScreen>
   }
 
   void _cancelReservation(Reservation reservation, AppLocalizations l10n) {
+    final cancellationDeadline = reservation.screeningStartTime.subtract(const Duration(days: 1));
+    final deadlineFormatted = "${cancellationDeadline.day}.${cancellationDeadline.month}.${cancellationDeadline.year}";
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(l10n.cancelReservation),
-          content: Text(l10n.cancelReservationConfirmation(reservation.movieTitle)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(l10n.cancelReservationConfirmation(reservation.movieTitle)),
+              const SizedBox(height: 16),
+              Text(
+                l10n.cancellationDeadlineInfo(deadlineFormatted),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+            ],
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),

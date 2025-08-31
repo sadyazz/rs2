@@ -80,6 +80,7 @@ builder.Services.AddTransient<InitialReservationState>();
 builder.Services.AddTransient<PendingReservationState>();
 builder.Services.AddTransient<ApprovedReservationState>();
 builder.Services.AddTransient<RejectedReservationState>();
+builder.Services.AddTransient<CancelledReservationState>();
 builder.Services.AddTransient<ExpiredReservationState>();
 builder.Services.AddMapster();
 

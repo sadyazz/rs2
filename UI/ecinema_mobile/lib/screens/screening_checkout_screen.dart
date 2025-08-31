@@ -289,6 +289,7 @@ class _ScreeningCheckoutScreenState extends State<ScreeningCheckoutScreen> {
   }
 
   Future<void> _processCashPayment() async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       setState(() {
         isProcessing = true;
@@ -319,7 +320,11 @@ class _ScreeningCheckoutScreenState extends State<ScreeningCheckoutScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error creating reservation: $e'),
+            content: Text(
+              e.toString().contains('You already have a reservation') 
+                ? l10n.existingReservationError 
+                : e.toString().replaceFirst('Exception: ', '')
+            ),
             backgroundColor: Colors.red,
           ),
         );

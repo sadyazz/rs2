@@ -273,7 +273,7 @@ class _ReservationQrCodeScreenState extends State<ReservationQrCodeScreen> {
               _buildDetailRow(l10n.movieUppercase, widget.reservation.movieTitle),
               _buildDetailRow(l10n.date, _formatDate(widget.reservation.screeningStartTime)),
               _buildDetailRow(l10n.time, _formatTime(widget.reservation.screeningStartTime)),
-              _buildDetailRow(l10n.hall, widget.reservation.hallName),
+              _buildDetailRow(l10n.hall, widget.reservation.hallName ?? 'N/A'),
               _buildDetailRow(l10n.seatsUppercase, _formatSeats()),
               _buildDetailRow(l10n.totalPrice, '${widget.reservation.totalPrice.toStringAsFixed(2)} ${l10n.currency}'),
               _buildDetailRow(l10n.paymentMethod, _getPaymentMethodText(l10n)),

@@ -7,6 +7,8 @@ using eCinema.Services.ReservationStateMachine;
 using Microsoft.EntityFrameworkCore;
 using MapsterMapper;
 using System.Collections.Generic;
+using eCinema.Services.ReservationStateMachine;
+using eCinema.Model;
 
 namespace eCinema.Services
 {
@@ -31,6 +33,23 @@ namespace eCinema.Services
 
             try
             {
+                var screening = await _context.Screenings
+                    .FirstOrDefaultAsync(s => s.Id == request.ScreeningId);
+                if (screening == null || screening.IsDeleted)
+                    throw new UserException("Screening not found");
+
+                if (screening.StartTime <= DateTime.UtcNow)
+                    throw new UserException("Cannot make reservation for past screenings");
+
+                var existingReservation = await _context.Reservations
+                    .AnyAsync(r => r.UserId == request.UserId 
+                        && r.ScreeningId == request.ScreeningId
+                        && !r.IsDeleted
+                        && r.State != nameof(CancelledReservationState)
+                        && r.State != nameof(RejectedReservationState));
+                if (existingReservation)
+                    throw new UserException("You already have a reservation for this screening");
+
                 await ValidateSeatsAvailability(request.ScreeningId, request.SeatIds);
 
                 var reservation = new Reservation
@@ -39,7 +58,6 @@ namespace eCinema.Services
                     TotalPrice = request.TotalPrice,
                     OriginalPrice = request.OriginalPrice,
                     DiscountPercentage = request.DiscountPercentage,
-                    Status = request.Status,
                     UserId = request.UserId,
                     ScreeningId = request.ScreeningId,
                     PaymentId = request.PaymentId,
@@ -109,42 +127,56 @@ namespace eCinema.Services
 
         public override async Task<ReservationResponse> UpdateAsync(int id, ReservationUpsertRequest request)
         {
-            var reservation = await _context.Reservations
-                .Include(r => r.ReservationSeats)
-                .FirstOrDefaultAsync(r => r.Id == id);
+            using var transaction = _context.Database.BeginTransaction();
 
-            if (reservation == null)
-                throw new Exception("Reservation not found");
-
-            reservation.ReservationTime = request.ReservationTime;
-            reservation.TotalPrice = request.TotalPrice;
-            reservation.OriginalPrice = request.OriginalPrice;
-            reservation.DiscountPercentage = request.DiscountPercentage;
-            reservation.Status = request.Status;
-            reservation.UserId = request.UserId;
-            reservation.ScreeningId = request.ScreeningId;
-            reservation.PaymentId = request.PaymentId;
-            reservation.PromotionId = request.PromotionId;
-            reservation.NumberOfTickets = request.SeatIds.Count;
-            reservation.PaymentType = request.PaymentType;
-            reservation.State = request.State;
-            reservation.IsDeleted = request.IsDeleted;
-
-            _context.ReservationSeats.RemoveRange(reservation.ReservationSeats);
-
-            foreach (var seatId in request.SeatIds)
+            try
             {
-                var reservationSeat = new ReservationSeat
-                {
-                    ReservationId = reservation.Id,
-                    SeatId = seatId,
-                    ReservedAt = DateTime.UtcNow
-                };
-                _context.ReservationSeats.Add(reservationSeat);
-            }
+                var reservation = await _context.Reservations
+                    .Include(r => r.ReservationSeats)
+                    .FirstOrDefaultAsync(r => r.Id == id);
 
-            await _context.SaveChangesAsync();
-            return MapToResponse(reservation);
+                if (reservation == null)
+                    throw new UserException("Reservation not found");
+
+                var currentState = GetReservationState(reservation.State);
+                await currentState.UpdateAsync(id, request);
+
+                reservation.ReservationTime = request.ReservationTime;
+                reservation.TotalPrice = request.TotalPrice;
+                reservation.OriginalPrice = request.OriginalPrice;
+                reservation.DiscountPercentage = request.DiscountPercentage;
+                reservation.UserId = request.UserId;
+                reservation.ScreeningId = request.ScreeningId;
+                reservation.PaymentId = request.PaymentId;
+                reservation.PromotionId = request.PromotionId;
+                reservation.NumberOfTickets = request.SeatIds.Count;
+                reservation.PaymentType = request.PaymentType;
+                reservation.IsDeleted = request.IsDeleted;
+
+                _context.ReservationSeats.RemoveRange(reservation.ReservationSeats);
+                await _context.SaveChangesAsync();
+
+                foreach (var seatId in request.SeatIds)
+                {
+                    var reservationSeat = new ReservationSeat
+                    {
+                        ReservationId = reservation.Id,
+                        SeatId = seatId,
+                        ReservedAt = DateTime.UtcNow
+                    };
+                    _context.ReservationSeats.Add(reservationSeat);
+                }
+
+                await _context.SaveChangesAsync();
+                transaction.Commit();
+
+                return await GetByIdAsync(reservation.Id);
+            }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
         }
 
         protected override ReservationResponse MapToResponse(Reservation entity)
@@ -159,7 +191,6 @@ namespace eCinema.Services
                 TotalPrice = entity.TotalPrice,
                 OriginalPrice = entity.OriginalPrice ?? entity.TotalPrice,
                 DiscountPercentage = entity.DiscountPercentage,
-                Status = entity.Status,
                 IsDeleted = entity.IsDeleted,
                 UserId = entity.UserId,
                 UserName = entity.User?.Username ?? "",
@@ -173,7 +204,7 @@ namespace eCinema.Services
                 PromotionName = entity.Promotion?.Code,
                 PaymentId = entity.PaymentId,
                 PaymentStatus = entity.Payment?.Status,
-                ReservationState = entity.State ?? "",
+                State = entity.State ?? "",
                 MovieImage = entity.Screening?.Movie?.Image,
                 HallName = entity.Screening?.Hall?.Name ?? "",
                 QrcodeBase64 = entity.QrcodeBase64
@@ -205,7 +236,6 @@ namespace eCinema.Services
                 TotalPrice = reservation.TotalPrice,
                 OriginalPrice = reservation.OriginalPrice ?? reservation.TotalPrice,
                 DiscountPercentage = reservation.DiscountPercentage,
-                Status = reservation.Status,
                 IsDeleted = reservation.IsDeleted,
                 UserId = reservation.UserId,
                 UserName = reservation.User.Username,
@@ -219,7 +249,7 @@ namespace eCinema.Services
                 PromotionName = reservation.Promotion != null ? reservation.Promotion.Code : null,
                 PaymentId = reservation.PaymentId,
                 PaymentStatus = reservation.Payment != null ? reservation.Payment.Status : null,
-                ReservationState = reservation.State,
+                State = reservation.State,
                 MovieImage = reservation.Screening.Movie.Image,
                 HallName = reservation.Screening.Hall.Name,
                 QrcodeBase64 = reservation.QrcodeBase64,
@@ -281,7 +311,6 @@ namespace eCinema.Services
                     TotalPrice = r.TotalPrice,
                     OriginalPrice = r.OriginalPrice ?? r.TotalPrice,
                     DiscountPercentage = r.DiscountPercentage,
-                    Status = r.Status,
                     IsDeleted = r.IsDeleted,
                     UserId = r.UserId,
                     UserName = r.User.Username,
@@ -295,7 +324,7 @@ namespace eCinema.Services
                     PromotionName = r.Promotion != null ? r.Promotion.Code : null,
                     PaymentId = r.PaymentId,
                     PaymentStatus = r.Payment != null ? r.Payment.Status : null,
-                    ReservationState = r.State,
+                    State = r.State,
                     MovieImage = r.Screening.Movie.Image,
                     HallName = r.Screening.Hall.Name,
                     QrcodeBase64 = r.QrcodeBase64,
@@ -303,6 +332,63 @@ namespace eCinema.Services
                 .ToList();
 
             return reservations;
+        }
+
+        protected override IQueryable<Reservation> ApplyFilter(IQueryable<Reservation> query, ReservationSearchObject search)
+        {
+            query = base.ApplyFilter(query, search);
+
+            if (!string.IsNullOrWhiteSpace(search.State))
+            {
+                query = query.Where(x => x.State == search.State);
+            }
+
+            if (search.UserId.HasValue)
+            {
+                query = query.Where(x => x.UserId == search.UserId.Value);
+            }
+
+            if (search.ScreeningId.HasValue)
+            {
+                query = query.Where(x => x.ScreeningId == search.ScreeningId.Value);
+            }
+
+            if (search.SeatId.HasValue)
+            {
+                query = query.Where(x => x.ReservationSeats.Any(rs => rs.SeatId == search.SeatId.Value));
+            }
+
+            if (search.PromotionId.HasValue)
+            {
+                query = query.Where(x => x.PromotionId == search.PromotionId.Value);
+            }
+
+            if (search.FromReservationTime.HasValue)
+            {
+                query = query.Where(x => x.ReservationTime >= search.FromReservationTime.Value);
+            }
+
+            if (search.ToReservationTime.HasValue)
+            {
+                query = query.Where(x => x.ReservationTime <= search.ToReservationTime.Value);
+            }
+
+            if (search.MinTotalPrice.HasValue)
+            {
+                query = query.Where(x => x.TotalPrice >= search.MinTotalPrice.Value);
+            }
+
+            if (search.MaxTotalPrice.HasValue)
+            {
+                query = query.Where(x => x.TotalPrice <= search.MaxTotalPrice.Value);
+            }
+
+            if (search.HasPayment.HasValue)
+            {
+                query = query.Where(x => (x.PaymentId != null) == search.HasPayment.Value);
+            }
+
+            return query;
         }
 
         private async Task ValidateSeatsAvailability(int screeningId, List<int> seatIds)
@@ -353,14 +439,14 @@ namespace eCinema.Services
             var now = DateTime.UtcNow;
             var screeningTime = screening.StartTime;
             
-            Console.WriteLine($"=== Time Debug Info ===");
-            Console.WriteLine($"Current time (UTC): {now}");
-            Console.WriteLine($"Screening time (UTC): {screeningTime}");
+            Console.WriteLine($"=== time debug info ===");
+            Console.WriteLine($"current time (utc): {now}");
+            Console.WriteLine($"screening time (utc): {screeningTime}");
             Console.WriteLine($"Time until screening: {screeningTime - now}");
-            Console.WriteLine($"Max allowed time (2h): {now.AddHours(2)}");
-            Console.WriteLine($"Min allowed time (-3h): {now.AddHours(-3)}");
-            Console.WriteLine($"Is too early? {screeningTime > now.AddHours(2)}");
-            Console.WriteLine($"Is too late? {screeningTime < now.AddHours(-3)}");
+            Console.WriteLine($"max allowed time (2h): {now.AddHours(2)}");
+            Console.WriteLine($"min allowed time (-3h): {now.AddHours(-3)}");
+            Console.WriteLine($"is too early? {screeningTime > now.AddHours(2)}");
+            Console.WriteLine($"is too late? {screeningTime < now.AddHours(-3)}");
             Console.WriteLine($"=====================");
 
             if (screeningTime < now.AddHours(-3))

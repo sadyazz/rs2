@@ -41,7 +41,6 @@ class SeatIdsConverter implements JsonConverter<List<int>, dynamic> {
     if (json is List) {
       return List<int>.from(json);
     } else if (json is String) {
-      // If seatIds comes as string, try to parse it
       try {
         if (json.isNotEmpty) {
           return json.split(',').map((s) => int.tryParse(s.trim()) ?? 0).where((i) => i > 0).toList();
@@ -66,7 +65,6 @@ class Reservation {
   final double totalPrice;
   final double originalPrice;
   final double? discountPercentage;
-  final String status;
   final bool isDeleted;
   final int userId;
   final String userName;
@@ -80,10 +78,11 @@ class Reservation {
   final String? promotionName;
   final int? paymentId;
   final String? paymentStatus;
+  @JsonKey(name: 'state')
   final String reservationState;
   @ByteArrayConverter()
   final String? movieImage;
-  final String hallName;
+  final String? hallName;
   @JsonKey(name: 'qrcodeBase64')
   final String? qrcodeBase64;
   final List<String>? seatNames;
@@ -94,7 +93,6 @@ class Reservation {
     required this.totalPrice,
     required this.originalPrice,
     this.discountPercentage,
-    required this.status,
     required this.isDeleted,
     required this.userId,
     required this.userName,
@@ -109,7 +107,7 @@ class Reservation {
     this.paymentStatus,
     required this.reservationState,
     this.movieImage,
-    required this.hallName,
+    this.hallName,
     this.qrcodeBase64,
     this.seatNames,
   });
