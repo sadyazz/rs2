@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace eCinema.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [Authorize(Roles = "admin")]
     public class DashboardController : ControllerBase
     {
@@ -152,6 +152,48 @@ namespace eCinema.API.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "Error retrieving today's screenings", error = ex.Message });
+            }
+        }
+
+        [HttpGet("ticket-sales")]
+        public async Task<IActionResult> GetTicketSales([FromQuery] DateTime startDate, [FromQuery] DateTime endDate, [FromQuery] int? movieId = null, [FromQuery] int? hallId = null)
+        {
+            try
+            {
+                var ticketSales = await _dashboardService.GetTicketSalesAsync(startDate, endDate, movieId, hallId);
+                return Ok(ticketSales);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error retrieving ticket sales", error = ex.Message });
+            }
+        }
+
+        [HttpGet("screening-attendance")]
+        public async Task<IActionResult> GetScreeningAttendance([FromQuery] DateTime startDate, [FromQuery] DateTime endDate, [FromQuery] int? movieId = null, [FromQuery] int? hallId = null)
+        {
+            try
+            {
+                var attendance = await _dashboardService.GetScreeningAttendanceAsync(startDate, endDate, movieId, hallId);
+                return Ok(attendance);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error retrieving screening attendance", error = ex.Message });
+            }
+        }
+
+        [HttpGet("revenue")]
+        public async Task<IActionResult> GetRevenue([FromQuery] DateTime startDate, [FromQuery] DateTime endDate, [FromQuery] int? movieId = null, [FromQuery] int? hallId = null)
+        {
+            try
+            {
+                var revenue = await _dashboardService.GetRevenueAsync(startDate, endDate, movieId, hallId);
+                return Ok(revenue);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error retrieving revenue", error = ex.Message });
             }
         }
     }

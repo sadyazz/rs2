@@ -124,7 +124,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
           genres = genres;
           isLoadingGenres = false;
         });
-        print("Genres: $genres");
+
       }catch (e) {
         print('Error loading genres: $e');
         setState(() {

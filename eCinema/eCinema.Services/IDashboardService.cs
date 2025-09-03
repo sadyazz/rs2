@@ -12,5 +12,8 @@ namespace eCinema.Services
         Task<List<MovieRevenueResponse>> GetRevenueByMovieAsync();
         Task<List<TopCustomerResponse>> GetTop5CustomersAsync();
         Task<List<ScreeningResponse>> GetTodayScreeningsAsync();
+        Task<List<TicketSalesResponse>> GetTicketSalesAsync(DateTime startDate, DateTime endDate, int? movieId = null, int? hallId = null);
+        Task<List<ScreeningAttendanceResponse>> GetScreeningAttendanceAsync(DateTime startDate, DateTime endDate, int? movieId = null, int? hallId = null);
+        Task<List<RevenueResponse>> GetRevenueAsync(DateTime startDate, DateTime endDate, int? movieId = null, int? hallId = null);
     }
 } 

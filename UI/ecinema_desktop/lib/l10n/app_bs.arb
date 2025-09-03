@@ -32,8 +32,140 @@
     "description": "Reviews navigation item"
   },
   "reports": "Izvještaji",
+  "downloadReport": "Preuzmi izvještaj",
+  "keyMetrics": "Ključni pokazatelji",
+  "date": "Datum",
+  "reservationCount": "Broj rezervacija",
+  "occupancyRate": "Stopa popunjenosti",
   "@reports": {
     "description": "Reports navigation item"
+  },
+  "reportsDescription": "Pratite performanse vašeg kina kroz automatski generisane izvještaje za donošenje informisanih poslovnih odluka.",
+  "@reportsDescription": {
+    "description": "Reports page description"
+  },
+  "totalTicketsSold": "Ukupno prodanih karata",
+  "@totalTicketsSold": {
+    "description": "Total tickets sold metric"
+  },
+  "totalRevenue": "Ukupan prihod",
+  "@totalRevenue": {
+    "description": "Total revenue metric"
+  },
+  "averageOccupancy": "Prosječna popunjenost",
+  "@averageOccupancy": {
+    "description": "Average occupancy metric"
+  },
+  "chartComingSoon": "Grafički prikaz uskoro",
+  "@chartComingSoon": {
+    "description": "Placeholder text for charts"
+  },
+  "dateRange": "Vremenski period",
+  "@dateRange": {
+    "description": "Date range selector title"
+  },
+  "daily": "Dnevno",
+  "@daily": {
+    "description": "Daily date range option"
+  },
+  "weekly": "Sedmično",
+  "@weekly": {
+    "description": "Weekly date range option"
+  },
+  "monthly": "Mjesečno",
+  "@monthly": {
+    "description": "Monthly date range option"
+  },
+  "yearly": "Godišnje",
+  "@yearly": {
+    "description": "Yearly date range option"
+  },
+  "custom": "Prilagođeno",
+  "@custom": {
+    "description": "Custom date range option"
+  },
+  "from": "Od",
+  "@from": {
+    "description": "From date label"
+  },
+  "to": "Do",
+  "@to": {
+    "description": "To date label"
+  },
+  "ticketSales": "Prodaja karata",
+  "@ticketSales": {
+    "description": "Ticket sales section title"
+  },
+  "totalSeats": "Ukupno sjedišta",
+  "@totalSeats": {
+    "description": "Total seats label"
+  },
+  "reservedSeats": "Rezervisana sjedišta",
+  "@reservedSeats": {
+    "description": "Reserved seats label"
+  },
+  "availableSeats": "Dostupna sjedišta",
+  "@availableSeats": {
+    "description": "Available seats label"
+  },
+  "averageTicketPrice": "Prosječna cijena karte",
+  "@averageTicketPrice": {
+    "description": "Average ticket price label"
+  },
+  "screeningAttendance": "Posjećenost projekcija",
+  "@screeningAttendance": {
+    "description": "Screening attendance section title"
+  },
+  "revenueByMovieHall": "Prihodi po filmu/dvorani",
+  "@revenueByMovieHall": {
+    "description": "Revenue by movie/hall section title"
+  },
+  "filters": "Filteri",
+  "@filters": {
+    "description": "Filters section title"
+  },
+  "allMovies": "Svi filmovi",
+  "@allMovies": {
+    "description": "All movies filter option"
+  },
+  "allHalls": "Sve dvorane",
+  "@allHalls": {
+    "description": "All halls filter option"
+  },
+  "ticketSales": "Prodaja karata",
+  "@ticketSales": {
+    "description": "Ticket sales section title"
+  },
+  "@dateRange": {
+    "description": "Date range selector title"
+  },
+  "daily": "Dnevno",
+  "@daily": {
+    "description": "Daily date range option"
+  },
+  "weekly": "Sedmično",
+  "@weekly": {
+    "description": "Weekly date range option"
+  },
+  "monthly": "Mjesečno",
+  "@monthly": {
+    "description": "Monthly date range option"
+  },
+  "yearly": "Godišnje",
+  "@yearly": {
+    "description": "Yearly date range option"
+  },
+  "custom": "Prilagođeno",
+  "@custom": {
+    "description": "Custom date range option"
+  },
+  "from": "Od",
+  "@from": {
+    "description": "From date label"
+  },
+  "to": "Do",
+  "@to": {
+    "description": "To date label"
   },
   "settings": "Postavke",
   "@settings": {
@@ -646,6 +778,14 @@
   "screeningRestoredSuccessfully": "Projekcija uspješno vraćena",
   "@screeningRestoredSuccessfully": {
     "description": "Screening restored success message"
+  },
+  "screeningUpdatedSuccessfully": "Projekcija uspješno ažurirana",
+  "@screeningUpdatedSuccessfully": {
+    "description": "Screening updated success message"
+  },
+  "screeningCreatedSuccessfully": "Projekcija uspješno kreirana",
+  "@screeningCreatedSuccessfully": {
+    "description": "Screening created success message"
   },
   "failedToDeleteScreening": "Greška pri brisanju projekcije",
   "@failedToDeleteScreening": {
@@ -1984,5 +2124,21 @@
   "reserved": "Rezervisano",
   "@reserved": {
     "description": "Reserved seats label"
+  },
+  "selectDateRange": "Odaberi vremenski period",
+  "@selectDateRange": {
+    "description": "Select date range button text"
+  },
+  "selectDateRangeTooltip": "Odaberite vremenski period za filtriranje podataka",
+  "@selectDateRangeTooltip": {
+    "description": "Tooltip for date range selector"
+  },
+  "occupancy": "Popunjenost",
+  "@occupancy": {
+    "description": "Occupancy label"
+  },
+  "seats": "Sjedišta",
+  "@seats": {
+    "description": "Seats label"
   }
 }

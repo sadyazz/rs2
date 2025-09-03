@@ -18,13 +18,7 @@ class ReviewProvider extends BaseProvider<Review> {
       final uri = Uri.parse(url);
       final headers = createHeaders();
 
-      print('Toggle spoiler URL: $url');
-      print('Headers: $headers');
-
       final response = await http.post(uri, headers: headers);
-
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
 
       if (isValidResponse(response)) {
         return true;

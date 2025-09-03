@@ -69,7 +69,7 @@ class _NewsListScreenState extends State<NewsListScreen> {
       }
       
       result = await provider.get(filter: filter);
-      print('News result: ${result?.items?.length} items');
+
       setState(() {
         result = result;
         isLoading = false;

@@ -93,8 +93,7 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
     genresResult = await genreProvider.get();
     actorsResult = await actorProvider.get();
 
-    print("genresResult: ${genresResult?.items}");
-    print("actorsResult: ${actorsResult?.items}");
+
 
     if (widget.movie != null) {
       if (widget.movie!.genres != null && widget.movie!.genres!.isNotEmpty) {

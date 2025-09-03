@@ -1,11 +1,18 @@
-import 'package:ecinema_desktop/layouts/master_screen.dart';
-import 'package:ecinema_desktop/models/movie_revenue.dart';
-import 'package:ecinema_desktop/models/top_customer.dart';
-import 'package:ecinema_desktop/providers/dashboard_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:convert';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../providers/dashboard_provider.dart';
+import '../providers/movie_provider.dart';
+import '../providers/hall_provider.dart';
+import '../models/movie.dart';
+import '../models/hall.dart';
+import '../models/search_result.dart';
+import '../widgets/date_range_selector.dart';
+import '../widgets/ticket_sales_chart.dart';
+import '../widgets/revenue_chart.dart';
+import '../widgets/attendance_chart.dart';
+import '../layouts/master_screen.dart';
+import '../utilities/pdf_exporter.dart';
 
 class ReportsScreen extends StatefulWidget {
   const ReportsScreen({super.key});
@@ -15,461 +22,505 @@ class ReportsScreen extends StatefulWidget {
 }
 
 class _ReportsScreenState extends State<ReportsScreen> {
-  late DashboardProvider provider;
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    provider = context.read<DashboardProvider>();
-  }
+  late MovieProvider _movieProvider;
+  late HallProvider _hallProvider;
+  SearchResult<Movie>? _moviesResult;
+  SearchResult<Hall>? _hallsResult;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
+    _movieProvider = context.read<MovieProvider>();
+    _hallProvider = context.read<HallProvider>();
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadAllReports();
+      _loadData();
+      final dashboardProvider = context.read<DashboardProvider>();
+      
+
+      final now = DateTime(2025, DateTime.now().month, DateTime.now().day);
+      dashboardProvider.setDateRange(now.subtract(const Duration(days: 7)), now, DateRangeType.weekly);
     });
   }
 
-  Future<void> _loadAllReports() async {
-    await provider.refreshAll();
+  Future<void> _loadData() async {
+    try {
+      final moviesResult = await _movieProvider.get();
+      final hallsResult = await _hallProvider.get();
+
+      setState(() {
+        _moviesResult = moviesResult;
+        _hallsResult = hallsResult;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('Error loading data: $e');
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return MasterScreen(l10n.reports,
-      Padding(
-        padding: const EdgeInsets.fromLTRB(32.0, 16.0, 32.0, 16.0),
-        child: Consumer<DashboardProvider>(
-          builder: (context, dashboardProvider, child) {
-            if (dashboardProvider.isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
 
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return MasterScreen(
+      l10n.reports,
+      _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            IntrinsicHeight(
+              child: Row(
                 children: [
-                  _buildSummaryCards(dashboardProvider, l10n),
-                  const SizedBox(height: 32),
-                  _buildTopMoviesSection(dashboardProvider, l10n),
-                  const SizedBox(height: 32),
-                  _buildRevenueByMovieSection(dashboardProvider, l10n),
-                  const SizedBox(height: 32),
-                  _buildTopCustomersSection(dashboardProvider, l10n),
+                  Expanded(
+                    child: DateRangeSelector(
+                      onDateRangeChanged: (startDate, endDate, type) {
+                        final dashboardProvider = context.read<DashboardProvider>();
+                        dashboardProvider.setDateRange(startDate, endDate, type);
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _buildFiltersCard(context),
+                  ),
                 ],
               ),
-            );
-          },
-        ),
-      ),
-    );
-  }
+            ),
+            const SizedBox(height: 32),
 
-  Widget _buildSummaryCards(DashboardProvider provider, AppLocalizations l10n) {
-    return Row(
-      children: [
-        Expanded(
-          child: _buildSummaryCard(
-            l10n.totalUsers,
-            provider.userCount?.toString() ?? '0',
-            Icons.people,
-            Colors.blue,
-          ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: _buildSummaryCard(
-            l10n.totalIncome,
-            '${provider.totalIncome?.toStringAsFixed(2) ?? '0.00'} €',
-            Icons.euro,
-            Colors.green,
-          ),
-        ),
-      ],
-    );
-  }
 
-  Widget _buildSummaryCard(String title, String value, IconData icon, Color color) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
-            spreadRadius: 0,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
+            _buildKeyMetricsSection(context),
+            const SizedBox(height: 32),
+
+
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                Expanded(
+                  child: _buildTicketSalesSection(context),
                 ),
-                child: Icon(icon, color: color, size: 20),
-              ),
-              const Spacer(),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            value,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.onSurface,
+                const SizedBox(width: 24),
+
+                Expanded(
+                  child: _buildRevenueSection(context),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+            const SizedBox(height: 32),
 
-  Widget _buildTopMoviesSection(DashboardProvider provider, AppLocalizations l10n) {
-    return _buildSection(
-      title: l10n.top5WatchedMovies,
-      icon: Icons.movie,
-      child: provider.top5Movies != null && provider.top5Movies!.isNotEmpty
-          ? ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: provider.top5Movies!.length,
-              itemBuilder: (context, index) {
-                final movie = provider.top5Movies![index];
-                return _buildMovieRevenueCard(movie, index + 1, l10n);
-              },
-            )
-          : _buildEmptyState(l10n.noDataAvailable, Icons.movie_outlined),
-    );
-  }
 
-  Widget _buildRevenueByMovieSection(DashboardProvider provider, AppLocalizations l10n) {
-    return _buildSection(
-      title: l10n.revenueByMovie,
-      icon: Icons.trending_up,
-      child: provider.revenueByMovie != null && provider.revenueByMovie!.isNotEmpty
-          ? ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: provider.revenueByMovie!.length,
-              itemBuilder: (context, index) {
-                final movie = provider.revenueByMovie![index];
-                return _buildMovieRevenueCard(movie, index + 1, l10n);
-              },
-            )
-          : _buildEmptyState(l10n.noDataAvailable, Icons.trending_up),
-    );
-  }
-
-  Widget _buildTopCustomersSection(DashboardProvider provider, AppLocalizations l10n) {
-    return _buildSection(
-      title: l10n.top5Customers,
-      icon: Icons.person,
-      child: provider.top5Customers != null && provider.top5Customers!.isNotEmpty
-          ? ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: provider.top5Customers!.length,
-              itemBuilder: (context, index) {
-                final customer = provider.top5Customers![index];
-                return _buildTopCustomerCard(customer, index + 1, l10n);
-              },
-            )
-          : _buildEmptyState(l10n.noDataAvailable, Icons.person_outline),
-    );
-  }
-
-  Widget _buildSection({
-    required String title,
-    required IconData icon,
-    required Widget child,
-  }) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+            _buildAttendanceSection(context),
+          ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).colorScheme.shadow.withOpacity(0.1),
-            spreadRadius: 0,
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    );
+  }
+
+  Widget _buildFiltersCard(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.filters,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.onSurface,
+                  ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<int?>(
+                    decoration: InputDecoration(
+                      labelText: l10n.movie,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          color: colorScheme.outline.withOpacity(0.3),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                    value: null,
+                    items: [
+                      DropdownMenuItem(
+                        value: null,
+                        child: Text(l10n.allMovies),
+                      ),
+                      if (_moviesResult?.items != null)
+                        ...(_moviesResult?.items ?? []).map((movie) => DropdownMenuItem(
+                              value: movie.id,
+                              child: Text(movie.title ?? ''),
+                            )).toList(),
+                    ],
+                    onChanged: (value) {
+                      final dashboardProvider = context.read<DashboardProvider>();
+                      dashboardProvider.setSelectedMovie(value);
+                      dashboardProvider.refreshReports();
+                    },
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: DropdownButtonFormField<int?>(
+                    decoration: InputDecoration(
+                      labelText: l10n.hall,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          color: colorScheme.outline.withOpacity(0.3),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                    value: null,
+                    items: [
+                      DropdownMenuItem(
+                        value: null,
+                        child: Text(l10n.allHalls),
+                      ),
+                      if (_hallsResult?.items != null)
+                        ...(_hallsResult?.items ?? []).map((hall) => DropdownMenuItem(
+                              value: hall.id,
+                              child: Text(hall.name ?? ''),
+                            )).toList(),
+                    ],
+                    onChanged: (value) {
+                      final dashboardProvider = context.read<DashboardProvider>();
+                      dashboardProvider.setSelectedHall(value);
+                      dashboardProvider.refreshReports();
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildKeyMetricsSection(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+    final dashboardProvider = context.watch<DashboardProvider>();
+
+    int totalTickets = 0;
+    double totalRevenue = 0;
+    double averageOccupancy = 0;
+
+    if (dashboardProvider.ticketSales != null) {
+      for (var sale in dashboardProvider.ticketSales!) {
+        totalTickets += sale.ticketCount;
+        totalRevenue += sale.totalRevenue;
+      }
+    }
+
+    if (dashboardProvider.screeningAttendance != null && dashboardProvider.screeningAttendance!.isNotEmpty) {
+      double totalOccupancy = 0;
+      for (var attendance in dashboardProvider.screeningAttendance!) {
+        totalOccupancy += attendance.occupancyRate;
+      }
+      averageOccupancy = totalOccupancy / dashboardProvider.screeningAttendance!.length;
+    }
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  l10n.keyMetrics,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                ElevatedButton.icon(
+                  onPressed: () => _downloadReport(context),
+                  icon: const Icon(Icons.download),
+                  label: Text(l10n.downloadReport),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                _buildMetricCard(
+                  context,
+                  title: l10n.totalTicketsSold,
+                  value: totalTickets.toString(),
+                  icon: Icons.confirmation_number,
+                  color: colorScheme.primary,
+                ),
+                const SizedBox(width: 16),
+                _buildMetricCard(
+                  context,
+                  title: l10n.totalRevenue,
+                  value: '\$${totalRevenue.toStringAsFixed(2)}',
+                  icon: Icons.attach_money,
+                  color: Colors.green,
+                ),
+                const SizedBox(width: 16),
+                _buildMetricCard(
+                  context,
+                  title: l10n.averageOccupancy,
+                  value: '${averageOccupancy.toStringAsFixed(1)}%',
+                  icon: Icons.people,
+                  color: colorScheme.tertiary,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMetricCard(
+    BuildContext context, {
+    required String title,
+    required String value,
+    required IconData icon,
+    required Color color,
+  }) {
+    return Expanded(
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, color: Theme.of(context).colorScheme.primary),
-              const SizedBox(width: 8),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: color.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(icon, color: color),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                value,
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+              ),
+              const SizedBox(height: 4),
               Text(
                 title,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          child,
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMovieRevenueCard(MovieRevenue movie, int rank, AppLocalizations l10n) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
         ),
       ),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Center(
-              child: Text(
-                '#$rank',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          if (movie.movieImage.isNotEmpty)
-            Container(
-              width: 50,
-              height: 70,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                  image: MemoryImage(base64Decode(movie.movieImage)),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            )
-          else
-            Container(
-              width: 50,
-              height: 70,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceVariant,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                Icons.movie,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  movie.movieTitle,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '${l10n.reservations}: ${movie.reservationCount}',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '${movie.totalRevenue.toStringAsFixed(2)} €',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.green[600],
-                ),
-              ),
-              Text(
-                l10n.revenue,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 
-  Widget _buildTopCustomerCard(TopCustomer customer, int rank, AppLocalizations l10n) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Theme.of(context).colorScheme.outline.withOpacity(0.1),
+  Widget _buildTicketSalesSection(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final dashboardProvider = context.watch<DashboardProvider>();
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.ticketSales,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            const SizedBox(height: 24),
+            if (dashboardProvider.ticketSales != null)
+              TicketSalesChart(
+                ticketSales: dashboardProvider.ticketSales!,
+                dateRangeType: dashboardProvider.dateRangeType,
+              )
+            else
+              AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Center(
+                    child: Text(l10n.noDataAvailable),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Center(
-              child: Text(
-                '#$rank',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(25),
-            ),
-            child: Icon(
-              Icons.person,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  customer.userName,
-                  style: const TextStyle(
+    );
+  }
+
+  Widget _buildRevenueSection(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final dashboardProvider = context.watch<DashboardProvider>();
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.revenue,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  customer.email,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '${l10n.reservations}: ${customer.reservationCount}',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                    fontSize: 12,
-                  ),
-                ),
-              ],
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '${customer.totalSpent.toStringAsFixed(2)} €',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.green[600],
+            const SizedBox(height: 24),
+            if (dashboardProvider.revenueData != null)
+              RevenueChart(
+                revenueData: dashboardProvider.revenueData!,
+                dateRangeType: dashboardProvider.dateRangeType,
+              )
+            else
+              AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Center(
+                    child: Text(l10n.noDataAvailable),
+                  ),
                 ),
               ),
-              Text(
-                l10n.totalSpent,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildEmptyState(String message, IconData icon) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            size: 48,
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            message,
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-              fontSize: 16,
+  Widget _buildAttendanceSection(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final dashboardProvider = context.watch<DashboardProvider>();
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.screeningAttendance,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
-          ),
-        ],
+            const SizedBox(height: 24),
+            if (dashboardProvider.screeningAttendance != null)
+              AttendanceChart(attendanceData: dashboardProvider.screeningAttendance!)
+            else
+              AspectRatio(
+                aspectRatio: 21 / 9,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Center(
+                    child: Text(l10n.noDataAvailable),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
-} 
+
+  Future<void> _downloadReport(BuildContext context) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+
+    final dashboardProvider = context.read<DashboardProvider>();
+
+    final result = await PdfExporter.exportToPDF(
+      context,
+      dashboardProvider.ticketSales ?? [],
+      dashboardProvider.revenueData ?? [],
+      dashboardProvider.screeningAttendance ?? [],
+      dateRangeType: dashboardProvider.dateRangeType,
+    );
+
+    if (context.mounted) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            result == 'success'
+                ? 'PDF exported successfully!'
+                : 'Failed to export PDF. Please try again.',
+          ),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    }
+  }
+
+
+}

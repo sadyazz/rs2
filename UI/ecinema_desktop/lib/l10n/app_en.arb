@@ -32,8 +32,105 @@
     "description": "Reviews navigation item"
   },
   "reports": "Reports",
+  "downloadReport": "Download Report",
+  "keyMetrics": "Key Metrics",
+  "date": "Date",
+  "reservationCount": "Reservation Count",
+  "occupancyRate": "Occupancy Rate",
   "@reports": {
     "description": "Reports navigation item"
+  },
+  "reportsDescription": "Track your cinema's performance with automatically generated reports to make informed business decisions.",
+  "@reportsDescription": {
+    "description": "Reports page description"
+  },
+  "totalTicketsSold": "Total Tickets Sold",
+  "@totalTicketsSold": {
+    "description": "Total tickets sold metric"
+  },
+  "totalRevenue": "Total Revenue",
+  "@totalRevenue": {
+    "description": "Total revenue metric"
+  },
+  "averageOccupancy": "Average Occupancy",
+  "@averageOccupancy": {
+    "description": "Average occupancy metric"
+  },
+  "chartComingSoon": "Chart visualization coming soon",
+  "@chartComingSoon": {
+    "description": "Placeholder text for charts"
+  },
+  "dateRange": "Date Range",
+  "@dateRange": {
+    "description": "Date range selector title"
+  },
+  "daily": "Daily",
+  "@daily": {
+    "description": "Daily date range option"
+  },
+  "weekly": "Weekly",
+  "@weekly": {
+    "description": "Weekly date range option"
+  },
+  "monthly": "Monthly",
+  "@monthly": {
+    "description": "Monthly date range option"
+  },
+  "yearly": "Yearly",
+  "@yearly": {
+    "description": "Yearly date range option"
+  },
+  "custom": "Custom",
+  "@custom": {
+    "description": "Custom date range option"
+  },
+  "from": "From",
+  "@from": {
+    "description": "From date label"
+  },
+  "to": "To",
+  "@to": {
+    "description": "To date label"
+  },
+  "ticketSales": "Ticket Sales",
+  "@ticketSales": {
+    "description": "Ticket sales section title"
+  },
+  "totalSeats": "Total Seats",
+  "@totalSeats": {
+    "description": "Total seats label"
+  },
+  "reservedSeats": "Reserved Seats",
+  "@reservedSeats": {
+    "description": "Reserved seats label"
+  },
+  "availableSeats": "Available Seats",
+  "@availableSeats": {
+    "description": "Available seats label"
+  },
+  "averageTicketPrice": "Average Ticket Price",
+  "@averageTicketPrice": {
+    "description": "Average ticket price label"
+  },
+  "screeningAttendance": "Screening Attendance",
+  "@screeningAttendance": {
+    "description": "Screening attendance section title"
+  },
+  "revenueByMovieHall": "Revenue by Movie/Hall",
+  "@revenueByMovieHall": {
+    "description": "Revenue by movie/hall section title"
+  },
+  "filters": "Filters",
+  "@filters": {
+    "description": "Filters section title"
+  },
+  "allMovies": "All Movies",
+  "@allMovies": {
+    "description": "All movies filter option"
+  },
+  "allHalls": "All Halls",
+  "@allHalls": {
+    "description": "All halls filter option"
   },
   "settings": "Settings",
   "@settings": {
@@ -2170,5 +2267,21 @@
   "reserved": "Reserved",
   "@reserved": {
     "description": "Reserved seats label"
+  },
+  "selectDateRange": "Select Date Range",
+  "@selectDateRange": {
+    "description": "Select date range button text"
+  },
+  "selectDateRangeTooltip": "Select a date range to filter data",
+  "@selectDateRangeTooltip": {
+    "description": "Tooltip for date range selector"
+  },
+  "occupancy": "Occupancy",
+  "@occupancy": {
+    "description": "Occupancy label"
+  },
+  "seats": "Seats",
+  "@seats": {
+    "description": "Seats label"
   }
 }
