@@ -499,12 +499,30 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
     final dashboardProvider = context.read<DashboardProvider>();
 
+    // Get selected movie and hall names
+    String? selectedMovieName;
+    String? selectedHallName;
+
+    if (dashboardProvider.selectedMovieId != null && _moviesResult?.items != null) {
+      selectedMovieName = _moviesResult?.items
+          ?.firstWhere((m) => m.id == dashboardProvider.selectedMovieId)
+          .title;
+    }
+
+    if (dashboardProvider.selectedHallId != null && _hallsResult?.items != null) {
+      selectedHallName = _hallsResult?.items
+          ?.firstWhere((h) => h.id == dashboardProvider.selectedHallId)
+          .name;
+    }
+
     final result = await PdfExporter.exportToPDF(
       context,
       dashboardProvider.ticketSales ?? [],
       dashboardProvider.revenueData ?? [],
       dashboardProvider.screeningAttendance ?? [],
       dateRangeType: dashboardProvider.dateRangeType,
+      selectedMovie: selectedMovieName,
+      selectedHall: selectedHallName,
     );
 
     if (context.mounted) {
