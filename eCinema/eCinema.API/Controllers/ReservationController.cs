@@ -20,6 +20,25 @@ namespace eCinema.API.Controllers
             _reservationService = service;
         }
 
+        [HttpPost("process-stripe-payment")]
+        public async Task<ActionResult<ReservationResponse>> ProcessStripePayment([FromBody] StripePaymentRequest request)
+        {
+            try
+            {
+                var reservation = await _reservationService.ProcessStripePayment(
+                    request.PaymentIntentId,
+                    request.Amount,
+                    request.ScreeningId,
+                    request.SeatIds
+                );
+                return Ok(reservation);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
         [HttpGet("available-seats/{screeningId}")]
         public async Task<ActionResult<List<Seat>>> GetAvailableSeats(int screeningId)
         {
@@ -77,4 +96,4 @@ namespace eCinema.API.Controllers
             }
         }
     }
-} 
+}

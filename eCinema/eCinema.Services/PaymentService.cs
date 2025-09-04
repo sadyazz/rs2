@@ -1,66 +1,102 @@
-using eCinema.Model;
-using eCinema.Model.Requests;
-using eCinema.Model.Responses;
-using eCinema.Model.SearchObjects;
 using eCinema.Services.Database;
 using eCinema.Services.Database.Entities;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MapsterMapper;
+using Stripe;
 
 namespace eCinema.Services
 {
-    public class PaymentService : BaseCRUDService<PaymentResponse, PaymentSearchObject, Payment, PaymentUpsertRequest, PaymentUpsertRequest>, IPaymentService
+    public class PaymentService : IPaymentService
     {
         private readonly eCinemaDBContext _context;
-        public PaymentService(eCinemaDBContext context, IMapper mapper) : base(context, mapper)
+
+        public PaymentService(string stripeSecretKey, eCinemaDBContext context)
         {
+            if (string.IsNullOrEmpty(stripeSecretKey))
+            {
+                throw new ArgumentException("Stripe secret key is required", nameof(stripeSecretKey));
+            }
+            StripeConfiguration.ApiKey = stripeSecretKey;
             _context = context;
         }
 
-        protected override IQueryable<Payment> ApplyFilter(IQueryable<Payment> query, PaymentSearchObject search)
+        public StripePayment ProcessStripePayment(string paymentIntentId, decimal amount)
         {
-            query = base.ApplyFilter(query, search);
-            
-            if (search.MinAmount.HasValue)
+            try
             {
-                query = query.Where(x => x.Amount >= search.MinAmount.Value);
-            }
+                var service = new PaymentIntentService();
+                var paymentIntent = service.Get(paymentIntentId);
+                
+                switch (paymentIntent.Status)
+                {
+                    case "succeeded":
+                        break;
+                    case "requires_payment_method":
+                        throw new InvalidOperationException("Payment method required");
+                    case "requires_confirmation":
+                        throw new InvalidOperationException("Payment needs confirmation");
+                    case "requires_action":
+                        throw new InvalidOperationException("Additional action required (e.g. 3D Secure)");
+                    case "processing":
+                        throw new InvalidOperationException("Payment is still processing");
+                    case "canceled":
+                        throw new InvalidOperationException("Payment was canceled");
+                    default:
+                        throw new InvalidOperationException($"Unexpected payment status: {paymentIntent.Status}");
+                }
 
-            if (search.MaxAmount.HasValue)
+                var payment = new StripePayment
+                {
+                    PaymentProvider = "Stripe",
+                    TransactionId = paymentIntent.Id,
+                    Amount = amount,
+                    PaymentDate = DateTime.Now
+                };
+
+                _context.StripePayments.Add(payment);
+
+                return payment;
+            }
+            catch (StripeException e)
             {
-                query = query.Where(x => x.Amount <= search.MaxAmount.Value);
+                throw new InvalidOperationException($"Stripe error: {e.StripeError?.Message ?? e.Message}");
             }
-
-            if (search.FromPaymentDate.HasValue)
+            catch (Exception e)
             {
-                query = query.Where(x => x.PaymentDate >= search.FromPaymentDate.Value);
+                throw new InvalidOperationException($"Error processing payment: {e.Message}");
             }
+        }
 
-            if (search.ToPaymentDate.HasValue)
+        public async Task<PaymentIntent> CreatePaymentIntentAsync(int amount)
+        {
+            try
             {
-                query = query.Where(x => x.PaymentDate <= search.ToPaymentDate.Value);
-            }
+                var options = new PaymentIntentCreateOptions
+                {
+                    Amount = amount,
+                    Currency = "usd",
+                    PaymentMethodTypes = new List<string> { "card" },
+                    CaptureMethod = "automatic",
+                };
 
-            if (!string.IsNullOrWhiteSpace(search.PaymentMethod))
+                var service = new PaymentIntentService();
+                var intent = await service.CreateAsync(options);
+
+                if (intent == null)
+                {
+                    throw new InvalidOperationException("Failed to create payment intent");
+                }
+
+                return intent;
+            }
+            catch (StripeException e)
             {
-                query = query.Where(x => x.PaymentMethod == search.PaymentMethod);
+                Console.WriteLine($"Stripe error creating payment intent: {e.StripeError?.Message}");
+                throw new InvalidOperationException($"Stripe error: {e.StripeError?.Message ?? e.Message}");
             }
-
-            if (!string.IsNullOrWhiteSpace(search.Status))
+            catch (Exception e)
             {
-                query = query.Where(x => x.Status == search.Status);
+                Console.WriteLine($"Error creating payment intent: {e.Message}");
+                throw new InvalidOperationException($"Error creating payment intent: {e.Message}");
             }
-
-            if (search.ReservationId.HasValue)
-            {
-                query = query.Where(x => x.ReservationId == search.ReservationId.Value);
-            }
-
-            return query;
         }
     }
-} 
+}

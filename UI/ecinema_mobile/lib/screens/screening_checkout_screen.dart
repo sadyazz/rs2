@@ -3,6 +3,7 @@ import '../models/screening.dart';
 import '../models/seat.dart';
 import '../screens/reservation_qr_code_screen.dart';
 import '../providers/reservation_provider.dart';
+import '../providers/payment_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ScreeningCheckoutScreen extends StatefulWidget {
@@ -51,7 +52,6 @@ class _ScreeningCheckoutScreenState extends State<ScreeningCheckoutScreen> {
             const SizedBox(height: 32),
             _buildProceedButton(l10n, colorScheme),
             const SizedBox(height: 32),
-
           ],
         ),
       ),
@@ -215,7 +215,14 @@ class _ScreeningCheckoutScreenState extends State<ScreeningCheckoutScreen> {
           ),
         ),
         child: isProcessing
-            ? CircularProgressIndicator(color: Colors.white)
+            ? SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
+              )
             : Text(
                 selectedPaymentMethod == 'cash' 
                     ? l10n.payWithCash 
@@ -270,34 +277,33 @@ class _ScreeningCheckoutScreenState extends State<ScreeningCheckoutScreen> {
 
     try {
       if (selectedPaymentMethod == 'cash') {
-        _processCashPayment();
+        await _processCashPayment();
       } else {
-        _processStripePayment();
+        await _processStripePayment();
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     } finally {
-      setState(() {
-        isProcessing = false;
-      });
+      if (mounted) {
+        setState(() {
+          isProcessing = false;
+        });
+      }
     }
   }
 
   Future<void> _processCashPayment() async {
     final l10n = AppLocalizations.of(context)!;
     try {
-      setState(() {
-        isProcessing = true;
-      });
-
       final reservationProvider = ReservationProvider();
       
-      // Kreiranje rezervacije na backendu
       final reservation = await reservationProvider.createReservation(
         screeningId: widget.screening.id!,
         seatIds: widget.selectedSeats.map((seat) => seat.id).toList(),
@@ -305,7 +311,6 @@ class _ScreeningCheckoutScreenState extends State<ScreeningCheckoutScreen> {
         paymentType: 'Cash',
       );
 
-      // Navigacija na QR kod ekran sa kreiranom rezervacijom
       if (mounted) {
         Navigator.pushReplacement(
           context,
@@ -329,21 +334,55 @@ class _ScreeningCheckoutScreenState extends State<ScreeningCheckoutScreen> {
           ),
         );
       }
-    } finally {
-      if (mounted) {
-        setState(() {
-          isProcessing = false;
-        });
-      }
     }
   }
 
-  void _processStripePayment() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Stripe integration coming soon!'),
-        backgroundColor: Colors.orange,
-      ),
-    );
+  Future<void> _processStripePayment() async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      final paymentProvider = PaymentProvider();
+      final reservationProvider = ReservationProvider();
+
+      final amountInCents = (widget.totalPrice * 100).round();
+
+      final paymentIntentId = await paymentProvider.initializePayment(amountInCents);
+
+      final reservation = await reservationProvider.processStripePayment(
+        screeningId: widget.screening.id!,
+        seatIds: widget.selectedSeats.map((seat) => seat.id).toList(),
+        amount: widget.totalPrice,
+        paymentIntentId: paymentIntentId,
+      );
+
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ReservationQrCodeScreen(
+              reservation: reservation,
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      print('Error in _processStripePayment: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              e.toString().toLowerCase().contains('you already have a reservation')
+                ? l10n.existingReservationError
+                : e.toString().toLowerCase().contains('payment flow has been cancelled') ||
+                  e.toString().toLowerCase().contains('the payment flow has been cancelled')
+                  ? l10n.paymentCancelled
+                  : e.toString().contains('Failed to process payment:')
+                    ? e.toString().split('Failed to process payment:')[1].trim()
+                    : e.toString().replaceFirst('Exception: ', '')
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }

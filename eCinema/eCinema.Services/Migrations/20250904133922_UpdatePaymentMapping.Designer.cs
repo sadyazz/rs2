@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eCinema.Services.Database;
 
@@ -11,9 +12,11 @@ using eCinema.Services.Database;
 namespace eCinema.Services.Migrations
 {
     [DbContext(typeof(eCinemaDBContext))]
-    partial class eCinemaDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250904133922_UpdatePaymentMapping")]
+    partial class UpdatePaymentMapping
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,6 +247,33 @@ namespace eCinema.Services.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("NewsArticles");
+                });
+
+            modelBuilder.Entity("eCinema.Services.Database.Entities.Payment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal?>("Amount")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<DateTime?>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentProvider")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("TransactionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("eCinema.Services.Database.Entities.Promotion", b =>
@@ -551,33 +581,6 @@ namespace eCinema.Services.Migrations
                     b.ToTable("Seats");
                 });
 
-            modelBuilder.Entity("eCinema.Services.Database.Entities.StripePayment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal?>("Amount")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<DateTime?>("PaymentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PaymentProvider")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("TransactionId")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("StripePayments", (string)null);
-                });
-
             modelBuilder.Entity("eCinema.Services.Database.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -734,7 +737,7 @@ namespace eCinema.Services.Migrations
 
             modelBuilder.Entity("eCinema.Services.Database.Entities.Reservation", b =>
                 {
-                    b.HasOne("eCinema.Services.Database.Entities.StripePayment", "Payment")
+                    b.HasOne("eCinema.Services.Database.Entities.Payment", "Payment")
                         .WithOne()
                         .HasForeignKey("eCinema.Services.Database.Entities.Reservation", "PaymentId")
                         .OnDelete(DeleteBehavior.SetNull);

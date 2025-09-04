@@ -6,19 +6,27 @@ using eCinema.Services.Database.Entities;
 using eCinema.Services.ReservationStateMachine;
 using Microsoft.EntityFrameworkCore;
 using MapsterMapper;
-using System.Collections.Generic;
-using eCinema.Services.ReservationStateMachine;
 using eCinema.Model;
+using eCinema.Services.Auth;
 
 namespace eCinema.Services
 {
     public class ReservationService : BaseCRUDService<ReservationResponse, ReservationSearchObject, Reservation, ReservationUpsertRequest, ReservationUpsertRequest>, IReservationService
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly PaymentService _paymentService;
+        private readonly ICurrentUserService _currentUserService;
 
-        public ReservationService(eCinemaDBContext context, IMapper mapper, IServiceProvider serviceProvider) : base(context, mapper)
+        public ReservationService(
+            eCinemaDBContext context, 
+            IMapper mapper, 
+            IServiceProvider serviceProvider, 
+            PaymentService paymentService,
+            ICurrentUserService currentUserService) : base(context, mapper)
         {
             _serviceProvider = serviceProvider;
+            _paymentService = paymentService;
+            _currentUserService = currentUserService;
         }
 
         private BaseReservationState GetReservationState(string stateName)
@@ -29,7 +37,6 @@ namespace eCinema.Services
 
         public override async Task<ReservationResponse> CreateAsync(ReservationUpsertRequest request)
         {
-            using var transaction = _context.Database.BeginTransaction();
 
             try
             {
@@ -64,7 +71,7 @@ namespace eCinema.Services
                     PromotionId = request.PromotionId,
                     NumberOfTickets = request.SeatIds.Count,
                     PaymentType = request.PaymentType,
-                    State = nameof(ApprovedReservationState),
+                    State = request.State,
                     IsDeleted = request.IsDeleted
                 };
 
@@ -109,19 +116,51 @@ namespace eCinema.Services
                 
                 reservation.QrcodeBase64 = qrCodeBase64;
                 
-                reservation.State = nameof(ApprovedReservationState);
                 
                 await _context.SaveChangesAsync();
 
-                transaction.Commit();
-
                 var fullReservation = await GetByIdAsync(reservation.Id);
-                return fullReservation;
+                return fullReservation ?? throw new Exception("Failed to create reservation");
             }
             catch
             {
-                transaction.Rollback();
                 throw;
+            }
+        }
+
+        public async Task<ReservationResponse> ProcessStripePayment(string paymentIntentId, decimal amount, int screeningId, List<int> seatIds)
+        {
+            using var transaction = _context.Database.BeginTransaction();
+
+            try
+            {
+                var payment = _paymentService.ProcessStripePayment(paymentIntentId, amount);
+
+                var request = new ReservationUpsertRequest
+                {
+                    ScreeningId = screeningId,
+                    SeatIds = seatIds,
+                    TotalPrice = amount,
+                    PaymentType = "Stripe",
+                    PaymentId = payment.Id,
+                    ReservationTime = DateTime.UtcNow,
+                    IsDeleted = false,
+                    UserId = await _currentUserService.GetUserIdAsync() ?? throw new Exception("User not authenticated"),
+                    State = "ApprovedReservationState"
+                };
+
+                var reservation = await CreateAsync(request);
+                if (reservation == null)
+                    throw new Exception("Failed to create reservation");
+
+                transaction.Commit();
+
+                return reservation;
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Failed to process payment: {ex.Message}");
             }
         }
 
@@ -170,7 +209,8 @@ namespace eCinema.Services
                 await _context.SaveChangesAsync();
                 transaction.Commit();
 
-                return await GetByIdAsync(reservation.Id);
+                var updatedReservation = await GetByIdAsync(reservation.Id);
+                return updatedReservation ?? throw new Exception("Failed to update reservation");
             }
             catch
             {
@@ -182,7 +222,7 @@ namespace eCinema.Services
         protected override ReservationResponse MapToResponse(Reservation entity)
         {
             if (entity == null)
-                return null;
+                throw new ArgumentNullException(nameof(entity));
 
             var response = new ReservationResponse
             {
@@ -203,7 +243,6 @@ namespace eCinema.Services
                 PromotionId = entity.PromotionId,
                 PromotionName = entity.Promotion?.Code,
                 PaymentId = entity.PaymentId,
-                PaymentStatus = entity.Payment?.Status,
                 State = entity.State ?? "",
                 MovieImage = entity.Screening?.Movie?.Image,
                 HallName = entity.Screening?.Hall?.Name ?? "",
@@ -227,7 +266,7 @@ namespace eCinema.Services
                 .FirstOrDefaultAsync(r => r.Id == id);
                 
             if (reservation == null)
-                return null;
+                throw new KeyNotFoundException($"Reservation with ID {id} not found");
 
             return new ReservationResponse
             {
@@ -238,20 +277,19 @@ namespace eCinema.Services
                 DiscountPercentage = reservation.DiscountPercentage,
                 IsDeleted = reservation.IsDeleted,
                 UserId = reservation.UserId,
-                UserName = reservation.User.Username,
+                UserName = reservation.User?.Username ?? "",
                 ScreeningId = reservation.ScreeningId,
-                MovieTitle = reservation.Screening.Movie.Title,
-                ScreeningStartTime = reservation.Screening.StartTime,
+                MovieTitle = reservation.Screening?.Movie?.Title ?? "",
+                ScreeningStartTime = reservation.Screening?.StartTime ?? DateTime.MinValue,
                 SeatIds = reservation.ReservationSeats.Select(rs => rs.SeatId).ToList(),
-                SeatNames = reservation.ReservationSeats.Select(rs => rs.Seat.Name ?? $"Seat {rs.SeatId}").ToList(),
+                SeatNames = reservation.ReservationSeats.Select(rs => rs.Seat?.Name ?? $"Seat {rs.SeatId}").ToList(),
                 NumberOfTickets = reservation.NumberOfTickets ?? 0,
                 PromotionId = reservation.PromotionId,
-                PromotionName = reservation.Promotion != null ? reservation.Promotion.Code : null,
+                PromotionName = reservation.Promotion?.Code,
                 PaymentId = reservation.PaymentId,
-                PaymentStatus = reservation.Payment != null ? reservation.Payment.Status : null,
-                State = reservation.State,
-                MovieImage = reservation.Screening.Movie.Image,
-                HallName = reservation.Screening.Hall.Name,
+                State = reservation.State ?? "",
+                MovieImage = reservation.Screening?.Movie?.Image,
+                HallName = reservation.Screening?.Hall?.Name ?? "",
                 QrcodeBase64 = reservation.QrcodeBase64,
             };
         }
@@ -313,9 +351,9 @@ namespace eCinema.Services
                     DiscountPercentage = r.DiscountPercentage,
                     IsDeleted = r.IsDeleted,
                     UserId = r.UserId,
-                    UserName = r.User.Username,
+                    UserName = r.User.Username ?? "",
                     ScreeningId = r.ScreeningId,
-                    MovieTitle = r.Screening.Movie.Title,
+                    MovieTitle = r.Screening.Movie.Title ?? "",
                     ScreeningStartTime = r.Screening.StartTime,
                     SeatIds = r.ReservationSeats.Select(rs => rs.SeatId).ToList(),
                     SeatNames = r.ReservationSeats.Select(rs => rs.Seat.Name ?? $"Seat {rs.SeatId}").ToList(),
@@ -323,10 +361,9 @@ namespace eCinema.Services
                     PromotionId = r.PromotionId,
                     PromotionName = r.Promotion != null ? r.Promotion.Code : null,
                     PaymentId = r.PaymentId,
-                    PaymentStatus = r.Payment != null ? r.Payment.Status : null,
-                    State = r.State,
+                    State = r.State ?? "",
                     MovieImage = r.Screening.Movie.Image,
-                    HallName = r.Screening.Hall.Name,
+                    HallName = r.Screening.Hall.Name ?? "",
                     QrcodeBase64 = r.QrcodeBase64,
                 })
                 .ToList();
@@ -403,8 +440,6 @@ namespace eCinema.Services
                 throw new InvalidOperationException($"The following seats are already reserved: {string.Join(", ", unavailableSeats)}");
             }
         }
-
-
 
         public async Task<ReservationResponse> VerifyReservation(int reservationId)
         {
@@ -533,7 +568,6 @@ namespace eCinema.Services
 
         public async Task<string> GenerateQRCode(int reservationId)
         {
-            
             var reservation = await _context.Reservations
                 .Include(r => r.User)
                 .Include(r => r.Screening)
@@ -568,4 +602,4 @@ namespace eCinema.Services
             return Convert.ToBase64String(qrCodeImage);
         }
     }
-} 
+}

@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'config/api_config.dart';
 import 'providers/language_provider.dart';
 import 'providers/theme_provider.dart';
 import 'providers/movie_provider.dart';
@@ -15,11 +18,16 @@ import 'providers/actor_provider.dart';
 import 'providers/review_provider.dart';
 import 'providers/user_provider.dart';
 import 'providers/reservation_provider.dart';
+import 'providers/payment_provider.dart';
 import 'layouts/master_screen.dart';
 import 'screens/register_screen.dart';
 
 final routeObserver = RouteObserver<ModalRoute>();
-void main() {
+void main() async {
+  await dotenv.load(fileName: "assets/.env");
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = ApiConfig.stripePublishableKey;
+  await Stripe.instance.applySettings();
   runApp(const MyApp());
 }
 
@@ -41,6 +49,7 @@ class MyApp extends StatelessWidget {
                   ChangeNotifierProvider(create: (_) => PromotionProvider()),
           ChangeNotifierProvider(create: (_) => UserMovieListProvider()),
           ChangeNotifierProvider(create: (_) => ReservationProvider()),
+          ChangeNotifierProvider(create: (_) => PaymentProvider()),
       ],
       child: Consumer2<LanguageProvider, ThemeProvider>(
         builder: (context, languageProvider, themeProvider, child) {

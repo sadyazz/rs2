@@ -1557,5 +1557,9 @@
   "cannotCancelUsedTicket": "Cannot cancel a used ticket",
   "@cannotCancelUsedTicket": {
     "description": "Error message when trying to cancel a used ticket"
+  },
+  "paymentCancelled": "Payment cancelled",
+  "@paymentCancelled": {
+    "description": "Message shown when user cancels payment"
   }
 } 

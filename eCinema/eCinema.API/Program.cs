@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Authentication;
 using eCinema.API.Filters;
 using Microsoft.OpenApi.Models;
 using eCinema.Services.ReservationStateMachine;
+using DotNetEnv;
+
+Env.Load(@"../.env");
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,7 +69,12 @@ builder.Services.AddTransient<IScreeningService, ScreeningService>();
 builder.Services.AddTransient<IScreeningFormatService, ScreeningFormatService>();
 builder.Services.AddTransient<IMovieService, MovieService>();
 builder.Services.AddTransient<INewsArticleService, NewsArticleService>();
-builder.Services.AddTransient<IPaymentService, PaymentService>();
+var stripeSecretKey = Environment.GetEnvironmentVariable("STRIPE_SECRET_KEY");
+
+builder.Services.AddTransient(sp => new PaymentService(
+    stripeSecretKey ?? throw new InvalidOperationException("STRIPE_SECRET_KEY not found in environment variables."),
+    sp.GetRequiredService<eCinemaDBContext>()
+));
 builder.Services.AddTransient<IPromotionService, PromotionService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IReservationService, ReservationService>();

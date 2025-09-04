@@ -1,10 +1,12 @@
-using eCinema.Model;
-using eCinema.Model.Requests;
-using eCinema.Model.Responses;
-using eCinema.Model.SearchObjects;
+using eCinema.Services.Database.Entities;
+using Stripe;
+using System.Threading.Tasks;
 
-namespace eCinema.Services;
-
-public interface IPaymentService : ICRUDService<PaymentResponse, PaymentSearchObject, PaymentUpsertRequest, PaymentUpsertRequest>
+namespace eCinema.Services
 {
-} 
+    public interface IPaymentService
+    {
+        Task<PaymentIntent> CreatePaymentIntentAsync(int amount);
+        StripePayment ProcessStripePayment(string paymentIntentId, decimal amount);
+    }
+}

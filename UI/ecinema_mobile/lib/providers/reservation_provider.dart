@@ -107,7 +107,6 @@ class ReservationProvider extends BaseProvider<dynamic> {
         'totalPrice': totalPrice.toString(),
         'originalPrice': totalPrice.toString(),
         'discountPercentage': 0,
-
         'userId': userId,
         'screeningId': screeningId,
         'paymentId': null,
@@ -138,6 +137,40 @@ class ReservationProvider extends BaseProvider<dynamic> {
       final responseData = jsonDecode(response.body);
       return Reservation.fromJson(responseData);
     } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Reservation> processStripePayment({
+    required int screeningId,
+    required List<int> seatIds,
+    required double amount,
+    required String paymentIntentId,
+  }) async {
+    try {
+      final baseUrl = const String.fromEnvironment("baseUrl", defaultValue: "http://10.0.2.2:5190");
+      
+      final data = {
+        'screeningId': screeningId,
+        'seatIds': seatIds,
+        'amount': amount,
+        'paymentIntentId': paymentIntentId,
+      };
+
+      final response = await http.post(
+        Uri.parse('$baseUrl/Reservation/process-stripe-payment'),
+        headers: createHeaders(),
+        body: jsonEncode(data),
+      );
+
+      if (!isValidResponse(response)) {
+        throw Exception('Failed to process payment: ${response.statusCode} - ${response.body}');
+      }
+
+      final responseData = jsonDecode(response.body);
+      return Reservation.fromJson(responseData);
+    } catch (e) {
+      print('Error processing Stripe payment: $e');
       rethrow;
     }
   }

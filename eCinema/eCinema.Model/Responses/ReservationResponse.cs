@@ -22,7 +22,7 @@ namespace eCinema.Model.Responses
         public int? PromotionId { get; set; }
         public string? PromotionName { get; set; }
         public int? PaymentId { get; set; }
-        public string? PaymentStatus { get; set; }
+        public string? PaymentType { get; set; }
         public string State { get; set; } = string.Empty;
         public byte[]? MovieImage { get; set; }
         public string HallName { get; set; } = string.Empty;

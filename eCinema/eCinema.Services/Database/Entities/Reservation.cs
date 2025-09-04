@@ -44,11 +44,11 @@ namespace eCinema.Services.Database.Entities
         public virtual Screening Screening { get; set; } = null!;
         
         [ForeignKey(nameof(PaymentId))]
-        public virtual Payment? Payment { get; set; }
+        public virtual StripePayment? Payment { get; set; }
         
         [ForeignKey(nameof(PromotionId))]
         public virtual Promotion? Promotion { get; set; }
         
         public virtual ICollection<ReservationSeat> ReservationSeats { get; set; } = new List<ReservationSeat>();
     }
-} 
+}

@@ -26,6 +26,7 @@
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="QRCoder" Version="1.4.3" />
       <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
+      <PackageReference Include="Stripe.net" Version="46.1.0" />
     </ItemGroup>
 
 </Project>

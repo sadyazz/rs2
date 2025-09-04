@@ -23,14 +23,25 @@ namespace eCinema.Services.Database
         public DbSet<Reservation> Reservations { get; set; } = null!;
         public DbSet<ReservationSeat> ReservationSeats { get; set; } = null!;
         public DbSet<ScreeningSeat> ScreeningSeats { get; set; } = null!;
-        public DbSet<Payment> Payments { get; set; } = null!;
+        public DbSet<StripePayment> StripePayments { get; set; } = null!;
         public DbSet<Review> Reviews { get; set; } = null!;
         public DbSet<Promotion> Promotions { get; set; } = null!;
         public DbSet<NewsArticle> NewsArticles { get; set; } = null!;
         public DbSet<UserMovieList> UserMovieLists { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<StripePayment>(entity =>
+            {
+                entity.ToTable("StripePayments");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");
+                entity.Property(e => e.TransactionId).HasMaxLength(100);
+                entity.Property(e => e.PaymentDate);
+                entity.Property(e => e.PaymentProvider).HasMaxLength(50);
+            });
 
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Username)
@@ -47,8 +58,6 @@ namespace eCinema.Services.Database
             modelBuilder.Entity<Actor>()
                 .HasIndex(a => new { a.FirstName, a.LastName })
                 .IsUnique();
-
-
 
             modelBuilder.Entity<Screening>()
                 .HasOne(s => s.Movie)
@@ -114,11 +123,11 @@ namespace eCinema.Services.Database
                 .HasForeignKey(r => r.PromotionId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<Payment>()
-                .HasOne(p => p.Reservation)
-                .WithOne(r => r.Payment)
-                .HasForeignKey<Payment>(p => p.ReservationId)
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Reservation>()
+                .HasOne(r => r.Payment)
+                .WithOne()
+                .HasForeignKey<Reservation>(r => r.PaymentId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.User)
@@ -181,9 +190,6 @@ namespace eCinema.Services.Database
             modelBuilder.Entity<UserMovieList>()
                 .HasIndex(uml => new { uml.UserId, uml.MovieId, uml.ListType })
                 .IsUnique();
-
-
-
         }
     }
-} 
+}

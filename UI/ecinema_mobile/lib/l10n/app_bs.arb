@@ -1549,5 +1549,9 @@
   "cannotCancelUsedTicket": "Ne možete otkazati iskorištenu kartu",
   "@cannotCancelUsedTicket": {
     "description": "Error message when trying to cancel a used ticket"
+  },
+  "paymentCancelled": "Plaćanje otkazano",
+  "@paymentCancelled": {
+    "description": "Message shown when user cancels payment"
   }
 } 
