@@ -65,6 +65,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       if (response.items != null) {
         setState(() {
           _news = response.items!;
+          _news.sort((a, b) {
+            int dateCompare = (b.publishDate ?? DateTime.now())
+                .compareTo(a.publishDate ?? DateTime.now());
+            if (dateCompare == 0) {
+              bool aIsEvent = a.type?.toLowerCase() == 'event';
+              bool bIsEvent = b.type?.toLowerCase() == 'event';
+              return bIsEvent.toString().compareTo(aIsEvent.toString());
+            }
+            return dateCompare;
+          });
         });
       } else {
         print('Response items is null');
@@ -100,14 +110,20 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   List<Map<String, dynamic>> get filteredItems {
     List<Map<String, dynamic>> items = [];
 
-    if (_selectedFilter == 'all' || _selectedFilter == 'news') {
-      items.addAll(_news.where((news) => news.isDeleted != true && news.id != null).map((news) => {
+    if (_selectedFilter == 'all' || _selectedFilter == 'news' || _selectedFilter == 'events') {
+      items.addAll(_news.where((news) => 
+        news.isDeleted != true && 
+        news.id != null && 
+        (_selectedFilter == 'all' || 
+         (_selectedFilter == 'news' && (news.type?.toLowerCase() == 'news' || news.type == null)) ||
+         (_selectedFilter == 'events' && news.type?.toLowerCase() == 'event'))
+      ).map((news) => {
         'id': news.id!.toString(),
         'title': news.title,
         'description': news.content,
         'date': news.publishDate,
         'imageUrl': null,
-        'type': 'news',
+        'type': news.type?.toLowerCase() ?? 'news',
         'isFeatured': false,
       }));
     }
@@ -294,21 +310,36 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   void _onNewsItemTap(Map<String, dynamic> item) {
-    if (item['type'] == 'news') {
-      final news = _news.firstWhere((n) => n.id.toString() == item['id']);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => NewsDetailsScreen(news: news),
-        ),
-      );
-    } else if (item['type'] == 'promotion') {
-      final promotionId = int.parse(item['id'].toString().replaceFirst('promo_', ''));
-      final promotion = _promotions.firstWhere((p) => p.id == promotionId);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PromotionDetailsScreen(promotion: promotion),
+    try {
+      if (item['type'] == 'news' || item['type'] == 'event') {
+        final news = _news.firstWhere(
+          (n) => n.id.toString() == item['id'],
+          orElse: () => throw Exception('News/Event not found')
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NewsDetailsScreen(news: news),
+          ),
+        );
+      } else if (item['type'] == 'promotion') {
+        final promotionId = int.parse(item['id'].toString().replaceFirst('promo_', ''));
+        final promotion = _promotions.firstWhere(
+          (p) => p.id == promotionId,
+          orElse: () => throw Exception('Promotion not found')
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PromotionDetailsScreen(promotion: promotion),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString().replaceFirst('Exception: ', '')),
+          backgroundColor: Colors.red,
         ),
       );
     }

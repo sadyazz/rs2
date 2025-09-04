@@ -1561,5 +1561,13 @@
   "paymentCancelled": "Payment cancelled",
   "@paymentCancelled": {
     "description": "Message shown when user cancels payment"
+  },
+  "publishDate": "Publish date",
+  "@publishDate": {
+    "description": "Publish date label"
+  },
+  "eventDate": "Event date",
+  "@eventDate": {
+    "description": "Event date label"
   }
 } 

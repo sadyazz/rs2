@@ -1553,5 +1553,13 @@
   "paymentCancelled": "Plaćanje otkazano",
   "@paymentCancelled": {
     "description": "Message shown when user cancels payment"
+  },
+  "publishDate": "Datum objave",
+  "@publishDate": {
+    "description": "Publish date label"
+  },
+  "eventDate": "Datum događaja",
+  "@eventDate": {
+    "description": "Event date label"
   }
 } 

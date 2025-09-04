@@ -32,13 +32,17 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
       _initialValue = {
         'title': widget.news!.title ?? '',
         'content': widget.news!.content ?? '',
-        'publishDate': widget.news!.publishDate ?? DateTime.now(),
+        'publishDate': widget.news!.publishDate ?? DateTime.now().toUtc(),
+        'type': widget.news!.type ?? 'news',
+        'eventDate': widget.news!.eventDate,
       };
     } else {
       _initialValue = {
         'title': '',
         'content': '',
-        'publishDate': DateTime.now(),
+        'publishDate': DateTime.now().toUtc(),
+        'type': 'news',
+        'eventDate': null,
       };
     }
   }
@@ -119,8 +123,57 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                   ),
                 ),
                 const SizedBox(width: 16),
-
+                Expanded(
+                  child: FormBuilderDropdown<String>(
+                    name: 'type',
+                    decoration: InputDecoration(
+                      labelText: l10n.type,
+                      border: const OutlineInputBorder(),
+                      prefixIcon: const Icon(Icons.category),
+                    ),
+                    items: [
+                      DropdownMenuItem(
+                        value: 'news',
+                        child: Text(l10n.news),
+                      ),
+                      DropdownMenuItem(
+                        value: 'event',
+                        child: Text(l10n.event),
+                      ),
+                    ],
+                    validator: FormBuilderValidators.required(errorText: l10n.pleaseSelectType),
+                    onChanged: (value) {
+                      setState(() {
+                      });
+                    },
+                  ),
+                ),
               ],
+            ),
+
+            FormBuilderField<String>(
+              name: 'type_listener',
+              builder: (FormFieldState<String> field) {
+                final type = _formKey.currentState?.fields['type']?.value as String?;
+                if (type == 'event') {
+                  return Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      FormBuilderDateTimePicker(
+                        name: 'eventDate',
+                        decoration: InputDecoration(
+                          labelText: l10n.eventDate,
+                          border: const OutlineInputBorder(),
+                          prefixIcon: const Icon(Icons.event),
+                        ),
+                        inputType: InputType.both,
+                        validator: FormBuilderValidators.required(errorText: l10n.pleaseSelectEventDate),
+                      ),
+                    ],
+                  );
+                }
+                return const SizedBox.shrink();
+              },
             ),
           ],
         ),
@@ -149,7 +202,10 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
                   if (formData['publishDate'] != null && formData['publishDate'] is DateTime) {
                     formData['publishDate'] = formData['publishDate'].toIso8601String();
                   }
-                  
+
+                  if (formData['eventDate'] != null && formData['eventDate'] is DateTime) {
+                    formData['eventDate'] = formData['eventDate'].toIso8601String();
+                  }
 
 
                   if (widget.news != null) {
@@ -172,10 +228,28 @@ class _EditNewsScreenState extends State<EditNewsScreen> {
 
                   Navigator.pop(context, true);
                 } catch (e) {
+                  String errorMessage = e.toString();
+                  String displayMessage;
+
+                  if (errorMessage.startsWith('Exception: ')) {
+                    errorMessage = errorMessage.substring('Exception: '.length);
+                  }
+
+                  if (errorMessage.contains('Publish date cannot be in the future')) {
+                    displayMessage = l10n.publishDateCannotBeInFuture;
+                  } else if (errorMessage.contains('Event date is required for events')) {
+                    displayMessage = l10n.eventDateRequired;
+                  } else if (errorMessage.contains('News articles cannot have an event date')) {
+                    displayMessage = l10n.newsCannotHaveEventDate;
+                  } else {
+                    displayMessage = errorMessage;
+                  }
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(l10n.failedToSaveNewsArticle),
+                      content: Text(displayMessage),
                       backgroundColor: Colors.red,
+                      duration: const Duration(seconds: 5), 
                     ),
                   );
                 }

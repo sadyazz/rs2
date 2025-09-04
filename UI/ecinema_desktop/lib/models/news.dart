@@ -7,6 +7,8 @@ class News {
   bool? isDeleted;
   int? authorId;
   String? authorName;
+  String? type;
+  DateTime? eventDate;
 
   News({
     this.id,
@@ -17,6 +19,8 @@ class News {
     this.isDeleted,
     this.authorId,
     this.authorName,
+    this.type,
+    this.eventDate,
   });
 
   News.fromJson(Map<String, dynamic> json) {
@@ -28,6 +32,8 @@ class News {
     isDeleted = json['isDeleted'];
     authorId = json['authorId'];
     authorName = json['authorName'];
+    type = json['type'];
+    eventDate = json['eventDate'] != null ? DateTime.parse(json['eventDate']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -40,6 +46,8 @@ class News {
     data['isDeleted'] = isDeleted;
     data['authorId'] = authorId;
     data['authorName'] = authorName;
+    data['type'] = type;
+    data['eventDate'] = eventDate?.toIso8601String();
     return data;
   }
 } 

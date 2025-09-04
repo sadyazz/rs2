@@ -10,15 +10,22 @@ class NewsDetailsScreen extends StatelessWidget {
     required this.news,
   });
 
+  String _getType() {
+    return news.type?.toLowerCase() ?? 'news';
+  }
+
+  bool get _isEvent => _getType() == 'event';
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
+    final type = _getType();
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        title: Text(l10n.news),
+        title: Text(_isEvent ? l10n.event : l10n.news),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -31,46 +38,101 @@ class NewsDetailsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    news.title ?? '',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: colorScheme.onSurface,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
                   Row(
                     children: [
-                      Icon(
-                        Icons.calendar_today,
-                        size: 16,
-                        color: colorScheme.onSurface.withOpacity(0.7),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        _formatDate(news.publishDate),
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: colorScheme.onSurface.withOpacity(0.7),
+                      Expanded(
+                        child: Text(
+                          news.title ?? '',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: colorScheme.onSurface,
+                          ),
                         ),
                       ),
-                                             if (news.authorName != null && news.authorName!.isNotEmpty) ...[
-                         const SizedBox(width: 16),
-                         Icon(
-                           Icons.person,
-                           size: 16,
-                           color: colorScheme.onSurface.withOpacity(0.7),
-                         ),
-                         const SizedBox(width: 8),
-                         Text(
-                           news.authorName!,
-                           style: TextStyle(
-                             fontSize: 14,
-                             color: colorScheme.onSurface.withOpacity(0.7),
-                           ),
-                         ),
-                       ],
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: _isEvent
+                              ? colorScheme.primary.withOpacity(0.1)
+                              : colorScheme.secondary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          _isEvent ? l10n.event : l10n.news,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: _isEvent
+                                ? colorScheme.primary
+                                : colorScheme.secondary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.calendar_today,
+                            size: 16,
+                            color: colorScheme.onSurface.withOpacity(0.7),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            '${l10n.publishDate}: ${_formatDate(news.publishDate)}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: colorScheme.onSurface.withOpacity(0.7),
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (_isEvent && news.eventDate != null) ...[
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.event,
+                              size: 16,
+                              color: colorScheme.primary.withOpacity(0.7),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              '${l10n.eventDate}: ${_formatDate(news.eventDate)}',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: colorScheme.primary.withOpacity(0.9),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                      if (news.authorName != null && news.authorName!.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.person,
+                              size: 16,
+                              color: colorScheme.onSurface.withOpacity(0.7),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              news.authorName!,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: colorScheme.onSurface.withOpacity(0.7),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ],
                   ),
                   const SizedBox(height: 24),

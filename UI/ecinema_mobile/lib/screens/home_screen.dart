@@ -18,7 +18,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController _searchController = TextEditingController();
   SearchResult<Movie>? result = null;
   SearchResult<Movie>? comingSoonResult = null;
   bool isLoading = false;
@@ -36,7 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    _searchController.dispose();
     super.dispose();
   }
 
@@ -126,7 +124,6 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 40),
-              _buildSearchBar(l10n, colorScheme),
               const SizedBox(height: 16),
               _buildMovieSuggestionBanner(l10n, colorScheme),
               const SizedBox(height: 16),
@@ -143,54 +140,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildSearchBar(AppLocalizations l10n, ColorScheme colorScheme) {
-    return SizedBox(
-      width: double.infinity,
-      height: 56,
-      child: TextField(
-        controller: _searchController,
-        decoration: InputDecoration(
-          hintText: l10n.searchMovies,
-          hintStyle: TextStyle(
-            color: colorScheme.onSurface.withOpacity(0.6),
-            fontSize: 16,
-          ),
-          filled: true,
-          fillColor: colorScheme.surface,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(32),
-            borderSide: BorderSide.none,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(32),
-            borderSide: BorderSide.none,
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(32),
-            borderSide: BorderSide(color: colorScheme.primary, width: 2),
-          ),
-          prefixIcon: Icon(
-            Icons.search,
-            color: colorScheme.primary,
-            size: 20,
-          ),
-          suffixIcon: Icon(
-            Icons.tune,
-            color: colorScheme.onSurface.withOpacity(0.6),
-            size: 20,
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        ),
-        style: TextStyle(
-          color: colorScheme.onSurface,
-          fontSize: 16,
-        ),
-        onSubmitted: (value) {
-          print('Search submitted: $value');
-        },
-      ),
-    );
-  }
 
   Widget _buildMovieSuggestionBanner(AppLocalizations l10n, ColorScheme colorScheme) {
     return Container(

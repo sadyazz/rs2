@@ -2140,5 +2140,37 @@
   "seats": "Sjedišta",
   "@seats": {
     "description": "Seats label"
+  },
+  "type": "Tip",
+  "@type": {
+    "description": "Type field label"
+  },
+  "event": "Događaj",
+  "@event": {
+    "description": "Event type option"
+  },
+  "eventDate": "Datum događaja",
+  "@eventDate": {
+    "description": "Event date field label"
+  },
+  "pleaseSelectType": "Molimo odaberite tip",
+  "@pleaseSelectType": {
+    "description": "Type selection validation message"
+  },
+  "pleaseSelectEventDate": "Molimo odaberite datum događaja",
+  "@pleaseSelectEventDate": {
+    "description": "Event date validation message"
+  },
+  "publishDateCannotBeInFuture": "Molimo odaberite datum objave koji nije u budućnosti",
+  "@publishDateCannotBeInFuture": {
+    "description": "Error message when publish date is in the future"
+  },
+  "eventDateRequired": "Datum događaja je obavezan za događaje",
+  "@eventDateRequired": {
+    "description": "Error message when event date is missing for event type"
+  },
+  "newsCannotHaveEventDate": "Vijesti ne mogu imati datum događaja",
+  "@newsCannotHaveEventDate": {
+    "description": "Error message when news type has event date"
   }
 }

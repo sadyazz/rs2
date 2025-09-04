@@ -2283,5 +2283,37 @@
   "seats": "Seats",
   "@seats": {
     "description": "Seats label"
+  },
+  "type": "Type",
+  "@type": {
+    "description": "Type field label"
+  },
+  "event": "Event",
+  "@event": {
+    "description": "Event type option"
+  },
+  "eventDate": "Event Date",
+  "@eventDate": {
+    "description": "Event date field label"
+  },
+  "pleaseSelectType": "Please select type",
+  "@pleaseSelectType": {
+    "description": "Type selection validation message"
+  },
+  "pleaseSelectEventDate": "Please select event date",
+  "@pleaseSelectEventDate": {
+    "description": "Event date validation message"
+  },
+  "publishDateCannotBeInFuture": "Please select a publish date that is not in the future",
+  "@publishDateCannotBeInFuture": {
+    "description": "Error message when publish date is in the future"
+  },
+  "eventDateRequired": "Event date is required for events",
+  "@eventDateRequired": {
+    "description": "Error message when event date is missing for event type"
+  },
+  "newsCannotHaveEventDate": "News articles cannot have an event date",
+  "@newsCannotHaveEventDate": {
+    "description": "Error message when news type has event date"
   }
 }

@@ -27,6 +27,17 @@ namespace eCinema.Services
             {
                 throw new UserException("Publish date cannot be in the future.");
             }
+
+            if (insert.Type?.ToLower() == "event" && !insert.EventDate.HasValue)
+            {
+                throw new UserException("Event date is required for events.");
+            }
+
+            if (insert.Type?.ToLower() == "news" && insert.EventDate.HasValue)
+            {
+                throw new UserException("News articles cannot have an event date.");
+            }
+
             return await base.CreateAsync(insert);
         }
 
@@ -36,6 +47,17 @@ namespace eCinema.Services
             {
                 throw new UserException("Publish date cannot be in the future.");
             }
+
+            if (update.Type?.ToLower() == "event" && !update.EventDate.HasValue)
+            {
+                throw new UserException("Event date is required for events.");
+            }
+
+            if (update.Type?.ToLower() == "news" && update.EventDate.HasValue)
+            {
+                throw new UserException("News articles cannot have an event date.");
+            }
+
             return await base.UpdateAsync(id, update);
         }
 
@@ -73,6 +95,21 @@ namespace eCinema.Services
             if (search.AuthorId.HasValue)
             {
                 query = query.Where(x => x.AuthorId == search.AuthorId.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search.Type))
+            {
+                query = query.Where(x => x.Type.ToLower() == search.Type.ToLower());
+            }
+
+            if (search.FromEventDate.HasValue)
+            {
+                query = query.Where(x => x.EventDate >= search.FromEventDate.Value);
+            }
+
+            if (search.ToEventDate.HasValue)
+            {
+                query = query.Where(x => x.EventDate <= search.ToEventDate.Value);
             }
 
             return query;

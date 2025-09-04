@@ -150,8 +150,17 @@ abstract class BaseProvider<T> with ChangeNotifier {
     } else if (response.statusCode == 401) {
       throw new Exception("Unauthorized");
     } else {
-      print(response.body);
-      throw new Exception("Something bad happened please try again");
+      Map<String, dynamic> responseBody = jsonDecode(response.body);
+      if (responseBody.containsKey('errors')) {
+        var errors = responseBody['errors'];
+        if (errors is Map && errors.containsKey('userError')) {
+          var userErrors = errors['userError'];
+          if (userErrors is List && userErrors.isNotEmpty) {
+            throw Exception(userErrors.first);
+          }
+        }
+      }
+      throw Exception("Something bad happened please try again");
     }
   }
 
