@@ -8,4 +8,5 @@ namespace eCinema.Services;
 public interface IReviewService : ICRUDService<ReviewResponse, ReviewSearchObject, ReviewUpsertRequest, ReviewUpsertRequest>
 {
     Task<ReviewResponse> ToggleSpoilerAsync(int id);
+    Task<bool> HasUserReviewedMovieAsync(int movieId);
 } 

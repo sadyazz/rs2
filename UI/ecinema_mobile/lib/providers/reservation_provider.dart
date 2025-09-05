@@ -260,4 +260,25 @@ class ReservationProvider extends BaseProvider<dynamic> {
       rethrow;
     }
   }
+
+  Future<bool> hasWatchedMovie(int movieId) async {
+    try {
+      final baseUrl = const String.fromEnvironment("baseUrl", defaultValue: "http://10.0.2.2:5190");
+      final url = '$baseUrl/Reservation/has-watched/$movieId';
+      
+      final response = await http.get(
+        Uri.parse(url),
+        headers: createHeaders(),
+      );
+
+      if (!isValidResponse(response)) {
+        throw Exception('Failed to check movie watch status');
+      }
+
+      return jsonDecode(response.body) as bool;
+    } catch (e) {
+      print('Error checking if user has watched movie: $e');
+      return false;
+    }
+  }
 }

@@ -1595,5 +1595,39 @@
   "promoCodeAlreadyUsed": "Već ste iskoristili ovaj promo kod",
   "@promoCodeAlreadyUsed": {
     "description": "Error message shown when promo code has already been used"
+  },
+  "howWasTheMovie": "Kako vam se svidio {movieTitle}?",
+  "@howWasTheMovie": {
+    "description": "Review prompt title",
+    "placeholders": {
+      "movieTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "shareYourThoughts": "Podijelite svoje mišljenje o filmu...",
+  "@shareYourThoughts": {
+    "description": "Review prompt placeholder"
+  },
+  "containsSpoilers": "Sadrži spojlere",
+  "@containsSpoilers": {
+    "description": "Spoiler warning checkbox label"
+  },
+  "submitReview": "Pošalji recenziju",
+  "@submitReview": {
+    "description": "Submit review button text"
+  },
+  "pleaseSelectRating": "Molimo odaberite ocjenu",
+  "@pleaseSelectRating": {
+    "description": "Rating validation message"
+  },
+  "errorSubmittingReview": "Greška pri slanju recenzije",
+  "@errorSubmittingReview": {
+    "description": "Review submission error message"
+  },
+  "reviewSubmittedSuccessfully": "Recenzija uspješno poslana",
+
+  "@reviewSubmittedSuccessfully": {
+    "description": "Review submission success message"
   }
 } 

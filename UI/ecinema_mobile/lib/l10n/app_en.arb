@@ -1603,5 +1603,38 @@
   "promoCodeAlreadyUsed": "You have already used this promotion code",
   "@promoCodeAlreadyUsed": {
     "description": "Error message shown when promo code has already been used"
-  } 
+  },
+  "howWasTheMovie": "How was {movieTitle}?",
+  "@howWasTheMovie": {
+    "description": "Review prompt title",
+    "placeholders": {
+      "movieTitle": {
+        "type": "String"
+      }
+    }
+  },
+  "shareYourThoughts": "Share your thoughts about the movie...",
+  "@shareYourThoughts": {
+    "description": "Review prompt placeholder"
+  },
+  "containsSpoilers": "Contains spoilers",
+  "@containsSpoilers": {
+    "description": "Spoiler warning checkbox label"
+  },
+  "submitReview": "Submit Review",
+  "@submitReview": {
+    "description": "Submit review button text"
+  },
+  "pleaseSelectRating": "Please select a rating",
+  "@pleaseSelectRating": {
+    "description": "Rating validation message"
+  },
+  "errorSubmittingReview": "Error submitting review",
+  "@errorSubmittingReview": {
+    "description": "Review submission error message"
+  },
+  "reviewSubmittedSuccessfully": "Review submitted successfully",
+  "@reviewSubmittedSuccessfully": {
+    "description": "Review submission success message"
+  }
 }

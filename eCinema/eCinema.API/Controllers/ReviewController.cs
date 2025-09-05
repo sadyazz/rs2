@@ -43,7 +43,20 @@ namespace eCinema.API.Controllers
         {
             return await base.Create(request);
         }
-        
-        
+
+        [HttpGet("has-reviewed/{movieId}")]
+        [Authorize(Roles = "user")]
+        public async Task<ActionResult<bool>> HasUserReviewedMovie(int movieId)
+        {
+            try
+            {
+                var hasReviewed = await _reviewService.HasUserReviewedMovieAsync(movieId);
+                return Ok(hasReviewed);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error checking if user has reviewed movie: {ex.Message}");
+            }
+        }
     }
 } 

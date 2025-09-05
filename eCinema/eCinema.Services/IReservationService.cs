@@ -14,5 +14,6 @@ namespace eCinema.Services
         Task<ReservationResponse> CancelReservation(int reservationId);
         Task<(decimal totalPrice, decimal? discountPercentage)> CalculatePriceWithPromotion(decimal originalPrice, string? promotionCode);
         Task<ReservationResponse> ProcessStripePayment(string paymentIntentId, decimal amount, int screeningId, List<int> seatIds);
+        Task<bool> HasUserWatchedMovie(int movieId);
     }
 } 

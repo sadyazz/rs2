@@ -369,5 +369,19 @@ namespace eCinema.Services
             
             return response;
         }
+
+        public async Task<bool> HasUserReviewedMovieAsync(int movieId)
+        {
+            var currentUser = await _currentUserService.GetCurrentUserAsync();
+            if (currentUser == null)
+            {
+                throw new UnauthorizedAccessException("User not authenticated.");
+            }
+
+            return await _context.Reviews
+                .AnyAsync(r => r.MovieId == movieId && 
+                              r.UserId == currentUser.Id && 
+                              !r.IsDeleted);
+        }
     }
 } 
