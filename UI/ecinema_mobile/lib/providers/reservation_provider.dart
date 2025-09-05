@@ -92,6 +92,7 @@ class ReservationProvider extends BaseProvider<dynamic> {
     required List<int> seatIds,
     required double totalPrice,
     required String paymentType,
+    int? promotionId,
   }) async {
     try {
       final userId = AuthProvider.userId;
@@ -110,10 +111,10 @@ class ReservationProvider extends BaseProvider<dynamic> {
         'userId': userId,
         'screeningId': screeningId,
         'paymentId': null,
-        'promotionId': null,
+        'promotionId': promotionId,
         'numberOfTickets': seatIds.length,
         'paymentType': paymentType,
-        'state': 'InitialReservationState',
+        'state': 'ApprovedReservationState',
         'isDeleted': false,
         'seatIds': seatIds,
       };

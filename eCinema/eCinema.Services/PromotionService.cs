@@ -21,6 +21,57 @@ namespace eCinema.Services
             _context = context;
         }
 
+        public override async Task<PromotionResponse> CreateAsync(PromotionUpsertRequest request)
+        {
+            request.StartDate = request.StartDate.Date;
+            request.EndDate = request.EndDate.Date.AddDays(1).AddSeconds(-1);
+            return await base.CreateAsync(request);
+        }
+
+        public override async Task<PromotionResponse> UpdateAsync(int id, PromotionUpsertRequest request)
+        {
+            request.StartDate = request.StartDate.Date;
+            request.EndDate = request.EndDate.Date.AddDays(1).AddSeconds(-1);
+            return await base.UpdateAsync(id, request);
+        }
+
+        public async Task<PromotionResponse?> ValidatePromotionCode(string code, int userId)
+        {
+            Console.WriteLine($"Validating code: {code}");
+            
+            var promotion = await _context.Promotions
+                .Where(p => p.Code == code)
+                .FirstOrDefaultAsync();
+
+            Console.WriteLine($"Found promotion: {promotion?.Id}, Code: {promotion?.Code}, IsDeleted: {promotion?.IsDeleted}");
+            
+            if (promotion != null)
+            {
+                var currentDate = DateTime.UtcNow.Date;
+                var startDate = promotion.StartDate.Date;
+                var endDate = promotion.EndDate.Date;
+                
+                if (promotion.IsDeleted || currentDate < startDate || currentDate > endDate)
+                {
+                    Console.WriteLine("Promotion invalid or expired");
+                    return null;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Promotion not found");
+                return null;
+            }
+
+            var hasUsed = await _context.UserPromotions
+                .AnyAsync(up => up.UserId == userId && up.PromotionId == promotion.Id);
+
+            if (hasUsed)
+                throw new UserException("You have already used this promotion code");
+
+            return _mapper.Map<PromotionResponse>(promotion);
+        }
+
         protected override IQueryable<Promotion> ApplyFilter(IQueryable<Promotion> query, PromotionSearchObject search)
         {
             query = base.ApplyFilter(query, search);
@@ -68,4 +119,4 @@ namespace eCinema.Services
             return query;
         }
     }
-} 
+}

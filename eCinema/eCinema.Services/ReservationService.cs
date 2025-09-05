@@ -110,6 +110,23 @@ namespace eCinema.Services
                     }
                 }
 
+                if (request.PromotionId.HasValue)
+                {
+                    var hasUsedPromotion = await _context.UserPromotions
+                        .AnyAsync(up => up.UserId == request.UserId && up.PromotionId == request.PromotionId.Value);
+
+                    if (hasUsedPromotion)
+                        throw new UserException("You have already used this promotion code");
+
+                    var userPromotion = new UserPromotion
+                    {
+                        UserId = request.UserId,
+                        PromotionId = request.PromotionId.Value,
+                        UsedDate = DateTime.UtcNow
+                    };
+                    _context.UserPromotions.Add(userPromotion);
+                }
+
                 await _context.SaveChangesAsync();
 
                 var qrCodeBase64 = await GenerateQRCode(reservation.Id);
@@ -564,6 +581,26 @@ namespace eCinema.Services
             await _context.SaveChangesAsync();
                 
             return MapToResponse(reservation);
+        }
+
+        public async Task<(decimal totalPrice, decimal? discountPercentage)> CalculatePriceWithPromotion(decimal originalPrice, string? promotionCode)
+        {
+            if (string.IsNullOrEmpty(promotionCode))
+                return (originalPrice, null);
+
+            var promotion = await _context.Promotions
+                .FirstOrDefaultAsync(p => p.Code == promotionCode 
+                    && !p.IsDeleted 
+                    && p.StartDate <= DateTime.UtcNow 
+                    && p.EndDate >= DateTime.UtcNow);
+
+            if (promotion == null)
+                return (originalPrice, null);
+
+            var discountAmount = originalPrice * (promotion.DiscountPercentage / 100m);
+            var finalPrice = originalPrice - discountAmount;
+
+            return (finalPrice, promotion.DiscountPercentage);
         }
 
         public async Task<string> GenerateQRCode(int reservationId)

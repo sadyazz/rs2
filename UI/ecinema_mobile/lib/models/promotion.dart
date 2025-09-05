@@ -1,24 +1,22 @@
 class Promotion {
-  final int? id;
-  final String? name;
-  final String? description;
+  final int id;
+  final String name;
+  final String description;
   final String? code;
-  final double? discountPercentage;
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final int? reservationCount;
-  final bool? isDeleted;
+  final double discountPercentage;
+  final DateTime startDate;
+  final DateTime endDate;
+  final bool isDeleted;
 
   Promotion({
-    this.id,
-    this.name,
-    this.description,
+    required this.id,
+    required this.name,
+    required this.description,
     this.code,
-    this.discountPercentage,
-    this.startDate,
-    this.endDate,
-    this.reservationCount,
-    this.isDeleted,
+    required this.discountPercentage,
+    required this.startDate,
+    required this.endDate,
+    required this.isDeleted,
   });
 
   factory Promotion.fromJson(Map<String, dynamic> json) {
@@ -27,11 +25,10 @@ class Promotion {
       name: json['name'],
       description: json['description'],
       code: json['code'],
-      discountPercentage: json['discountPercentage']?.toDouble(),
-      startDate: json['startDate'] != null ? DateTime.parse(json['startDate']) : null,
-      endDate: json['endDate'] != null ? DateTime.parse(json['endDate']) : null,
-      reservationCount: json['reservationCount'] ?? 0,
-      isDeleted: json['isDeleted'] ?? false,
+      discountPercentage: double.parse(json['discountPercentage'].toString()),
+      startDate: DateTime.parse(json['startDate']),
+      endDate: DateTime.parse(json['endDate']),
+      isDeleted: json['isDeleted'],
     );
   }
 
@@ -42,10 +39,9 @@ class Promotion {
       'description': description,
       'code': code,
       'discountPercentage': discountPercentage,
-      'startDate': startDate?.toIso8601String(),
-      'endDate': endDate?.toIso8601String(),
-      'reservationCount': reservationCount,
+      'startDate': startDate.toIso8601String(),
+      'endDate': endDate.toIso8601String(),
       'isDeleted': isDeleted,
     };
   }
-} 
+}

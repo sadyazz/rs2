@@ -12,6 +12,7 @@ namespace eCinema.Services
         Task<string> GenerateQRCode(int reservationId);
         Task<ReservationResponse> VerifyReservation(int reservationId);
         Task<ReservationResponse> CancelReservation(int reservationId);
+        Task<(decimal totalPrice, decimal? discountPercentage)> CalculatePriceWithPromotion(decimal originalPrice, string? promotionCode);
         Task<ReservationResponse> ProcessStripePayment(string paymentIntentId, decimal amount, int screeningId, List<int> seatIds);
     }
 } 

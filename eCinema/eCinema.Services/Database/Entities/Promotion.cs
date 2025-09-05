@@ -29,5 +29,6 @@ namespace eCinema.Services.Database.Entities
         public bool IsDeleted { get; set; } = false;
 
         public virtual ICollection<Reservation> Reservations { get; set; } = new HashSet<Reservation>();
+        public virtual ICollection<UserPromotion> UserPromotions { get; set; } = new HashSet<UserPromotion>();
     }
 } 

@@ -1572,7 +1572,7 @@
   "@totalUsers": {"description": "Total users statistic card title"},
   "totalHalls": "Total Halls",
   "@totalHalls": {"description": "Total halls statistic card title"},
-  "totalShows": "Total Shows",
+  "totalShows": "Total projections",
   "@totalShows": {"description": "Total shows statistic card title"},
   "totalReservations": "Total Reservations",
   "@totalReservations": {"description": "Total reservations statistic card title"},

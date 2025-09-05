@@ -79,7 +79,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       } else {
         print('Response items is null');
       }
-    } catch (e, stackTrace) {
+    } catch (e) {
       print('Error loading news: $e');
       setState(() {
         _error = e.toString();
@@ -110,43 +110,60 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   List<Map<String, dynamic>> get filteredItems {
     List<Map<String, dynamic>> items = [];
 
-    if (_selectedFilter == 'all' || _selectedFilter == 'news' || _selectedFilter == 'events') {
-      items.addAll(_news.where((news) => 
-        news.isDeleted != true && 
-        news.id != null && 
-        (_selectedFilter == 'all' || 
-         (_selectedFilter == 'news' && (news.type?.toLowerCase() == 'news' || news.type == null)) ||
-         (_selectedFilter == 'events' && news.type?.toLowerCase() == 'event'))
-      ).map((news) => {
-        'id': news.id!.toString(),
-        'title': news.title,
-        'description': news.content,
-        'date': news.publishDate,
-        'imageUrl': null,
-        'type': news.type?.toLowerCase() ?? 'news',
-        'isFeatured': false,
-      }));
+    var filteredNews = _news.where((news) => 
+      news.isDeleted != true && 
+      news.id != null
+    ).toList();
+
+    if (_selectedFilter == 'all' || _selectedFilter == 'news') {
+      items.addAll(filteredNews
+        .where((news) => news.type?.toLowerCase() != 'event')
+        .map((news) => {
+          'id': news.id!.toString(),
+          'title': news.title,
+          'description': news.content,
+          'date': news.publishDate,
+          'imageUrl': null,
+          'type': 'news',
+          'isFeatured': false,
+        }));
+    }
+
+    if (_selectedFilter == 'all' || _selectedFilter == 'events') {
+      items.addAll(filteredNews
+        .where((news) => news.type?.toLowerCase() == 'event')
+        .map((news) => {
+          'id': news.id!.toString(),
+          'title': news.title,
+          'description': news.content,
+          'date': news.publishDate,
+          'imageUrl': null,
+          'type': 'event',
+          'isFeatured': false,
+        }));
     }
 
     if (_selectedFilter == 'all' || _selectedFilter == 'promotions') {
-      items.addAll(_promotions.where((p) => 
-        p.isDeleted != true && 
-        p.endDate != null && 
-        p.id != null &&
-        p.endDate!.isAfter(DateTime.now())
-      ).map((promo) => {
-        'id': 'promo_${promo.id!}',
-        'title': promo.name,
-        'description': promo.description,
-        'date': promo.startDate,
-        'imageUrl': null,
-        'type': 'promotion',
-        'isFeatured': false,
-      }));
+      items.addAll(_promotions
+        .where((p) => 
+          p.isDeleted != true && 
+          p.endDate != null && 
+          p.id != null &&
+          p.endDate!.isAfter(DateTime.now())
+        )
+        .map((promo) => {
+          'id': 'promo_${promo.id!}',
+          'title': promo.name,
+          'description': promo.description,
+          'date': promo.startDate,
+          'imageUrl': null,
+          'type': 'promotion',
+          'isFeatured': false,
+        }));
     }
 
-    return items.where((item) => item['date'] != null).toList()
-      ..sort((a, b) => (b['date'] as DateTime).compareTo(a['date'] as DateTime));
+    items.sort((a, b) => (b['date'] as DateTime).compareTo(a['date'] as DateTime));
+    return items;
   }
 
   @override
@@ -228,8 +245,6 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   Widget _buildContent(BuildContext context, AppLocalizations l10n, ColorScheme colorScheme) {
     final items = filteredItems;
-    final featuredItems = items.where((item) => item['isFeatured'] == true).toList();
-    final latestItems = items.where((item) => item['isFeatured'] != true).toList();
 
     return CustomScrollView(
       slivers: [
@@ -245,63 +260,34 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             ],
           ),
         ),
-        if (featuredItems.isNotEmpty)
+        if (items.isNotEmpty)
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final item = items[index];
+                return NewsItemCard(
+                  item: item,
+                  onTap: () => _onNewsItemTap(item),
+                );
+              },
+              childCount: items.length,
+            ),
+          ),
+        if (items.isEmpty)
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.featured,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: colorScheme.onSurface,
-                    ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  l10n.noMoviesAvailable,
+                  style: TextStyle(
+                    color: colorScheme.onSurface.withOpacity(0.7),
+                    fontSize: 16,
                   ),
-                  const SizedBox(height: 16),
-                  ...featuredItems.map((item) => NewsItemCard(
-                    item: item,
-                    onTap: () => _onNewsItemTap(item),
-                  )),
-                  const SizedBox(height: 24),
-                ],
+                ),
               ),
             ),
           ),
-        if (latestItems.isNotEmpty)
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.latestNews,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: colorScheme.onSurface,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                ],
-              ),
-            ),
-          ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final item = latestItems[index];
-              return NewsItemCard(
-                item: item,
-                onTap: () => _onNewsItemTap(item),
-              );
-            },
-            childCount: latestItems.length,
-          ),
-        ),
         const SliverToBoxAdapter(
           child: SizedBox(height: 100),
         ),
@@ -344,4 +330,4 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       );
     }
   }
-} 
+}

@@ -4,6 +4,7 @@ import '../models/seat.dart';
 import '../screens/reservation_qr_code_screen.dart';
 import '../providers/reservation_provider.dart';
 import '../providers/payment_provider.dart';
+import '../providers/promotion_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ScreeningCheckoutScreen extends StatefulWidget {
@@ -25,6 +26,11 @@ class ScreeningCheckoutScreen extends StatefulWidget {
 class _ScreeningCheckoutScreenState extends State<ScreeningCheckoutScreen> {
   String selectedPaymentMethod = 'cash';
   bool isProcessing = false;
+  final TextEditingController _promoCodeController = TextEditingController();
+  double? _discountAmount;
+  int? _promotionId;
+  bool _isCheckingPromoCode = false;
+  bool _showPromoInput = false;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +53,8 @@ class _ScreeningCheckoutScreenState extends State<ScreeningCheckoutScreen> {
             _buildSelectedSeats(l10n, colorScheme),
             const SizedBox(height: 24),
             _buildPriceDetails(l10n, colorScheme),
+            const SizedBox(height: 24),
+            _buildPromoCodeSection(l10n, colorScheme),
             const SizedBox(height: 24),
             _buildPaymentMethodSelection(l10n, colorScheme),
             const SizedBox(height: 32),
@@ -99,16 +107,19 @@ class _ScreeningCheckoutScreenState extends State<ScreeningCheckoutScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: widget.selectedSeats.map((seat) {
-                return Chip(
-                  label: Text(seat.name ?? 'Seat ${seat.id}'),
-                  backgroundColor: colorScheme.primaryContainer,
-                  labelStyle: TextStyle(color: colorScheme.onPrimaryContainer),
-                );
-              }).toList(),
+            Container(
+              width: double.infinity,
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: widget.selectedSeats.map((seat) {
+                  return Chip(
+                    label: Text(seat.name ?? 'Seat ${seat.id}'),
+                    backgroundColor: colorScheme.primaryContainer,
+                    labelStyle: TextStyle(color: colorScheme.onPrimaryContainer),
+                  );
+                }).toList(),
+              ),
             ),
           ],
         ),
@@ -136,15 +147,184 @@ class _ScreeningCheckoutScreenState extends State<ScreeningCheckoutScreen> {
             _buildInfoRow(l10n.pricePerSeat, '${pricePerSeat.toStringAsFixed(2)} ${l10n.currency}'),
             _buildInfoRow(l10n.numberOfSeats, '${widget.selectedSeats.length}'),
             const Divider(),
+            if (_discountAmount != null) ...[
+              _buildInfoRow(
+                l10n.discount,
+                '-${_discountAmount!.toStringAsFixed(2)} ${l10n.currency}',
+                isDiscount: true,
+              ),
+              const Divider(),
+            ],
             _buildInfoRow(
               l10n.totalPrice,
-              '${widget.totalPrice.toStringAsFixed(2)} ${l10n.currency}',
+              '${(_discountAmount != null ? widget.totalPrice - _discountAmount! : widget.totalPrice).toStringAsFixed(2)} ${l10n.currency}',
               isTotal: true,
             ),
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildPromoCodeSection(AppLocalizations l10n, ColorScheme colorScheme) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InkWell(
+            onTap: () {
+              setState(() {
+                _showPromoInput = !_showPromoInput;
+                if (!_showPromoInput) {
+                  _promoCodeController.clear();
+                  _discountAmount = null;
+                }
+              });
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Row(
+                children: [
+                  Text(
+                    l10n.havePromoCode,
+                    style: TextStyle(
+                      color: const Color(0xFF4F8593),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Icon(
+                    _showPromoInput ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                    color: const Color(0xFF4F8593),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (_showPromoInput) ...[
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _promoCodeController,
+                    decoration: InputDecoration(
+                      hintText: l10n.enterPromoCode,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                _isCheckingPromoCode
+                    ? const SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(),
+                      )
+                    : ElevatedButton(
+                        onPressed: () {
+                          print('Button pressed');
+                          if (_discountAmount == null) {
+                            print('Calling _validatePromoCode');
+                            _validatePromoCode();
+                          } else {
+                            print('Calling _removePromoCode');
+                            _removePromoCode();
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF4F8593),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                        ),
+                        child: Text(_discountAmount == null ? l10n.apply : l10n.remove),
+                      ),
+              ],
+            ),
+            if (_discountAmount != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                l10n.discountApplied('\$${_discountAmount!.toStringAsFixed(2)}'),
+                style: const TextStyle(
+                  color: Colors.green,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ],
+        ],
+      ),
+    );
+  }
+
+  Future<void> _validatePromoCode() async {
+    final code = _promoCodeController.text.trim();
+    final l10n = AppLocalizations.of(context)!;
+    if (code.isEmpty) {
+      print('Code is empty');
+      return;
+    }
+
+    setState(() {
+      _isCheckingPromoCode = true;
+    });
+
+    try {
+      final promotionProvider = PromotionProvider();
+      final promotion = await promotionProvider.validateCode(code);
+      
+      if (promotion != null) {
+        final discountAmount = widget.totalPrice * (promotion.discountPercentage / 100);
+        setState(() {
+          _discountAmount = discountAmount;
+          _promotionId = promotion.id;
+        });
+      } else {
+        if (mounted) {
+          final l10n = AppLocalizations.of(context)!;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(l10n.invalidPromoCode),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        final message = e.toString()
+            .replaceFirst('Exception: ', '')
+            .replaceAll('"', '');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              message.contains('You have already used this promotion code')
+                ? l10n.promoCodeAlreadyUsed
+                : message
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isCheckingPromoCode = false;
+        });
+      }
+    }
+  }
+
+  void _removePromoCode() {
+    setState(() {
+      _discountAmount = null;
+      _promotionId = null;
+      _promoCodeController.clear();
+    });
   }
 
   Widget _buildPaymentMethodSelection(AppLocalizations l10n, ColorScheme colorScheme) {
@@ -236,7 +416,7 @@ class _ScreeningCheckoutScreenState extends State<ScreeningCheckoutScreen> {
     );
   }
 
-  Widget _buildInfoRow(String label, String value, {bool isTotal = false}) {
+  Widget _buildInfoRow(String label, String value, {bool isTotal = false, bool isDiscount = false}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
@@ -252,7 +432,7 @@ class _ScreeningCheckoutScreenState extends State<ScreeningCheckoutScreen> {
             value,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-              color: isTotal ? const Color(0xFF4F8593) : null,
+              color: isTotal ? const Color(0xFF4F8593) : isDiscount ? Colors.green : null,
             ),
           ),
         ],
@@ -307,7 +487,8 @@ class _ScreeningCheckoutScreenState extends State<ScreeningCheckoutScreen> {
       final reservation = await reservationProvider.createReservation(
         screeningId: widget.screening.id!,
         seatIds: widget.selectedSeats.map((seat) => seat.id).toList(),
-        totalPrice: widget.totalPrice,
+        totalPrice: _discountAmount != null ? widget.totalPrice - _discountAmount! : widget.totalPrice,
+        promotionId: _promotionId,
         paymentType: 'Cash',
       );
 

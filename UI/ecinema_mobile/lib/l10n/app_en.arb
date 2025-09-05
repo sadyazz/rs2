@@ -1569,5 +1569,39 @@
   "eventDate": "Event date",
   "@eventDate": {
     "description": "Event date label"
-  }
-} 
+  },
+  "havePromoCode": "Have a promo code?",
+  "@havePromoCode": {
+    "description": "Text shown to expand promo code input"
+  },
+  "enterPromoCode": "Enter promo code",
+  "@enterPromoCode": {
+    "description": "Placeholder text for promo code input"
+  },
+  "apply": "Apply",
+  "@apply": {
+    "description": "Apply button text"
+  },
+  "remove": "Remove",
+  "@remove": {
+    "description": "Remove button text"
+  },
+  "discountApplied": "Discount applied: -${amount}",
+  "@discountApplied": {
+    "description": "Message shown when discount is applied",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "$5.00"
+      }
+    }
+  },
+  "invalidPromoCode": "Invalid promo code",
+  "@invalidPromoCode": {
+    "description": "Error message shown when promo code is invalid"
+  },
+  "promoCodeAlreadyUsed": "You have already used this promotion code",
+  "@promoCodeAlreadyUsed": {
+    "description": "Error message shown when promo code has already been used"
+  } 
+}

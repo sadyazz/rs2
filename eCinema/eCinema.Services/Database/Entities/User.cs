@@ -48,9 +48,9 @@ namespace eCinema.Services.Database.Entities
         public int RoleId { get; set; }
         [ForeignKey(nameof(RoleId))]
         public virtual Role Role { get; set; } = null!;
-        // Navigation properties
         public virtual ICollection<Reservation> Reservations { get; set; } = new HashSet<Reservation>();
         public virtual ICollection<Review> Reviews { get; set; } = new HashSet<Review>();
-        // public virtual ICollection<NewsArticle> NewsArticles { get; set; } = new HashSet<NewsArticle>();
+        public virtual ICollection<UserPromotion> UserPromotions { get; set; } = new HashSet<UserPromotion>();
+
     }
 } 

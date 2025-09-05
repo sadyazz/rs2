@@ -52,6 +52,7 @@ class _SeatsManagementScreenState extends State<SeatsManagementScreen> {
     
     return MasterScreen(
       l10n.seatsManagement,
+      showDrawer: false,
       Center(
         child: _isLoading
           ? const CircularProgressIndicator()

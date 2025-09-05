@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eCinema.Services.Database;
 
@@ -11,9 +12,11 @@ using eCinema.Services.Database;
 namespace eCinema.Services.Migrations
 {
     [DbContext(typeof(eCinemaDBContext))]
-    partial class eCinemaDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250905113913_DropAndRecreateUserPromotionsTable")]
+    partial class DropAndRecreateUserPromotionsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -704,20 +707,30 @@ namespace eCinema.Services.Migrations
                     b.Property<int>("PromotionId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PromotionId1")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UsedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UserId1")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PromotionId");
 
+                    b.HasIndex("PromotionId1");
+
+                    b.HasIndex("UserId1");
+
                     b.HasIndex("UserId", "PromotionId")
                         .IsUnique();
 
-                    b.ToTable("UserPromotions", (string)null);
+                    b.ToTable("UserPromotions");
                 });
 
             modelBuilder.Entity("eCinema.Services.Database.Entities.MovieActor", b =>
@@ -916,16 +929,24 @@ namespace eCinema.Services.Migrations
             modelBuilder.Entity("eCinema.Services.Database.Entities.UserPromotion", b =>
                 {
                     b.HasOne("eCinema.Services.Database.Entities.Promotion", "Promotion")
-                        .WithMany("UserPromotions")
+                        .WithMany()
                         .HasForeignKey("PromotionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("eCinema.Services.Database.Entities.User", "User")
+                    b.HasOne("eCinema.Services.Database.Entities.Promotion", null)
                         .WithMany("UserPromotions")
+                        .HasForeignKey("PromotionId1");
+
+                    b.HasOne("eCinema.Services.Database.Entities.User", "User")
+                        .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("eCinema.Services.Database.Entities.User", null)
+                        .WithMany("UserPromotions")
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("Promotion");
 

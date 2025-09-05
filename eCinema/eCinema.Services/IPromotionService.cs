@@ -7,4 +7,5 @@ namespace eCinema.Services;
 
 public interface IPromotionService : ICRUDService<PromotionResponse, PromotionSearchObject, PromotionUpsertRequest, PromotionUpsertRequest>
 {
+    Task<PromotionResponse?> ValidatePromotionCode(string code, int userId);
 } 

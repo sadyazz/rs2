@@ -82,6 +82,20 @@ namespace eCinema.API.Controllers
             }
         }
 
+        [HttpGet("calculate-price")]
+        public async Task<ActionResult<(decimal totalPrice, decimal? discountPercentage)>> CalculatePrice([FromQuery] decimal originalPrice, [FromQuery] string? promotionCode)
+        {
+            try
+            {
+                var result = await _reservationService.CalculatePriceWithPromotion(originalPrice, promotionCode);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error calculating price: {ex.Message}");
+            }
+        }
+
         [HttpGet("user/{userId}")]
         public ActionResult<List<ReservationResponse>> GetUserReservations(int userId, [FromQuery] bool? isFuture)
         {

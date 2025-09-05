@@ -1365,7 +1365,7 @@
   "@numberOfSeats": {
     "description": "Broj sjedista oznaka"
   },
-  "total": "Ukupno:",
+  "total": "Ukupno",
   "@total": {
     "description": "Ukupno oznaka"
   },
@@ -1561,5 +1561,39 @@
   "eventDate": "Datum događaja",
   "@eventDate": {
     "description": "Event date label"
+  },
+  "havePromoCode": "Imate promo kod?",
+  "@havePromoCode": {
+    "description": "Text shown to expand promo code input"
+  },
+  "enterPromoCode": "Unesite promo kod",
+  "@enterPromoCode": {
+    "description": "Placeholder text for promo code input"
+  },
+  "apply": "Primijeni",
+  "@apply": {
+    "description": "Apply button text"
+  },
+  "remove": "Ukloni",
+  "@remove": {
+    "description": "Remove button text"
+  },
+  "discountApplied": "Popust primijenjen: -${amount}",
+  "@discountApplied": {
+    "description": "Message shown when discount is applied",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "$5.00"
+      }
+    }
+  },
+  "invalidPromoCode": "Nevažeći promo kod",
+  "@invalidPromoCode": {
+    "description": "Error message shown when promo code is invalid"
+  },
+  "promoCodeAlreadyUsed": "Već ste iskoristili ovaj promo kod",
+  "@promoCodeAlreadyUsed": {
+    "description": "Error message shown when promo code has already been used"
   }
 } 

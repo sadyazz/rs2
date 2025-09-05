@@ -28,6 +28,7 @@ namespace eCinema.Services.Database
         public DbSet<Promotion> Promotions { get; set; } = null!;
         public DbSet<NewsArticle> NewsArticles { get; set; } = null!;
         public DbSet<UserMovieList> UserMovieLists { get; set; } = null!;
+        public DbSet<UserPromotion> UserPromotions { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -190,6 +191,29 @@ namespace eCinema.Services.Database
             modelBuilder.Entity<UserMovieList>()
                 .HasIndex(uml => new { uml.UserId, uml.MovieId, uml.ListType })
                 .IsUnique();
+
+            modelBuilder.Entity<UserPromotion>(entity =>
+            {
+                entity.ToTable("UserPromotions");
+                entity.HasKey(e => e.Id);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(u => u.UserPromotions)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(d => d.Promotion)
+                    .WithMany(p => p.UserPromotions)
+                    .HasForeignKey(d => d.PromotionId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(e => new { e.UserId, e.PromotionId })
+                    .IsUnique();
+            });
+
+            modelBuilder.Entity<Screening>()
+                .Property(s => s.BasePrice)
+                .HasColumnType("decimal(10, 2)");
         }
     }
 }
