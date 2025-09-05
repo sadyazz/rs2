@@ -9,6 +9,8 @@ import '../providers/review_provider.dart';
 import '../providers/user_movie_list_provider.dart';
 import '../providers/utils.dart';
 import '../models/review.dart';
+import '../providers/reservation_provider.dart';
+import '../widgets/review_prompt_sheet.dart';
 import 'reviews_screen.dart';
 import 'reservation_screen.dart';
 
@@ -47,6 +49,39 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     _loadActors();
     _loadReviews();
     _loadListStatuses();
+    _checkForReviewPrompt();
+  }
+
+  Future<void> _checkForReviewPrompt() async {
+    if (widget.movie.id == null) return;
+
+    final reservationProvider = ReservationProvider();
+    final hasWatched = await reservationProvider.hasWatchedMovie(widget.movie.id!);
+    if (!hasWatched) return;
+
+    final reviewProvider = ReviewProvider();
+    final hasReviewed = await reviewProvider.hasUserReviewedMovie(widget.movie.id!);
+    if (hasReviewed) return;
+
+    if (!mounted) return;
+
+    final result = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: ReviewPromptSheet(movie: widget.movie),
+      ),
+    );
+
+    if (result == true) {
+      await _loadReviews();
+    }
   }
 
   Future<void> _loadListStatuses() async {

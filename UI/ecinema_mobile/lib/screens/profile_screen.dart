@@ -36,7 +36,11 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
   void didChangeDependencies() {
     super.didChangeDependencies();
     routeObserver.subscribe(this, ModalRoute.of(context)!);
-    _loadListCounts();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _loadListCounts();
+      }
+    });
   }
 
   @override
@@ -50,19 +54,31 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
 
   @override
   void didPopNext() {
-    _loadListCounts();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _loadListCounts();
+      }
+    });
   }
 
   void _onFocusChange() {
     if (_focusNode.hasFocus) {
-      _loadListCounts();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _loadListCounts();
+        }
+      });
     }
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      _loadListCounts();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _loadListCounts();
+        }
+      });
     }
   }
 
@@ -365,16 +381,6 @@ class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserv
               }
               _loadListCounts();
             });
-          },
-        ),
-        const SizedBox(height: 12),
-        _buildSettingsCard(
-          icon: Icons.payment,
-          title: l10n.paymentMethods,
-          subtitle: l10n.paymentMethodsDescription,
-          colorScheme: colorScheme,
-          onTap: () {
-            // TODO: Navigate to payment methods
           },
         ),
         const SizedBox(height: 12),

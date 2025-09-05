@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'randomizer_screen.dart';
 import 'movies_list_screen.dart';
 import '../providers/genre_provider.dart';
@@ -8,6 +9,9 @@ import '../providers/movie_provider.dart';
 import '../providers/utils.dart';
 import '../models/movie.dart';
 import '../models/search_result.dart';
+import '../providers/reservation_provider.dart';
+import '../providers/review_provider.dart';
+import '../widgets/review_prompt_sheet.dart';
 import 'movie_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,7 +21,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   SearchResult<Movie>? result = null;
   SearchResult<Movie>? comingSoonResult = null;
   bool isLoading = false;
@@ -26,16 +30,83 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadGenres();
       _loadMovies();
       _loadComingSoonMovies();
+      Future.delayed(const Duration(seconds: 2), () async {
+        if (mounted) {
+          await _checkForUnreviewedMovies();
+        }
+      });
     });
   }
 
+
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && mounted) {
+      _checkForUnreviewedMovies();
+    }
+  }
+
+  Future<void> _checkForUnreviewedMovies() async {
+    try {
+      final movieProvider = context.read<MovieProvider>();
+      var filter = <String, dynamic>{
+        'page': 0,
+        'pageSize': 100,
+        'includeTotalCount': true,
+        'includeDeleted': false,
+        'hasActiveScreenings': true,
+      };
+      
+      var movies = await movieProvider.get(filter: filter);
+      if (movies.items == null || movies.items!.isEmpty) return;
+
+      for (final movie in movies.items!) {
+        if (movie.id == null) continue;
+
+        final reservationProvider = ReservationProvider();
+        final hasWatched = await reservationProvider.hasWatchedMovie(movie.id!);
+        if (!hasWatched) continue;
+
+        final reviewProvider = ReviewProvider();
+        final hasReviewed = await reviewProvider.hasUserReviewedMovie(movie.id!);
+        if (hasReviewed) continue;
+
+        if (!mounted) return;
+
+        await showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          isDismissible: true,
+          enableDrag: true,
+          backgroundColor: Colors.transparent,
+          builder: (context) => Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: ReviewPromptSheet(movie: movie),
+          ),
+        );
+
+        final prefs = await SharedPreferences.getInstance();
+        final promptShownKey = 'review_prompt_shown_${movie.id}';
+        await prefs.setBool(promptShownKey, true);
+
+        break;
+      }
+    } catch (e) {
+      print('Error checking for unreviewed movies: $e');
+    }
   }
 
   Future<void> _loadGenres() async {

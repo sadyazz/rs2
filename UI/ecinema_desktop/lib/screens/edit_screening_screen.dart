@@ -14,8 +14,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class EditScreeningScreen extends StatefulWidget {
   final Screening? screening;
@@ -212,9 +210,15 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
       Navigator.pop(context, true);
     } catch (e) {
       print('Error saving screening: $e');
+      String errorMessage = l10n.failedToSaveScreening;
+      
+      if (e.toString().contains("End time must be after start time")) {
+        errorMessage = l10n.endTimeMustBeAfterStartTime;
+      }
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(l10n.failedToSaveScreening),
+          content: Text(errorMessage),
           backgroundColor: Colors.red,
         ),
       );
@@ -402,6 +406,12 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
                 if (value == null) {
                   return l10n.pleaseEnterEndTime;
                 }
+                
+                final startTime = _formKey.currentState?.fields['startTime']?.value as DateTime?;
+                if (startTime != null && value.isBefore(startTime)) {
+                  return l10n.endTimeMustBeAfterStartTime;
+                }
+                
                 return null;
               },
             ),

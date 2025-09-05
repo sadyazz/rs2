@@ -603,6 +603,20 @@ namespace eCinema.Services
             return (finalPrice, promotion.DiscountPercentage);
         }
 
+        public async Task<bool> HasUserWatchedMovie(int movieId)
+        {
+            var userId = await _currentUserService.GetUserIdAsync();
+            if (!userId.HasValue)
+                return false;
+
+            return await _context.Reservations
+                .Include(r => r.Screening)
+                .AnyAsync(r => 
+                    r.UserId == userId.Value &&
+                    r.Screening.MovieId == movieId &&
+                    r.State == nameof(UsedReservationState));
+        }
+
         public async Task<string> GenerateQRCode(int reservationId)
         {
             var reservation = await _context.Reservations

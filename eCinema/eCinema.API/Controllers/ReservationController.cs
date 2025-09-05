@@ -109,5 +109,19 @@ namespace eCinema.API.Controllers
                 return BadRequest($"Error getting user reservations: {ex.Message}");
             }
         }
+
+        [HttpGet("has-watched/{movieId}")]
+        public async Task<ActionResult<bool>> HasUserWatchedMovie(int movieId)
+        {
+            try
+            {
+                var hasWatched = await _reservationService.HasUserWatchedMovie(movieId);
+                return Ok(hasWatched);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error checking if user has watched movie: {ex.Message}");
+            }
+        }
     }
 }
