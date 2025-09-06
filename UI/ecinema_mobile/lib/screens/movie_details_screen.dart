@@ -59,6 +59,12 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     final hasWatched = await reservationProvider.hasWatchedMovie(widget.movie.id!);
     if (!hasWatched) return;
 
+    final userMovieListProvider = UserMovieListProvider();
+    final isInWatchedList = await userMovieListProvider.isMovieInList(widget.movie.id!, 'watched');
+    if (!isInWatchedList) {
+      await userMovieListProvider.addMovieToList(widget.movie.id!, 'watched');
+    }
+
     final reviewProvider = ReviewProvider();
     final hasReviewed = await reviewProvider.hasUserReviewedMovie(widget.movie.id!);
     if (hasReviewed) return;
