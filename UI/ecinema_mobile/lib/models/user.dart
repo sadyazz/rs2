@@ -4,58 +4,50 @@ class User {
   final int? id;
   final String? firstName;
   final String? lastName;
-  final String? fullName;
-  final String? username;
   final String? email;
+  final String? username;
   final String? phoneNumber;
-  final bool? isDeleted;
-  final DateTime? createdAt;
   final String? image;
   final Role? role;
+  final DateTime? createdAt;
 
-  const User({
+  User({
     this.id,
     this.firstName,
     this.lastName,
-    this.fullName,
-    this.username,
     this.email,
+    this.username,
     this.phoneNumber,
-    this.isDeleted,
-    this.createdAt,
     this.image,
     this.role,
+    this.createdAt,
   });
+
+  String get fullName => '${firstName ?? ''} ${lastName ?? ''}'.trim();
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
       firstName: json['firstName'],
       lastName: json['lastName'],
-      fullName: json['fullName'],
-      username: json['username'],
       email: json['email'],
+      username: json['username'],
       phoneNumber: json['phoneNumber'],
-      isDeleted: json['isDeleted'] ?? false,
-      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
       image: json['image'],
       role: json['role'] != null ? Role.fromJson(json['role']) : null,
+      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'firstName': firstName,
-      'lastName': lastName,
-      'fullName': fullName,
-      'username': username,
-      'email': email,
-      'phoneNumber': phoneNumber,
-      'isDeleted': isDeleted,
-      'createdAt': createdAt?.toIso8601String(),
-      'image': image,
-      'role': role?.toJson(),
-    };
-  }
-} 
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'firstName': firstName,
+    'lastName': lastName,
+    'email': email,
+    'username': username,
+    'phoneNumber': phoneNumber,
+    'image': image,
+    'role': role?.toJson(),
+    'createdAt': createdAt?.toIso8601String(),
+  };
+}

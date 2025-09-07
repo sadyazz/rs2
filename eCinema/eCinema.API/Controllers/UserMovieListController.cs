@@ -1,15 +1,14 @@
-using eCinema.Model;
 using eCinema.Model.Requests;
 using eCinema.Model.Responses;
 using eCinema.Model.SearchObjects;
 using eCinema.Services;
 using eCinema.Services.Auth;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eCinema.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class UserMovieListController : ControllerBase

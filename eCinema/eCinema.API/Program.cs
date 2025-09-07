@@ -10,6 +10,7 @@ using eCinema.API.Filters;
 using Microsoft.OpenApi.Models;
 using eCinema.Services.ReservationStateMachine;
 using DotNetEnv;
+using eCinema.Services.Recommender;
 
 Env.Load(@"../.env");
 
@@ -82,6 +83,7 @@ builder.Services.AddTransient<IReviewService, ReviewService>();
 builder.Services.AddTransient<IDashboardService, DashboardService>();
 builder.Services.AddTransient<IUserMovieListService, UserMovieListService>();
 builder.Services.AddScoped<IRabbitMQService, RabbitMQService>();
+builder.Services.AddScoped<IRecommenderService, RecommenderService>();
 
 builder.Services.AddTransient<BaseReservationState>();
 builder.Services.AddTransient<InitialReservationState>();

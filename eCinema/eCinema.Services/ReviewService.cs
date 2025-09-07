@@ -10,6 +10,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using MapsterMapper;
+using eCinema.Services.Recommender;
 
 namespace eCinema.Services
 {
@@ -17,11 +18,13 @@ namespace eCinema.Services
     {
         private readonly eCinemaDBContext _context;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IRecommenderService _recommenderService;
         
-        public ReviewService(eCinemaDBContext context, IMapper mapper, ICurrentUserService currentUserService) : base(context, mapper)
+        public ReviewService(eCinemaDBContext context, IMapper mapper, ICurrentUserService currentUserService, IRecommenderService recommenderService) : base(context, mapper)
         {
             _context = context;
             _currentUserService = currentUserService;
+            _recommenderService = recommenderService;
         }
 
         private async Task<bool> IsAdminAsync()
@@ -51,6 +54,8 @@ namespace eCinema.Services
             await _context.SaveChangesAsync();
             
             await RecalculateMovieGrade(entity.MovieId);
+            
+            await _recommenderService.TrainModelAsync();
             
             return MapToResponse(entity);
         }
@@ -120,6 +125,8 @@ namespace eCinema.Services
             await _context.SaveChangesAsync();
             await RecalculateMovieGrade(entity.MovieId);
             
+            await _recommenderService.TrainModelAsync();
+            
             return MapToResponse(entity);
         }
 
@@ -151,6 +158,8 @@ namespace eCinema.Services
             if (result && movieId > 0)
             {
                 await RecalculateMovieGrade(movieId);
+                
+                await _recommenderService.TrainModelAsync();
             }
             
             return result;
@@ -184,6 +193,8 @@ namespace eCinema.Services
             if (result && movieId > 0)
             {
                 await RecalculateMovieGrade(movieId);
+                
+                await _recommenderService.TrainModelAsync();
             }
             
             return result;
@@ -211,6 +222,8 @@ namespace eCinema.Services
             if (result && movieId > 0)
             {
                 await RecalculateMovieGrade(movieId);
+                
+                await _recommenderService.TrainModelAsync();
             }
             
             return result;

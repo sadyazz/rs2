@@ -389,7 +389,7 @@ class _LoginPageState extends State<LoginPage> {
         print('🔍 Current user after login: ${user?.toJson()}');
         print('🔍 User role: ${user?.role?.name}');
         
-        final roleName = user?.role?.name?.toLowerCase();
+        final roleName = user?.role?.name?.toLowerCase() ?? '';
         if (roleName == 'user') {
           print('🔍 User has regular role, navigating to home');
           Navigator.of(context).pushReplacementNamed('/home');

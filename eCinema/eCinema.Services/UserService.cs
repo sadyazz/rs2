@@ -9,20 +9,22 @@ using eCinema.Services.RabbitMQ;
 using Microsoft.EntityFrameworkCore;
 using MapsterMapper;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
+using eCinema.Services.Recommender;
 
 namespace eCinema.Services
 {
     public class UserService : BaseCRUDService<UserResponse, UserSearchObject, User, UserUpsertRequest, UserUpdateRequest>, IUserService
     {
         private readonly IRabbitMQService _rabbitMQService;
+        private readonly IRecommenderService _recommenderService;
         private const int SaltSize = 16;
         private const int KeySize = 32;
         private const int Iterations = 10000;
         
-        public UserService(eCinemaDBContext context, IMapper mapper, IRabbitMQService rabbitMQService) : base(context, mapper)
+        public UserService(eCinemaDBContext context, IMapper mapper, IRabbitMQService rabbitMQService, IRecommenderService recommenderService) : base(context, mapper)
         {
             _rabbitMQService = rabbitMQService;
+            _recommenderService = recommenderService;
         }
 
         public override async Task<PagedResult<UserResponse>> GetAsync(UserSearchObject search)
@@ -114,7 +116,7 @@ namespace eCinema.Services
             if (user == null)
                 return null;
 
-                        if (await _context.Users.AnyAsync(u => u.Email == request.Email && u.Id != id))
+            if (await _context.Users.AnyAsync(u => u.Email == request.Email && u.Id != id))
             {
                 throw new InvalidOperationException("A user with this email already exists.");
             }
@@ -245,84 +247,143 @@ namespace eCinema.Services
 
         public async Task<UserResponse> RegisterAsync(UserUpsertRequest request)
         {
-            if (await _context.Users.AnyAsync(u => u.Email == request.Email))
+            try 
             {
-                throw new InvalidOperationException("A user with this email already exists.");
-            }
-            
-            if (await _context.Users.AnyAsync(u => u.Username == request.Username))
-            {
-                throw new InvalidOperationException("A user with this username already exists.");
-            }
-            
-            var user = new User
-            {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Email = request.Email,
-                Username = request.Username,
-                PhoneNumber = request.PhoneNumber,
-                RoleId = request.RoleId,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            if (!string.IsNullOrEmpty(request.Password))
-            {
-                byte[] salt;
-                user.PasswordHash = HashPassword(request.Password, out salt);
-                user.PasswordSalt = Convert.ToBase64String(salt);
-            }
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            var userRole = await _context.Roles
-                .FirstOrDefaultAsync(r => r.Id == user.RoleId);
-
-            if (userRole?.Name == "user")
-            {
-                var email = new Email
+                
+                if (await _context.Users.AnyAsync(u => u.Email == request.Email))
                 {
-                    To = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Subject = "Welcome to eCinema!",
-                    Body = "",
-                    Type = EmailType.Welcome
+                    throw new InvalidOperationException("A user with this email already exists.");
+                }
+                
+                if (await _context.Users.AnyAsync(u => u.Username == request.Username))
+                {
+                    throw new InvalidOperationException("A user with this username already exists.");
+                }
+
+                var roleExists = await _context.Roles.AnyAsync(r => r.Id == request.RoleId);
+                if (!roleExists)
+                {
+                    throw new InvalidOperationException($"Role with ID {request.RoleId} does not exist.");
+                }
+                
+                var user = new User
+                {
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    Email = request.Email,
+                    Username = request.Username,
+                    PhoneNumber = request.PhoneNumber,
+                    RoleId = request.RoleId,
+                    CreatedAt = DateTime.UtcNow
                 };
-                await _rabbitMQService.SendEmail(email);
+
+                if (!string.IsNullOrEmpty(request.Password))
+                {
+                    byte[] salt;
+                    user.PasswordHash = HashPassword(request.Password, out salt);
+                    user.PasswordSalt = Convert.ToBase64String(salt);
+                }
+
+                try 
+                {
+                    _context.Users.Add(user);
+                    await _context.SaveChangesAsync();
+
+                    var userRole = await _context.Roles
+                        .FirstOrDefaultAsync(r => r.Id == user.RoleId);
+
+                    if (userRole?.Name == "user")
+                    {
+                        try
+                        {
+                            Console.WriteLine("Sending welcome email...");
+                            var email = new Email
+                            {
+                                To = user.Email,
+                                FirstName = user.FirstName,
+                                LastName = user.LastName,
+                                Subject = "Welcome to eCinema!",
+                                Body = "",
+                                Type = EmailType.Welcome
+                            };
+                            await _rabbitMQService.SendEmail(email);
+                            Console.WriteLine("Welcome email sent");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Warning: Could not send welcome email: {ex.Message}");
+                        }
+                    }
+
+                    var response = await GetUserResponseWithRoleAsync(user.Id);
+                    return response;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error during user creation: {ex.Message}");
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                    throw;
+                }
+            } 
+            catch (Exception ex) 
+            {
+                Console.WriteLine($"Error during registration: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
             }
+        }
+
+        public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                throw new InvalidOperationException("User not found");
+
+            if (!VerifyPassword(currentPassword, user.PasswordHash, user.PasswordSalt))
+                return false;
+
+            byte[] salt;
+            user.PasswordHash = HashPassword(newPassword, out salt);
+            user.PasswordSalt = Convert.ToBase64String(salt);
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<UserResponse?> UpdateUserRoleAsync(int id, int roleId)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+                return null;
+
+            user.RoleId = roleId;
+            await _context.SaveChangesAsync();
 
             return await GetUserResponseWithRoleAsync(user.Id);
         }
 
-        public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
-{
-    var user = await _context.Users.FindAsync(userId);
-    if (user == null)
-        throw new InvalidOperationException("User not found");
+        public async Task<List<MovieResponse>> GetRecommendedMoviesAsync(int userId, int numberOfRecommendations = 4)
+        {
+            return _recommenderService.GetRecommendedMovies(userId, numberOfRecommendations);
+        }
 
-    if (!VerifyPassword(currentPassword, user.PasswordHash, user.PasswordSalt))
-        return false;
+        public async Task TrainModelAsync()
+        {
+            await _recommenderService.TrainModelAsync();
+        }
 
-    byte[] salt;
-    user.PasswordHash = HashPassword(newPassword, out salt);
-    user.PasswordSalt = Convert.ToBase64String(salt);
-
-    await _context.SaveChangesAsync();
-    return true;
+        public async Task<List<object>> GetUserReviewsAsync(int userId)
+        {
+            return await _context.Reviews
+                .Include(r => r.Movie)
+                .Where(r => r.UserId == userId && !r.IsDeleted)
+                .Select(r => new { 
+                    MovieTitle = r.Movie.Title,
+                    Rating = r.Rating,
+                    ReviewDate = r.CreatedAt
+                })
+                .Cast<object>()
+                .ToListAsync();
+        }
+    }
 }
-
-    public async Task<UserResponse?> UpdateUserRoleAsync(int id, int roleId)
-    {
-        var user = await _context.Users.FindAsync(id);
-        if (user == null)
-            return null;
-
-        user.RoleId = roleId;
-        await _context.SaveChangesAsync();
-
-        return await GetUserResponseWithRoleAsync(user.Id);
-    }
-    }
-} 

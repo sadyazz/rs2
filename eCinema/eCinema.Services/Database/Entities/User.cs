@@ -31,6 +31,7 @@ namespace eCinema.Services.Database.Entities
         
         public string? PasswordSalt { get; set; }
         
+        [Phone]
         public string? PhoneNumber { get; set; }
         
         public DateTime? DateOfBirth { get; set; }

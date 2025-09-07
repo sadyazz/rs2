@@ -12,6 +12,7 @@ import '../models/search_result.dart';
 import '../providers/reservation_provider.dart';
 import '../providers/review_provider.dart';
 import '../widgets/review_prompt_sheet.dart';
+import '../utils/user_session.dart';
 import 'movie_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,8 +25,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   SearchResult<Movie>? result = null;
   SearchResult<Movie>? comingSoonResult = null;
+  List<Movie> recommendedMovies = [];
   bool isLoading = false;
   bool isLoadingComingSoon = false;
+  bool isLoadingRecommended = false;
 
   @override
   void initState() {
@@ -35,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       _loadGenres();
       _loadMovies();
       _loadComingSoonMovies();
+      _loadRecommendedMovies();
       Future.delayed(const Duration(seconds: 2), () async {
         if (mounted) {
           await _checkForUnreviewedMovies();
@@ -42,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       });
     });
   }
-
 
   @override
   void dispose() {
@@ -145,6 +148,126 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
   }
 
+  Future<void> _loadRecommendedMovies() async {
+    try {
+      setState(() {
+        isLoadingRecommended = true;
+      });
+      
+      final movieProvider = context.read<MovieProvider>();
+      if (UserSession.currentUser != null) {
+        print('🔍 Loading recommendations for user: ${UserSession.currentUser!.id}');
+        recommendedMovies = await movieProvider.getRecommendedMovies(UserSession.currentUser!.id!);
+        print('🔍 Got ${recommendedMovies.length} recommended movies: ${recommendedMovies.map((m) => m.title).join(", ")}');
+      } else {
+        var filter = <String, dynamic>{
+          'page': 0,
+          'pageSize': 4,
+          'includeTotalCount': true,
+          'includeDeleted': false,
+          'isComingSoon': false,
+          'orderBy': 'grade desc',
+        };
+        var result = await movieProvider.get(filter: filter);
+        recommendedMovies = result.items ?? [];
+      }
+      
+      setState(() {
+        isLoadingRecommended = false;
+      });
+    } catch (e) {
+      print('Error loading recommended movies: $e');
+      setState(() {
+        isLoadingRecommended = false;
+      });
+    }
+  }
+
+  Widget _buildRecommendedSection(AppLocalizations l10n, ColorScheme colorScheme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              l10n.recommendedForYou,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+      ],
+    );
+  }
+
+  Widget _buildRecommendedMoviesGrid(AppLocalizations l10n, ColorScheme colorScheme) {
+    if (isLoadingRecommended) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              color: colorScheme.primary,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.loadingMovies,
+              style: TextStyle(
+                fontSize: 16,
+                color: colorScheme.onSurface.withOpacity(0.7),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (recommendedMovies.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.movie_outlined,
+              size: 64,
+              color: colorScheme.onSurface.withOpacity(0.5),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.noRecommendedMovies,
+              style: TextStyle(
+                fontSize: 18,
+                color: colorScheme.onSurface.withOpacity(0.7),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(top: 16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.6,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 16,
+      ),
+      itemCount: recommendedMovies.length,
+      itemBuilder: (context, index) {
+        final movie = recommendedMovies[index];
+        return _buildMovieCard(movie, l10n, colorScheme, showGrade: true);
+      },
+    );
+  }
+
   Future<void> _loadComingSoonMovies() async {
     try {
       setState(() {
@@ -197,12 +320,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               const SizedBox(height: 40),
               const SizedBox(height: 16),
               _buildMovieSuggestionBanner(l10n, colorScheme),
-              const SizedBox(height: 16),
+              const SizedBox(height: 32),
               _buildNowShowingSection(l10n, colorScheme),
               _buildMoviesGrid(l10n, colorScheme),
               const SizedBox(height: 32),
               _buildComingSoonSection(l10n, colorScheme),
               _buildComingSoonMoviesGrid(l10n, colorScheme),
+              const SizedBox(height: 32),
+              _buildRecommendedSection(l10n, colorScheme),
+              _buildRecommendedMoviesGrid(l10n, colorScheme),
               const SizedBox(height: 100),
             ],
           ),
@@ -210,7 +336,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       ),
     );
   }
-
 
   Widget _buildMovieSuggestionBanner(AppLocalizations l10n, ColorScheme colorScheme) {
     return Container(

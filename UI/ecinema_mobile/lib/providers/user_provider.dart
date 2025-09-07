@@ -4,6 +4,7 @@ import 'auth_provider.dart';
 import '../models/user.dart';
 import '../models/reservation_response.dart';
 import '../config/api_config.dart';
+import '../utils/user_session.dart';
 import 'package:ecinema_mobile/providers/base_provider.dart';
 
 class UserProvider extends BaseProvider<User> {
@@ -16,10 +17,10 @@ class UserProvider extends BaseProvider<User> {
     
     final user = User(
       id: AuthProvider.userId,
-      firstName: AuthProvider.firstName ?? '',
-      lastName: AuthProvider.lastName ?? '',
-      username: AuthProvider.username ?? '',
-      email: AuthProvider.email ?? '',
+      firstName: AuthProvider.firstName,
+      lastName: AuthProvider.lastName,
+      username: AuthProvider.username,
+      email: AuthProvider.email,
       phoneNumber: AuthProvider.phoneNumber,
       createdAt: AuthProvider.createdAt,
       role: AuthProvider.role,
@@ -53,6 +54,8 @@ class UserProvider extends BaseProvider<User> {
         AuthProvider.username = username;
         AuthProvider.password = password;
         AuthProvider.setUser(user);
+        
+        UserSession.currentUser = user;
         
         print('🔍 AuthProvider.userId after setUser: ${AuthProvider.userId}');
         
@@ -90,10 +93,22 @@ class UserProvider extends BaseProvider<User> {
         }),
       );
 
-      return response.statusCode == 200;
+      print('🔍 Register response status: ${response.statusCode}');
+      print('🔍 Register response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        try {
+          final errorMessage = response.body.isNotEmpty ? jsonDecode(response.body) : 'Registration failed';
+          throw Exception(errorMessage);
+        } catch (e) {
+          throw Exception(response.body.isNotEmpty ? response.body : 'Registration failed');
+        }
+      }
     } catch (e) {
       print('Register error: $e');
-      return false;
+      rethrow;
     }
   }
 

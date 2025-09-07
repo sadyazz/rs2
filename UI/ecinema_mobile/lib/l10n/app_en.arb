@@ -1155,6 +1155,10 @@
   "@emailAlreadyExists": {
     "description": "Email already exists error message"
   },
+  "usernameAlreadyExists": "Username already exists",
+  "@usernameAlreadyExists": {
+    "description": "Username already exists error message"
+  },
   "changeProfilePhoto": "Change Profile Photo",
   "@changeProfilePhoto": {
     "description": "Change profile photo dialog title"
@@ -1636,5 +1640,13 @@
   "reviewSubmittedSuccessfully": "Review submitted successfully",
   "@reviewSubmittedSuccessfully": {
     "description": "Review submission success message"
+  },
+  "recommendedForYou": "Recommended For You",
+  "@recommendedForYou": {
+    "description": "Recommended movies section title"
+  },
+  "noRecommendedMovies": "No recommended movies yet",
+  "@noRecommendedMovies": {
+    "description": "No recommended movies message"
   }
 }

@@ -20,6 +20,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -84,6 +85,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       textAlign: TextAlign.center,
                     ),
+                    if (_errorMessage != null) ...[
+                      const SizedBox(height: 16),
+                      Text(
+                        _errorMessage!,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.error,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                     const SizedBox(height: 48),
                     Row(
                       children: [
@@ -306,6 +317,10 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<void> _handleRegister() async {
     final l10n = AppLocalizations.of(context)!;
     
+    setState(() {
+      _errorMessage = null;
+    });
+
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -339,35 +354,19 @@ class _RegisterPageState extends State<RegisterPage> {
         Future.delayed(const Duration(seconds: 3), () {
           Navigator.of(context).pop();
         });
-      } else {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(l10n.error),
-            content: Text(l10n.failedToCreateAccount),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(l10n.ok),
-              ),
-            ],
-          ),
-        );
       }
     } catch (e) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(l10n.error),
-          content: Text(e.toString()),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(l10n.ok),
-            ),
-          ],
-        ),
-      );
+      String errorMessage = l10n.failedToCreateAccount;
+      
+      if (e.toString().contains('email already exists')) {
+        errorMessage = l10n.emailAlreadyExists;
+      } else if (e.toString().contains('username already exists')) {
+        errorMessage = l10n.usernameAlreadyExists;
+      }
+
+      setState(() {
+        _errorMessage = errorMessage;
+      });
     } finally {
       setState(() {
         _isLoading = false;

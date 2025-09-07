@@ -9,6 +9,7 @@ using System.Security.Claims;
 
 namespace eCinema.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class UserController : BaseCRUDController<UserResponse, UserSearchObject, UserUpsertRequest, UserUpdateRequest>
@@ -52,14 +53,13 @@ namespace eCinema.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(500, "An error occurred while creating the user.");
+                Console.WriteLine($"Error in Register: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                return StatusCode(500, ex.Message);
             }
         }
-
-
-
 
         [HttpPut("{id}/role")]
         [Authorize(Roles = "admin")]
@@ -111,6 +111,62 @@ namespace eCinema.API.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{userId}/recommended-movies")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<MovieResponse>>> GetRecommendedMovies(int userId, [FromQuery] int numberOfRecommendations = 4)
+        {
+            try
+            {
+                var movies = await _userService.GetRecommendedMoviesAsync(userId, numberOfRecommendations);
+                return Ok(movies);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("train-model")]
+        [Authorize(Roles = "admin,staff,user")]
+        public async Task<IActionResult> TrainModel()
+        {
+            try
+            {
+                await _userService.TrainModelAsync();
+                return Ok("Model training started successfully");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while training the model: {ex.Message}");
+            }
+        }
+
+        [HttpGet("test-recommender/{userId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> TestRecommender(int userId)
+        {
+            try
+            {
+                await _userService.TrainModelAsync();
+                Console.WriteLine("Model trained successfully");
+
+                var recommendations = await _userService.GetRecommendedMoviesAsync(userId);
+                Console.WriteLine($"Got {recommendations.Count} recommendations");
+
+                var reviews = await _userService.GetUserReviewsAsync(userId);
+
+                return Ok(new {
+                    Message = "Test completed successfully",
+                    UserReviews = reviews,
+                    RecommendedMovies = recommendations
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while testing: {ex.Message}");
             }
         }
     }

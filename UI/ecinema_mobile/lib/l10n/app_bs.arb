@@ -1155,6 +1155,10 @@
   "@emailAlreadyExists": {
     "description": "Email already exists error message"
   },
+  "usernameAlreadyExists": "Korisničko ime već postoji",
+  "@usernameAlreadyExists": {
+    "description": "Username already exists error message"
+  },
   "changeProfilePhoto": "Promijeni sliku profila",
   "@changeProfilePhoto": {
     "description": "Change profile photo dialog title"
@@ -1626,6 +1630,15 @@
     "description": "Review submission error message"
   },
   "reviewSubmittedSuccessfully": "Recenzija uspješno poslana",
+
+  "recommendedForYou": "Preporučeno za vas",
+  "@recommendedForYou": {
+    "description": "Recommended movies section title"
+  },
+  "noRecommendedMovies": "Još nema preporučenih filmova",
+  "@noRecommendedMovies": {
+    "description": "No recommended movies message"
+  },
 
   "@reviewSubmittedSuccessfully": {
     "description": "Review submission success message"

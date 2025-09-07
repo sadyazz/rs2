@@ -19,5 +19,8 @@ public interface IUserService : ICRUDService<UserResponse, UserSearchObject, Use
     Task<UserResponse> RegisterAsync(UserUpsertRequest request);
     Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword);
     Task<UserResponse?> UpdateUserRoleAsync(int id, int roleId);
+        Task<List<MovieResponse>> GetRecommendedMoviesAsync(int userId, int numberOfRecommendations = 4);
+        Task TrainModelAsync();
+        Task<List<object>> GetUserReviewsAsync(int userId);
 } 
 }

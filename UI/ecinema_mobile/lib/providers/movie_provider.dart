@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'base_provider.dart';
 import '../models/movie.dart';
+import '../config/api_config.dart';
 
 class MovieProvider extends BaseProvider<Movie> {
   MovieProvider() : super("Movie");
@@ -57,6 +58,24 @@ class MovieProvider extends BaseProvider<Movie> {
       return null;
     } else {
       throw Exception('Error: ${response.statusCode}');
+    }
+  }
+
+  Future<List<Movie>> getRecommendedMovies(int userId, {int numberOfRecommendations = 4}) async {
+    var url = "${ApiConfig.baseUrl}User/$userId/recommended-movies?numberOfRecommendations=$numberOfRecommendations";
+    var headers = createHeaders();
+
+    try {
+      var response = await http.get(Uri.parse(url), headers: headers);
+      if (response.statusCode == 200) {
+        final List<dynamic> body = jsonDecode(response.body);
+        return body.map((item) => Movie.fromJson(item)).toList();
+      } else {
+        throw Exception('Error loading recommended movies, status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Exception: $e');
+      rethrow;
     }
   }
 } 

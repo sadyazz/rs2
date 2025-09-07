@@ -186,35 +186,25 @@ class ReservationProvider extends BaseProvider<dynamic> {
       }
 
       final headers = createHeaders();
-      print('🔍 Calling URL: $url');
       final response = await http.get(
         Uri.parse(url),
         headers: headers,
       );
-      print('🔍 Response status: ${response.statusCode}');
-      print('🔍 Response body: ${response.body}');
 
       if (!isValidResponse(response)) {
         throw Exception('Failed to load user reservations: ${response.statusCode} - ${response.body}');
       }
 
-      print('🔍 Parsing response...');
       final data = jsonDecode(response.body);
-      print('🔍 Decoded data: $data');
       
       if (data is List) {
-        print('🔍 Data is a List, mapping directly');
         final reservations = data.map((json) => Reservation.fromJson(json)).toList();
-        print('🔍 Created ${reservations.length} reservations');
         return reservations;
       } else if (data is Map && data.containsKey('items')) {
-        print('🔍 Data is a Map with items');
         final items = data['items'] as List<dynamic>;
         final reservations = items.map((json) => Reservation.fromJson(json)).toList();
-        print('🔍 Created ${reservations.length} reservations from items');
         return reservations;
       } else {
-        print('🔍 Unexpected data format');
         throw Exception('Unexpected response format');
       }
     } catch (e) {
