@@ -2316,5 +2316,93 @@
   "newsCannotHaveEventDate": "News articles cannot have an event date",
   "@newsCannotHaveEventDate": {
     "description": "Error message when news type has event date"
+  },
+  "pleaseEnterMovieTitle": "Please enter movie title",
+  "@pleaseEnterMovieTitle": {
+    "description": "Movie title validation message"
+  },
+  "movieTitleTooLong": "Title must be less than 200 characters",
+  "@movieTitleTooLong": {
+    "description": "Movie title length validation message"
+  },
+  "pleaseEnterMovieDescription": "Please enter movie description",
+  "@pleaseEnterMovieDescription": {
+    "description": "Movie description validation message"
+  },
+  "movieDescriptionTooLong": "Description must be less than 1000 characters",
+  "@movieDescriptionTooLong": {
+    "description": "Movie description length validation message"
+  },
+  "pleaseEnterMovieDirector": "Please enter movie director",
+  "@pleaseEnterMovieDirector": {
+    "description": "Movie director validation message"
+  },
+  "movieDirectorTooLong": "Director name must be less than 100 characters",
+  "@movieDirectorTooLong": {
+    "description": "Movie director length validation message"
+  },
+  "pleaseEnterMovieDuration": "Please enter movie duration",
+  "@pleaseEnterMovieDuration": {
+    "description": "Movie duration validation message"
+  },
+  "movieDurationTooShort": "Duration must be at least 1 minute",
+  "@movieDurationTooShort": {
+    "description": "Movie duration minimum validation message"
+  },
+  "movieDurationTooLong": "Duration cannot exceed 600 minutes (10 hours)",
+  "@movieDurationTooLong": {
+    "description": "Movie duration maximum validation message"
+  },
+  "durationMinutesHelp": "Enter duration in minutes (1-600)",
+  "@durationMinutesHelp": {
+    "description": "Movie duration help text"
+  },
+  "pleaseEnterReleaseDate": "Please enter release date",
+  "@pleaseEnterReleaseDate": {
+    "description": "Release date validation message"
+  },
+  "invalidReleaseYear": "Invalid release year. Must be between 1888 and next year",
+  "@invalidReleaseYear": {
+    "description": "Invalid release year validation message"
+  },
+  "trailerUrlHelp": "Enter valid YouTube or other video URL",
+  "@trailerUrlHelp": {
+    "description": "Trailer URL help text"
+  },
+  "pleaseEnterValidUrl": "Please enter a valid URL",
+  "@pleaseEnterValidUrl": {
+    "description": "URL validation message"
+  },
+  "pleaseSelectAtLeastOneGenre": "Please select at least one genre",
+  "@pleaseSelectAtLeastOneGenre": {
+    "description": "Genre selection validation message"
+  },
+  "pleaseSelectAtLeastOneActor": "Please select at least one actor",
+  "@pleaseSelectAtLeastOneActor": {
+    "description": "Actor selection validation message"
+  },
+  "movieCreatedSuccessfully": "Movie created successfully",
+  "@movieCreatedSuccessfully": {
+    "description": "Movie created success message"
+  },
+  "movieUpdatedSuccessfully": "Movie updated successfully",
+  "@movieUpdatedSuccessfully": {
+    "description": "Movie updated success message"
+  },
+  "usernameMinLength": "Username must be at least 3 characters",
+  "@usernameMinLength": {
+    "description": "Username minimum length validation"
+  },
+  "usernameInvalid": "Username can only contain letters, numbers and underscores",
+  "@usernameInvalid": {
+    "description": "Username format validation message"
+  },
+  "phoneNumberInvalid": "Please enter a valid phone number",
+  "@phoneNumberInvalid": {
+    "description": "Phone number validation message"
+  },
+  "phoneNumberFormat": "Format: +123 45 678 910",
+  "@phoneNumberFormat": {
+    "description": "Phone number format help text"
   }
 }

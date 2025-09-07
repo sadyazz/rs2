@@ -195,8 +195,12 @@ class _LoginPageState extends State<LoginPage> {
                         if (value == null || value.trim().isEmpty) {
                           return l10n.pleaseEnterUsername;
                         }
-                        if (value.trim().length < 3) {
-                          return l10n.usernameMinLength;
+                        if (value.trim().length < 3 || value.trim().length > 20) {
+                          return l10n.usernameFormat;
+                        }
+                        // Check if username contains only letters, numbers and underscores
+                        if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value.trim())) {
+                          return l10n.usernameFormat;
                         }
                         return null;
                       },
@@ -250,10 +254,10 @@ class _LoginPageState extends State<LoginPage> {
                         if (value == null || value.isEmpty) {
                           return l10n.pleaseEnterPassword;
                         }
-                        if (value.length < 6) {
-                          return l10n.passwordMinLength;
-                        }
-                        return null;
+            if (value.length < 6) {
+              return l10n.passwordMinLength;
+            }
+            return null;
                       },
                       textInputAction: TextInputAction.done,
                                                   onFieldSubmitted: (_) {

@@ -9,6 +9,8 @@ import 'package:ecinema_desktop/screens/promotions_list_screen.dart';
 import 'package:ecinema_desktop/screens/roles_list_screen.dart';
 import 'package:ecinema_desktop/screens/seats_management_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ecinema_desktop/providers/user_provider.dart';
 import 'package:ecinema_desktop/models/user.dart';
@@ -22,6 +24,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _isEditing = false;
+  final _formKey = GlobalKey<FormBuilderState>();
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
   late TextEditingController _usernameController;
@@ -78,6 +81,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _toggleEditMode() {
+    if (_isEditing) {
+      _firstNameController.text = _currentUser?.firstName ?? '';
+      _lastNameController.text = _currentUser?.lastName ?? '';
+      _usernameController.text = _currentUser?.username ?? '';
+      _emailController.text = _currentUser?.email ?? '';
+      _phoneController.text = _currentUser?.phoneNumber ?? '';
+      _formKey.currentState?.reset();
+    }
     setState(() {
       _isEditing = !_isEditing;
     });
@@ -86,6 +97,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _saveProfile() async {
     try {
       final l10n = AppLocalizations.of(context)!;
+      
+      if (!(_formKey.currentState?.saveAndValidate() ?? false)) {
+        return;
+      }
+
       final success = await UserProvider.updateUser(
         firstName: _firstNameController.text,
         lastName: _lastNameController.text,
@@ -158,48 +174,84 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _firstNameController,
-                    enabled: _isEditing,
-                    decoration: InputDecoration(
-                      labelText: l10n.firstName,
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _lastNameController,
-                    enabled: _isEditing,
-                    decoration: InputDecoration(
-                      labelText: l10n.lastName,
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _usernameController,
-                    enabled: _isEditing,
-                    decoration: InputDecoration(
-                      labelText: l10n.username,
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _emailController,
-                    enabled: _isEditing,
-                    decoration: InputDecoration(
-                      labelText: l10n.email,
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _phoneController,
-                    enabled: _isEditing,
-                    decoration: InputDecoration(
-                      labelText: l10n.phone,
-                      border: OutlineInputBorder(),
+                  FormBuilder(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        FormBuilderTextField(
+                          name: 'firstName',
+                          controller: _firstNameController,
+                          enabled: _isEditing,
+                          decoration: InputDecoration(
+                            labelText: l10n.firstName,
+                            border: const OutlineInputBorder(),
+                          ),
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(errorText: l10n.pleaseEnterFirstName),
+                          ]),
+                        ),
+                        const SizedBox(height: 16),
+                        FormBuilderTextField(
+                          name: 'lastName',
+                          controller: _lastNameController,
+                          enabled: _isEditing,
+                          decoration: InputDecoration(
+                            labelText: l10n.lastName,
+                            border: const OutlineInputBorder(),
+                          ),
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(errorText: l10n.pleaseEnterLastName),
+                          ]),
+                        ),
+                        const SizedBox(height: 16),
+                        FormBuilderTextField(
+                          name: 'username',
+                          controller: _usernameController,
+                          enabled: _isEditing,
+                          decoration: InputDecoration(
+                            labelText: l10n.username,
+                            border: const OutlineInputBorder(),
+                          ),
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(errorText: l10n.pleaseEnterUsername),
+                            FormBuilderValidators.minLength(3, errorText: l10n.usernameMinLength),
+                            FormBuilderValidators.match(RegExp(r'^[a-zA-Z0-9_]+$'), errorText: l10n.usernameInvalid),
+                          ]),
+                        ),
+                        const SizedBox(height: 16),
+                        FormBuilderTextField(
+                          name: 'email',
+                          controller: _emailController,
+                          enabled: _isEditing,
+                          decoration: InputDecoration(
+                            labelText: l10n.email,
+                            border: const OutlineInputBorder(),
+                          ),
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(errorText: l10n.pleaseEnterEmail),
+                            FormBuilderValidators.email(errorText: l10n.pleaseEnterValidEmail),
+                          ]),
+                        ),
+                        const SizedBox(height: 16),
+                        FormBuilderTextField(
+                          name: 'phoneNumber',
+                          controller: _phoneController,
+                          enabled: _isEditing,
+                          decoration: InputDecoration(
+                            labelText: l10n.phone,
+                            border: const OutlineInputBorder(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return null; 
+                            }
+                            if (!RegExp(r'^\+?[\d\s-]+$').hasMatch(value)) {
+                              return l10n.phoneNumberInvalid;
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
                     ),
                   ),
                   if (_isEditing) ...[

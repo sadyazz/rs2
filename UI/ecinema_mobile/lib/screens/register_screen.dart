@@ -114,6 +114,9 @@ class _RegisterPageState extends State<RegisterPage> {
                               if (value == null || value.trim().isEmpty) {
                                 return l10n.pleaseEnterFirstName;
                               }
+                              if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value.trim())) {
+                                return l10n.firstNameLettersOnly;
+                              }
                               return null;
                             },
                           ),
@@ -134,6 +137,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
                                 return l10n.pleaseEnterLastName;
+                              }
+                              if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value.trim())) {
+                                return l10n.lastNameLettersOnly;
                               }
                               return null;
                             },
@@ -159,7 +165,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           return l10n.pleaseEnterEmail;
                         }
                         if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                          return l10n.pleaseEnterValidEmail;
+                          return l10n.emailFormat;
                         }
                         return null;
                       },
@@ -175,13 +181,17 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         filled: true,
                         fillColor: colorScheme.surface,
+                        errorMaxLines: 2,
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return l10n.pleaseEnterUsername;
                         }
-                        if (value.trim().length < 3) {
-                          return l10n.usernameMinLength;
+                        if (value.trim().length < 3 || value.trim().length > 20) {
+                          return l10n.usernameFormat;
+                        }
+                        if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value.trim())) {
+                          return l10n.usernameFormat;
                         }
                         return null;
                       },
@@ -214,10 +224,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         if (value == null || value.isEmpty) {
                           return l10n.pleaseEnterPassword;
                         }
-                        if (value.length < 6) {
-                          return l10n.passwordMinLength;
-                        }
-                        return null;
+            if (value.length < 6) {
+              return l10n.passwordMinLength;
+            }
+            return null;
                       },
                     ),
                     const SizedBox(height: 16),

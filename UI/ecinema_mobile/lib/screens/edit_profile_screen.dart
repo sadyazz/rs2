@@ -383,6 +383,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             if (value == null || value.trim().isEmpty) {
               return l10n.pleaseEnterUsername;
             }
+            if (value.trim().length < 3 || value.trim().length > 20) {
+              return l10n.usernameFormat;
+            }
+            if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value.trim())) {
+              return l10n.usernameFormat;
+            }
             return null;
           },
           colorScheme: colorScheme,
@@ -404,6 +410,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             if (value == null || value.trim().isEmpty) {
               return l10n.pleaseEnterFirstName;
             }
+            if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value.trim())) {
+              return l10n.firstNameLettersOnly;
+            }
             return null;
           },
           colorScheme: colorScheme,
@@ -415,6 +424,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
               return l10n.pleaseEnterLastName;
+            }
+            if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value.trim())) {
+              return l10n.lastNameLettersOnly;
             }
             return null;
           },
@@ -430,7 +442,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               return l10n.pleaseEnterEmail;
             }
             if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-              return l10n.pleaseEnterValidEmail;
+              return l10n.emailFormat;
             }
             return null;
           },
@@ -441,6 +453,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           controller: _phoneNumberController,
           label: l10n.phoneNumber,
           keyboardType: TextInputType.phone,
+          validator: (value) {
+            if (value != null && value.trim().isNotEmpty) {
+              if (!RegExp(r'^\+387 \d{2} \d{3} \d{3}$').hasMatch(value)) {
+                return l10n.phoneFormat;
+              }
+            }
+            return null;
+          },
           colorScheme: colorScheme,
         ),
       ],
@@ -460,40 +480,41 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       keyboardType: keyboardType,
       validator: validator,
       enabled: enabled,
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: colorScheme.outline.withOpacity(0.3),
+          decoration: InputDecoration(
+            labelText: label,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: colorScheme.outline.withOpacity(0.3),
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: colorScheme.outline.withOpacity(0.3),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: colorScheme.primary,
+                width: 2,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(
+                color: Colors.red,
+              ),
+            ),
+            filled: true,
+            fillColor: colorScheme.surface,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
+            errorMaxLines: 2,
           ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: colorScheme.outline.withOpacity(0.3),
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: colorScheme.primary,
-            width: 2,
-          ),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: Colors.red,
-          ),
-        ),
-        filled: true,
-        fillColor: colorScheme.surface,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 16,
-        ),
-      ),
       style: TextStyle(
         color: colorScheme.onSurface,
         fontSize: 16,

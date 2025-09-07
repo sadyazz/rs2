@@ -54,7 +54,7 @@ namespace eCinema.API.Controllers
         }
 
         [HttpPost("verify/{reservationId}")]
-        [Authorize]
+        [Authorize(Roles = "staff")]
         public async Task<ActionResult<ReservationResponse>> VerifyReservation(int reservationId)
         {
             try

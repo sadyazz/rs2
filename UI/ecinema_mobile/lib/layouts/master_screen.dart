@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../screens/home_screen.dart';
-import '../screens/tickets_screen.dart';
 import '../screens/notifications_screen.dart';
 import '../screens/profile_screen.dart';
 import 'package:ecinema_mobile/providers/language_provider.dart';
@@ -17,13 +16,13 @@ class MasterScreen extends StatefulWidget {
     this.floatingActionButton,
   });
 
-  String? title;
-  Widget? child;
-  bool showAppBar;
-  bool showBackButton;
-  bool transparentAppBar;
-  bool showBottomNav;
-  Widget? floatingActionButton;
+  final String? title;
+  final Widget? child;
+  final bool showAppBar;
+  final bool showBackButton;
+  final bool transparentAppBar;
+  final bool showBottomNav;
+  final Widget? floatingActionButton;
 
   @override
   State<MasterScreen> createState() => _MasterScreenState();
@@ -34,7 +33,7 @@ class _MasterScreenState extends State<MasterScreen> {
 
   final List<Widget> _screens = [
     const HomeScreen(),
-    const TicketsScreen(),
+    // const TicketsScreen(),
     const NotificationsScreen(),
     const ProfileScreen(),
   ];
@@ -71,7 +70,6 @@ class _MasterScreenState extends State<MasterScreen> {
     
     final List<String> _titles = [
       'eCinema',
-      l10n.tickets,
       l10n.notifications,
       l10n.profile,
     ];
@@ -136,9 +134,8 @@ class _MasterScreenState extends State<MasterScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _buildNavItem(0, Icons.home_outlined, Icons.home, colorScheme),
-        _buildNavItem(1, Icons.confirmation_number_outlined, Icons.confirmation_number, colorScheme),
-        _buildNavItem(2, Icons.notifications_outlined, Icons.notifications, colorScheme),
-        _buildNavItem(3, Icons.person_outline, Icons.person, colorScheme),
+        _buildNavItem(1, Icons.notifications_outlined, Icons.notifications, colorScheme),
+        _buildNavItem(2, Icons.person_outline, Icons.person, colorScheme),
       ],
     ),
   ),

@@ -73,6 +73,7 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
     try {
       var movieFilter = <String, dynamic>{
         'isDeleted': false,
+        'isComingSoon': false,
       };
       var hallFilter = <String, dynamic>{
         'isDeleted': false,

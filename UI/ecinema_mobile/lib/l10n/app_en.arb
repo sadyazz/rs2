@@ -1179,7 +1179,7 @@
   "@phoneNumber": {
     "description": "Phone number field label"
   },
-  "pleaseEnterUsername": "Please enter username",
+  "pleaseEnterUsername": "Please enter a username (minimum 3 characters, letters and numbers only)",
   "@pleaseEnterUsername": {
     "description": "Username validation message"
   },
@@ -1648,5 +1648,38 @@
   "noRecommendedMovies": "No recommended movies yet",
   "@noRecommendedMovies": {
     "description": "No recommended movies message"
-  }
+  },
+
+  "usernameFormat": "Username must be 3-20 characters long\nand can only contain letters, numbers, and underscores",
+  "@usernameFormat": {
+    "description": "Username format requirements"
+  },
+  
+  "passwordFormat": "Password must be at least 6 characters long",
+  "@passwordFormat": {
+    "description": "Password format requirements"
+  },
+  
+  "emailFormat": "Please enter a valid email address",
+  "@emailFormat": {
+    "description": "Email format requirements"
+  },
+  
+  "phoneFormat": "Please enter a valid phone number (e.g. +387 61 123 456)",
+  "@phoneFormat": {
+    "description": "Phone number format requirements"
+  },
+  
+  "reviewMinLength": "Review must be at least 10 characters long",
+  "@reviewMinLength": {
+    "description": "Review minimum length requirement"
+  },
+"firstNameLettersOnly":"First name can only contain letters",
+"@firstNameLettersOnly":{
+  "firstNameLettersOnly":"First name requirements"
+},
+  "lastNameLettersOnly":"Last name can only contain letters",
+"@lastNameLettersOnly":{
+  "lastNameLettersOnly":"Last name requirements"
+}
 }

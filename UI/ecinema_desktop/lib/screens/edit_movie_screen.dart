@@ -11,13 +11,14 @@ import 'package:ecinema_desktop/providers/actor_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:convert';
 
 class EditMovieScreen extends StatefulWidget {
-  Movie? movie;
-  EditMovieScreen({super.key, this.movie});
+  final Movie? movie;
+  const EditMovieScreen({super.key, this.movie});
 
   @override
   State<EditMovieScreen> createState() => _EditMovieScreenState();  
@@ -246,39 +247,77 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
                   child: Column(
                     children: [
                       FormBuilderTextField(
-                        decoration: InputDecoration(labelText: l10n.title),
                         name: 'title',
+                        decoration: InputDecoration(
+                          labelText: l10n.title,
+                          border: const OutlineInputBorder(),
+                        ),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(errorText: l10n.pleaseEnterMovieTitle),
+                          FormBuilderValidators.maxLength(200, errorText: l10n.movieTitleTooLong),
+                        ]),
                       ),
                       
                       SizedBox(height: 16),
                       
                       FormBuilderTextField(
-                        decoration: InputDecoration(labelText: l10n.description),
-                        name: "description",
+                        name: 'description',
+                        decoration: InputDecoration(
+                          labelText: l10n.description,
+                          border: const OutlineInputBorder(),
+                        ),
+                        maxLines: 3,
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(errorText: l10n.pleaseEnterMovieDescription),
+                          FormBuilderValidators.maxLength(1000, errorText: l10n.movieDescriptionTooLong),
+                        ]),
                       ),
                       
                       SizedBox(height: 16),
                       
                       FormBuilderTextField(
-                        decoration: InputDecoration(labelText: l10n.director),
                         name: 'director',
+                        decoration: InputDecoration(
+                          labelText: l10n.director,
+                          border: const OutlineInputBorder(),
+                        ),
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(errorText: l10n.pleaseEnterMovieDirector),
+                          FormBuilderValidators.maxLength(100, errorText: l10n.movieDirectorTooLong),
+                        ]),
                       ),
                       
                       SizedBox(height: 16),
                       
                       FormBuilderTextField(
-                        decoration: InputDecoration(labelText: l10n.durationMinutes),
                         name: 'durationMinutes',
+                        decoration: InputDecoration(
+                          labelText: l10n.durationMinutes,
+                          border: const OutlineInputBorder(),
+                          helperText: l10n.durationMinutesHelp,
+                        ),
                         keyboardType: TextInputType.number,
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(errorText: l10n.pleaseEnterMovieDuration),
+                          FormBuilderValidators.numeric(errorText: l10n.pleaseEnterValidNumber),
+                          FormBuilderValidators.min(1, errorText: l10n.movieDurationTooShort),
+                          FormBuilderValidators.max(600, errorText: l10n.movieDurationTooLong),
+                        ]),
                       ),
                       
                       SizedBox(height: 16),
                       
                       Row(children: [
                         Expanded(child: FormBuilderDateTimePicker(
-                          decoration: InputDecoration(labelText: l10n.releaseDate),
                           name: 'releaseDate',
+                          decoration: InputDecoration(
+                            labelText: l10n.releaseDate,
+                            border: const OutlineInputBorder(),
+                          ),
                           inputType: InputType.date,
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(errorText: l10n.pleaseEnterReleaseDate),
+                          ]),
                           onChanged: (value) {
                             if (value != null) {
                               setState(() {
@@ -293,6 +332,19 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
                           controller: _releaseYearController,
                           decoration: InputDecoration(labelText: l10n.releaseYear),
                           keyboardType: TextInputType.number,
+                          onChanged: (value) {
+                            final year = int.tryParse(value);
+                            if (year != null) {
+                              if (year < 1888 || year > DateTime.now().year + 10) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(l10n.invalidReleaseYear),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            }
+                          },
                         ))
                       ],),
                       
@@ -349,12 +401,25 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
             
             const SizedBox(height: 16),
             
-            Row(children: [
-              Expanded(child: FormBuilderTextField(
-                decoration: InputDecoration(labelText: l10n.trailerUrl),
-                name: 'trailerUrl',
-              )),
-            ],),
+                      Row(children: [
+                        Expanded(child: FormBuilderTextField(
+                          name: 'trailerUrl',
+                          decoration: InputDecoration(
+                            labelText: l10n.trailerUrl,
+                            border: const OutlineInputBorder(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return null; 
+                            }
+                            final uri = Uri.tryParse(value);
+                            if (uri == null || !uri.hasAbsolutePath) {
+                              return l10n.pleaseEnterValidUrl;
+                            }
+                            return null;
+                          },
+                        )),
+                      ],),
             
             const SizedBox(height: 16),
             
@@ -404,7 +469,29 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
           SizedBox(width: 16),
           ElevatedButton(
             onPressed:() async {
-                _formKey.currentState?.saveAndValidate();
+                if (!_formKey.currentState!.saveAndValidate()) {
+                  return;
+                }
+
+                if (_selectedGenres.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(l10n.pleaseSelectAtLeastOneGenre),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
+
+                if (_selectedActors.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(l10n.pleaseSelectAtLeastOneActor),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                  return;
+                }
                 
                 try {
                   var formData = Map<String, dynamic>.from(_formKey.currentState?.value ?? {});
@@ -417,7 +504,6 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
                     formData['actorIds'] = formData['actorIds'].map((id) => int.parse(id)).toList();
                   }
                   
-                  // Add selected genres and actors
                   formData['genreIds'] = _selectedGenres.map((g) => g.id).toList();
                   formData['actorIds'] = _selectedActors.map((a) => a.id).toList();
                   
@@ -429,12 +515,11 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
                     formData['releaseYear'] = int.parse(formData['releaseYear']);
                   }
                   
-                  // Add release year from controller
                   if (_releaseYearController.text.isNotEmpty) {
                     formData['releaseYear'] = int.parse(_releaseYearController.text);
                   }
                   
-                                    if (formData['releaseDate'] != null && formData['releaseDate'] is DateTime) {
+                  if (formData['releaseDate'] != null && formData['releaseDate'] is DateTime) {
                     formData['releaseDate'] = formData['releaseDate'].toIso8601String();
                   }
                   
@@ -446,8 +531,20 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
                   
                   if(widget.movie == null){
                     await movieProvider.insert(formData);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(l10n.movieCreatedSuccessfully),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
                   }else{
                     await movieProvider.update(widget.movie!.id!, formData);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(l10n.movieUpdatedSuccessfully),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
                   }
                   
                   Navigator.of(context).pop(true);

@@ -1642,5 +1642,38 @@
 
   "@reviewSubmittedSuccessfully": {
     "description": "Review submission success message"
+  },
+
+  "usernameFormat": "Korisničko ime mora imati 3-20 karaktera\ni može sadržavati samo slova, brojeve i donju crtu",
+  "@usernameFormat": {
+    "description": "Username format requirements"
+  },
+  
+  "passwordFormat": "Lozinka mora imati najmanje 6 karaktera",
+  "@passwordFormat": {
+    "description": "Password format requirements"
+  },
+  
+  "emailFormat": "Molimo unesite ispravnu email adresu",
+  "@emailFormat": {
+    "description": "Email format requirements"
+  },
+  
+  "phoneFormat": "Molimo unesite ispravan broj telefona (npr. +387 61 123 456)",
+  "@phoneFormat": {
+    "description": "Phone number format requirements"
+  },
+  
+  "reviewMinLength": "Recenzija mora imati najmanje 10 karaktera",
+  "@reviewMinLength": {
+    "description": "Review minimum length requirement"
+  },
+  "firstNameLettersOnly":"Ime može sadržavati samo slova",
+  "@firstNameLettersOnly":{
+    "firstNameLettersOnly":"First name requirements"
+  },
+   "lastNameLettersOnly":"Prezime može sadržavati samo slova",
+  "@lastNameLettersOnly":{
+    "lastNameLettersOnly":"Last name requirements"
   }
 } 

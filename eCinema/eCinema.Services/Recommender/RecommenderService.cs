@@ -27,6 +27,7 @@ namespace eCinema.Services.Recommender
                 .Include(m => m.Genres).ThenInclude(mg => mg.Genre)
                 .Include(m => m.Actors).ThenInclude(ma => ma.Actor)
                 .Where(m => !m.IsDeleted)
+                .Where(m => !m.IsComingSoon)
                 .ToList();
 
             var userReviews = Context.Reviews
@@ -113,7 +114,6 @@ namespace eCinema.Services.Recommender
                 IsDeleted = x.Movie.IsDeleted
             }).ToList();
 
-            Console.WriteLine("❤️RECOMMENDATIONS: " + recommendations.Count);
             return recommendations;
         }
 

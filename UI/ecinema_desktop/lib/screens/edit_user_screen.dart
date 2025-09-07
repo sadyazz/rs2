@@ -294,6 +294,8 @@ class _EditUserScreenState extends State<EditUserScreen> {
                                 ),
                                 validator: FormBuilderValidators.compose([
                                   FormBuilderValidators.required(errorText: l10n.pleaseEnterUsername),
+                                  FormBuilderValidators.minLength(3, errorText: l10n.usernameMinLength),
+                                  FormBuilderValidators.match(RegExp(r'^[a-zA-Z0-9_]+$'), errorText: l10n.usernameInvalid),
                                 ]),
                               ),
                             ),
@@ -304,7 +306,14 @@ class _EditUserScreenState extends State<EditUserScreen> {
                                 decoration: InputDecoration(
                                   labelText: l10n.phoneNumber,
                                   border: const OutlineInputBorder(),
+                                  helperText: l10n.phoneNumberFormat,
                                 ),
+                                validator: FormBuilderValidators.compose([
+                                  FormBuilderValidators.match(
+                                    RegExp(r'^\+?[\d\s-]+$'),
+                                    errorText: l10n.phoneNumberInvalid,
+                                  ),
+                                ]),
                               ),
                             ),
                           ],

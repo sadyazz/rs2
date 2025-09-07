@@ -6,7 +6,6 @@ import 'package:ecinema_desktop/screens/edit_screening_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
-import 'dart:ui';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ScreeningsListScreen extends StatefulWidget {
@@ -49,7 +48,6 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
   final TextEditingController _maxBasePriceController = TextEditingController();
   final TextEditingController _fromStartTimeController = TextEditingController();
   final TextEditingController _toStartTimeController = TextEditingController();
-  bool hasSubtitles = false;
   bool hasAvailableSeats = false;
   bool includeDeleted = false;
 
@@ -186,7 +184,6 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
            _maxBasePriceController.text.isNotEmpty ||
            _fromStartTimeController.text.isNotEmpty ||
            _toStartTimeController.text.isNotEmpty ||
-           hasSubtitles ||
            hasAvailableSeats;
   }
 
@@ -276,7 +273,6 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                 context: context,
                 builder: (context) {
                   bool localIncludeDeleted = includeDeleted;
-                  bool localHasSubtitles = hasSubtitles;
                   bool localHasAvailableSeats = hasAvailableSeats;
                   return StatefulBuilder(
                     builder: (context, setState) => AlertDialog(
@@ -451,24 +447,6 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                               Row(
                                 children: [
                                   Text(
-                                    l10n.hasSubtitles,
-                                    style: TextStyle(
-                                      color: Theme.of(context).colorScheme.onSurface,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Switch(
-                                    value: localHasSubtitles,
-                                    onChanged: (val) {
-                                      setState(() => localHasSubtitles = val);
-                                    },
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              Row(
-                                children: [
-                                  Text(
                                     l10n.hasAvailableSeats,
                                     style: TextStyle(
                                       color: Theme.of(context).colorScheme.onSurface,
@@ -518,10 +496,8 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                             _fromStartTimeController.clear();
                             _toStartTimeController.clear();
                             setState(() {
-                              localHasSubtitles = false;
                               localHasAvailableSeats = false;
                               localIncludeDeleted = false;
-                              hasSubtitles = false;
                               hasAvailableSeats = false;
                               includeDeleted = false;
                             });
@@ -535,7 +511,6 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                         ),
                         ElevatedButton(
                           onPressed: () async {
-                           hasSubtitles = localHasSubtitles;
                            hasAvailableSeats = localHasAvailableSeats;
                            includeDeleted = localIncludeDeleted;
                             await _searchScreenings(resetPage: true);
@@ -707,7 +682,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
     
     final totalCount = result!.totalCount ?? 0;
     final currentItems = result!.items != null ? result!.items!.length : 0;
-    final hasNextPage = totalCount > (currentPage + 1) * pageSize; // Updated logic
+    final hasNextPage = totalCount > (currentPage + 1) * pageSize; 
     final hasPreviousPage = currentPage > 0;
     final totalPages = (totalCount / pageSize).ceil();
     
