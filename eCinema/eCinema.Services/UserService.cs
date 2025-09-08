@@ -9,6 +9,7 @@ using eCinema.Services.RabbitMQ;
 using Microsoft.EntityFrameworkCore;
 using MapsterMapper;
 using System.Security.Cryptography;
+using System.Text;
 using eCinema.Services.Recommender;
 
 namespace eCinema.Services
@@ -17,9 +18,6 @@ namespace eCinema.Services
     {
         private readonly IRabbitMQService _rabbitMQService;
         private readonly IRecommenderService _recommenderService;
-        private const int SaltSize = 16;
-        private const int KeySize = 32;
-        private const int Iterations = 10000;
         
         public UserService(eCinemaDBContext context, IMapper mapper, IRabbitMQService rabbitMQService, IRecommenderService recommenderService) : base(context, mapper)
         {
@@ -48,15 +46,24 @@ namespace eCinema.Services
             return user != null ? MapToResponse(user) : null;
         }
 
-        private string HashPassword(string password, out byte[] salt)
+        public static string GenerateSalt()
         {
-            salt = new byte[SaltSize];
-            salt = RandomNumberGenerator.GetBytes(SaltSize);
+            var byteArray = RandomNumberGenerator.GetBytes(16);
+            return Convert.ToBase64String(byteArray);
+        }
 
-            using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, Iterations, HashAlgorithmName.SHA256))
-            {
-                return Convert.ToBase64String(pbkdf2.GetBytes(KeySize));
-            }
+        public static string GenerateHash(string salt, string password)
+        {
+            byte[] src = Convert.FromBase64String(salt);
+            byte[] bytes = Encoding.Unicode.GetBytes(password);
+            byte[] dst = new byte[src.Length + bytes.Length];
+
+            Buffer.BlockCopy(src, 0, dst, 0, src.Length);
+            Buffer.BlockCopy(bytes, 0, dst, src.Length, bytes.Length);
+
+            HashAlgorithm algorithm = HashAlgorithm.Create("SHA1");
+            byte[] inArray = algorithm.ComputeHash(dst);
+            return Convert.ToBase64String(inArray);
         }
 
         public override async Task<UserResponse> CreateAsync(UserUpsertRequest request)
@@ -84,9 +91,8 @@ namespace eCinema.Services
 
             if (!string.IsNullOrEmpty(request.Password))
             {
-                byte[] salt;
-                user.PasswordHash = HashPassword(request.Password, out salt);
-                user.PasswordSalt = Convert.ToBase64String(salt);
+                user.PasswordSalt = GenerateSalt();
+                user.PasswordHash = GenerateHash(user.PasswordSalt, request.Password);
             }
 
             _context.Users.Add(user);
@@ -219,7 +225,7 @@ namespace eCinema.Services
             if (user == null)
                 return null;
 
-            if (!VerifyPassword(request.Password!, user.PasswordHash, user.PasswordSalt))
+            if (!VerifyPassword(request.Password!, user.PasswordHash, user.PasswordSalt ?? ""))
                 return null;
 
             await _context.SaveChangesAsync();
@@ -239,10 +245,8 @@ namespace eCinema.Services
         {
             if (string.IsNullOrEmpty(passwordSalt)) return false;
             
-            var salt = Convert.FromBase64String(passwordSalt);
-            var hash = Convert.FromBase64String(passwordHash);
-            var hashBytes = new Rfc2898DeriveBytes(password, salt, Iterations, HashAlgorithmName.SHA256).GetBytes(KeySize);
-            return hash.SequenceEqual(hashBytes);
+            var hash = GenerateHash(passwordSalt, password);
+            return hash == passwordHash;
         }
 
         public async Task<UserResponse> RegisterAsync(UserUpsertRequest request)
@@ -279,9 +283,8 @@ namespace eCinema.Services
 
                 if (!string.IsNullOrEmpty(request.Password))
                 {
-                    byte[] salt;
-                    user.PasswordHash = HashPassword(request.Password, out salt);
-                    user.PasswordSalt = Convert.ToBase64String(salt);
+                    user.PasswordSalt = GenerateSalt();
+                    user.PasswordHash = GenerateHash(user.PasswordSalt, request.Password);
                 }
 
                 try 
@@ -339,12 +342,11 @@ namespace eCinema.Services
             if (user == null)
                 throw new InvalidOperationException("User not found");
 
-            if (!VerifyPassword(currentPassword, user.PasswordHash, user.PasswordSalt))
+            if (!VerifyPassword(currentPassword, user.PasswordHash, user.PasswordSalt ?? ""))
                 return false;
 
-            byte[] salt;
-            user.PasswordHash = HashPassword(newPassword, out salt);
-            user.PasswordSalt = Convert.ToBase64String(salt);
+            user.PasswordSalt = GenerateSalt();
+            user.PasswordHash = GenerateHash(user.PasswordSalt, newPassword);
 
             await _context.SaveChangesAsync();
             return true;

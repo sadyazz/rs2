@@ -1011,8 +1011,8 @@ namespace eCinema.Services.Database
                 LastName = "User",
                 Username = "admin",
                 Email = "admin@ecinema.com",
-                PasswordHash = "J5qnG1xNtwotwXcoIJBDmmKs8ZiiQOzvLcargw5ZV+4=",
-                PasswordSalt = "FV4HsweUjkWW7Fc6zXVdJA==",
+                PasswordHash = "6aafooVevEFJA8eLDuWSq2hoP0g=",
+                PasswordSalt = "6jBPoTLjZaYRbw8HyTMkQw==",
                 CreatedAt = new DateTime(2025, 1, 1),
                 RoleId = 1,
                 IsDeleted = false
@@ -1024,8 +1024,8 @@ namespace eCinema.Services.Database
                 LastName = "One",
                 Username = "user1",
                 Email = "user1@ecinema.com",
-                PasswordHash = "J5qnG1xNtwotwXcoIJBDmmKs8ZiiQOzvLcargw5ZV+4=",
-                PasswordSalt = "FV4HsweUjkWW7Fc6zXVdJA==",
+                PasswordHash = "6aafooVevEFJA8eLDuWSq2hoP0g=",
+                PasswordSalt = "6jBPoTLjZaYRbw8HyTMkQw==",
                 CreatedAt = new DateTime(2025, 1, 1),
                 RoleId = 2,
                 IsDeleted = false
@@ -1037,8 +1037,8 @@ namespace eCinema.Services.Database
                 LastName = "Two",
                 Username = "user2",
                 Email = "user2@ecinema.com",
-                PasswordHash = "J5qnG1xNtwotwXcoIJBDmmKs8ZiiQOzvLcargw5ZV+4=",
-                PasswordSalt = "FV4HsweUjkWW7Fc6zXVdJA==",
+                PasswordHash = "6aafooVevEFJA8eLDuWSq2hoP0g=",
+                PasswordSalt = "6jBPoTLjZaYRbw8HyTMkQw==",
                 CreatedAt = new DateTime(2025, 1, 1),
                 RoleId = 2,
                 IsDeleted = false
@@ -1050,8 +1050,8 @@ namespace eCinema.Services.Database
                 LastName = "User",
                 Username = "staff",
                 Email = "staff@ecinema.com",
-                PasswordHash = "J5qnG1xNtwotwXcoIJBDmmKs8ZiiQOzvLcargw5ZV+4=",
-                PasswordSalt = "FV4HsweUjkWW7Fc6zXVdJA==",
+                PasswordHash = "6aafooVevEFJA8eLDuWSq2hoP0g=",
+                PasswordSalt = "6jBPoTLjZaYRbw8HyTMkQw==",
                 CreatedAt = new DateTime(2025, 1, 1),
                 RoleId = 3,
                 IsDeleted = false
