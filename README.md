@@ -2,14 +2,14 @@
 
 Nakon kloniranja repozitorija uraditi sljedeće:
 
-Otvoriti rs2/eCinema u terminalu i pokrenuti komandu: docker-compose up –build
-Extractovati: fit-build-2025-09-08-desktop
-Pokrenuti ecinema_desktop.exe koji se nalazi u folderu "Release"
-Unijeti desktop kredencijale koji se mogu pronaći u ovom readme-u
-Prije pokretanja mobilne aplikacije pobrinuti se da aplikacija već ne postoji na android emulatoru, ukoliko postoji, uraditi deinstalaciju iste
-Extractovati: fit-build-2025-09-08-mobile
-Nakon extractovanja, prevući apk fajl koji se nalazi u folderu "flutter-apk" u emulator i sačekati da se aplikacija instalira
-Nakon što je aplikacija instalirana, pokrenuti je i unijet
+- Otvoriti rs2/eCinema u terminalu i pokrenuti komandu: docker-compose up –build
+- Extractovati: fit-build-2025-09-08-desktop
+- Pokrenuti ecinema_desktop.exe koji se nalazi u folderu "Release"
+- Unijeti desktop kredencijale koji se mogu pronaći u ovom readme-u
+- Prije pokretanja mobilne aplikacije pobrinuti se da aplikacija već ne postoji na android emulatoru, ukoliko postoji, uraditi deinstalaciju iste
+- Extractovati: fit-build-2025-09-08-mobile
+- Nakon extractovanja, prevući apk fajl koji se nalazi u folderu "flutter-apk" u emulator i sačekati da se aplikacija instalira
+- Nakon što je aplikacija instalirana, pokrenuti je i unijet
 
 ## Napomene
 
