@@ -6,54 +6,25 @@ using Newtonsoft.Json;
 using eCinema.Subscriber;
 using DotNetEnv;
 
-Env.Load(".env");
+Env.Load();
 
 Console.WriteLine("Sleeping to wait for RabbitMQ...");
 Task.Delay(10000).Wait();
 
+Task.Delay(1000).Wait();
 Console.WriteLine("Connecting to RabbitMQ...");
 
-var hostname = Environment.GetEnvironmentVariable("_rabbitMqHost") ?? "localhost";
+var hostname = Environment.GetEnvironmentVariable("_rabbitMqHost") ?? "rabbitmq";
 var username = Environment.GetEnvironmentVariable("_rabbitMqUser") ?? "guest";
 var password = Environment.GetEnvironmentVariable("_rabbitMqPassword") ?? "guest";
 var port = int.Parse(Environment.GetEnvironmentVariable("_rabbitMqPort") ?? "5672");
 
-var factory = new ConnectionFactory 
-{ 
-    HostName = hostname, 
-    UserName = username, 
-    Password = password, 
-    Port = port,
-    RequestedHeartbeat = TimeSpan.FromSeconds(60),
-    AutomaticRecoveryEnabled = true
-};
+ConnectionFactory factory = new ConnectionFactory() { HostName = hostname, Port = port };
+factory.UserName = username;
+factory.Password = password;
 
-int retryCount = 0;
-const int maxRetries = 5;
-IConnection connection = null;
-IModel channel = null;
-
-while (retryCount < maxRetries)
-{
-    try
-    {
-        connection = factory.CreateConnection();
-        channel = connection.CreateModel();
-        Console.WriteLine("Successfully connected to RabbitMQ");
-        break;
-    }
-    catch (Exception ex)
-    {
-        retryCount++;
-        if (retryCount == maxRetries)
-        {
-            Console.WriteLine($"Failed to connect to RabbitMQ after {maxRetries} attempts. Error: {ex.Message}");
-            throw;
-        }
-        Console.WriteLine($"Failed to connect to RabbitMQ. Attempt {retryCount} of {maxRetries}. Retrying in 5 seconds...");
-        Thread.Sleep(5000);
-    }
-}
+IConnection connection = factory.CreateConnection();
+IModel channel = connection.CreateModel();
 
 channel.QueueDeclare(
     queue: "mail_sending",

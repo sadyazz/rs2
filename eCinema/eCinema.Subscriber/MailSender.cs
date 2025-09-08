@@ -1,6 +1,7 @@
 using MailKit.Net.Smtp;
 using MimeKit;
 using MailKit.Security;
+using System.Collections;
 
 namespace eCinema.Subscriber
 {
@@ -74,10 +75,27 @@ namespace eCinema.Subscriber
 
                 using (var client = new SmtpClient())
                 {
-                    var smtpHost = Environment.GetEnvironmentVariable("SMTP_HOST") ?? "smtp.gmail.com";
-                    var smtpPort = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT") ?? "587");
-                    var emailUsername = Environment.GetEnvironmentVariable("EMAIL_USERNAME");
-                    var emailPassword = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
+                    var smtpHost = Environment.GetEnvironmentVariable("_host") ?? "smtp.gmail.com";
+                    var smtpPort = int.Parse(Environment.GetEnvironmentVariable("_port") ?? "587");
+                    var emailUsername = Environment.GetEnvironmentVariable("_fromAddress");
+                    var emailPassword = Environment.GetEnvironmentVariable("_password");
+
+                    Console.WriteLine($"Email Config - Host: {smtpHost}, Port: {smtpPort}");
+                    Console.WriteLine($"Email Username: {emailUsername}");
+                    Console.WriteLine("Environment Variables:");
+                    foreach (DictionaryEntry env in Environment.GetEnvironmentVariables())
+                    {
+                        Console.WriteLine($"{env.Key} = {env.Value}");
+                    }
+
+                    if (string.IsNullOrEmpty(emailUsername))
+                    {
+                        throw new Exception("Email username (_fromAddress) is not set in environment variables");
+                    }
+                    if (string.IsNullOrEmpty(emailPassword))
+                    {
+                        throw new Exception("Email password (_password) is not set in environment variables");
+                    }
 
                     client.Connect(smtpHost, smtpPort, MailKit.Security.SecureSocketOptions.StartTls);
                     client.Authenticate(emailUsername, emailPassword);

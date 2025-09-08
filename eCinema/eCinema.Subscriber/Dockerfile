@@ -1,10 +1,18 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
+WORKDIR /src
 
-COPY *.csproj ./
-RUN dotnet restore
+# Copy solution and project files
+COPY ["eCinema.Subscriber/eCinema.Subscriber.csproj", "eCinema.Subscriber/"]
+COPY ["eCinema.Model/eCinema.Model.csproj", "eCinema.Model/"]
 
-COPY . ./
+# Restore NuGet packages
+RUN dotnet restore "eCinema.Subscriber/eCinema.Subscriber.csproj"
+
+# Copy everything else
+COPY . .
+
+# Build the project
+WORKDIR "/src/eCinema.Subscriber"
 RUN dotnet build "eCinema.Subscriber.csproj" -c Release -o /app/build
 
 FROM mcr.microsoft.com/dotnet/runtime:8.0 AS runtime
