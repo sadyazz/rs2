@@ -6,6 +6,7 @@ services:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=${_saPassword}
       - MSSQL_PID=Developer
+      
     ports:
       - "1433:1433"
     expose: 

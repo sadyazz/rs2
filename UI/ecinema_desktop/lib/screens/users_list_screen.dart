@@ -4,7 +4,7 @@ import 'package:ecinema_desktop/models/search_result.dart';
 import 'package:ecinema_desktop/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ecinema_desktop/l10n/app_localizations.dart';
 import 'edit_user_screen.dart';
 import '../providers/utils.dart';
 

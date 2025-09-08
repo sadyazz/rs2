@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/reservation.dart';
 import '../layouts/master_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ecinema_mobile/l10n/app_localizations.dart';
 import 'dart:convert';
 import 'user_reservations_screen.dart';
 

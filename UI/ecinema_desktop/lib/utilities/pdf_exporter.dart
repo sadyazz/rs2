@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import '../models/ticket_sales.dart';
 import '../models/revenue.dart';
 import '../models/screening_attendance.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ecinema_desktop/l10n/app_localizations.dart';
 
 class PdfExporter {
   static Future<String> exportToPDF(

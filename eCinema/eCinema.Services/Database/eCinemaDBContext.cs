@@ -1031,8 +1031,8 @@ public static class ModelBuilderExtensions
                 LastName = "One",
                 Username = "user1",
                 Email = "user1@ecinema.com",
-                PasswordHash = "z3SQwuxT1mJShft0WfgG9dQAVB70J0am1CjhOChydKs=",
-                PasswordSalt = "2hoymazAFiAH50iQ/cSRQA==",
+                PasswordHash = "6EqP+3jBodPH1qKpQDCsf+2BUV5iJqY5NDC+rWpfFKw=",
+                PasswordSalt = "bw7nttYe6MqZzgQhTB1LXQ==",
                 CreatedAt = new DateTime(2025, 1, 1),
                 RoleId = 2,
                 IsDeleted = false

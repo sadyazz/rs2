@@ -6,7 +6,7 @@ import 'package:ecinema_desktop/screens/edit_screening_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ecinema_desktop/l10n/app_localizations.dart';
 
 class ScreeningsListScreen extends StatefulWidget {
   const ScreeningsListScreen({super.key});

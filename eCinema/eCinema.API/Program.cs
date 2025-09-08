@@ -99,9 +99,8 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
-    var dbContext = services.GetRequiredService<eCinemaDBContext>();
-    dbContext.Database.EnsureCreated();
+    var datacontext = scope.ServiceProvider.GetRequiredService<eCinemaDBContext>();
+    datacontext.Database.Migrate();
 }
 
 if (app.Environment.IsDevelopment())

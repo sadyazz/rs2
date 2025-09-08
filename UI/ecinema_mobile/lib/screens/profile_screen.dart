@@ -1,6 +1,6 @@
 import 'package:ecinema_mobile/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ecinema_mobile/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../providers/utils.dart';
 import '../providers/auth_provider.dart';

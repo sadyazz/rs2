@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ecinema_mobile/l10n/app_localizations.dart';
 import '../screens/home_screen.dart';
 import '../screens/notifications_screen.dart';
 import '../screens/profile_screen.dart';

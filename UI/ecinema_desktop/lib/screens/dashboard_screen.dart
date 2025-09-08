@@ -1,6 +1,6 @@
 import 'package:ecinema_desktop/layouts/master_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ecinema_desktop/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../providers/dashboard_provider.dart';
 import '../providers/movie_provider.dart';

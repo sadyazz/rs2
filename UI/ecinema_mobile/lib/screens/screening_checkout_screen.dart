@@ -5,7 +5,7 @@ import '../screens/reservation_qr_code_screen.dart';
 import '../providers/reservation_provider.dart';
 import '../providers/payment_provider.dart';
 import '../providers/promotion_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ecinema_mobile/l10n/app_localizations.dart';
 
 class ScreeningCheckoutScreen extends StatefulWidget {
   final Screening screening;

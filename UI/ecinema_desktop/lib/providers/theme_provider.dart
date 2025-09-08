@@ -55,7 +55,7 @@ class ThemeProvider with ChangeNotifier {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         filled: true,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 8,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
@@ -82,7 +82,7 @@ class ThemeProvider with ChangeNotifier {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         filled: true,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 8,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
