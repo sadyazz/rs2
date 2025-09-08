@@ -9,21 +9,53 @@ using DotNetEnv;
 Env.Load();
 
 Console.WriteLine("Sleeping to wait for RabbitMQ...");
-Task.Delay(10000).Wait();
-
-Task.Delay(1000).Wait();
-Console.WriteLine("Connecting to RabbitMQ...");
+Task.Delay(15000).Wait();
 
 var hostname = Environment.GetEnvironmentVariable("_rabbitMqHost") ?? "rabbitmq";
 var username = Environment.GetEnvironmentVariable("_rabbitMqUser") ?? "guest";
 var password = Environment.GetEnvironmentVariable("_rabbitMqPassword") ?? "guest";
 var port = int.Parse(Environment.GetEnvironmentVariable("_rabbitMqPort") ?? "5672");
 
-ConnectionFactory factory = new ConnectionFactory() { HostName = hostname, Port = port };
-factory.UserName = username;
-factory.Password = password;
+Console.WriteLine($"Connecting to RabbitMQ at {hostname}:{port}...");
 
-IConnection connection = factory.CreateConnection();
+IConnection connection = null;
+int maxRetries = 10;
+int retryCount = 0;
+
+while (connection == null && retryCount < maxRetries)
+{
+    try
+    {
+        ConnectionFactory factory = new ConnectionFactory() 
+        { 
+            HostName = hostname, 
+            Port = port,
+            UserName = username,
+            Password = password,
+            RequestedConnectionTimeout = TimeSpan.FromSeconds(30),
+            RequestedHeartbeat = TimeSpan.FromSeconds(60)
+        };
+        
+        connection = factory.CreateConnection();
+        Console.WriteLine("Successfully connected to RabbitMQ!");
+    }
+    catch (Exception ex)
+    {
+        retryCount++;
+        Console.WriteLine($"Failed to connect to RabbitMQ (attempt {retryCount}/{maxRetries}): {ex.Message}");
+        
+        if (retryCount < maxRetries)
+        {
+            Console.WriteLine($"Retrying in 5 seconds...");
+            Task.Delay(5000).Wait();
+        }
+        else
+        {
+            Console.WriteLine("Max retries reached. Exiting...");
+            Environment.Exit(1);
+        }
+    }
+}
 IModel channel = connection.CreateModel();
 
 channel.QueueDeclare(
