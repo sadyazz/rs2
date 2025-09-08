@@ -9,7 +9,6 @@ Nakon kloniranja repozitorija uraditi sljedeće:
 - Prije pokretanja mobilne aplikacije pobrinuti se da aplikacija već ne postoji na android emulatoru, ukoliko postoji, uraditi deinstalaciju iste
 - Extractovati: fit-build-2025-09-08-mobile
 - Nakon extractovanja, prevući apk fajl koji se nalazi u folderu "flutter-apk" u emulator i sačekati da se aplikacija instalira
-- Nakon što je aplikacija instalirana, pokrenuti je i unijet
 
 ## Napomene
 
