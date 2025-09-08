@@ -259,20 +259,20 @@ class _LoginPageState extends State<LoginPage> {
                             },
                           ),
                           const SizedBox(height: 8),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: () {
-                                // TODO: Implement forgot password
-                              },
-                              child: Text(
-                                l10n.forgotPassword,
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                            ),
-                          ),
+                          // Align(
+                          //   alignment: Alignment.centerRight,
+                          //   child: TextButton(
+                          //     onPressed: () {
+                          //       // TODO: Implement forgot password
+                          //     },
+                          //     child: Text(
+                          //       l10n.forgotPassword,
+                          //       style: TextStyle(
+                          //         color: Theme.of(context).colorScheme.primary,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                           if (_errorMessage != null) ...[Row(
                                 children: [
                                   Icon( 

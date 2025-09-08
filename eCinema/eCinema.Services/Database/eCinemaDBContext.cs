@@ -215,8 +215,8 @@ namespace eCinema.Services.Database
                 .Property(s => s.BasePrice)
                 .HasColumnType("decimal(10, 2)");
 
-            // Roles
-            modelBuilder.Entity<Role>().HasData(
+        // Roles
+        modelBuilder.Entity<Role>().HasData(
             new Role { Id = 1, Name = "admin" },
             new Role { Id = 2, Name = "user" },
             new Role { Id = 3, Name = "staff" }
