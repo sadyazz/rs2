@@ -12,7 +12,7 @@ services:
     expose: 
       - "1433"
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P ${_saPassword} -Q 'SELECT 1' || exit 1"]
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P ${_saPassword} -C -Q 'SELECT 1' || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 10

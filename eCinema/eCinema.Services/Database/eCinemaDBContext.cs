@@ -214,16 +214,9 @@ namespace eCinema.Services.Database
             modelBuilder.Entity<Screening>()
                 .Property(s => s.BasePrice)
                 .HasColumnType("decimal(10, 2)");
-        }
-    }
-}
 
-public static class ModelBuilderExtensions
-{
-    public static void Seed(this ModelBuilder modelBuilder)
-    {
-        // Roles
-        modelBuilder.Entity<Role>().HasData(
+            // Roles
+            modelBuilder.Entity<Role>().HasData(
             new Role { Id = 1, Name = "admin" },
             new Role { Id = 2, Name = "user" },
             new Role { Id = 3, Name = "staff" }
@@ -1018,8 +1011,8 @@ public static class ModelBuilderExtensions
                 LastName = "User",
                 Username = "admin",
                 Email = "admin@ecinema.com",
-                PasswordHash = "6EqP+3jBodPH1qKpQDCsf+2BUV5iJqY5NDC+rWpfFKw=",
-                PasswordSalt = "bw7nttYe6MqZzgQhTB1LXQ==",
+                PasswordHash = "J5qnG1xNtwotwXcoIJBDmmKs8ZiiQOzvLcargw5ZV+4=",
+                PasswordSalt = "FV4HsweUjkWW7Fc6zXVdJA==",
                 CreatedAt = new DateTime(2025, 1, 1),
                 RoleId = 1,
                 IsDeleted = false
@@ -1031,8 +1024,8 @@ public static class ModelBuilderExtensions
                 LastName = "One",
                 Username = "user1",
                 Email = "user1@ecinema.com",
-                PasswordHash = "6EqP+3jBodPH1qKpQDCsf+2BUV5iJqY5NDC+rWpfFKw=",
-                PasswordSalt = "bw7nttYe6MqZzgQhTB1LXQ==",
+                PasswordHash = "J5qnG1xNtwotwXcoIJBDmmKs8ZiiQOzvLcargw5ZV+4=",
+                PasswordSalt = "FV4HsweUjkWW7Fc6zXVdJA==",
                 CreatedAt = new DateTime(2025, 1, 1),
                 RoleId = 2,
                 IsDeleted = false
@@ -1044,8 +1037,8 @@ public static class ModelBuilderExtensions
                 LastName = "Two",
                 Username = "user2",
                 Email = "user2@ecinema.com",
-                PasswordHash = "6EqP+3jBodPH1qKpQDCsf+2BUV5iJqY5NDC+rWpfFKw=",
-                PasswordSalt = "bw7nttYe6MqZzgQhTB1LXQ==",
+                PasswordHash = "J5qnG1xNtwotwXcoIJBDmmKs8ZiiQOzvLcargw5ZV+4=",
+                PasswordSalt = "FV4HsweUjkWW7Fc6zXVdJA==",
                 CreatedAt = new DateTime(2025, 1, 1),
                 RoleId = 2,
                 IsDeleted = false
@@ -1057,12 +1050,13 @@ public static class ModelBuilderExtensions
                 LastName = "User",
                 Username = "staff",
                 Email = "staff@ecinema.com",
-                PasswordHash = "6EqP+3jBodPH1qKpQDCsf+2BUV5iJqY5NDC+rWpfFKw=",
-                PasswordSalt = "bw7nttYe6MqZzgQhTB1LXQ==",
+                PasswordHash = "J5qnG1xNtwotwXcoIJBDmmKs8ZiiQOzvLcargw5ZV+4=",
+                PasswordSalt = "FV4HsweUjkWW7Fc6zXVdJA==",
                 CreatedAt = new DateTime(2025, 1, 1),
                 RoleId = 3,
                 IsDeleted = false
             }
         );
+        }
     }
 }
