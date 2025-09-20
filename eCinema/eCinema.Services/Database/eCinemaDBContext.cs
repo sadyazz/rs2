@@ -918,7 +918,150 @@ namespace eCinema.Services.Database
             // new ReservationSeat { ReservationId = 203, SeatId = 13, ReservedAt = new DateTime(2025, 9, 14, 12, 0, 0) }
         );
 
-        // Screenings
+        // // Screenings
+        // modelBuilder.Entity<Screening>().HasData(
+        //     // Past screenings (for reviews)
+        //     new Screening
+        //     {
+        //         Id = 1,
+        //         StartTime = new DateTime(2025, 9, 8, 16, 0, 0),
+        //         EndTime = new DateTime(2025, 9, 8, 18, 0, 0),
+        //         BasePrice = 5.00m,
+        //         Language = "English",
+        //         HasSubtitles = false,
+        //         IsDeleted = false,
+        //         MovieId = 4,
+        //         HallId = 3,
+        //         ScreeningFormatId = 1
+        //     },
+        //     new Screening
+        //     {
+        //         Id = 2,
+        //         StartTime = new DateTime(2025, 9, 8, 17, 0, 0),
+        //         EndTime = new DateTime(2025, 9, 8, 18, 0, 0),
+        //         BasePrice = 5.00m,
+        //         Language = "English",
+        //         HasSubtitles = false,
+        //         IsDeleted = false,
+        //         MovieId = 3,
+        //         HallId = 3,
+        //         ScreeningFormatId = 2
+        //     },
+        //     new Screening
+        //     {
+        //         Id = 3,
+        //         StartTime = new DateTime(2025, 9, 8, 18, 20, 0),
+        //         EndTime = new DateTime(2025, 9, 8, 20, 0, 0),
+        //         BasePrice = 10.00m,
+        //         Language = "English",
+        //         HasSubtitles = false,
+        //         IsDeleted = false,
+        //         MovieId = 5,
+        //         HallId = 3,
+        //         ScreeningFormatId = 1
+        //     },
+        //     // Future screenings
+        //     new Screening
+        //     {
+        //         Id = 4,
+        //         StartTime = new DateTime(2025, 10, 8, 19, 0, 0),
+        //         EndTime = new DateTime(2025, 9, 8, 21, 0, 0),
+        //         BasePrice = 5.00m,
+        //         Language = "English",
+        //         HasSubtitles = false,
+        //         IsDeleted = false,
+        //         MovieId = 5,
+        //         HallId = 5,
+        //         ScreeningFormatId = 4
+        //     },
+        //     new Screening
+        //     {
+        //         Id = 5,
+        //         StartTime = new DateTime(2025, 9, 30, 12, 0, 0),
+        //         EndTime = new DateTime(2025, 9, 30, 14, 0, 0),
+        //         BasePrice = 3.00m,
+        //         Language = "English",
+        //         HasSubtitles = true,
+        //         IsDeleted = false,
+        //         MovieId = 4,
+        //         HallId = 2,
+        //         ScreeningFormatId = 2
+        //     },
+        //     new Screening
+        //     {
+        //         Id = 6,
+        //         StartTime = new DateTime(2025, 9, 29, 13, 0, 0),
+        //         EndTime = new DateTime(2025, 9, 29, 15, 0, 0),
+        //         BasePrice = 5.00m,
+        //         Language = "English",
+        //         HasSubtitles = false,
+        //         IsDeleted = false,
+        //         MovieId = 3,
+        //         HallId = 4,
+        //         ScreeningFormatId = 1
+        //     }
+        // );
+
+        // var password = "stringst";
+        // var salt = UserService.GenerateSalt();
+        // var hash = UserService.GenerateHash(salt, password);
+
+        // // Users
+        // modelBuilder.Entity<User>().HasData(
+        //     new User
+        //     {
+        //         Id = 1,
+        //         FirstName = "Admin",
+        //         LastName = "User",
+        //         Username = "admin",
+        //         Email = "admin@ecinema.com",
+        //         PasswordHash = hash,
+        //         PasswordSalt = salt,
+        //         CreatedAt = new DateTime(2025, 1, 1),
+        //         RoleId = 1,
+        //         IsDeleted = false
+        //     },
+        //     new User
+        //     {
+        //         Id = 2,
+        //         FirstName = "User",
+        //         LastName = "One",
+        //         Username = "user1",
+        //         Email = "user1@ecinema.com",
+        //         PasswordHash = hash,
+        //         PasswordSalt = salt,
+        //         CreatedAt = new DateTime(2025, 1, 1),
+        //         RoleId = 2,
+        //         IsDeleted = false
+        //     },
+        //     new User
+        //     {
+        //         Id = 3,
+        //         FirstName = "User",
+        //         LastName = "Two",
+        //         Username = "user2",
+        //         Email = "user2@ecinema.com",
+        //         PasswordHash = hash,
+        //         PasswordSalt = salt,
+        //         CreatedAt = new DateTime(2025, 1, 1),
+        //         RoleId = 2,
+        //         IsDeleted = false
+        //     },
+        //     new User
+        //     {
+        //         Id = 4,
+        //         FirstName = "Staff",
+        //         LastName = "User",
+        //         Username = "staff",
+        //         Email = "staff@ecinema.com",
+        //         PasswordHash = hash,
+        //         PasswordSalt = salt,
+        //         CreatedAt = new DateTime(2025, 1, 1),
+        //         RoleId = 3,
+        //         IsDeleted = false
+        //     }
+        // );
+                // Screenings
         modelBuilder.Entity<Screening>().HasData(
             // Past screenings (for reviews)
             new Screening
@@ -1002,6 +1145,25 @@ namespace eCinema.Services.Database
             }
         );
 
+        // ScreeningSeats
+        // For each screening, link all 48 seats
+        var screeningSeats = new List<ScreeningSeat>();
+        for (int i = 1; i <= 6; i++) // For each screening
+        {
+            for (int j = 1; j <= 48; j++) // For each seat
+            {
+                screeningSeats.Add(new ScreeningSeat { ScreeningId = i, SeatId = j, IsReserved = false });
+            }
+        }
+        modelBuilder.Entity<ScreeningSeat>().HasData(screeningSeats);
+
+        // ReservationSeats
+              
+
+        var password = "stringst";
+        var salt = UserService.GenerateSalt();
+        var hash = UserService.GenerateHash(salt, password);
+
         // Users
         modelBuilder.Entity<User>().HasData(
             new User
@@ -1011,8 +1173,8 @@ namespace eCinema.Services.Database
                 LastName = "User",
                 Username = "admin",
                 Email = "admin@ecinema.com",
-                PasswordHash = "6aafooVevEFJA8eLDuWSq2hoP0g=",
-                PasswordSalt = "6jBPoTLjZaYRbw8HyTMkQw==",
+                PasswordHash = hash,
+                PasswordSalt = salt,
                 CreatedAt = new DateTime(2025, 1, 1),
                 RoleId = 1,
                 IsDeleted = false
@@ -1024,8 +1186,8 @@ namespace eCinema.Services.Database
                 LastName = "One",
                 Username = "user1",
                 Email = "user1@ecinema.com",
-                PasswordHash = "6aafooVevEFJA8eLDuWSq2hoP0g=",
-                PasswordSalt = "6jBPoTLjZaYRbw8HyTMkQw==",
+                PasswordHash = hash,
+                PasswordSalt = salt,
                 CreatedAt = new DateTime(2025, 1, 1),
                 RoleId = 2,
                 IsDeleted = false
@@ -1037,8 +1199,8 @@ namespace eCinema.Services.Database
                 LastName = "Two",
                 Username = "user2",
                 Email = "user2@ecinema.com",
-                PasswordHash = "6aafooVevEFJA8eLDuWSq2hoP0g=",
-                PasswordSalt = "6jBPoTLjZaYRbw8HyTMkQw==",
+                PasswordHash = hash,
+                PasswordSalt = salt,
                 CreatedAt = new DateTime(2025, 1, 1),
                 RoleId = 2,
                 IsDeleted = false
@@ -1050,8 +1212,8 @@ namespace eCinema.Services.Database
                 LastName = "User",
                 Username = "staff",
                 Email = "staff@ecinema.com",
-                PasswordHash = "6aafooVevEFJA8eLDuWSq2hoP0g=",
-                PasswordSalt = "6jBPoTLjZaYRbw8HyTMkQw==",
+                PasswordHash = hash,
+                PasswordSalt = salt,
                 CreatedAt = new DateTime(2025, 1, 1),
                 RoleId = 3,
                 IsDeleted = false

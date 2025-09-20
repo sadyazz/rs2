@@ -67,6 +67,8 @@ services:
       - _displayName=${_displayName}
       - _timeout=${_timeout}
       - _port=${_port}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}     
+      - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY} 
     ports:
       - "5190:5190"
     networks:

@@ -7,6 +7,6 @@ namespace eCinema.Services
     public interface IPaymentService
     {
         Task<PaymentIntent> CreatePaymentIntentAsync(int amount);
-        StripePayment ProcessStripePayment(string paymentIntentId, decimal amount);
+        Task<StripePayment> ProcessStripePayment(string paymentIntentId, decimal amount);
     }
 }

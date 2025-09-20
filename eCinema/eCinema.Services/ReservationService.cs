@@ -151,7 +151,7 @@ namespace eCinema.Services
 
             try
             {
-                var payment = _paymentService.ProcessStripePayment(paymentIntentId, amount);
+                var payment = await _paymentService.ProcessStripePayment(paymentIntentId, amount);
 
                 var request = new ReservationUpsertRequest
                 {

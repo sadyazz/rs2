@@ -18,12 +18,12 @@ namespace eCinema.Services
             _context = context;
         }
 
-        public StripePayment ProcessStripePayment(string paymentIntentId, decimal amount)
+        public async Task<StripePayment> ProcessStripePayment(string paymentIntentId, decimal amount)
         {
             try
             {
                 var service = new PaymentIntentService();
-                var paymentIntent = service.Get(paymentIntentId);
+                var paymentIntent = await service.GetAsync(paymentIntentId);
                 
                 switch (paymentIntent.Status)
                 {
@@ -52,6 +52,7 @@ namespace eCinema.Services
                 };
 
                 _context.StripePayments.Add(payment);
+                await _context.SaveChangesAsync();
 
                 return payment;
             }

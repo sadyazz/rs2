@@ -88,7 +88,7 @@ class PromotionDetailsScreen extends StatelessWidget {
               const SizedBox(height: 24),
                              if (promotion.description != null && promotion.description!.isNotEmpty) ...[
                  Text(
-                   'Opis',
+                   l10n.description,
                    style: TextStyle(
                      fontSize: 18,
                      fontWeight: FontWeight.bold,

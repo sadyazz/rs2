@@ -105,7 +105,7 @@ class _StaffHomeScreenState extends State<StaffHomeScreen> {
       
       if (reservationId == null) {
         if (mounted) {
-          _showErrorBottomSheet(context, 'Invalid QR code format - could not find reservation ID');
+          _showErrorBottomSheet(context, 'Invalid QR code format - could not find reservation');
         }
         return;
       }

@@ -12,8 +12,8 @@ using eCinema.Services.Database;
 namespace eCinema.Services.Migrations
 {
     [DbContext(typeof(eCinemaDBContext))]
-    [Migration("20250908181028_InitialMigrationWithSeedData")]
-    partial class InitialMigrationWithSeedData
+    [Migration("20250915162904_AddScreeningSeatsAndFixReservations")]
+    partial class AddScreeningSeatsAndFixReservations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1299,6 +1299,1736 @@ namespace eCinema.Services.Migrations
                     b.HasIndex("SeatId");
 
                     b.ToTable("ScreeningSeats");
+
+                    b.HasData(
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 1,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 2,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 3,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 4,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 5,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 6,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 7,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 8,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 9,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 10,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 11,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 12,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 13,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 14,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 15,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 16,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 17,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 18,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 19,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 20,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 21,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 22,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 23,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 24,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 25,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 26,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 27,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 28,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 29,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 30,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 31,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 32,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 33,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 34,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 35,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 36,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 37,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 38,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 39,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 40,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 41,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 42,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 43,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 44,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 45,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 46,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 47,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 1,
+                            SeatId = 48,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 1,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 2,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 3,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 4,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 5,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 6,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 7,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 8,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 9,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 10,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 11,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 12,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 13,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 14,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 15,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 16,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 17,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 18,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 19,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 20,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 21,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 22,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 23,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 24,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 25,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 26,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 27,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 28,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 29,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 30,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 31,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 32,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 33,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 34,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 35,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 36,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 37,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 38,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 39,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 40,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 41,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 42,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 43,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 44,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 45,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 46,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 47,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 2,
+                            SeatId = 48,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 1,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 2,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 3,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 4,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 5,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 6,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 7,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 8,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 9,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 10,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 11,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 12,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 13,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 14,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 15,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 16,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 17,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 18,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 19,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 20,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 21,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 22,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 23,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 24,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 25,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 26,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 27,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 28,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 29,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 30,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 31,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 32,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 33,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 34,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 35,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 36,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 37,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 38,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 39,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 40,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 41,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 42,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 43,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 44,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 45,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 46,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 47,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 3,
+                            SeatId = 48,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 1,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 2,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 3,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 4,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 5,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 6,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 7,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 8,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 9,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 10,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 11,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 12,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 13,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 14,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 15,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 16,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 17,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 18,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 19,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 20,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 21,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 22,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 23,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 24,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 25,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 26,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 27,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 28,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 29,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 30,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 31,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 32,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 33,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 34,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 35,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 36,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 37,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 38,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 39,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 40,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 41,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 42,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 43,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 44,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 45,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 46,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 47,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 4,
+                            SeatId = 48,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 1,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 2,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 3,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 4,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 5,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 6,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 7,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 8,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 9,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 10,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 11,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 12,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 13,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 14,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 15,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 16,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 17,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 18,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 19,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 20,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 21,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 22,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 23,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 24,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 25,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 26,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 27,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 28,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 29,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 30,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 31,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 32,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 33,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 34,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 35,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 36,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 37,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 38,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 39,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 40,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 41,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 42,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 43,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 44,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 45,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 46,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 47,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 5,
+                            SeatId = 48,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 1,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 2,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 3,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 4,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 5,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 6,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 7,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 8,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 9,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 10,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 11,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 12,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 13,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 14,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 15,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 16,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 17,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 18,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 19,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 20,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 21,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 22,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 23,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 24,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 25,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 26,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 27,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 28,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 29,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 30,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 31,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 32,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 33,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 34,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 35,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 36,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 37,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 38,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 39,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 40,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 41,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 42,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 43,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 44,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 45,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 46,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 47,
+                            IsReserved = false
+                        },
+                        new
+                        {
+                            ScreeningId = 6,
+                            SeatId = 48,
+                            IsReserved = false
+                        });
                 });
 
             modelBuilder.Entity("eCinema.Services.Database.Entities.Seat", b =>
@@ -1667,8 +3397,8 @@ namespace eCinema.Services.Migrations
                             FirstName = "Admin",
                             IsDeleted = false,
                             LastName = "User",
-                            PasswordHash = "6EqP+3jBodPH1qKpQDCsf+2BUV5iJqY5NDC+rWpfFKw=",
-                            PasswordSalt = "bw7nttYe6MqZzgQhTB1LXQ==",
+                            PasswordHash = "HTZLMGli8ZJmCZNlSaApOMiSfZ4=",
+                            PasswordSalt = "NAxiIL0cy7CRZemVCT00Zw==",
                             ReceiveNotifications = true,
                             RoleId = 1,
                             Username = "admin"
@@ -1681,8 +3411,8 @@ namespace eCinema.Services.Migrations
                             FirstName = "User",
                             IsDeleted = false,
                             LastName = "One",
-                            PasswordHash = "6EqP+3jBodPH1qKpQDCsf+2BUV5iJqY5NDC+rWpfFKw=",
-                            PasswordSalt = "bw7nttYe6MqZzgQhTB1LXQ==",
+                            PasswordHash = "HTZLMGli8ZJmCZNlSaApOMiSfZ4=",
+                            PasswordSalt = "NAxiIL0cy7CRZemVCT00Zw==",
                             ReceiveNotifications = true,
                             RoleId = 2,
                             Username = "user1"
@@ -1695,8 +3425,8 @@ namespace eCinema.Services.Migrations
                             FirstName = "User",
                             IsDeleted = false,
                             LastName = "Two",
-                            PasswordHash = "6EqP+3jBodPH1qKpQDCsf+2BUV5iJqY5NDC+rWpfFKw=",
-                            PasswordSalt = "bw7nttYe6MqZzgQhTB1LXQ==",
+                            PasswordHash = "HTZLMGli8ZJmCZNlSaApOMiSfZ4=",
+                            PasswordSalt = "NAxiIL0cy7CRZemVCT00Zw==",
                             ReceiveNotifications = true,
                             RoleId = 2,
                             Username = "user2"
@@ -1709,8 +3439,8 @@ namespace eCinema.Services.Migrations
                             FirstName = "Staff",
                             IsDeleted = false,
                             LastName = "User",
-                            PasswordHash = "6EqP+3jBodPH1qKpQDCsf+2BUV5iJqY5NDC+rWpfFKw=",
-                            PasswordSalt = "bw7nttYe6MqZzgQhTB1LXQ==",
+                            PasswordHash = "HTZLMGli8ZJmCZNlSaApOMiSfZ4=",
+                            PasswordSalt = "NAxiIL0cy7CRZemVCT00Zw==",
                             ReceiveNotifications = true,
                             RoleId = 3,
                             Username = "staff"
