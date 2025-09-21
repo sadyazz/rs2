@@ -486,7 +486,7 @@
   },
   "releaseDate": "Release Date",
   "@releaseDate": {
-    "description": "Release date label"
+    "description": "Release date field label"
   },
   "releaseYear": "Release Year",
   "@releaseYear": {
@@ -494,11 +494,11 @@
   },
   "genres": "Genres",
   "@genres": {
-    "description": "Genres label"
+    "description": "Genres field label"
   },
   "actors": "Actors",
   "@actors": {
-    "description": "Actors label"
+    "description": "Actors field label"
   },
   "trailer": "Trailer",
   "@trailer": {
@@ -889,9 +889,6 @@
     }
   },
   "delete": "Delete",
-  "@delete": {
-    "description": "Delete button text"
-  },
   "restore": "Restore",
   "@restore": {
     "description": "Restore button text"
@@ -1590,9 +1587,21 @@
   "allTime": "All time",
   "@allTime": {"description": "All time subtitle"},
   "welcomeToECinema": "Welcome to eCinema Management System",
-  "@welcomeToECinema": {"description": "Dashboard welcome message"},
+  "@welcomeToECinema": {
+    "description": "Dashboard welcome message"
+  },
+  "moviePoster": "Movie Poster",
+  "@moviePoster": {
+    "description": "Movie poster section title"
+  },
+  "selectMovie": "Select movie",
+  "@selectMovie": {
+    "description": "Text to prompt user to select movie image"
+  },
   "heresWhatHappening": "Here's what's happening with your cinema today",
-  "@heresWhatHappening": {"description": "Dashboard subtitle"},
+  "@heresWhatHappening": {
+    "description": "Dashboard subtitle"
+  },
   "spoiler": "Spoiler",
   "@spoiler": {"description": "Spoiler label"},
   "markAsSpoiler": "Mark as Spoiler",
@@ -2404,5 +2413,44 @@
   "phoneNumberFormat": "Format: +123 45 678 910",
   "@phoneNumberFormat": {
     "description": "Phone number format help text"
+  },
+  "cancel": "Cancel",
+  "confirmDeletionTitle": "Confirm Deletion",
+  "confirmDeleteSeatMessage": "Are you sure you want to delete the seat \"{seatName}\"? This will remove the seat from all existing screenings.",
+  "@confirmDeleteSeatMessage": {
+    "placeholders": {
+      "seatName": {}
+    }
+  },
+  "deleteButtonLabel": "Delete",
+  "cancelButtonLabel": "Cancel",
+  "seatLayout": "Seat Layout",
+  "@seatLayout": {
+    "description": "Seat layout section title"
+  },
+  "searchPlaceholder": "Search {label}...",
+  "@searchPlaceholder": {
+    "description": "Search placeholder text for various fields",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "searchGenresPlaceholder": "Search genres...",
+  "@searchGenresPlaceholder": {
+    "description": "Search placeholder text for genres"
+  },
+  "searchActorsPlaceholder": "Search actors...",
+  "@searchActorsPlaceholder": {
+    "description": "Search placeholder text for actors"
+  },
+  "searchButtonLabel": "Search",
+  "@searchButtonLabel": {
+    "description": "Search button label"
+  },
+  "noScreeningsToday": "No screenings today",
+  "@noScreeningsToday": {
+    "description": "Message shown when there are no screenings today"
   }
 }

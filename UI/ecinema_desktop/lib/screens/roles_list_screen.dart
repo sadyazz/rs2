@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ecinema_desktop/l10n/app_localizations.dart';
 import 'edit_role_screen.dart';
+import 'dart:async';
 
 class RolesListScreen extends StatefulWidget {
   const RolesListScreen({super.key});
@@ -27,8 +28,29 @@ class _RolesListScreenState extends State<RolesListScreen> {
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(_onSearchChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadRoles();
+    });
+  }
+
+  @override
+  void dispose() {
+    _mounted = false;
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    _debounceTimer?.cancel();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      if (_searchController.text.isEmpty) {
+        _loadRoles();
+      } else {
+        _searchRoles();
+      }
     });
   }
 
@@ -39,6 +61,8 @@ class _RolesListScreenState extends State<RolesListScreen> {
 
   final TextEditingController _searchController = TextEditingController();
   bool includeDeleted = false;
+  
+  Timer? _debounceTimer;
 
   Future<void> _loadRoles() async {
     try {
@@ -657,10 +681,4 @@ class _RolesListScreenState extends State<RolesListScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    _mounted = false;
-    _searchController.dispose();
-    super.dispose();
-  }
 }

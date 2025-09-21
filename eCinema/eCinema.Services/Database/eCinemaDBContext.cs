@@ -553,7 +553,7 @@ namespace eCinema.Services.Database
             new Promotion
             {
                 Id = 3,
-                Name = "eCinema Summer Promotion",
+                Name = "Summer Promotion",
                 Description = "50% off",
                 Code = "50",
                 DiscountPercentage = 50,

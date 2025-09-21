@@ -565,7 +565,7 @@ namespace eCinema.Services.Migrations
                 values: new object[,]
                 {
                     { 2, "899", "Welcoming all our new users with a 20% discount on their first purchase.", 20m, new DateTime(2025, 10, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "New user promotion", new DateTime(2025, 9, 4, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 3, "50", "50% off", 50m, new DateTime(2025, 10, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "eCinema Summer Promotion", new DateTime(2025, 9, 5, 0, 0, 0, 670, DateTimeKind.Unspecified) },
+                    { 3, "50", "50% off", 50m, new DateTime(2025, 10, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), false, "Summer Promotion", new DateTime(2025, 9, 5, 0, 0, 0, 670, DateTimeKind.Unspecified) },
                     { 4, "SEP5", "5% discount on all tickets in September.", 5m, new DateTime(2025, 9, 30, 23, 59, 59, 0, DateTimeKind.Unspecified), false, "September Sale", new DateTime(2025, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 

@@ -8,6 +8,7 @@ import 'package:ecinema_desktop/screens/edit_movie_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ecinema_desktop/l10n/app_localizations.dart';
+import 'dart:async';
 
 class MoviesListScreen extends StatefulWidget {
   const MoviesListScreen({super.key});
@@ -28,8 +29,35 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(_onSearchChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadMovies();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    _directorController.dispose();
+    _genresController.dispose();
+    _minDurationController.dispose();
+    _maxDurationController.dispose();
+    _minGradeController.dispose();
+    _maxGradeController.dispose();
+    _releaseYearController.dispose();
+    _debounceTimer?.cancel();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      if (_searchController.text.isEmpty) {
+        _loadMovies();
+      } else {
+        _searchMovies();
+      }
     });
   }
 
@@ -48,6 +76,8 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   final TextEditingController _releaseYearController = TextEditingController();
   bool includeDeleted = false;
   bool isComingSoon = false;
+  
+  Timer? _debounceTimer;
 
   Future<void> _loadMovies() async {
     try {

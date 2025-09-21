@@ -533,7 +533,7 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
               const SizedBox(height: 16),
               
               Text(
-                'Seat Layout',
+                l10n.seatLayout,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),

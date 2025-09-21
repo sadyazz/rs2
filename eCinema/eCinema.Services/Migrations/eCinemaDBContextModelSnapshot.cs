@@ -807,7 +807,7 @@ namespace eCinema.Services.Migrations
                             DiscountPercentage = 50m,
                             EndDate = new DateTime(2025, 10, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDeleted = false,
-                            Name = "eCinema Summer Promotion",
+                            Name = "Summer Promotion",
                             StartDate = new DateTime(2025, 9, 5, 0, 0, 0, 670, DateTimeKind.Unspecified)
                         },
                         new

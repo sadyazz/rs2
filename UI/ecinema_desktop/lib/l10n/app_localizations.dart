@@ -2672,6 +2672,18 @@ abstract class AppLocalizations {
   /// **'Welcome to eCinema Management System'**
   String get welcomeToECinema;
 
+  /// Movie poster section title
+  ///
+  /// In en, this message translates to:
+  /// **'Movie Poster'**
+  String get moviePoster;
+
+  /// Text to prompt user to select movie image
+  ///
+  /// In en, this message translates to:
+  /// **'Select movie'**
+  String get selectMovie;
+
   /// Dashboard subtitle
   ///
   /// In en, this message translates to:
@@ -3517,6 +3529,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Format: +123 45 678 910'**
   String get phoneNumberFormat;
+
+  /// No description provided for @confirmDeletionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Deletion'**
+  String get confirmDeletionTitle;
+
+  /// No description provided for @confirmDeleteSeatMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the seat \"{seatName}\"? This will remove the seat from all existing screenings.'**
+  String confirmDeleteSeatMessage(Object seatName);
+
+  /// No description provided for @deleteButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteButtonLabel;
+
+  /// No description provided for @cancelButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelButtonLabel;
+
+  /// Seat layout section title
+  ///
+  /// In en, this message translates to:
+  /// **'Seat Layout'**
+  String get seatLayout;
+
+  /// Search placeholder text for various fields
+  ///
+  /// In en, this message translates to:
+  /// **'Search {label}...'**
+  String searchPlaceholder(String label);
+
+  /// Search placeholder text for genres
+  ///
+  /// In en, this message translates to:
+  /// **'Search genres...'**
+  String get searchGenresPlaceholder;
+
+  /// Search placeholder text for actors
+  ///
+  /// In en, this message translates to:
+  /// **'Search actors...'**
+  String get searchActorsPlaceholder;
+
+  /// Search button label
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchButtonLabel;
+
+  /// Message shown when there are no screenings today
+  ///
+  /// In en, this message translates to:
+  /// **'No screenings today'**
+  String get noScreeningsToday;
 }
 
 class _AppLocalizationsDelegate

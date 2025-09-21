@@ -6,6 +6,7 @@ import 'package:ecinema_desktop/screens/edit_screening_format_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ecinema_desktop/l10n/app_localizations.dart';
+import 'dart:async';
 
 class ScreeningFormatsListScreen extends StatefulWidget {
   const ScreeningFormatsListScreen({super.key});
@@ -26,8 +27,28 @@ class _ScreeningFormatsListScreenState extends State<ScreeningFormatsListScreen>
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(_onSearchChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadScreeningFormats();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    _debounceTimer?.cancel();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      if (_searchController.text.isEmpty) {
+        _loadScreeningFormats();
+      } else {
+        _searchScreeningFormats();
+      }
     });
   }
 
@@ -38,6 +59,8 @@ class _ScreeningFormatsListScreenState extends State<ScreeningFormatsListScreen>
 
   final TextEditingController _searchController = TextEditingController();
   bool includeDeleted = false;
+  
+  Timer? _debounceTimer;
 
   Future<void> _loadScreeningFormats() async {
     try {

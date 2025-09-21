@@ -166,7 +166,7 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              'Movie Poster',
+                              l10n.moviePoster,
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 color: Theme.of(context).colorScheme.primary,
@@ -221,7 +221,7 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
                                                 ),
                                                 const SizedBox(height: 8),
                                                 Text(
-                                                  'Select movie',
+                                                  l10n.selectMovie,
                                                   style: TextStyle(
                                                     color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                                                     fontSize: 14,
@@ -358,7 +358,7 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
             SizedBox(height: 24),
             
             _buildSearchableDropdown(
-              label: l10n.genre,
+              label: l10n.genres,
               items: genresResult?.items ?? [],
               selectedItems: _selectedGenres,
               onItemSelected: (genre) {
@@ -380,7 +380,7 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
             
             Row(children: [
               Expanded(child: _buildSearchableDropdown(
-                label: l10n.actor,
+                label: l10n.actors,
                 items: actorsResult?.items ?? [],
                 selectedItems: _selectedActors,
                 onItemSelected: (actor) {
@@ -591,10 +591,10 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
         ),
         const SizedBox(height: 8),
         TextField(
-          controller: label == l10n.genre ? _genreSearchController : _actorSearchController,
+          controller: label == l10n.genres ? _genreSearchController : _actorSearchController,
           decoration: InputDecoration(
             labelText: label,
-            hintText: 'Search ${label.toLowerCase()}...',
+            hintText: label == l10n.genres ? l10n.searchGenresPlaceholder : l10n.searchActorsPlaceholder,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -614,7 +614,7 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
             setState(() {});
           },
         ),
-        if ((label == l10n.genre ? _genreSearchController.text : _actorSearchController.text).isNotEmpty)
+        if ((label == l10n.genres ? _genreSearchController.text : _actorSearchController.text).isNotEmpty)
           Container(
             margin: const EdgeInsets.only(top: 4),
             decoration: BoxDecoration(
@@ -627,13 +627,13 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
               shrinkWrap: true,
               itemCount: items.where((item) => 
                 itemToString(item).toLowerCase().contains(
-                  (label == l10n.genre ? _genreSearchController.text : _actorSearchController.text).toLowerCase()
+                  (label == l10n.genres ? _genreSearchController.text : _actorSearchController.text).toLowerCase()
                 )
               ).length,
               itemBuilder: (context, index) {
                 final filteredItems = items.where((item) => 
                   itemToString(item).toLowerCase().contains(
-                    (label == l10n.genre ? _genreSearchController.text : _actorSearchController.text).toLowerCase()
+                    (label == l10n.genres ? _genreSearchController.text : _actorSearchController.text).toLowerCase()
                   )
                 ).toList();
                 final item = filteredItems[index];
@@ -648,7 +648,7 @@ class _EditMovieScreenState extends State<EditMovieScreen> {
                     } else {
                       onItemSelected(item);
                     }
-                    if (label == l10n.genre) {
+                    if (label == l10n.genres) {
                       _genreSearchController.clear();
                     } else {
                       _actorSearchController.clear();

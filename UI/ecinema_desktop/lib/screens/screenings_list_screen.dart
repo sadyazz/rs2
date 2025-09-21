@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:ecinema_desktop/l10n/app_localizations.dart';
+import 'dart:async';
 
 class ScreeningsListScreen extends StatefulWidget {
   const ScreeningsListScreen({super.key});
@@ -29,8 +30,36 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
     super.initState();
     final now = DateTime.now();
     _fromStartTimeController.text = now.toIso8601String();
+    _searchController.addListener(_onSearchChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadScreenings();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    _movieTitleController.dispose();
+    _hallNameController.dispose();
+    _screeningFormatNameController.dispose();
+    _languageController.dispose();
+    _minBasePriceController.dispose();
+    _maxBasePriceController.dispose();
+    _fromStartTimeController.dispose();
+    _toStartTimeController.dispose();
+    _debounceTimer?.cancel();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      if (_searchController.text.isEmpty) {
+        _loadScreenings();
+      } else {
+        _searchScreenings(resetPage: true);
+      }
     });
   }
 
@@ -50,6 +79,8 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
   final TextEditingController _toStartTimeController = TextEditingController();
   bool hasAvailableSeats = false;
   bool includeDeleted = false;
+  
+  Timer? _debounceTimer;
 
   Future<void> _loadScreenings() async {
     try {

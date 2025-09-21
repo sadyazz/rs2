@@ -347,7 +347,7 @@
   "@edited": {
     "description": "Text shown when a review has been edited"
   },
-  "cancel": "Otkaži",
+  "cancel": "Poništi",
   "@cancel": {
     "description": "Cancel button text"
   },
@@ -483,15 +483,19 @@
   },
   "releaseDate": "Datum izlaska",
   "@releaseDate": {
-    "description": "Release date label"
+    "description": "Release date field label"
+  },
+  "releaseYear": "Godina izlaska",
+  "@releaseYear": {
+    "description": "Release year field label"
   },
   "genres": "Žanrovi",
   "@genres": {
-    "description": "Genres label"
+    "description": "Genres field label"
   },
   "actors": "Glumci",
   "@actors": {
-    "description": "Actors label"
+    "description": "Actors field label"
   },
   "trailer": "Trejler",
   "@trailer": {
@@ -1496,9 +1500,21 @@
   "allTime": "Sve vrijeme",
   "@allTime": {"description": "All time subtitle"},
   "welcomeToECinema": "Dobrodošli u eCinema Management System",
-  "@welcomeToECinema": {"description": "Dashboard welcome message"},
+  "@welcomeToECinema": {
+    "description": "Dashboard welcome message"
+  },
+  "moviePoster": "Poster filma",
+  "@moviePoster": {
+    "description": "Movie poster section title"
+  },
+  "selectMovie": "Odaberite film",
+  "@selectMovie": {
+    "description": "Text to prompt user to select movie image"
+  },
   "heresWhatHappening": "Evo šta se dešava sa vašim bioskopom danas",
-  "@heresWhatHappening": {"description": "Dashboard subtitle"},
+  "@heresWhatHappening": {
+    "description": "Dashboard subtitle"
+  },
   "spoiler": "Spoiler",
   "@spoiler": {"description": "Spoiler label"},
   "markAsSpoiler": "Označi kao spoiler",
@@ -1687,7 +1703,7 @@
   "@deleteRole": {
     "description": "Delete role button text"
   },
-  "cancel": "Otkaži",
+  "cancel": "Poništi",
   "@cancel": {
     "description": "Cancel button text"
   },
@@ -2261,5 +2277,43 @@
   "phoneNumberFormat": "Format: +123 45 678 910",
   "@phoneNumberFormat": {
     "description": "Phone number format help text"
+  },
+  "confirmDeletionTitle": "Potvrdi brisanje",
+  "confirmDeleteSeatMessage": "Jeste li sigurni da želite obrisati sjedalo \"{seatName}\"? Ovo će ukloniti sjedalo sa svih postojećih projekcija.",
+  "@confirmDeleteSeatMessage": {
+    "placeholders": {
+      "seatName": {}
+    }
+  },
+  "deleteButtonLabel": "Obriši",
+  "cancelButtonLabel": "Poništi",
+  "seatLayout": "Raspored sjedišta",
+  "@seatLayout": {
+    "description": "Seat layout section title"
+  },
+  "searchPlaceholder": "Pretraži {label}...",
+  "@searchPlaceholder": {
+    "description": "Search placeholder text for various fields",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "searchGenresPlaceholder": "Pretraži žanrove...",
+  "@searchGenresPlaceholder": {
+    "description": "Search placeholder text for genres"
+  },
+  "searchActorsPlaceholder": "Pretraži glumce...",
+  "@searchActorsPlaceholder": {
+    "description": "Search placeholder text for actors"
+  },
+  "searchButtonLabel": "Pretraži",
+  "@searchButtonLabel": {
+    "description": "Search button label"
+  },
+  "noScreeningsToday": "Nema projekcija danas",
+  "@noScreeningsToday": {
+    "description": "Message shown when there are no screenings today"
   }
 }

@@ -7,6 +7,7 @@ import '../providers/utils.dart';
 import '../models/movie.dart';
 import '../models/search_result.dart';
 import 'movie_details_screen.dart';
+import 'dart:async';
 
 class MoviesListScreen extends StatefulWidget {
   const MoviesListScreen({super.key});
@@ -22,10 +23,13 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
   int currentPage = 0;
   int pageSize = 8;
   int? selectedGenreId = null;
+  
+  Timer? _debounceTimer;
 
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(_onSearchChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadGenres();
       _loadMovies();
@@ -34,8 +38,21 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
 
   @override
   void dispose() {
+    _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
+  }
+
+  void _onSearchChanged() {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      if (_searchController.text.isEmpty) {
+        _loadMovies();
+      } else {
+        _searchMovies();
+      }
+    });
   }
 
   Future<void> _loadGenres() async {
@@ -217,9 +234,6 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
           color: colorScheme.onSurface,
           fontSize: 16,
         ),
-        onSubmitted: (value) {
-          _searchMovies();
-        },
       ),
     );
   }

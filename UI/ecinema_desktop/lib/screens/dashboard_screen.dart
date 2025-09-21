@@ -312,10 +312,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Consumer<DashboardProvider>(
       builder: (context, dashboardProvider, child) {
         final todayScreenings = dashboardProvider.todayScreenings;
-        if (todayScreenings == null || todayScreenings.isEmpty) {
-          return const SizedBox.shrink();
-        }
-
+        
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -327,21 +324,52 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: todayScreenings.length,
-              itemBuilder: (context, index) {
-                final screening = todayScreenings[index];
-                return _buildActivityItem(
-                  icon: Icons.movie_outlined,
-                  title: screening.movieTitle ?? l10n.unknownMovie,
-                  subtitle: '${screening.startTime?.hour.toString().padLeft(2, '0')}:${screening.startTime?.minute.toString().padLeft(2, '0')} - ${screening.hallName ?? l10n.unknownHall}',
-                  color: Colors.purple.shade200,
-                  badge: '${screening.availableSeats ?? 0} seats',
-                );
-              },
-            ),
+            if (todayScreenings == null || todayScreenings.isEmpty)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.movie_outlined,
+                      size: 48,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      l10n.noScreeningsToday,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.7),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            else
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: todayScreenings.length,
+                itemBuilder: (context, index) {
+                  final screening = todayScreenings[index];
+                  return _buildActivityItem(
+                    icon: Icons.movie_outlined,
+                    title: screening.movieTitle ?? l10n.unknownMovie,
+                    subtitle: '${screening.startTime?.hour.toString().padLeft(2, '0')}:${screening.startTime?.minute.toString().padLeft(2, '0')} - ${screening.hallName ?? l10n.unknownHall}',
+                    color: Colors.purple.shade200,
+                    badge: '${screening.availableSeats ?? 0} seats',
+                  );
+                },
+              ),
           ],
         );
       },

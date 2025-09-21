@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:ecinema_desktop/l10n/app_localizations.dart';
 import 'edit_user_screen.dart';
 import '../providers/utils.dart';
+import 'dart:async';
 
 class UsersListScreen extends StatefulWidget {
   const UsersListScreen({super.key});
@@ -26,15 +27,30 @@ class _UsersListScreenState extends State<UsersListScreen> {
 
   @override
   void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
     _roleNameController.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(_onSearchChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadUsers();
+    });
+  }
+
+  void _onSearchChanged() {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      if (_searchController.text.isEmpty) {
+        _loadUsers();
+      } else {
+        _searchUsers();
+      }
     });
   }
 
@@ -46,6 +62,8 @@ class _UsersListScreenState extends State<UsersListScreen> {
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _roleNameController = TextEditingController();
   bool includeDeleted = false;
+  
+  Timer? _debounceTimer;
 
   Future<void> _loadUsers() async {
     try {

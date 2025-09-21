@@ -267,7 +267,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get edited => '(uređeno)';
 
   @override
-  String get cancel => 'Otkaži';
+  String get cancel => 'Poništi';
 
   @override
   String get logoutConfirmation => 'Da li ste sigurni da se želite odjaviti?';
@@ -1366,6 +1366,12 @@ class AppLocalizationsBs extends AppLocalizations {
   String get welcomeToECinema => 'Dobrodošli u eCinema Management System';
 
   @override
+  String get moviePoster => 'Poster filma';
+
+  @override
+  String get selectMovie => 'Odaberite film';
+
+  @override
   String get heresWhatHappening => 'Evo šta se dešava sa vašim bioskopom danas';
 
   @override
@@ -1824,4 +1830,38 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get phoneNumberFormat => 'Format: +123 45 678 910';
+
+  @override
+  String get confirmDeletionTitle => 'Potvrdi brisanje';
+
+  @override
+  String confirmDeleteSeatMessage(Object seatName) {
+    return 'Jeste li sigurni da želite obrisati sjedalo \"$seatName\"? Ovo će ukloniti sjedalo sa svih postojećih projekcija.';
+  }
+
+  @override
+  String get deleteButtonLabel => 'Obriši';
+
+  @override
+  String get cancelButtonLabel => 'Poništi';
+
+  @override
+  String get seatLayout => 'Raspored sjedišta';
+
+  @override
+  String searchPlaceholder(String label) {
+    return 'Pretraži $label...';
+  }
+
+  @override
+  String get searchGenresPlaceholder => 'Pretraži žanrove...';
+
+  @override
+  String get searchActorsPlaceholder => 'Pretraži glumce...';
+
+  @override
+  String get searchButtonLabel => 'Pretraži';
+
+  @override
+  String get noScreeningsToday => 'Nema projekcija danas';
 }

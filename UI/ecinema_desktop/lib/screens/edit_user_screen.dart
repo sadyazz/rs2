@@ -306,7 +306,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
                                 decoration: InputDecoration(
                                   labelText: l10n.phoneNumber,
                                   border: const OutlineInputBorder(),
-                                  helperText: l10n.phoneNumberFormat,
+                                  hintText: l10n.phoneNumberFormat,
                                 ),
                                 validator: FormBuilderValidators.compose([
                                   FormBuilderValidators.match(

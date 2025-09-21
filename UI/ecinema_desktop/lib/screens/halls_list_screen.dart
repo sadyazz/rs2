@@ -6,6 +6,7 @@ import 'package:ecinema_desktop/screens/edit_hall_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ecinema_desktop/l10n/app_localizations.dart';
+import 'dart:async';
 
 class HallsListScreen extends StatefulWidget {
   const HallsListScreen({super.key});
@@ -26,8 +27,28 @@ class _HallsListScreenState extends State<HallsListScreen> {
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(_onSearchChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadHalls();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    _debounceTimer?.cancel();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      if (_searchController.text.isEmpty) {
+        _loadHalls();
+      } else {
+        _searchHalls();
+      }
     });
   }
 
@@ -38,6 +59,8 @@ class _HallsListScreenState extends State<HallsListScreen> {
 
   final TextEditingController _searchController = TextEditingController();
   bool includeDeleted = false;
+  
+  Timer? _debounceTimer;
 
   Future<void> _loadHalls() async {
     try {

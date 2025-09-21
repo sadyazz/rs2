@@ -78,7 +78,7 @@ class _SeatsManagementScreenState extends State<SeatsManagementScreen> {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            'Seat Layout',
+                            l10n.seatLayout,
                             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
@@ -106,12 +106,6 @@ class _SeatsManagementScreenState extends State<SeatsManagementScreen> {
                             onPressed: _generateAllSeats,
                             icon: const Icon(Icons.refresh),
                             label: Text(l10n.regenerateAll),
-                          ),
-                          const SizedBox(width: 16),
-                          ElevatedButton.icon(
-                            onPressed: () => _showAddSeatDialog(l10n),
-                            icon: const Icon(Icons.add),
-                            label: Text(l10n.addSeat),
                           ),
                         ],
                       ),
@@ -147,6 +141,7 @@ class _SeatsManagementScreenState extends State<SeatsManagementScreen> {
         return Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
                 width: 30,
@@ -227,105 +222,12 @@ class _SeatsManagementScreenState extends State<SeatsManagementScreen> {
     }
   }
 
-  void _showAddSeatDialog(AppLocalizations l10n) {
-    if (_seats.length >= 48) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.maxSeatsReached),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.addSeat),
-        content: TextField(
-          decoration: InputDecoration(
-            labelText: l10n.seatName,
-            hintText: l10n.seatNameFormat,
-          ),
-          onSubmitted: (value) async {
-            if (_validateSeatName(value)) {
-              try {
-                await _seatProvider.insert(SeatUpsertRequest(name: value));
-                if (mounted) {
-                  Navigator.pop(context);
-                  await _loadSeats();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(l10n.seatAddedSuccessfully),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                }
-              } catch (e) {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(l10n.failedToAddSeat),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                }
-              }
-            }
-          },
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.add),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showEditSeatDialog(Seat seat) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(AppLocalizations.of(context)!.editSeat),
-        content: TextField(
-          decoration: InputDecoration(
-            labelText: AppLocalizations.of(context)!.seatName,
-            hintText: AppLocalizations.of(context)!.seatNameFormat,
-          ),
-          controller: TextEditingController(text: seat.name),
-          onSubmitted: (value) async {
-            if (_validateSeatName(value, excludeSeatId: seat.id)) {
-              try {
-                await _seatProvider.update(seat.id!, SeatUpsertRequest(name: value));
-                if (mounted) {
-                  Navigator.pop(context);
-                  await _loadSeats();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(AppLocalizations.of(context)!.seatUpdatedSuccessfully),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                }
-              } catch (e) {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(AppLocalizations.of(context)!.failedToUpdateSeat),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                }
-              }
-            }
-          },
-        ),
+        content: Text('${AppLocalizations.of(context)!.seatName}: ${seat.name}'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -333,35 +235,52 @@ class _SeatsManagementScreenState extends State<SeatsManagementScreen> {
           ),
           TextButton(
             onPressed: () async {
-              try {
-                await _seatProvider.delete(seat.id!);
-                if (mounted) {
-                  Navigator.pop(context);
-                  await _loadSeats();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(AppLocalizations.of(context)!.seatDeletedSuccessfully),
-                      backgroundColor: Colors.green,
+              final confirmDelete = await showDialog<bool>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text(AppLocalizations.of(context)!.confirmDeletionTitle),
+                  content: Text(AppLocalizations.of(context)!.confirmDeleteSeatMessage(seat.name ?? '')),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      child: Text(AppLocalizations.of(context)!.cancel),
                     ),
-                  );
-                }
-              } catch (e) {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(AppLocalizations.of(context)!.failedToDeleteSeat),
-                      backgroundColor: Colors.red,
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      child: Text(AppLocalizations.of(context)!.deleteButtonLabel),
+                      style: TextButton.styleFrom(foregroundColor: Colors.red),
                     ),
-                  );
+                  ],
+                ),
+              );
+
+              if (confirmDelete == true) {
+                try {
+                  await _seatProvider.delete(seat.id!);
+                  if (mounted) {
+                    Navigator.pop(context); // Pop the edit dialog
+                    await _loadSeats();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(AppLocalizations.of(context)!.seatDeletedSuccessfully),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(AppLocalizations.of(context)!.failedToDeleteSeat),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
                 }
               }
             },
-            child: Text(AppLocalizations.of(context)!.delete),
+            child: Text(AppLocalizations.of(context)!.deleteButtonLabel),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(AppLocalizations.of(context)!.update),
           ),
         ],
       ),

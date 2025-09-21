@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ecinema_desktop/l10n/app_localizations.dart';
 import 'edit_genre_screen.dart';
+import 'dart:async';
 
 class GenresListScreen extends StatefulWidget {
   const GenresListScreen({super.key});
@@ -26,8 +27,28 @@ class _GenresListScreenState extends State<GenresListScreen> {
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(_onSearchChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadGenres();
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    _debounceTimer?.cancel();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      if (_searchController.text.isEmpty) {
+        _loadGenres();
+      } else {
+        _searchGenres();
+      }
     });
   }
 
@@ -38,6 +59,8 @@ class _GenresListScreenState extends State<GenresListScreen> {
 
   final TextEditingController _searchController = TextEditingController();
   bool includeDeleted = false;
+  
+  Timer? _debounceTimer;
 
   Future<void> _loadGenres() async {
     try {

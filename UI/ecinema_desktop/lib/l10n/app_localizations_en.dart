@@ -1363,6 +1363,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeToECinema => 'Welcome to eCinema Management System';
 
   @override
+  String get moviePoster => 'Movie Poster';
+
+  @override
+  String get selectMovie => 'Select movie';
+
+  @override
   String get heresWhatHappening =>
       'Here\'s what\'s happening with your cinema today';
 
@@ -1820,4 +1826,38 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get phoneNumberFormat => 'Format: +123 45 678 910';
+
+  @override
+  String get confirmDeletionTitle => 'Confirm Deletion';
+
+  @override
+  String confirmDeleteSeatMessage(Object seatName) {
+    return 'Are you sure you want to delete the seat \"$seatName\"? This will remove the seat from all existing screenings.';
+  }
+
+  @override
+  String get deleteButtonLabel => 'Delete';
+
+  @override
+  String get cancelButtonLabel => 'Cancel';
+
+  @override
+  String get seatLayout => 'Seat Layout';
+
+  @override
+  String searchPlaceholder(String label) {
+    return 'Search $label...';
+  }
+
+  @override
+  String get searchGenresPlaceholder => 'Search genres...';
+
+  @override
+  String get searchActorsPlaceholder => 'Search actors...';
+
+  @override
+  String get searchButtonLabel => 'Search';
+
+  @override
+  String get noScreeningsToday => 'No screenings today';
 }
