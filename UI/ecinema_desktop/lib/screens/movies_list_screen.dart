@@ -573,17 +573,41 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(top: 16, bottom: 5),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 5,
-                  childAspectRatio: 0.65,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                ),
-                itemCount: result!.items!.length,
-                itemBuilder: (context, index) {
-                  final movie = result!.items![index];
-                  return _buildMovieCard(movie);
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  int crossAxisCount = 5;
+                  double childAspectRatio = 0.65;
+
+                  if (constraints.maxWidth < 1000) {
+                    crossAxisCount = 4;
+                    childAspectRatio = 0.7;
+                  }
+                  if (constraints.maxWidth < 800) {
+                    crossAxisCount = 3;
+                    childAspectRatio = 0.75;
+                  }
+                  if (constraints.maxWidth < 600) {
+                    crossAxisCount = 2;
+                    childAspectRatio = 0.8;
+                  }
+                  if (constraints.maxWidth < 400) {
+                    crossAxisCount = 1;
+                    childAspectRatio = 1.0;
+                  }
+
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      childAspectRatio: childAspectRatio,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                    ),
+                    itemCount: result!.items!.length,
+                    itemBuilder: (context, index) {
+                      final movie = result!.items![index];
+                      return _buildMovieCard(movie);
+                    },
+                  );
                 },
               ),
             ),
@@ -625,7 +649,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              flex: 4,
+              flex: 4, // Reverted flex to 4
               child: Stack(
                 children: [
                   Container(
@@ -755,7 +779,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
             ),
             
             Expanded(
-              flex: 1,
+              flex: 2, // Reverted flex to 2
               child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: Column(
@@ -771,8 +795,7 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 2),
-                    
+                    const SizedBox(height: 8),
                     Text(
                       movie.director ?? l10n.unknownDirector,
                       style: TextStyle(
@@ -783,49 +806,67 @@ class _MoviesListScreenState extends State<MoviesListScreen> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
-                    
+                    const Spacer(), // Added Spacer
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         if (movie.genres != null && movie.genres!.isNotEmpty)
                           Expanded(
                             child: Wrap(
-                              spacing: 2,
-                              runSpacing: 1,
-                              children: movie.genres!.map((genre) => Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primaryContainer,
-                                  borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.3), width: 0.5),
-                                ),
-                                child: Text(
-                                  genre.name ?? l10n.unknown,
-                                  style: TextStyle(
-                                    fontSize: 12,
+                              spacing: 6,
+                              runSpacing: 4,
+                              children: [
+                                ...movie.genres!.take(2).map((genre) => Chip(
+                                  label: Text(genre.name ?? l10n.unknown),
+                                  labelStyle: TextStyle(
+                                    fontSize: 9,
                                     color: Theme.of(context).colorScheme.onPrimaryContainer,
                                     fontWeight: FontWeight.w500,
                                   ),
-                                ),
-                              )).toList(),
+                                  backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                                  visualDensity: VisualDensity.compact,
+                                  padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 0),
+                                  labelPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: -2),
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                )),
+                                if (movie.genres!.length > 2)
+                                  Chip(
+                                    label: const Text('...'),
+                                    labelStyle: TextStyle(
+                                      fontSize: 9,
+                                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                                    visualDensity: VisualDensity.compact,
+                                    padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 0),
+                                    labelPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: -2),
+                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                              ],
                             ),
                           ),
                         
                         if (movie.durationMinutes != null)
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.access_time, size: 10, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6)),
-                              const SizedBox(width: 2),
-                              Text(
-                                "${movie.durationMinutes}m",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                                  fontWeight: FontWeight.w500,
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0), // Added padding for separation
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.access_time, size: 10, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6)),
+                                const SizedBox(width: 2),
+                                Text(
+                                  "${movie.durationMinutes}m",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                       ],
                     ),

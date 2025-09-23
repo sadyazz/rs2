@@ -93,64 +93,74 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
             ),
             const SizedBox(height: 16),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                ChoiceChip(
-                  label: Text(l10n.daily),
-                  selected: _selectedType == DateRangeType.daily,
-                  onSelected: (selected) {
-                    if (selected) _setDateRange(DateRangeType.daily);
-                  },
-                ),
-                ChoiceChip(
-                  label: Text(l10n.weekly),
-                  selected: _selectedType == DateRangeType.weekly,
-                  onSelected: (selected) {
-                    if (selected) _setDateRange(DateRangeType.weekly);
-                  },
-                ),
-                ChoiceChip(
-                  label: Text(l10n.monthly),
-                  selected: _selectedType == DateRangeType.monthly,
-                  onSelected: (selected) {
-                    if (selected) _setDateRange(DateRangeType.monthly);
-                  },
-                ),
-                ChoiceChip(
-                  label: Text(l10n.yearly),
-                  selected: _selectedType == DateRangeType.yearly,
-                  onSelected: (selected) {
-                    if (selected) _setDateRange(DateRangeType.yearly);
-                  },
-                ),
-                  ],
+                Flexible(
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      ChoiceChip(
+                        label: Text(l10n.daily),
+                        selected: _selectedType == DateRangeType.daily,
+                        onSelected: (selected) {
+                          if (selected) _setDateRange(DateRangeType.daily);
+                        },
+                      ),
+                      ChoiceChip(
+                        label: Text(l10n.weekly),
+                        selected: _selectedType == DateRangeType.weekly,
+                        onSelected: (selected) {
+                          if (selected) _setDateRange(DateRangeType.weekly);
+                        },
+                      ),
+                      ChoiceChip(
+                        label: Text(l10n.monthly),
+                        selected: _selectedType == DateRangeType.monthly,
+                        onSelected: (selected) {
+                          if (selected) _setDateRange(DateRangeType.monthly);
+                        },
+                      ),
+                      ChoiceChip(
+                        label: Text(l10n.yearly),
+                        selected: _selectedType == DateRangeType.yearly,
+                        onSelected: (selected) {
+                          if (selected) _setDateRange(DateRangeType.yearly);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(width: 16),
                 if (_selectedDateRange != null)
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: colorScheme.primary.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
+                  Expanded(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: colorScheme.primary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(Icons.calendar_today,
+                            color: colorScheme.primary,
+                            size: 20,
+                          ),
                         ),
-                        child: Icon(Icons.calendar_today, 
-                          color: colorScheme.primary,
-                          size: 20,
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            '${_selectedDateRange!.start.toLocal().toString().split(' ')[0]} - ${_selectedDateRange!.end.toLocal().toString().split(' ')[0]}',
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        '${_selectedDateRange!.start.toLocal().toString().split(' ')[0]} - ${_selectedDateRange!.end.toLocal().toString().split(' ')[0]}',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
               ],
             ),

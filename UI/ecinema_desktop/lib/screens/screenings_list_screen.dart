@@ -684,18 +684,38 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(top: 16, bottom: 5),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                  childAspectRatio: 0.8,
-                  crossAxisSpacing: 24,
-                  mainAxisSpacing: 24,
-                ),
-                itemCount: result!.items != null ? result!.items!.length : 0,
-                itemBuilder: (context, index) {
-                  final screening = result!.items != null ? result!.items![index] : null;
-                  if (screening == null) return const SizedBox.shrink();
-                  return _buildScreeningCard(screening);
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  int crossAxisCount = 4;
+                  double childAspectRatio = 0.8;
+
+                  if (constraints.maxWidth < 1000) {
+                    crossAxisCount = 3;
+                    childAspectRatio = 0.85;
+                  }
+                  if (constraints.maxWidth < 750) {
+                    crossAxisCount = 2;
+                    childAspectRatio = 0.9;
+                  }
+                  if (constraints.maxWidth < 500) {
+                    crossAxisCount = 1;
+                    childAspectRatio = 1.0;
+                  }
+
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      childAspectRatio: childAspectRatio,
+                      crossAxisSpacing: 24,
+                      mainAxisSpacing: 24,
+                    ),
+                    itemCount: result!.items != null ? result!.items!.length : 0,
+                    itemBuilder: (context, index) {
+                      final screening = result!.items != null ? result!.items![index] : null;
+                      if (screening == null) return const SizedBox.shrink();
+                      return _buildScreeningCard(screening);
+                    },
+                  );
                 },
               ),
             ),
@@ -893,7 +913,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              flex: 3,
+              flex: 4,
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -1020,7 +1040,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
             ),
             
             Expanded(
-              flex: 4,
+              flex: 7, // Increased from 6 to 7 to give more vertical space
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
@@ -1072,17 +1092,21 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                             ),
                           ),
                           const SizedBox(width: 6),
-                          Text(
-                            "${screening.startTime!.day.toString().padLeft(2, '0')}/${screening.startTime!.month.toString().padLeft(2, '0')}/${screening.startTime!.year}",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: Theme.of(context).colorScheme.onSurface,
+                          Expanded(
+                            child: Text(
+                              "${screening.startTime!.day.toString().padLeft(2, '0')}/${screening.startTime!.month.toString().padLeft(2, '0')}/${screening.startTime!.year}",
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ],
                       ),
-                    const SizedBox(height: 6),
+                    const Spacer(),
                     if (screening.startTime != null && screening.endTime != null)
                       Row(
                         children: [
@@ -1111,7 +1135,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                           ),
                         ],
                       ),
-                    const SizedBox(height: 6),
+                    const Spacer(),
                     Row(
                       children: [
                         Container(
@@ -1127,17 +1151,21 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                           ),
                         ),
                         const SizedBox(width: 6),
-                        Text(
-                          screening.language ?? l10n.unknown,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Theme.of(context).colorScheme.onSurface,
+                        Expanded(
+                          child: Text(
+                            screening.language ?? l10n.unknown,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 6),
+                    const Spacer(),
                     Row(
                       children: [
                         Container(
@@ -1153,12 +1181,16 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                           ),
                         ),
                         const SizedBox(width: 6),
-                        Text(
-                          screening.screeningFormatName ?? l10n.unknown,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Theme.of(context).colorScheme.onSurface,
+                        Expanded(
+                          child: Text(
+                            screening.screeningFormatName ?? l10n.unknown,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -1321,7 +1353,7 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
   }
 
   Widget _buildFallbackImage() {
-    final l10n = AppLocalizations.of(context)!;
+    // final l10n = AppLocalizations.of(context)!;
     
     return Container(
       decoration: BoxDecoration(
@@ -1348,15 +1380,6 @@ class _ScreeningsListScreenState extends State<ScreeningsListScreen> {
                 Icons.event_seat,
                 size: 40,
                 color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              l10n.screening,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ],

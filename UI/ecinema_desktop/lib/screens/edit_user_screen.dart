@@ -54,7 +54,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
         'lastName': widget.user?.lastName ?? '',
         'email': widget.user?.email ?? '',
         'username': widget.user?.username ?? '',
-        'phoneNumber': widget.user?.phoneNumber ?? '',
+        'phoneNumber': widget.user?.phoneNumber ?? (_isEditing ? '' : null),
         'password': '',
         'isDeleted': widget.user?.isDeleted ?? false,
       };
@@ -118,7 +118,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
           'lastName': formData['lastName'],
           'email': formData['email'],
           'username': formData['username'],
-          'phoneNumber': formData['phoneNumber'],
+          'phoneNumber': (formData['phoneNumber'] as String?)?.isNotEmpty == true ? formData['phoneNumber'] : null,
           'password': formData['password'],
           'roleId': int.parse(formData['roleId']),
         };
@@ -308,12 +308,17 @@ class _EditUserScreenState extends State<EditUserScreen> {
                                   border: const OutlineInputBorder(),
                                   hintText: l10n.phoneNumberFormat,
                                 ),
-                                validator: FormBuilderValidators.compose([
-                                  FormBuilderValidators.match(
-                                    RegExp(r'^\+?[\d\s-]+$'),
-                                    errorText: l10n.phoneNumberInvalid,
-                                  ),
-                                ]),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return null;
+                                  }
+                                  return FormBuilderValidators.compose([
+                                    FormBuilderValidators.match(
+                                      RegExp(r'^\+?[\d\s-]+$'),
+                                      errorText: l10n.phoneNumberInvalid,
+                                    ),
+                                  ])(value);
+                                },
                               ),
                             ),
                           ],

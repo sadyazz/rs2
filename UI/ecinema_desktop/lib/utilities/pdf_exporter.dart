@@ -19,6 +19,7 @@ class PdfExporter {
     String? selectedMovie,
     String? selectedHall,
   }) async {
+    if (!context.mounted) return 'failure';
     final pdf = pw.Document();
     final l10n = AppLocalizations.of(context)!;
 
@@ -95,15 +96,19 @@ class PdfExporter {
       ),
     );
 
-    final bytes = await pdf.save();
-    await FileSaver.instance.saveFile(
-      name: 'cinema_report_${DateTime.now().toIso8601String()}',
-      bytes: bytes,
-      ext: 'pdf',
-      mimeType: MimeType.pdf,
-    );
-
-    return 'success';
+    try {
+      final bytes = await pdf.save();
+      await FileSaver.instance.saveFile(
+        name: 'cinema_report_${DateTime.now().toIso8601String()}',
+        bytes: bytes,
+        ext: 'pdf',
+        mimeType: MimeType.pdf,
+      );
+      return 'success';
+    } catch (e) {
+      print('Error exporting PDF: $e');
+      return 'failure';
+    }
   }
 
   static pw.Widget _buildPdfKeyMetrics(
