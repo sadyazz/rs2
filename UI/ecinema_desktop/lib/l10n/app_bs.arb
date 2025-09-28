@@ -2315,5 +2315,45 @@
   "noScreeningsToday": "Nema projekcija danas",
   "@noScreeningsToday": {
     "description": "Message shown when there are no screenings today"
+  },
+  "pdfExportedSuccessfully": "PDF je uspješno izvezen!",
+  "@pdfExportedSuccessfully": {
+    "description": "Success message when PDF is exported"
+  },
+  "failedToExportPdf": "Neuspješno izvoženje PDF-a. Molimo pokušajte ponovo.",
+  "@failedToExportPdf": {
+    "description": "Error message when PDF export fails"
+  },
+  "seatsOverview": "Pregled sjedista",
+  "@seatsOverview": {
+    "description": "Title for seats overview section"
+  },
+  "refreshSeats": "Osvježi sjedista",
+  "@refreshSeats": {
+    "description": "Tooltip for refresh seats button"
+  },
+  "seatsGeneratedSuccessfully": "Sjedista su uspješno generirana",
+  "@seatsGeneratedSuccessfully": {
+    "description": "Success message when seats are generated"
+  },
+  "failedToGenerateSeats": "Neuspješno generiranje sjedista",
+  "@failedToGenerateSeats": {
+    "description": "Error message when seat generation fails"
+  },
+  "generateSeats": "Generiraj sjedista",
+  "@generateSeats": {
+    "description": "Button label for generating seats"
+  },
+  "screen": "EKRAN",
+  "@screen": {
+    "description": "Screen label in seat layout"
+  },
+  "noSeatsAvailable": "Nema dostupnih sjedista",
+  "@noSeatsAvailable": {
+    "description": "Message when no seats are available"
+  },
+  "unknown": "Nepoznato",
+  "@unknown": {
+    "description": "Unknown value placeholder"
   }
 }

@@ -463,7 +463,7 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Seats Overview',
+                    l10n.seatsOverview,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.primary,
@@ -473,7 +473,7 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
                   IconButton(
                     onPressed: _loadSeats,
                     icon: const Icon(Icons.refresh),
-                    tooltip: 'Refresh seats',
+                    tooltip: l10n.refreshSeats,
                   ),
                   if (seats.isEmpty) ...[
                     const SizedBox(width: 8),
@@ -483,22 +483,22 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
                           await provider.generateSeatsForScreening(widget.screening!.id!);
                           await _loadSeats();
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Seats generated successfully'),
+                            SnackBar(
+                              content: Text(l10n.seatsGeneratedSuccessfully),
                               backgroundColor: Colors.green,
                             ),
                           );
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('Failed to generate seats: $e'),
+                              content: Text('${l10n.failedToGenerateSeats}: $e'),
                               backgroundColor: Colors.red,
                             ),
                           );
                         }
                       },
                       icon: const Icon(Icons.add),
-                      label: const Text('Generate Seats'),
+                      label: Text(l10n.generateSeats),
                     ),
                   ],
                 ],
@@ -590,8 +590,8 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
     final l10n = AppLocalizations.of(context)!;
     
     if (seats.isEmpty) {
-      return const Center(
-        child: Text('No seats available'),
+      return Center(
+        child: Text(l10n.noSeatsAvailable),
       );
     }
 
@@ -613,7 +613,7 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
-              'SCREEN',
+              l10n.screen,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.primary,
@@ -646,9 +646,10 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
   }
 
   Widget _buildSeatsGridContent() {
+    final l10n = AppLocalizations.of(context)!;
     if (seats.isEmpty) {
-      return const Center(
-        child: Text('No seats available'),
+      return Center(
+        child: Text(l10n.noSeatsAvailable),
       );
     }
 
@@ -715,13 +716,14 @@ class _EditScreeningScreenState extends State<EditScreeningScreen> {
   }
 
   Widget _buildSeatItem(Seat seat) {
+    final l10n = AppLocalizations.of(context)!;
     final isReserved = seat.isReserved ?? false;
-    final seatName = seat.name ?? 'Unknown';
+    final seatName = seat.name ?? l10n.unknown;
     
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 1),
       child: Tooltip(
-        message: '$seatName - ${isReserved ? "Reserved" : "Available"}',
+        message: '$seatName - ${isReserved ? l10n.reserved : l10n.available}',
         child: Container(
           width: 32,
           height: 32,

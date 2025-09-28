@@ -1605,14 +1605,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get generate => 'Generate';
 
   @override
-  String seatsGeneratedSuccessfully(int count) {
-    return 'Generated $count seats successfully';
-  }
+  String get seatsGeneratedSuccessfully => 'Seats generated successfully';
 
   @override
-  String failedToGenerateSeats(String error) {
-    return 'Failed to generate seats: $error';
-  }
+  String get failedToGenerateSeats => 'Failed to generate seats';
 
   @override
   String get seatsManagement => 'Seats Management';
@@ -1860,4 +1856,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noScreeningsToday => 'No screenings today';
+
+  @override
+  String get pdfExportedSuccessfully => 'PDF exported successfully!';
+
+  @override
+  String get failedToExportPdf => 'Failed to export PDF. Please try again.';
+
+  @override
+  String get seatsOverview => 'Seats Overview';
+
+  @override
+  String get refreshSeats => 'Refresh seats';
+
+  @override
+  String get generateSeats => 'Generate Seats';
+
+  @override
+  String get screen => 'SCREEN';
+
+  @override
+  String get noSeatsAvailable => 'No seats available';
 }

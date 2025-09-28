@@ -830,7 +830,7 @@ abstract class AppLocalizations {
   /// **'Description'**
   String get description;
 
-  /// Unknown placeholder text
+  /// Unknown value placeholder
   ///
   /// In en, this message translates to:
   /// **'Unknown'**
@@ -3128,17 +3128,17 @@ abstract class AppLocalizations {
   /// **'Generate'**
   String get generate;
 
-  /// Seats generated success message
+  /// Success message when seats are generated
   ///
   /// In en, this message translates to:
-  /// **'Generated {count} seats successfully'**
-  String seatsGeneratedSuccessfully(int count);
+  /// **'Seats generated successfully'**
+  String get seatsGeneratedSuccessfully;
 
-  /// Failed to generate seats message
+  /// Error message when seat generation fails
   ///
   /// In en, this message translates to:
-  /// **'Failed to generate seats: {error}'**
-  String failedToGenerateSeats(String error);
+  /// **'Failed to generate seats'**
+  String get failedToGenerateSeats;
 
   /// Seats management section title
   ///
@@ -3589,6 +3589,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No screenings today'**
   String get noScreeningsToday;
+
+  /// Success message when PDF is exported
+  ///
+  /// In en, this message translates to:
+  /// **'PDF exported successfully!'**
+  String get pdfExportedSuccessfully;
+
+  /// Error message when PDF export fails
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to export PDF. Please try again.'**
+  String get failedToExportPdf;
+
+  /// Title for seats overview section
+  ///
+  /// In en, this message translates to:
+  /// **'Seats Overview'**
+  String get seatsOverview;
+
+  /// Tooltip for refresh seats button
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh seats'**
+  String get refreshSeats;
+
+  /// Button label for generating seats
+  ///
+  /// In en, this message translates to:
+  /// **'Generate Seats'**
+  String get generateSeats;
+
+  /// Screen label in seat layout
+  ///
+  /// In en, this message translates to:
+  /// **'SCREEN'**
+  String get screen;
+
+  /// Message when no seats are available
+  ///
+  /// In en, this message translates to:
+  /// **'No seats available'**
+  String get noSeatsAvailable;
 }
 
 class _AppLocalizationsDelegate

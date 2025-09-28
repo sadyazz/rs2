@@ -208,7 +208,7 @@ class _SeatsManagementScreenState extends State<SeatsManagementScreen> {
       
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(l10n.seatsGeneratedSuccessfully(_seats.length)),
+          content: Text(l10n.seatsGeneratedSuccessfully),
           backgroundColor: Colors.green,
         ),
       );

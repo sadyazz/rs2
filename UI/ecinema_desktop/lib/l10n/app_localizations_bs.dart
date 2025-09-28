@@ -1608,14 +1608,10 @@ class AppLocalizationsBs extends AppLocalizations {
   String get generate => 'Generisi';
 
   @override
-  String seatsGeneratedSuccessfully(int count) {
-    return 'Uspešno generisano $count sedišta';
-  }
+  String get seatsGeneratedSuccessfully => 'Sjedista su uspješno generirana';
 
   @override
-  String failedToGenerateSeats(String error) {
-    return 'Greška pri generisanju sedišta: $error';
-  }
+  String get failedToGenerateSeats => 'Neuspješno generiranje sjedista';
 
   @override
   String get seatsManagement => 'Upravljanje Sedištima';
@@ -1864,4 +1860,26 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get noScreeningsToday => 'Nema projekcija danas';
+
+  @override
+  String get pdfExportedSuccessfully => 'PDF je uspješno izvezen!';
+
+  @override
+  String get failedToExportPdf =>
+      'Neuspješno izvoženje PDF-a. Molimo pokušajte ponovo.';
+
+  @override
+  String get seatsOverview => 'Pregled sjedista';
+
+  @override
+  String get refreshSeats => 'Osvježi sjedista';
+
+  @override
+  String get generateSeats => 'Generiraj sjedista';
+
+  @override
+  String get screen => 'EKRAN';
+
+  @override
+  String get noSeatsAvailable => 'Nema dostupnih sjedista';
 }

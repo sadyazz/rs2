@@ -487,6 +487,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   Future<void> _downloadReport(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -531,8 +532,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
         SnackBar(
           content: Text(
             result == 'success'
-                ? 'PDF exported successfully!'
-                : 'Failed to export PDF. Please try again.',
+                ? l10n.pdfExportedSuccessfully
+                : l10n.failedToExportPdf,
           ),
           duration: const Duration(seconds: 3),
         ),

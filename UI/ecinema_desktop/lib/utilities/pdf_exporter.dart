@@ -1,13 +1,15 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import '../widgets/date_range_selector.dart';
-import 'package:file_saver/file_saver.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import '../models/ticket_sales.dart';
 import '../models/revenue.dart';
 import '../models/screening_attendance.dart';
 import 'package:ecinema_desktop/l10n/app_localizations.dart';
+import 'package:path/path.dart' as path;
 
 class PdfExporter {
   static Future<String> exportToPDF(
@@ -98,12 +100,28 @@ class PdfExporter {
 
     try {
       final bytes = await pdf.save();
-      await FileSaver.instance.saveFile(
-        name: 'cinema_report_${DateTime.now().toIso8601String()}',
-        bytes: bytes,
-        ext: 'pdf',
-        mimeType: MimeType.pdf,
-      );
+      
+      Directory? downloadsDir;
+      if (Platform.isWindows) {
+        final userDir = Platform.environment['USERPROFILE'];
+        if (userDir != null) {
+          downloadsDir = Directory(path.join(userDir, 'Downloads'));
+        }
+      } else if (Platform.isMacOS || Platform.isLinux) {
+        downloadsDir = await getDownloadsDirectory();
+      }
+      
+      if (downloadsDir == null) {
+        downloadsDir = await getApplicationDocumentsDirectory();
+      }
+      
+      final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-').replaceAll('.', '-');
+      final fileName = 'cinema_report_$timestamp.pdf';
+      final filePath = path.join(downloadsDir.path, fileName);
+      
+      final file = File(filePath);
+      await file.writeAsBytes(bytes);
+      
       return 'success';
     } catch (e) {
       print('Error exporting PDF: $e');

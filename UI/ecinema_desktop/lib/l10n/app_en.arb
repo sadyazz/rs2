@@ -2452,5 +2452,45 @@
   "noScreeningsToday": "No screenings today",
   "@noScreeningsToday": {
     "description": "Message shown when there are no screenings today"
+  },
+  "pdfExportedSuccessfully": "PDF exported successfully!",
+  "@pdfExportedSuccessfully": {
+    "description": "Success message when PDF is exported"
+  },
+  "failedToExportPdf": "Failed to export PDF. Please try again.",
+  "@failedToExportPdf": {
+    "description": "Error message when PDF export fails"
+  },
+  "seatsOverview": "Seats Overview",
+  "@seatsOverview": {
+    "description": "Title for seats overview section"
+  },
+  "refreshSeats": "Refresh seats",
+  "@refreshSeats": {
+    "description": "Tooltip for refresh seats button"
+  },
+  "seatsGeneratedSuccessfully": "Seats generated successfully",
+  "@seatsGeneratedSuccessfully": {
+    "description": "Success message when seats are generated"
+  },
+  "failedToGenerateSeats": "Failed to generate seats",
+  "@failedToGenerateSeats": {
+    "description": "Error message when seat generation fails"
+  },
+  "generateSeats": "Generate Seats",
+  "@generateSeats": {
+    "description": "Button label for generating seats"
+  },
+  "screen": "SCREEN",
+  "@screen": {
+    "description": "Screen label in seat layout"
+  },
+  "noSeatsAvailable": "No seats available",
+  "@noSeatsAvailable": {
+    "description": "Message when no seats are available"
+  },
+  "unknown": "Unknown",
+  "@unknown": {
+    "description": "Unknown value placeholder"
   }
 }
