@@ -271,4 +271,47 @@ class ReservationProvider extends BaseProvider<dynamic> {
       return false;
     }
   }
+
+  Future<bool> hasActiveReservationForScreening(int screeningId) async {
+    try {
+      final userId = AuthProvider.userId;
+      
+      if (userId == null) {
+        return false;
+      }
+
+      final baseUrl = const String.fromEnvironment("baseUrl", defaultValue: "http://10.0.2.2:5190");
+      final url = '$baseUrl/Reservation/user/$userId';
+      
+      final response = await http.get(
+        Uri.parse(url),
+        headers: createHeaders(),
+      );
+
+      if (!isValidResponse(response)) {
+        return false;
+      }
+
+      final data = jsonDecode(response.body);
+      List<dynamic> reservations;
+      
+      if (data is List) {
+        reservations = data;
+      } else if (data is Map && data.containsKey('items')) {
+        reservations = data['items'] as List<dynamic>;
+      } else {
+        return false;
+      }
+
+      return reservations.any((reservation) =>
+        reservation['screeningId'] == screeningId &&
+        reservation['isDeleted'] == false &&
+        reservation['state'] != 'CancelledReservationState' &&
+        reservation['state'] != 'RejectedReservationState'
+      );
+    } catch (e) {
+      print('Error checking active reservation: $e');
+      return false;
+    }
+  }
 }

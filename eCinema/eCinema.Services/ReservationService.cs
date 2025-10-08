@@ -132,8 +132,6 @@ namespace eCinema.Services
                 var qrCodeBase64 = await GenerateQRCode(reservation.Id);
                 
                 reservation.QrcodeBase64 = qrCodeBase64;
-                
-                
                 await _context.SaveChangesAsync();
 
                 var fullReservation = await GetByIdAsync(reservation.Id);
@@ -151,6 +149,27 @@ namespace eCinema.Services
 
             try
             {
+                var userId = await _currentUserService.GetUserIdAsync() ?? throw new Exception("User not authenticated");
+                
+                var screening = await _context.Screenings
+                    .FirstOrDefaultAsync(s => s.Id == screeningId);
+                if (screening == null || screening.IsDeleted)
+                    throw new UserException("Screening not found");
+
+                if (screening.StartTime <= DateTime.UtcNow)
+                    throw new UserException("Cannot make reservation for past screenings");
+
+                var existingReservation = await _context.Reservations
+                    .AnyAsync(r => r.UserId == userId 
+                        && r.ScreeningId == screeningId
+                        && !r.IsDeleted
+                        && r.State != nameof(CancelledReservationState)
+                        && r.State != nameof(RejectedReservationState));
+                if (existingReservation)
+                    throw new UserException("You already have a reservation for this screening");
+
+                await ValidateSeatsAvailability(screeningId, seatIds);
+
                 var payment = await _paymentService.ProcessStripePayment(paymentIntentId, amount);
 
                 var request = new ReservationUpsertRequest
@@ -162,11 +181,12 @@ namespace eCinema.Services
                     PaymentId = payment.Id,
                     ReservationTime = DateTime.UtcNow,
                     IsDeleted = false,
-                    UserId = await _currentUserService.GetUserIdAsync() ?? throw new Exception("User not authenticated"),
+                    UserId = userId,
                     State = "ApprovedReservationState"
                 };
 
                 var reservation = await CreateAsync(request);
+                
                 if (reservation == null)
                     throw new Exception("Failed to create reservation");
 
@@ -177,7 +197,7 @@ namespace eCinema.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Failed to process payment: {ex.Message}");
+                throw new Exception($"Failed to process payment: {ex.Message}", ex);
             }
         }
 

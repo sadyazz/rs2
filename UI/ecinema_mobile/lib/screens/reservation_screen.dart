@@ -5,6 +5,7 @@ import '../models/movie.dart';
 import '../models/screening.dart';
 import '../models/seat.dart';
 import '../providers/screening_provider.dart';
+import '../providers/reservation_provider.dart';
 import '../providers/utils.dart';
 import '../screens/screening_checkout_screen.dart';
 
@@ -119,6 +120,7 @@ class _ReservationScreenState extends State<ReservationScreen> {
 
 
   Future<void> _createReservation() async {
+    final l10n = AppLocalizations.of(context)!;
     print('🔍 _createReservation called');
     print('🔍 selectedSeats.length: ${selectedSeats.length}');
     print('🔍 selectedSeats: ${selectedSeats.map((s) => '${s.name} (${s.id})').join(', ')}');
@@ -127,27 +129,67 @@ class _ReservationScreenState extends State<ReservationScreen> {
       print('❌ No seats selected');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)!.pleaseSelectAtLeastOneSeat),
+          content: Text(l10n.pleaseSelectAtLeastOneSeat),
           backgroundColor: Colors.red,
         ),
       );
       return;
     }
 
-    final totalPrice = (widget.screening.basePrice ?? 0.0) * selectedSeats.length;
-    print('🔍 Total price: $totalPrice');
-    print('🔍 Navigating to ScreeningCheckoutScreen');
-    
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ScreeningCheckoutScreen(
-          screening: widget.screening,
-          selectedSeats: selectedSeats,
-          totalPrice: totalPrice,
-        ),
-      ),
-    );
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final reservationProvider = ReservationProvider();
+      final hasExistingReservation = await reservationProvider.hasActiveReservationForScreening(widget.screening.id!);
+      
+      if (hasExistingReservation) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(l10n.existingReservationError),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 4),
+            ),
+          );
+        }
+        return;
+      }
+
+      final totalPrice = (widget.screening.basePrice ?? 0.0) * selectedSeats.length;
+      print('🔍 Total price: $totalPrice');
+      print('🔍 Navigating to ScreeningCheckoutScreen');
+      
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ScreeningCheckoutScreen(
+              screening: widget.screening,
+              selectedSeats: selectedSeats,
+              totalPrice: totalPrice,
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      print('❌ Error checking reservation: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 
 
