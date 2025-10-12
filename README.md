@@ -23,7 +23,8 @@ eCinema is a platform designed for users to browse movies, reserve tickets, and 
 ## Tech Stack
 - Mobile: Flutter (Dart)
 - Desktop: .NET (Windows)
-- Backend: .NET, Docker, SQL Server, Entity Framework Core, RabbitMQ, Movie Recommender System
+- Backend: .NET, Docker, SQL Server, EF Core, RabbitMQ
+- Recommender: ML.NET (content-based, cosine similarity)
 - Payments: Stripe (test mode)
 
 ## Features
@@ -128,54 +129,89 @@ Below are some guided flows showcasing the UI
 <details>
 <summary>Admin (Desktop) Screenshots</summary>
 
-  ![Dashboard Overview](UI/screenshots/dashboard.png) ![Dashboard with Menu](UI/screenshots/dashboard-2.png) ![Reports Overview](UI/screenshots/reports-1.png) ![Ticket Sales and Revenue](UI/screenshots/reports-2.png) ![Screening Attendance](UI/screenshots/reports-3.png)
+<div align="center">
+  <img src="UI/screenshots/dashboard.png" alt="Dashboard Overview" width="400px"> <img src="UI/screenshots/dashboard-2.png" alt="Dashboard with Menu" width="400px"> <img src="UI/screenshots/reports-1.png" alt="Reports Overview" width="400px"> <img src="UI/screenshots/reports-2.png" alt="Ticket Sales and Revenue" width="400px"> <img src="UI/screenshots/reports-3.png" alt="Screening Attendance" width="400px">
 
-  ![Movies List](UI/screenshots/movies.png) ![Screenings List](UI/screenshots/screenings.png) ![Edit Screening Details](UI/screenshots/screening-details-1.png) ![Edit Screening Seat Layout](UI/screenshots/screening-details-2.png) ![Settings Page Top](UI/screenshots/settings-1.png) ![Settings Page Scrolled](UI/screenshots/settings-2.png)
+  <img src="UI/screenshots/movies.png" alt="Movies List" width="400px"> <img src="UI/screenshots/screenings.png" alt="Screenings List" width="400px"> <img src="UI/screenshots/screening-details-1.png" alt="Edit Screening Details" width="400px"> <img src="UI/screenshots/screening-details-2.png" alt="Edit Screening Seat Layout" width="400px"> <img src="UI/screenshots/settings-1.png" alt="Settings Page Top" width="400px"> <img src="UI/screenshots/settings-2.png" alt="Settings Page Scrolled" width="400px">
 
+</div>
 </details>
 
 ### Staff (Mobile)
   <details>
   <summary>Scan Ticket Flow</summary>
 
-  ![Initial Scan Screen](UI/screenshots/staff_1.png)
-  ![Successful Scan](UI/screenshots/staff_valid.png)
-  ![Ticket Already Used Error](UI/screenshots/staff_used.png)
-  ![Invalid Ticket Error](UI/screenshots/staff_.png)
+<p align="center">
+  <img src="UI/screenshots/staff_1.png" alt="Initial Scan Screen" width="200px">
+  <img src="UI/screenshots/staff_valid.png" alt="Successful Scan" width="200px">
+  <img src="UI/screenshots/staff_used.png" alt="Ticket Already Used Error" width="200px">
+  <img src="UI/screenshots/staff_.png" alt="Invalid Ticket Error" width="200px">
+  </p>
   </details>
 
 ### User (Mobile)
   <details>
   <summary>Reserve Screening Flow</summary>
 
-  1.  **Home screen**
-    
-      ![Home screen](UI/screenshots/reservation-1.png)
-  2.  **Select movie**
-      
-      ![Select movie](UI/screenshots/reservation-2.png)
-  3.  **Select screening**
-       
-       ![Select screening (Top View)](UI/screenshots/reservation-3.1.png) ![Select screening (Scrolled View)](UI/screenshots/reservation-3.2.png)
-   4.  **Seating selection and reservation details**
-       
-       ![Seating selection (Top View)](UI/screenshots/reservation-4.1.png) ![Seating selection (Scrolled View)](UI/screenshots/reservation-4.2.png)
-   5.  **Payment**
-       
-       ![Payment (Top View)](UI/screenshots/reservation-5.1.png) ![Payment (Scrolled View)](UI/screenshots/reservation-5.2.png)
-  6.  **Reservation Confirmation**
-      
-      ![Confirmation](UI/screenshots/reservation-6.png)
+  <table border="0" align="center">
+    <tr>
+      <td align="center">
+        Home screen<br>
+        <img src="UI/screenshots/reservation-1.png" alt="Home screen" width="200px">
+      </td>
+      <td align="center">
+        Select movie<br>
+        <img src="UI/screenshots/reservation-2.png" alt="Select movie" width="200px">
+      </td>
+      <td align="center">
+        Select screening<br>
+        <img src="UI/screenshots/reservation-3.1.png" alt="Select screening (Top View)" width="200px">
+      </td>
+      <td align="center">
+        Select screening<br>
+        <img src="UI/screenshots/reservation-3.2.png" alt="Select screening (Scrolled View)" width="200px">
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        Seating selection<br>
+        <img src="UI/screenshots/reservation-4.1.png" alt="Seating selection (Top View)" width="200px">
+      </td>
+      <td align="center">
+        Seating selection<br>
+        <img src="UI/screenshots/reservation-4.2.png" alt="Seating selection (Scrolled View)" width="200px">
+      </td>
+      <td align="center">
+        Payment<br>
+        <img src="UI/screenshots/reservation-5.1.png" alt="Payment (Top View)" width="200px">
+      </td>
+      <td align="center">
+        Payment<br>
+        <img src="UI/screenshots/reservation-5.2.png" alt="Payment (Scrolled View)" width="200px">
+      </td>
+    </tr>
+    <tr>
+      <td align="center" colspan="4">
+        Reservation Confirmation<br>
+        <img src="UI/screenshots/reservation-6.png" alt="Confirmation" width="200px">
+      </td>
+    </tr>
+  </table>
+
   </details>
   <details>
   <summary>Post-Viewing Review Flow</summary>
 
-  ![Post-Viewing Review](UI/screenshots/review.png)
+<div align="center">
+  <img src="UI/screenshots/review.png" alt="Post-Viewing Review" width="200px">
+  </div>
   </details>
   <details>
   <summary>Random Movie Suggestion Flow</summary>
 
   This flow demonstrates how users can get a random movie suggestion based on selected filters:
   
- ![Home Screen](UI/screenshots/reservation-1.png) ![Filter Options](UI/screenshots/random-1.png) ![Suggested Movie](UI/screenshots/random-2.png)
+  <div align="center">
+  <img src="UI/screenshots/reservation-1.png" alt="Home Screen" width="200px"> <img src="UI/screenshots/random-1.png" alt="Filter Options" width="200px"> <img src="UI/screenshots/random-2.png" alt="Suggested Movie" width="200px">
+  </div>
   </details>
